@@ -1,5 +1,5 @@
 #include <iostream>
-#include "trianglemesh.h"
+#include "trianglemesh.hpp"
 
 
 using namespace std;

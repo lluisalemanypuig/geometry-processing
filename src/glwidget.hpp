@@ -4,7 +4,7 @@
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
-#include "trianglemesh.h"
+#include "trianglemesh.hpp"
 
 /*
  * Qt version in FIB:

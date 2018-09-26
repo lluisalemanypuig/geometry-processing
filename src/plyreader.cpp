@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include "plyreader.h"
+#include "plyreader.hpp"
 
 
 bool PLYReader::readMesh(const QString &filename, TriangleMesh &mesh)

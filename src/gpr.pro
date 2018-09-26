@@ -1,4 +1,3 @@
-
 TEMPLATE = app
 TARGET = Base
 
@@ -8,12 +7,18 @@ CONFIG += c++11
 
 INCLUDEPATH += .
 
-# Input
-HEADERS += glwidget.h mainwindow.h \
-    trianglemesh.h \
-    plyreader.h
 FORMS += mainwindow.ui
-SOURCES += glwidget.cpp main.cpp mainwindow.cpp \
+
+HEADERS += \
+    glwidget.hpp \
+    mainwindow.hpp \
+    plyreader.hpp \
+    trianglemesh.hpp
+
+SOURCES += \
+    main.cpp \
+    glwidget.cpp \
+    mainwindow.cpp \
     trianglemesh.cpp \
     plyreader.cpp
 

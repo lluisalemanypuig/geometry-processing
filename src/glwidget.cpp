@@ -1,4 +1,4 @@
-#include "glwidget.h"
+#include "glwidget.hpp"
 #include <iostream>
 #include <QApplication>
 #include <QMatrix4x4>
