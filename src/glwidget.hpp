@@ -1,16 +1,18 @@
-#ifndef GLWIDGET_H
-#define GLWIDGET_H
+#pragma once
 
+#include <iostream>
+using namespace std;
 
+// Qt includes
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
-#include "trianglemesh.hpp"
+#include <QApplication>
+#include <QMatrix4x4>
+#include <QMouseEvent>
 
-/*
- * Qt version in FIB:
- * /opt/Qt/5.9.6/gcc_64/bin/qmake
- *
- */
+// Custom includes
+#include "trianglemesh.hpp"
+#include "plyreader.hpp"
 
 class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -44,4 +46,3 @@ private:
 
 };
 
-#endif // GLWIDGET_H

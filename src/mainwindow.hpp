@@ -1,6 +1,6 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
+// Qt includes
 #include <QMainWindow>
 
 namespace Ui {
@@ -26,4 +26,3 @@ private:
 	Ui::MainWindow *ui;
 };
 
-#endif // MAINWINDOW_H

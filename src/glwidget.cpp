@@ -1,19 +1,9 @@
 #include "glwidget.hpp"
-#include <iostream>
-#include <QApplication>
-#include <QMatrix4x4>
-#include <QMouseEvent>
-#include <plyreader.h>
-
-
-using namespace std;
-
 
 const float rotationFactor = 0.5f;
 const float maxRotationCamera = 75.0f;
 const float minDistanceCamera = 1.0f;
 const float maxDistanceCamera = 3.0f;
-
 
 GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent), bPolygonFill(true), angleX(0.0f), angleY(0.0f), distance(2.0f)
 {

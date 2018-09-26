@@ -1,5 +1,5 @@
 TEMPLATE = app
-TARGET = Base
+TARGET = gpr
 
 QT += gui opengl
 

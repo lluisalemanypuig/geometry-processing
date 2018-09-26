@@ -1,13 +1,11 @@
-#ifndef PLYREADER_H
-#define PLYREADER_H
+#pragma once
 
-
+// C++ includes
 #include <fstream>
-#include "trianglemesh.hpp"
-
-
 using namespace std;
 
+// Custom includes
+#include "trianglemesh.hpp"
 
 class PLYReader
 {
@@ -23,5 +21,3 @@ private:
 	static void addModelToMesh(const vector<float> &plyVertices, const vector<int> &plyTriangles, TriangleMesh &mesh);
 
 };
-
-#endif // PLYREADER_H

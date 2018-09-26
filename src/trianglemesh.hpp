@@ -1,17 +1,15 @@
-#ifndef TRIANGLEMESH_H
-#define TRIANGLEMESH_H
+#pragma once
 
-
+// C++ includes
 #include <vector>
+using namespace std;
+
+// Qt includes
 #include <QVector3D>
 #include <QOpenGLFunctions>
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
 #include <QOpenGLShaderProgram>
-
-
-using namespace std;
-
 
 class TriangleMesh
 {
@@ -43,5 +41,3 @@ private:
 
 };
 
-
-#endif // TRIANGLEMESH_H
