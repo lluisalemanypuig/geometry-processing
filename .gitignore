@@ -1,1 +1,3 @@
 *.pro.user
+gpr-debug/
+gpr-release/
