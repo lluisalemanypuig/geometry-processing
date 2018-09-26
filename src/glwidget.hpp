@@ -14,35 +14,33 @@ using namespace std;
 #include "trianglemesh.hpp"
 #include "plyreader.hpp"
 
-class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions
-{
+class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
+	private:
+		bool bPolygonFill;
+		float angleX, angleY, distance;
+		QPoint lastMousePos;
 
-public:
-	GLWidget(QWidget *parent);
-	~GLWidget();
+		QOpenGLShaderProgram *program;
+		TriangleMesh mesh;
 
-	void loadMesh(const QString &filename);
-	void setPolygonMode(bool bFill);
+	private:
+		void setProjection(float aspect);
+		void setModelview();
 
-protected:
-	void initializeGL();
-	void resizeGL(int w, int h);
-	void paintGL();
+	protected:
+		void initializeGL();
+		void resizeGL(int w, int h);
+		void paintGL();
 
-	void mousePressEvent(QMouseEvent *event);
-	void mouseMoveEvent(QMouseEvent *event);
+		void mousePressEvent(QMouseEvent *event);
+		void mouseMoveEvent(QMouseEvent *event);
 
-private:
-	void setProjection(float aspect);
-	void setModelview();
+	public:
+		GLWidget(QWidget *parent);
+		~GLWidget();
 
-private:
-	bool bPolygonFill;
-	float angleX, angleY, distance;
-	QPoint lastMousePos;
-
-	QOpenGLShaderProgram *program;
-	TriangleMesh mesh;
+		void loadMesh(const QString &filename);
+		void setPolygonMode(bool bFill);
 
 };
 

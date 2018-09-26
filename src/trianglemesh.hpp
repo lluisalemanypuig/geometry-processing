@@ -1,6 +1,7 @@
 #pragma once
 
 // C++ includes
+#include <iostream>
 #include <vector>
 using namespace std;
 
@@ -11,33 +12,30 @@ using namespace std;
 #include <QOpenGLBuffer>
 #include <QOpenGLShaderProgram>
 
-class TriangleMesh
-{
+class TriangleMesh {
+	private:
+		void buildReplicatedVertices(vector<QVector3D> &replicatedVertices, vector<QVector3D> &normals, vector<unsigned int> &perFaceTriangles);
+		void fillVBOs(vector<QVector3D> &replicatedVertices, vector<QVector3D> &normals, vector<unsigned int> &perFaceTriangles);
 
-public:
-	TriangleMesh();
+	private:
+		vector<QVector3D> vertices;
+		vector<int> triangles;
 
-public:
-	void addVertex(const QVector3D &position);
-	void addTriangle(int v0, int v1, int v2);
+		QOpenGLVertexArrayObject vao;
+		QOpenGLBuffer vboVertices, vboNormals, eboTriangles;
 
-	void buildCube();
+	public:
+		TriangleMesh();
+		~TriangleMesh();
 
-	bool init(QOpenGLShaderProgram *program);
-	void destroy();
+		void addVertex(const QVector3D &position);
+		void addTriangle(int v0, int v1, int v2);
 
-	void render(QOpenGLFunctions &gl);
+		void buildCube();
 
-private:
-	void buildReplicatedVertices(vector<QVector3D> &replicatedVertices, vector<QVector3D> &normals, vector<unsigned int> &perFaceTriangles);
-	void fillVBOs(vector<QVector3D> &replicatedVertices, vector<QVector3D> &normals, vector<unsigned int> &perFaceTriangles);
+		bool init(QOpenGLShaderProgram *program);
+		void destroy();
 
-private:
-	vector<QVector3D> vertices;
-	vector<int> triangles;
-
-	QOpenGLVertexArrayObject vao;
-	QOpenGLBuffer vboVertices, vboNormals, eboTriangles;
-
+		void render(QOpenGLFunctions &gl);
 };
 
