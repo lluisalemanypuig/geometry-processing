@@ -72,12 +72,13 @@ namespace PLY_reader {
 	}
 
 	void __rescale_model(vector<float>& plyVertices) {
-		QVector3D center(0.0f, 0.0f, 0.0f), size[2];
+		QVector3D center(0.0f, 0.0f, 0.0f);
 
+		QVector3D size[2];
 		size[0] = QVector3D(1e10, 1e10, 1e10);
 		size[1] = QVector3D(-1e10, -1e10, -1e10);
-		for(unsigned int i = 0; i < plyVertices.size(); i += 3)
-		{
+
+		for (unsigned int i = 0; i < plyVertices.size(); i += 3) {
 			center += QVector3D(plyVertices[i], plyVertices[i+1], plyVertices[i+2]);
 			size[0][0] = min(size[0][0], plyVertices[i]);
 			size[0][1] = min(size[0][1], plyVertices[i+1]);
@@ -88,20 +89,31 @@ namespace PLY_reader {
 		}
 		center /= plyVertices.size()/3;
 
-		float largestSize = max(size[1][0] - size[0][0], max(size[1][1] - size[0][1], size[1][2] - size[0][2]));
+		float largestSize = max(
+			size[1][0] - size[0][0],
+			max(
+				size[1][1] - size[0][1],
+				size[1][2] - size[0][2]
+			)
+		);
 
 		for (unsigned int i = 0; i < plyVertices.size(); i += 3) {
-			plyVertices[i] = (plyVertices[i] - center[0]) / largestSize;
+			plyVertices[i] = (plyVertices[i] - center[0])/largestSize;
 			plyVertices[i+1] = (plyVertices[i+1] - center[1])/largestSize;
 			plyVertices[i+2] = (plyVertices[i+2] - center[2])/largestSize;
 		}
 	}
 
 	void __add_model_to_mesh(const vector<float>& plyVertices, const vector<int>& plyTriangles, TriangleMesh& mesh) {
+		// every position that is a multiple of 3 starts
+		// a new vertex -> (0,1,2) are the coordinates of a vertex,
+		// (3,4,5) are the coordinates of the next vertex, and so on.
 		for (unsigned int i = 0; i < plyVertices.size(); i += 3) {
 			mesh.addVertex(QVector3D(plyVertices[i], plyVertices[i+1], plyVertices[i+2]));
 		}
-		for(unsigned int i = 0; i < plyTriangles.size(); i += 3) {
+		// just like with the vertices, every position that is a
+		// multiple of 3 starts a new triangle.
+		for (unsigned int i = 0; i < plyTriangles.size(); i += 3) {
 			mesh.addTriangle(plyTriangles[i], plyTriangles[i+1], plyTriangles[i+2]);
 		}
 	}
@@ -111,12 +123,12 @@ namespace PLY_reader {
 		int nVertices, nFaces;
 
 		fin.open(filename.toStdString().c_str(), ios_base::in | ios_base::binary);
-		if (!fin.is_open()) {
+		if (not fin.is_open()) {
 			cerr << "PLY_reader::read_mesh - Error:" << endl;
 			cerr << "    Could not open file '" << filename.toStdString() << "'." << endl;
 			return false;
 		}
-		if (!__loadHeader(fin, nVertices, nFaces)) {
+		if (not __loadHeader(fin, nVertices, nFaces)) {
 			fin.close();
 			cerr << "PLY_reader::read_mesh - Error:" << endl;
 			cerr << "    Bad input file format." << endl;
@@ -126,12 +138,20 @@ namespace PLY_reader {
 		vector<float> plyVertices;
 		vector<int> plyTriangles;
 
+		// load the vertices and the faces from the ply file
 		__load_vertices(fin, nVertices, plyVertices);
 		__load_faces(fin, nFaces, plyTriangles);
 		fin.close();
 
+		// the model needs reescaling
 		__rescale_model(plyVertices);
+
+		// build the TriangleMesh object
 		__add_model_to_mesh(plyVertices, plyTriangles, mesh);
+
+		// the triangular mesh has now the vertices
+		// and faces loaded inside.
+
 		return true;
 	}
 

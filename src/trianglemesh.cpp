@@ -24,19 +24,21 @@ struct CornerEdge
 
 // PRIVATE
 
-void TriangleMesh::buildReplicatedVertices
+void TriangleMesh::make_VBO_data
 (
-	vector<QVector3D>& replicatedVertices,
+	vector<QVector3D>& copied_vertices,
 	vector<QVector3D>& normals,
 	vector<unsigned int>& perFaceTriangles
 )
 {
 	normals.resize(triangles.size());
+	copied_vertices.resize(3*triangles.size());
+	perFaceTriangles.resize(3*triangles.size());
 
 	for (unsigned int i = 0; i < triangles.size(); i += 3) {
-		replicatedVertices.push_back(vertices[triangles[i]]);
-		replicatedVertices.push_back(vertices[triangles[i+1]]);
-		replicatedVertices.push_back(vertices[triangles[i+2]]);
+		copied_vertices[i] = vertices[triangles[i]];
+		copied_vertices[i+1] = vertices[triangles[i+1]];
+		copied_vertices[i+2] = vertices[triangles[i+2]];
 
 		QVector3D N = QVector3D::crossProduct(
 			vertices[triangles[i+1]] - vertices[triangles[i]],
@@ -47,21 +49,21 @@ void TriangleMesh::buildReplicatedVertices
 		normals[i+1] = N;
 		normals[i+2] = N;
 
-		perFaceTriangles.push_back(perFaceTriangles.size());
-		perFaceTriangles.push_back(perFaceTriangles.size());
-		perFaceTriangles.push_back(perFaceTriangles.size());
+		perFaceTriangles[i] = i;
+		perFaceTriangles[i+1] = i+1;
+		perFaceTriangles[i+2] = i+2;
 	}
 }
 
 void TriangleMesh::fillVBOs
 (
-	vector<QVector3D>& replicatedVertices,
-	vector<QVector3D>& normals,
-	vector<unsigned int>& perFaceTriangles
+	const vector<QVector3D>& copied_vertices,
+	const vector<QVector3D>& normals,
+	const vector<unsigned int>& perFaceTriangles
 )
 {
 	vboVertices.bind();
-	vboVertices.allocate(&replicatedVertices[0], 3*sizeof(float)*replicatedVertices.size());
+	vboVertices.allocate(&copied_vertices[0], 3*sizeof(float)*copied_vertices.size());
 	vboVertices.release();
 
 	vboNormals.bind();
@@ -69,7 +71,7 @@ void TriangleMesh::fillVBOs
 	vboNormals.release();
 
 	vboTriangles.bind();
-	vboTriangles.allocate(&perFaceTriangles[0], sizeof(int)*perFaceTriangles.size());
+	vboTriangles.allocate(&perFaceTriangles[0], sizeof(unsigned int)*perFaceTriangles.size());
 	vboTriangles.release();
 }
 
@@ -123,10 +125,15 @@ void TriangleMesh::buildCube() {
 }
 
 bool TriangleMesh::init(QOpenGLShaderProgram *program) {
-	vector<QVector3D> replicatedVertices, normals;
-	vector<unsigned int> perFaceTriangles;
 
-	buildReplicatedVertices(replicatedVertices, normals, perFaceTriangles);
+	vector<QVector3D> copied_vertices, normals;
+	vector<unsigned int> perFaceTriangles;
+	make_VBO_data(copied_vertices, normals, perFaceTriangles);
+
+	/* ------------------ */
+	/* Load the shader program.
+	 * Create the vertex array/buffer objects.
+	 */
 
 	program->bind();
 
@@ -181,11 +188,13 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program) {
 	}
 	vboTriangles.setUsagePattern(QOpenGLBuffer::StaticDraw);
 
-	fillVBOs(replicatedVertices, normals, perFaceTriangles);
+	/* ------------------ */
+
+	// fill the vertex buffer objects for correct display.
+	fillVBOs(copied_vertices, normals, perFaceTriangles);
 
 	vao.release();
 	program->release();
-
 	return true;
 }
 
