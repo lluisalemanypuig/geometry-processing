@@ -12,15 +12,15 @@ FORMS += mainwindow.ui
 HEADERS += \
     glwidget.hpp \
     mainwindow.hpp \
-    plyreader.hpp \
-    trianglemesh.hpp
+    ply_reader.hpp \
+    triangle_mesh.hpp
 
 SOURCES += \
     main.cpp \
     glwidget.cpp \
     mainwindow.cpp \
-    trianglemesh.cpp \
-    plyreader.cpp
+    ply_reader.cpp \
+    triangle_mesh.cpp
 
 DISTFILES += \
     shaders/simpleshader.vert \

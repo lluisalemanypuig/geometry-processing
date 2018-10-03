@@ -29,11 +29,11 @@ class TriangleMesh {
 		/// Vertex array object for ...??
 		QOpenGLVertexArrayObject vao;
 		/// Vertex buffer object for the vertices.
-		QOpenGLBuffer vboVertices;
+		QOpenGLBuffer vbo_vertices;
 		/// Vertex buffer object for the normals.
-		QOpenGLBuffer vboNormals;
+		QOpenGLBuffer vbo_normals;
 		/// Vertex buffer object for the triangles.
-		QOpenGLBuffer vboTriangles;
+		QOpenGLBuffer vbo_triangles;
 
 	private:
 		/**
@@ -56,8 +56,8 @@ class TriangleMesh {
 		/**
 		 * @brief Fills the array/buffer objects associated to this mesh.
 		 *
-		 * These objects are @ref vao, @ref vboVertices, @ref vboNormals,
-		 * and @ref vboTriangles;
+		 * These objects are @ref vao, @ref vbo_vertices, @ref vbo_normals,
+		 * and @ref vbo_triangles;
 		 *
 		 * The parameters @e copied_vertices, @e normals, and @e perFaceTriangles
 		 * are the result of calling @ref make_BVO_data.
@@ -69,17 +69,51 @@ class TriangleMesh {
 		);
 
 	public:
+		/// Default constructor
 		TriangleMesh();
+		/// Destructor
 		~TriangleMesh();
 
+		/**
+		 * @brief Adds a vertex to the mesh.
+		 *
+		 * A simple call to push_back of @ref vertices.
+		 */
 		void addVertex(const QVector3D& position);
+		/**
+		 * @brief Adds a triangle to the mesh.
+		 *
+		 * Three calls to push_back of @ref triangles.
+		 */
 		void addTriangle(int v0, int v1, int v2);
 
+		/// Generates the vertices and triangles of a cube.
 		void buildCube();
 
+		/**
+		 * @brief Initialises the mesh with the shader @e program associated.
+		 *
+		 * Makes the data necessary to build the vertex buffer objects,
+		 * loads the shader program (bind, ...).
+		 * @param program An GLSL shader program.
+		 * @return Returns false on error.
+		 */
 		bool init(QOpenGLShaderProgram *program);
+		/**
+		 * @brief Frees all the memoery occupied by the mesh.
+		 *
+		 * Clears the contents of @ref vertices, @ref triangles
+		 * and destroys the vertex array object @ref vao, and
+		 * the vertex buffer objects @ref vbo_vertices, @ref vbo_normals,
+		 * @ref vbo_triangles.
+		 */
 		void destroy();
 
+		/**
+		 * @brief Renders the mesh.
+		 *
+		 * Using the functions available in @e gl.
+		 */
 		void render(QOpenGLFunctions& gl);
 };
 

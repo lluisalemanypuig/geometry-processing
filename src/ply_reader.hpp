@@ -7,13 +7,13 @@
 using namespace std;
 
 // Custom includes
-#include "trianglemesh.hpp"
+#include "triangle_mesh.hpp"
 
 /**
  * @brief Read a mesh in .ply format
  *
  * In order to load a mesh in ply format call only function
- * @ref readMesh.
+ * @ref read_mesh.
  */
 namespace PLY_reader {
 	bool __load_headerer(ifstream& fin, int& nVertices, int& nFaces);
@@ -22,6 +22,12 @@ namespace PLY_reader {
 	void __rescale_modeldel(vector<float>& plyVertices);
 	void __add_model_to_mesh_mesh(const vector<float>& plyVertices, const vector<int>& plyTriangles, TriangleMesh& mesh);
 
+	/**
+	 * @brief Loads a triangular mesh stored in @e filename.
+	 * @param filename File with the mesh in .ply format.
+	 * @param[out] mesh YUUY
+	 * @return Returns false on error.
+	 */
 	bool read_mesh(const QString& filename, TriangleMesh& mesh);
 
 } // -- namespace PLY_reader

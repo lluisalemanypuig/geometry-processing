@@ -1,4 +1,4 @@
-#include "trianglemesh.hpp"
+#include "triangle_mesh.hpp"
 
 // LOCAL-DEFINED
 
@@ -14,10 +14,10 @@ struct CornerEdge
 {
 	int vertexA, vertexB, corner;
 
-	bool operator<(const CornerEdge& cEdge) {
+	bool operator< (const CornerEdge& cEdge) {
 		return (vertexA < cEdge.vertexA) || ((vertexA == cEdge.vertexA) && (vertexB < cEdge.vertexB));
 	}
-	bool operator==(const CornerEdge& cEdge) {
+	bool operator== (const CornerEdge& cEdge) {
 		return (vertexA == cEdge.vertexA) && (vertexB == cEdge.vertexB);
 	}
 };
@@ -62,25 +62,25 @@ void TriangleMesh::fillVBOs
 	const vector<unsigned int>& perFaceTriangles
 )
 {
-	vboVertices.bind();
-	vboVertices.allocate(&copied_vertices[0], 3*sizeof(float)*copied_vertices.size());
-	vboVertices.release();
+	vbo_vertices.bind();
+	vbo_vertices.allocate(&copied_vertices[0], 3*sizeof(float)*copied_vertices.size());
+	vbo_vertices.release();
 
-	vboNormals.bind();
-	vboNormals.allocate(&normals[0], 3*sizeof(float)*normals.size());
-	vboNormals.release();
+	vbo_normals.bind();
+	vbo_normals.allocate(&normals[0], 3*sizeof(float)*normals.size());
+	vbo_normals.release();
 
-	vboTriangles.bind();
-	vboTriangles.allocate(&perFaceTriangles[0], sizeof(unsigned int)*perFaceTriangles.size());
-	vboTriangles.release();
+	vbo_triangles.bind();
+	vbo_triangles.allocate(&perFaceTriangles[0], sizeof(unsigned int)*perFaceTriangles.size());
+	vbo_triangles.release();
 }
 
 // PUBLIC
 
 TriangleMesh::TriangleMesh()
-: vboVertices(QOpenGLBuffer::VertexBuffer),
-  vboNormals(QOpenGLBuffer::VertexBuffer),
-  vboTriangles(QOpenGLBuffer::IndexBuffer)
+: vbo_vertices(QOpenGLBuffer::VertexBuffer),
+  vbo_normals(QOpenGLBuffer::VertexBuffer),
+  vbo_triangles(QOpenGLBuffer::IndexBuffer)
 { }
 
 TriangleMesh::~TriangleMesh() { }
@@ -148,45 +148,45 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program) {
 		return false;
 	}
 
-	vboVertices.destroy();
-	vboVertices.create();
-	if (vboVertices.isCreated()) {
-		vboVertices.bind();
+	vbo_vertices.destroy();
+	vbo_vertices.create();
+	if (vbo_vertices.isCreated()) {
+		vbo_vertices.bind();
 	}
 	else {
 		cerr << "TriangleMesh::init - Error:" << endl;
 		cerr << "    vertex buffer object 'vboVertices' not created." << endl;
 		return false;
 	}
-	vboVertices.setUsagePattern(QOpenGLBuffer::StaticDraw);
+	vbo_vertices.setUsagePattern(QOpenGLBuffer::StaticDraw);
 	program->enableAttributeArray(0);
 	program->setAttributeBuffer(0, GL_FLOAT, 0, 3, 0);
 
-	vboNormals.destroy();
-	vboNormals.create();
-	if (vboNormals.isCreated()) {
-		vboNormals.bind();
+	vbo_normals.destroy();
+	vbo_normals.create();
+	if (vbo_normals.isCreated()) {
+		vbo_normals.bind();
 	}
 	else {
 		cerr << "TriangleMesh::init - Error:" << endl;
 		cerr << "    vertex buffer object 'vboNormals' not created." << endl;
 		return false;
 	}
-	vboNormals.setUsagePattern(QOpenGLBuffer::StaticDraw);
+	vbo_normals.setUsagePattern(QOpenGLBuffer::StaticDraw);
 	program->enableAttributeArray(1);
 	program->setAttributeBuffer(1, GL_FLOAT, 0, 3, 0);
 
-	vboTriangles.destroy();
-	vboTriangles.create();
-	if (vboTriangles.isCreated()) {
-		vboTriangles.bind();
+	vbo_triangles.destroy();
+	vbo_triangles.create();
+	if (vbo_triangles.isCreated()) {
+		vbo_triangles.bind();
 	}
 	else {
 		cerr << "TriangleMesh::init - Error:" << endl;
 		cerr << "    vertex buffer object 'vboTriangles' not created." << endl;
 		return false;
 	}
-	vboTriangles.setUsagePattern(QOpenGLBuffer::StaticDraw);
+	vbo_triangles.setUsagePattern(QOpenGLBuffer::StaticDraw);
 
 	/* ------------------ */
 
@@ -200,9 +200,9 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program) {
 
 void TriangleMesh::destroy() {
 	vao.destroy();
-	vboVertices.destroy();
-	vboNormals.destroy();
-	vboTriangles.destroy();
+	vbo_vertices.destroy();
+	vbo_normals.destroy();
+	vbo_triangles.destroy();
 
 	vertices.clear();
 	triangles.clear();
@@ -210,7 +210,7 @@ void TriangleMesh::destroy() {
 
 void TriangleMesh::render(QOpenGLFunctions& gl) {
 	vao.bind();
-	vboTriangles.bind();
+	vbo_triangles.bind();
 	gl.glDrawElements(GL_TRIANGLES, triangles.size(), GL_UNSIGNED_INT, 0);
 	vao.release();
 }

@@ -11,8 +11,8 @@ using namespace std;
 #include <QMouseEvent>
 
 // Custom includes
-#include "trianglemesh.hpp"
-#include "plyreader.hpp"
+#include "triangle_mesh.hpp"
+#include "ply_reader.hpp"
 
 class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 	private:
