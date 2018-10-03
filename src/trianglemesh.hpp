@@ -14,21 +14,29 @@ using namespace std;
 
 class TriangleMesh {
 	private:
-		void buildReplicatedVertices(vector<QVector3D> &replicatedVertices, vector<QVector3D> &normals, vector<unsigned int> &perFaceTriangles);
-		void fillVBOs(vector<QVector3D> &replicatedVertices, vector<QVector3D> &normals, vector<unsigned int> &perFaceTriangles);
-
-	private:
 		vector<QVector3D> vertices;
 		vector<int> triangles;
 
 		QOpenGLVertexArrayObject vao;
-		QOpenGLBuffer vboVertices, vboNormals, eboTriangles;
+		QOpenGLBuffer vboVertices, vboNormals, vboTriangles;
+
+	private:
+		void buildReplicatedVertices(
+			vector<QVector3D>& replicatedVertices,
+			vector<QVector3D>& normals,
+			vector<unsigned int>& perFaceTriangles
+		);
+		void fillVBOs(
+			vector<QVector3D>& replicatedVertices,
+			vector<QVector3D>& normals,
+			vector<unsigned int>& perFaceTriangles
+		);
 
 	public:
 		TriangleMesh();
 		~TriangleMesh();
 
-		void addVertex(const QVector3D &position);
+		void addVertex(const QVector3D& position);
 		void addTriangle(int v0, int v1, int v2);
 
 		void buildCube();
@@ -36,6 +44,6 @@ class TriangleMesh {
 		bool init(QOpenGLShaderProgram *program);
 		void destroy();
 
-		void render(QOpenGLFunctions &gl);
+		void render(QOpenGLFunctions& gl);
 };
 

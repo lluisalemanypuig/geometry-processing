@@ -9,15 +9,19 @@ using namespace std;
 // Custom includes
 #include "trianglemesh.hpp"
 
-class PLYReader {
-    public:
-        static bool readMesh(const QString &filename, TriangleMesh &mesh);
+/**
+ * @brief Read a mesh in .ply format
+ *
+ * In order to load a mesh in ply format call only function
+ * @ref readMesh.
+ */
+namespace PLY_reader {
+	bool __load_headerer(ifstream& fin, int& nVertices, int& nFaces);
+	void __load_verticesces(ifstream& fin, int nVertices, vector<float>& plyVertices);
+	void __load_facesces(ifstream& fin, int nFaces, vector<int>& plyTriangles);
+	void __rescale_modeldel(vector<float>& plyVertices);
+	void __add_model_to_mesh_mesh(const vector<float>& plyVertices, const vector<int>& plyTriangles, TriangleMesh& mesh);
 
-    private:
-        static bool loadHeader(ifstream &fin, int &nVertices, int &nFaces);
-        static void loadVertices(ifstream &fin, int nVertices, vector<float> &plyVertices);
-        static void loadFaces(ifstream &fin, int nFaces, vector<int> &plyTriangles);
-        static void rescaleModel(vector<float> &plyVertices);
-        static void addModelToMesh(const vector<float> &plyVertices, const vector<int> &plyTriangles, TriangleMesh &mesh);
+	bool read_mesh(const QString& filename, TriangleMesh& mesh);
 
-};
+} // -- namespace PLY_reader

@@ -1,36 +1,89 @@
 #include "trianglemesh.hpp"
 
+// LOCAL-DEFINED
+
+inline int next(int corner) {
+	return 3*(corner/3) + (corner + 1)%3;
+}
+
+inline int previous(int corner) {
+	return 3*(corner/3) + (corner + 2)%3;
+}
 
 struct CornerEdge
 {
 	int vertexA, vertexB, corner;
 
-	bool operator<(const CornerEdge &cEdge) {
-		return (vertexA < cEdge.vertexA) || ((vertexA == cEdge.vertexA) && (vertexB < cEdge.vertexB));
+	bool operator<(const CornerEdge& cEdge) {
+		return (vertexA < cEdge.vertexA) || ((vertexA == cEdge.vertexA)& & (vertexB < cEdge.vertexB));
 	}
-	bool operator==(const CornerEdge &cEdge) {
-		return (vertexA == cEdge.vertexA) && (vertexB == cEdge.vertexB);
+	bool operator==(const CornerEdge& cEdge) {
+		return (vertexA == cEdge.vertexA)& & (vertexB == cEdge.vertexB);
 	}
 };
 
-int next(int corner) {
-	return 3*(corner/3) + (corner + 1)%3;
+// PRIVATE
+
+void TriangleMesh::buildReplicatedVertices
+(
+	vector<QVector3D>& replicatedVertices,
+	vector<QVector3D>& normals,
+	vector<unsigned int>& perFaceTriangles
+)
+{
+	normals.resize(triangles.size());
+
+	for (unsigned int i = 0; i < triangles.size(); i += 3) {
+		replicatedVertices.push_back(vertices[triangles[i]]);
+		replicatedVertices.push_back(vertices[triangles[i+1]]);
+		replicatedVertices.push_back(vertices[triangles[i+2]]);
+
+		QVector3D N = QVector3D::crossProduct(
+			vertices[triangles[i+1]] - vertices[triangles[i]],
+			vertices[triangles[i+2]] - vertices[triangles[i]]
+		);
+		N.normalize();
+		normals[i] = N;
+		normals[i+1] = N;
+		normals[i+2] = N;
+
+		perFaceTriangles.push_back(perFaceTriangles.size());
+		perFaceTriangles.push_back(perFaceTriangles.size());
+		perFaceTriangles.push_back(perFaceTriangles.size());
+	}
 }
 
-int previous(int corner) {
-	return 3*(corner/3) + (corner + 2)%3;
+void TriangleMesh::fillVBOs
+(
+	vector<QVector3D>& replicatedVertices,
+	vector<QVector3D>& normals,
+	vector<unsigned int>& perFaceTriangles
+)
+{
+	vboVertices.bind();
+	vboVertices.allocate(&replicatedVertices[0], 3*sizeof(float)*replicatedVertices.size());
+	vboVertices.release();
+
+	vboNormals.bind();
+	vboNormals.allocate(&normals[0], 3*sizeof(float)*normals.size());
+	vboNormals.release();
+
+	vboTriangles.bind();
+	vboTriangles.allocate(&perFaceTriangles[0], sizeof(int)*perFaceTriangles.size());
+	vboTriangles.release();
 }
 
+// PUBLIC
 
 TriangleMesh::TriangleMesh()
 : vboVertices(QOpenGLBuffer::VertexBuffer),
   vboNormals(QOpenGLBuffer::VertexBuffer),
-  eboTriangles(QOpenGLBuffer::IndexBuffer)
+  vboTriangles(QOpenGLBuffer::IndexBuffer)
 { }
 
 TriangleMesh::~TriangleMesh() { }
 
-void TriangleMesh::addVertex(const QVector3D &position) {
+void TriangleMesh::addVertex(const QVector3D& position) {
 	vertices.push_back(position);
 }
 
@@ -83,6 +136,8 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program) {
 		vao.bind();
 	}
 	else {
+		cerr << "TriangleMesh::init - Error:" << endl;
+		cerr << "    vertex array object 'vao' not created" << endl;
 		return false;
 	}
 
@@ -92,6 +147,8 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program) {
 		vboVertices.bind();
 	}
 	else {
+		cerr << "TriangleMesh::init - Error:" << endl;
+		cerr << "    vertex buffer object 'vboVertices' not created" << endl;
 		return false;
 	}
 	vboVertices.setUsagePattern(QOpenGLBuffer::StaticDraw);
@@ -104,21 +161,25 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program) {
 		vboNormals.bind();
 	}
 	else {
+		cerr << "TriangleMesh::init - Error:" << endl;
+		cerr << "    vertex buffer object 'vboNormals' not created" << endl;
 		return false;
 	}
 	vboNormals.setUsagePattern(QOpenGLBuffer::StaticDraw);
 	program->enableAttributeArray(1);
 	program->setAttributeBuffer(1, GL_FLOAT, 0, 3, 0);
 
-	eboTriangles.destroy();
-	eboTriangles.create();
-	if(eboTriangles.isCreated()) {
-		eboTriangles.bind();
+	vboTriangles.destroy();
+	vboTriangles.create();
+	if (vboTriangles.isCreated()) {
+		vboTriangles.bind();
 	}
 	else {
+		cerr << "TriangleMesh::init - Error:" << endl;
+		cerr << "    vertex buffer object 'vboTriangles' not created" << endl;
 		return false;
 	}
-	eboTriangles.setUsagePattern(QOpenGLBuffer::StaticDraw);
+	vboTriangles.setUsagePattern(QOpenGLBuffer::StaticDraw);
 
 	fillVBOs(replicatedVertices, normals, perFaceTriangles);
 
@@ -132,65 +193,18 @@ void TriangleMesh::destroy() {
 	vao.destroy();
 	vboVertices.destroy();
 	vboNormals.destroy();
-	eboTriangles.destroy();
+	vboTriangles.destroy();
 
 	vertices.clear();
 	triangles.clear();
 }
 
-void TriangleMesh::render(QOpenGLFunctions &gl) {
+void TriangleMesh::render(QOpenGLFunctions& gl) {
 	vao.bind();
-	eboTriangles.bind();
+	vboTriangles.bind();
 	gl.glDrawElements(GL_TRIANGLES, triangles.size(), GL_UNSIGNED_INT, 0);
 	vao.release();
 }
-
-void TriangleMesh::buildReplicatedVertices
-(
-	vector<QVector3D> &replicatedVertices,
-	vector<QVector3D> &normals,
-	vector<unsigned int> &perFaceTriangles
-)
-{
-	normals.resize(triangles.size());
-
-	for (unsigned int i = 0; i < triangles.size(); i += 3) {
-		replicatedVertices.push_back(vertices[triangles[i]]);
-		replicatedVertices.push_back(vertices[triangles[i+1]]);
-		replicatedVertices.push_back(vertices[triangles[i+2]]);
-
-		QVector3D N = QVector3D::crossProduct(vertices[triangles[i+1]] - vertices[triangles[i]], vertices[triangles[i+2]] - vertices[triangles[i]]);
-		N.normalize();
-		normals[i] = N;
-		normals[i+1] = N;
-		normals[i+2] = N;
-
-		perFaceTriangles.push_back(perFaceTriangles.size());
-		perFaceTriangles.push_back(perFaceTriangles.size());
-		perFaceTriangles.push_back(perFaceTriangles.size());
-	}
-}
-
-void TriangleMesh::fillVBOs
-(
-	vector<QVector3D> &replicatedVertices,
-	vector<QVector3D> &normals,
-	vector<unsigned int> &perFaceTriangles
-)
-{
-	vboVertices.bind();
-	vboVertices.allocate(&replicatedVertices[0], 3*sizeof(float)*replicatedVertices.size());
-	vboVertices.release();
-
-	vboNormals.bind();
-	vboNormals.allocate(&normals[0], 3*sizeof(float)*normals.size());
-	vboNormals.release();
-
-	eboTriangles.bind();
-	eboTriangles.allocate(&perFaceTriangles[0], sizeof(int)*perFaceTriangles.size());
-	eboTriangles.release();
-}
-
 
 
 

@@ -39,7 +39,7 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		GLWidget(QWidget *parent);
 		~GLWidget();
 
-		void loadMesh(const QString &filename);
+		void loadMesh(const QString& filename);
 		void setPolygonMode(bool bFill);
 
 };

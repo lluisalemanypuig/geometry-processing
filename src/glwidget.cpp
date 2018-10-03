@@ -89,13 +89,13 @@ void GLWidget::mousePressEvent(QMouseEvent *event) {
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event) {
 	// Rotation
-	if (event->buttons() & Qt::LeftButton) {
+	if (event->buttons()&  Qt::LeftButton) {
 		angleX += rotationFactor*(event->y() - lastMousePos.y());
 		angleX = max(-maxRotationCamera, min(angleX, maxRotationCamera));
 		angleY += rotationFactor*(event->x() - lastMousePos.x());
 	}
 	// Zoom
-	if (event->buttons() & Qt::RightButton) {
+	if (event->buttons()&  Qt::RightButton) {
 		distance += 0.01f*(event->y() - lastMousePos.y());
 		distance = max(minDistanceCamera, min(distance, maxDistanceCamera));
 	}
@@ -115,7 +115,7 @@ GLWidget::GLWidget(QWidget *parent)
 QOpenGLWidget(parent), bPolygonFill(true), angleX(0.0f),
 angleY(0.0f), distance(2.0f)
 {
-	program = NULL;
+	program = nullptr;
 }
 
 GLWidget::~GLWidget() {
@@ -124,11 +124,10 @@ GLWidget::~GLWidget() {
 	}
 }
 
-void GLWidget::loadMesh(const QString &filename) {
-	PLYReader reader;
+void GLWidget::loadMesh(const QString& filename) {
 
 	mesh.destroy();
-	reader.readMesh(filename, mesh);
+	PLY_reader::read_mesh(filename, mesh);
 	makeCurrent();
 	if (!mesh.init(program)) {
 		cerr << "Could not create vbo" << endl;
