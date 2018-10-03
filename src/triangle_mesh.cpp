@@ -10,14 +10,27 @@ inline int previous(int corner) {
 	return 3*(corner/3) + (corner + 2)%3;
 }
 
-struct CornerEdge
-{
+struct CornerEdge {
 	int vertexA, vertexB, corner;
 
-	bool operator< (const CornerEdge& cEdge) {
+	CornerEdge() : vertexA(-1), vertexB(-1), corner(-1) { }
+
+	void set_indexes(int va, int vb, int c) {
+		if (va < vb) {
+			vertexA = va;
+			vertexB = vb;
+		}
+		else {
+			vertexA = vb;
+			vertexB = va;
+		}
+		corner = c;
+	}
+
+	bool operator< (const CornerEdge& cEdge) const {
 		return (vertexA < cEdge.vertexA) || ((vertexA == cEdge.vertexA) && (vertexB < cEdge.vertexB));
 	}
-	bool operator== (const CornerEdge& cEdge) {
+	bool operator== (const CornerEdge& cEdge) const {
 		return (vertexA == cEdge.vertexA) && (vertexB == cEdge.vertexB);
 	}
 };
@@ -83,7 +96,9 @@ TriangleMesh::TriangleMesh()
   vbo_triangles(QOpenGLBuffer::IndexBuffer)
 { }
 
-TriangleMesh::~TriangleMesh() { }
+TriangleMesh::~TriangleMesh() {
+	destroy();
+}
 
 void TriangleMesh::addVertex(const QVector3D& position) {
 	vertices.push_back(position);
@@ -93,6 +108,58 @@ void TriangleMesh::addTriangle(int v0, int v1, int v2) {
 	triangles.push_back(v0);
 	triangles.push_back(v1);
 	triangles.push_back(v2);
+}
+
+void TriangleMesh::make_neighbourhood_data() {
+	// ------------------
+	// build corner table
+	corners.resize(vertices.size());
+
+	for (unsigned int i = 0; i < triangles.size(); i += 3) {
+		// triangle i has 3 corners:
+		// -> i+0, i+1, i+2
+		// each corner j is associated to a vertex
+		// triangles[i+1]=j <-> "the i+1 corner of the
+		// triangle has vertex j".
+
+		int v0 = triangles[i];
+		corners[v0] = i;
+
+		int v1 = triangles[i + 1];
+		corners[v1] = i + 1;
+
+		int v2 = triangles[i + 2];
+		corners[v2] = i + 2;
+	}
+
+	// ---------------------------
+	// build opposite_corner table
+
+	// opposite_corners is initialised with -1 because
+	// such opposite may not exist.
+	opposite_corners.resize(triangles.size(), -1);
+
+	vector<CornerEdge> data;
+	for (unsigned int i = 0; i < triangles.size(); i += 3) {
+		int v0 = triangles[i];
+		int v1 = triangles[i+1];
+		int v2 = triangles[i+2];
+
+		CornerEdge e1, e2, e3;
+
+		// edge v0,v1
+		e1.set_indexes(v0, v1, v2);
+		// edge v1,v2
+		e2.set_indexes(v1, v2, v0);
+		// edge v0,v2
+		e3.set_indexes(v0, v2, v1);
+
+		data.push_back(e1);
+		data.push_back(e2);
+		data.push_back(e3);
+	}
+
+	sort(data.begin(), data.end());
 }
 
 void TriangleMesh::buildCube() {
@@ -206,6 +273,8 @@ void TriangleMesh::destroy() {
 
 	vertices.clear();
 	triangles.clear();
+	opposite_corners.clear();
+	corners.clear();
 }
 
 void TriangleMesh::render(QOpenGLFunctions& gl) {

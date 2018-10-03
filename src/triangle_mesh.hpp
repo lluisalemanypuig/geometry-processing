@@ -1,6 +1,7 @@
 #pragma once
 
 // C++ includes
+#include <algorithm>
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -23,8 +24,32 @@ class TriangleMesh {
 		 * position multiple of 3 contain the indexes of
 		 * the vertices (stored in @ref vertices) of the
 		 * triangle.
+		 *
+		 * Then, the @e i-th triangle has vertices
+		 * @ref triangles[i], @ref triangles[i+1], @ref triangles[i+2]
 		 */
 		vector<int> triangles;
+		/**
+		 * @brief The set of opposite corners.
+		 *
+		 * This table stores for every corner its opposite
+		 * corner. Therefore, we can access the vertex opposite
+		 * to another vertex (with respect to an edge).
+		 *
+		 * Then @ref opposite_corners[@e i] = @e j iff corner @e j
+		 * is the opposite corner of @e i.
+		 */
+		vector<int> opposite_corners;
+		/**
+		 * @brief Corner table.
+		 *
+		 * Relates each vertex of the mesh to a corner.
+		 *
+		 * A vertex may belong to several corners (as many
+		 * as triangles it is found in), but this table
+		 * associates each vertex to a single corner index.
+		 */
+		vector<int> corners;
 
 		/// Vertex array object for ...??
 		QOpenGLVertexArrayObject vao;
@@ -74,6 +99,11 @@ class TriangleMesh {
 		/// Destructor
 		~TriangleMesh();
 
+		/// Generates the vertices and triangles of a cube.
+		void buildCube();
+
+		// MODIFIERS
+
 		/**
 		 * @brief Adds a vertex to the mesh.
 		 *
@@ -87,8 +117,16 @@ class TriangleMesh {
 		 */
 		void addTriangle(int v0, int v1, int v2);
 
-		/// Generates the vertices and triangles of a cube.
-		void buildCube();
+		/**
+		 * @brief Builds the necessary tables to iterate through
+		 * the one-ring of a vertex, ....
+		 *
+		 * Builds @ref corners and @ref opposite_corner tables.
+		 *
+		 * This function should be called only after all
+		 * vertices and triangles have been added.
+		 */
+		void make_neighbourhood_data();
 
 		/**
 		 * @brief Initialises the mesh with the shader @e program associated.
@@ -108,6 +146,8 @@ class TriangleMesh {
 		 * @ref vbo_triangles.
 		 */
 		void destroy();
+
+		// OTHERS
 
 		/**
 		 * @brief Renders the mesh.
