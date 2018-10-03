@@ -17,6 +17,7 @@ using namespace std;
 class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 	private:
 		bool bPolygonFill;
+
 		float angleX, angleY, distance;
 		QPoint lastMousePos;
 
@@ -24,8 +25,8 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		TriangleMesh mesh;
 
 	private:
-		void setProjection(float aspect);
-		void setModelview();
+		void set_projection(float aspect);
+		void set_modelview();
 
 	protected:
 		void initializeGL();
@@ -39,8 +40,9 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		GLWidget(QWidget *parent);
 		~GLWidget();
 
-		void loadMesh(const QString& filename);
-		void setPolygonMode(bool bFill);
+		void load_mesh(const QString& filename);
+
+		void set_polygon_mode(bool bFill);
 
 };
 

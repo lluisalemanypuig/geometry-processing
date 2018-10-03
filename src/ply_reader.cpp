@@ -2,7 +2,7 @@
 
 namespace PLY_reader {
 
-	bool __loadHeader(ifstream& fin, int& nVertices, int& nFaces) {
+	bool __load_header(ifstream& fin, int& nVertices, int& nFaces) {
 		char line[100];
 
 		fin.getline(line, 100);
@@ -128,7 +128,7 @@ namespace PLY_reader {
 			cerr << "    Could not open file '" << filename.toStdString() << "'." << endl;
 			return false;
 		}
-		if (not __loadHeader(fin, nVertices, nFaces)) {
+		if (not __load_header(fin, nVertices, nFaces)) {
 			fin.close();
 			cerr << "PLY_reader::read_mesh - Error:" << endl;
 			cerr << "    Bad input file format." << endl;

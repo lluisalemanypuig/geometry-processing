@@ -7,16 +7,17 @@ const float maxDistanceCamera = 3.0f;
 
 // PRIVATE
 
-void GLWidget::setProjection(float aspect) {
+void GLWidget::set_projection(float aspect) {
 	QMatrix4x4 projectionMatrix;
 
 	projectionMatrix.perspective(60, aspect, 0.01, 100.0);
+
 	program->bind();
 	program->setUniformValue("projection", projectionMatrix);
 	program->release();
 }
 
-void GLWidget::setModelview() {
+void GLWidget::set_modelview() {
 	QMatrix4x4 modelviewMatrix;
 
 	modelviewMatrix.translate(0, 0, -distance);
@@ -51,7 +52,7 @@ void GLWidget::initializeGL() {
 	mesh.buildCube();
 	if (!mesh.init(program)) {
 		cerr << "GLWidget::initializeGL - Error:" << endl;
-		cerr << "Could not create vbo." << endl;
+		cerr << "    Could not create vbo." << endl;
 		QApplication::quit();
 	}
 
@@ -61,8 +62,8 @@ void GLWidget::initializeGL() {
 
 void GLWidget::resizeGL(int w, int h) {
 	glViewport(0, 0, w, h);
-	setProjection((float)w/h);
-	setModelview();
+	set_projection((float)w/h);
+	set_modelview();
 }
 
 void GLWidget::paintGL() {
@@ -109,7 +110,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
 	lastMousePos = event->pos();
 
 	makeCurrent();
-	setModelview();
+	set_modelview();
 	doneCurrent();
 	update();
 }
@@ -118,8 +119,9 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
 
 GLWidget::GLWidget(QWidget *parent)
 :
-QOpenGLWidget(parent), bPolygonFill(true), angleX(0.0f),
-angleY(0.0f), distance(2.0f)
+QOpenGLWidget(parent),
+bPolygonFill(true), perspective(true),
+angleX(0.0f), angleY(0.0f), distance(2.0f)
 {
 	program = nullptr;
 }
@@ -130,9 +132,12 @@ GLWidget::~GLWidget() {
 	}
 }
 
-void GLWidget::loadMesh(const QString& filename) {
+void GLWidget::load_mesh(const QString& filename) {
 	mesh.destroy();
+
 	PLY_reader::read_mesh(filename, mesh);
+
+
 	makeCurrent();
 	if (!mesh.init(program)) {
 		cerr << "GLWidget::loadMesh - Error:" << endl;
@@ -143,7 +148,7 @@ void GLWidget::loadMesh(const QString& filename) {
 	update();
 }
 
-void GLWidget::setPolygonMode(bool bFill) {
+void GLWidget::set_polygon_mode(bool bFill) {
 	bPolygonFill = bFill;
 
 	makeCurrent();
@@ -156,3 +161,4 @@ void GLWidget::setPolygonMode(bool bFill) {
 	doneCurrent();
 	update();
 }
+

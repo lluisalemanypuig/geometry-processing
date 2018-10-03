@@ -6,7 +6,7 @@
 
 void MainWindow::on_action_Open_triggered() {
 	QString filename = QFileDialog::getOpenFileName(this, tr("Open PLY"), ".", tr("*.ply"));
-	ui->openGLWidget->loadMesh(filename);
+	ui->openGLWidget->load_mesh(filename);
 }
 
 void MainWindow::on_action_Quit_triggered() {
@@ -14,7 +14,7 @@ void MainWindow::on_action_Quit_triggered() {
 }
 
 void MainWindow::on_checkBoxFill_toggled(bool checked) {
-	 ui->openGLWidget->setPolygonMode(checked);
+	 ui->openGLWidget->set_polygon_mode(checked);
 }
 
 // PUBLIC

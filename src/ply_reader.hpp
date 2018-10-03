@@ -16,11 +16,11 @@ using namespace std;
  * @ref read_mesh.
  */
 namespace PLY_reader {
-	bool __load_headerer(ifstream& fin, int& nVertices, int& nFaces);
-	void __load_verticesces(ifstream& fin, int nVertices, vector<float>& plyVertices);
-	void __load_facesces(ifstream& fin, int nFaces, vector<int>& plyTriangles);
-	void __rescale_modeldel(vector<float>& plyVertices);
-	void __add_model_to_mesh_mesh(const vector<float>& plyVertices, const vector<int>& plyTriangles, TriangleMesh& mesh);
+	bool __load_header(ifstream& fin, int& nVertices, int& nFaces);
+	void __load_vertices(ifstream& fin, int nVertices, vector<float>& plyVertices);
+	void __load_faces(ifstream& fin, int nFaces, vector<int>& plyTriangles);
+	void __rescale_model(vector<float>& plyVertices);
+	void __add_model_to_mesh(const vector<float>& plyVertices, const vector<int>& plyTriangles, TriangleMesh& mesh);
 
 	/**
 	 * @brief Loads a triangular mesh stored in @e filename.
