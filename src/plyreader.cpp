@@ -7,6 +7,8 @@ namespace PLY_reader {
 
 		fin.getline(line, 100);
 		if (strncmp(line, "ply", 3) != 0) {
+			cerr << "PLY_reader::__loadHeader - Error:" << endl;
+			cerr << "    Wrong format of file: first line does not contain 'ply'." << endl;
 			return false;
 		}
 		nVertices = 0;
@@ -20,7 +22,9 @@ namespace PLY_reader {
 				nFaces = atoi(&line[13]);
 			}
 		}
-		if(nVertices <= 0) {
+		if (nVertices <= 0) {
+			cerr << "PLY_reader::__loadHeader - Error:" << endl;
+			cerr << "    Number of vertices read is negative." << endl;
 			return false;
 		}
 
@@ -108,10 +112,14 @@ namespace PLY_reader {
 
 		fin.open(filename.toStdString().c_str(), ios_base::in | ios_base::binary);
 		if (!fin.is_open()) {
+			cerr << "PLY_reader::read_mesh - Error:" << endl;
+			cerr << "    Could not open file '" << filename.toStdString() << "'." << endl;
 			return false;
 		}
 		if (!__loadHeader(fin, nVertices, nFaces)) {
 			fin.close();
+			cerr << "PLY_reader::read_mesh - Error:" << endl;
+			cerr << "    Bad input file format." << endl;
 			return false;
 		}
 
@@ -124,7 +132,6 @@ namespace PLY_reader {
 
 		__rescale_model(plyVertices);
 		__add_model_to_mesh(plyVertices, plyTriangles, mesh);
-
 		return true;
 	}
 

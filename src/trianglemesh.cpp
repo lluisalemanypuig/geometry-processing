@@ -15,10 +15,10 @@ struct CornerEdge
 	int vertexA, vertexB, corner;
 
 	bool operator<(const CornerEdge& cEdge) {
-		return (vertexA < cEdge.vertexA) || ((vertexA == cEdge.vertexA)& & (vertexB < cEdge.vertexB));
+		return (vertexA < cEdge.vertexA) || ((vertexA == cEdge.vertexA) && (vertexB < cEdge.vertexB));
 	}
 	bool operator==(const CornerEdge& cEdge) {
-		return (vertexA == cEdge.vertexA)& & (vertexB == cEdge.vertexB);
+		return (vertexA == cEdge.vertexA) && (vertexB == cEdge.vertexB);
 	}
 };
 
@@ -137,7 +137,7 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program) {
 	}
 	else {
 		cerr << "TriangleMesh::init - Error:" << endl;
-		cerr << "    vertex array object 'vao' not created" << endl;
+		cerr << "    vertex array object 'vao' not created." << endl;
 		return false;
 	}
 
@@ -148,7 +148,7 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program) {
 	}
 	else {
 		cerr << "TriangleMesh::init - Error:" << endl;
-		cerr << "    vertex buffer object 'vboVertices' not created" << endl;
+		cerr << "    vertex buffer object 'vboVertices' not created." << endl;
 		return false;
 	}
 	vboVertices.setUsagePattern(QOpenGLBuffer::StaticDraw);
@@ -162,7 +162,7 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program) {
 	}
 	else {
 		cerr << "TriangleMesh::init - Error:" << endl;
-		cerr << "    vertex buffer object 'vboNormals' not created" << endl;
+		cerr << "    vertex buffer object 'vboNormals' not created." << endl;
 		return false;
 	}
 	vboNormals.setUsagePattern(QOpenGLBuffer::StaticDraw);
@@ -176,7 +176,7 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program) {
 	}
 	else {
 		cerr << "TriangleMesh::init - Error:" << endl;
-		cerr << "    vertex buffer object 'vboTriangles' not created" << endl;
+		cerr << "    vertex buffer object 'vboTriangles' not created." << endl;
 		return false;
 	}
 	vboTriangles.setUsagePattern(QOpenGLBuffer::StaticDraw);

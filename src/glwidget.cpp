@@ -38,14 +38,20 @@ void GLWidget::initializeGL() {
 	program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/simpleshader.frag");
 	program->link();
 	if (!program->isLinked()) {
-		cerr << "Shader program has not linked" << endl << endl << "Log: " << endl << endl << program->log().toStdString();
+		cerr << "GLWidget::initializeGL - Error:" << endl;
+		cerr << "Shader program has not linked" << endl;
+		cerr << endl;
+		cerr << "Log: " << endl;
+		cerr << endl;
+		cerr << program->log().toStdString();
 		QApplication::quit();
 	}
 	program->bind();
 
 	mesh.buildCube();
 	if (!mesh.init(program)) {
-		cerr << "Could not create vbo" << endl;
+		cerr << "GLWidget::initializeGL - Error:" << endl;
+		cerr << "Could not create vbo." << endl;
 		QApplication::quit();
 	}
 
@@ -89,13 +95,13 @@ void GLWidget::mousePressEvent(QMouseEvent *event) {
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event) {
 	// Rotation
-	if (event->buttons()&  Qt::LeftButton) {
+	if (event->buttons() & Qt::LeftButton) {
 		angleX += rotationFactor*(event->y() - lastMousePos.y());
 		angleX = max(-maxRotationCamera, min(angleX, maxRotationCamera));
 		angleY += rotationFactor*(event->x() - lastMousePos.x());
 	}
 	// Zoom
-	if (event->buttons()&  Qt::RightButton) {
+	if (event->buttons() & Qt::RightButton) {
 		distance += 0.01f*(event->y() - lastMousePos.y());
 		distance = max(minDistanceCamera, min(distance, maxDistanceCamera));
 	}
@@ -125,12 +131,12 @@ GLWidget::~GLWidget() {
 }
 
 void GLWidget::loadMesh(const QString& filename) {
-
 	mesh.destroy();
 	PLY_reader::read_mesh(filename, mesh);
 	makeCurrent();
 	if (!mesh.init(program)) {
-		cerr << "Could not create vbo" << endl;
+		cerr << "GLWidget::loadMesh - Error:" << endl;
+		cerr << "    Could not create vbo." << endl;
 		QApplication::quit();
 	}
 	doneCurrent();
