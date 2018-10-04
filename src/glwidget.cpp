@@ -70,8 +70,8 @@ void GLWidget::paintGL() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	program->bind();
-	program->setUniformValue("bLighting", bPolygonFill);
-	if (bPolygonFill) {
+	program->setUniformValue("bLighting", poly_fill);
+	if (poly_fill) {
 		program->setUniformValue("color", QVector4D(0.75, 0.8, 0.9, 1.0));
 	}
 	else {
@@ -120,7 +120,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
 GLWidget::GLWidget(QWidget *parent)
 :
 QOpenGLWidget(parent),
-bPolygonFill(true),
+poly_fill(true),
 angleX(0.0f), angleY(0.0f), distance(2.0f)
 {
 	program = nullptr;
@@ -155,7 +155,7 @@ void GLWidget::load_mesh(const QString& filename) {
 }
 
 void GLWidget::set_polygon_mode(bool bFill) {
-	bPolygonFill = bFill;
+	poly_fill = bFill;
 
 	makeCurrent();
 	if (bFill) {
@@ -166,5 +166,19 @@ void GLWidget::set_polygon_mode(bool bFill) {
 	}
 	doneCurrent();
 	update();
+}
+
+void GLWidget::set_curvature_display(const curvature& _cd) {
+	cd = _cd;
+
+	if (cd == curvature::Gauss) {
+		cout << "Gauss curvature" << endl;
+	}
+	else if (cd == curvature::Mean) {
+		cout << "Mean curvature" << endl;
+	}
+	else if (cd == curvature::none) {
+		cout << "No curvature to be displayed" << endl;
+	}
 }
 

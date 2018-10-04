@@ -14,9 +14,18 @@ using namespace std;
 #include "triangle_mesh.hpp"
 #include "ply_reader.hpp"
 
+enum class curvature : int8_t {
+	none = -1,
+	Gauss,	// display Kg = k1*k2
+	Mean	// display Kh = (k1 + k2)/2
+};
+
 class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 	private:
-		bool bPolygonFill;
+		/// Display the polygons filled (true), or wireframe (false)
+		bool poly_fill;
+		/// Type of curvature to be displayed. See @ref curvature_display.
+		curvature cd;
 
 		float angleX, angleY, distance;
 		QPoint lastMousePos;
@@ -42,7 +51,9 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 
 		void load_mesh(const QString& filename);
 
-		void set_polygon_mode(bool bFill);
-
+		/// Sets the polygon display mode. See @ref poly_fill.
+		void set_polygon_mode(bool fill);
+		/// Sets the type of curvature to be displayed. See @ref curvature_display.
+		void set_curvature_display(const curvature& cd);
 };
 

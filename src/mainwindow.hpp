@@ -13,9 +13,17 @@ class MainWindow : public QMainWindow {
 		Ui::MainWindow *ui;
 
 	private slots:
+		/* Menu buttons */
 		void on_action_Open_triggered();
 		void on_action_Quit_triggered();
-		void on_checkBoxFill_toggled(bool checked);
+
+		/* Interface elements */
+		void on_cBFill_toggled(bool checked);
+
+		// curvature
+		void on_rBCurvatureH_toggled(bool checked);
+		void on_rBCurvatureG_toggled(bool checked);
+		void on_rBNoCurvature_toggled(bool checked);
 
 	public:
 		explicit MainWindow(QWidget *parent = 0);
