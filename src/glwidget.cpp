@@ -120,7 +120,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
 GLWidget::GLWidget(QWidget *parent)
 :
 QOpenGLWidget(parent),
-bPolygonFill(true), perspective(true),
+bPolygonFill(true),
 angleX(0.0f), angleY(0.0f), distance(2.0f)
 {
 	program = nullptr;
@@ -135,15 +135,22 @@ GLWidget::~GLWidget() {
 void GLWidget::load_mesh(const QString& filename) {
 	mesh.destroy();
 
+	cout << "GLWidget: reading mesh..." << endl;
 	PLY_reader::read_mesh(filename, mesh);
-
+	cout << "GLWidget: mesh read succesfully" << endl;
 
 	makeCurrent();
+
+	cout << "GLWidget: initialising mesh..." << endl;
+
 	if (!mesh.init(program)) {
 		cerr << "GLWidget::loadMesh - Error:" << endl;
 		cerr << "    Could not create vbo." << endl;
 		QApplication::quit();
 	}
+
+	cout << "GLWidget: mesh initialised succesfully." << endl;
+
 	doneCurrent();
 	update();
 }

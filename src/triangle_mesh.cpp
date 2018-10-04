@@ -57,6 +57,7 @@ void TriangleMesh::make_VBO_data
 			vertices[triangles[i+1]] - vertices[triangles[i]],
 			vertices[triangles[i+2]] - vertices[triangles[i]]
 		);
+
 		N.normalize();
 		normals[i] = N;
 		normals[i+1] = N;
@@ -192,7 +193,6 @@ void TriangleMesh::buildCube() {
 }
 
 bool TriangleMesh::init(QOpenGLShaderProgram *program) {
-
 	vector<QVector3D> copied_vertices, normals;
 	vector<unsigned int> perFaceTriangles;
 	make_VBO_data(copied_vertices, normals, perFaceTriangles);
@@ -210,8 +210,8 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program) {
 		vao.bind();
 	}
 	else {
-		cerr << "TriangleMesh::init - Error:" << endl;
-		cerr << "    vertex array object 'vao' not created." << endl;
+		cerr << "    TriangleMesh::init - Error:" << endl;
+		cerr << "        Vertex array object 'vao' not created." << endl;
 		return false;
 	}
 
@@ -221,8 +221,8 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program) {
 		vbo_vertices.bind();
 	}
 	else {
-		cerr << "TriangleMesh::init - Error:" << endl;
-		cerr << "    vertex buffer object 'vboVertices' not created." << endl;
+		cerr << "    TriangleMesh::init - Error:" << endl;
+		cerr << "        Vertex buffer object 'vboVertices' not created." << endl;
 		return false;
 	}
 	vbo_vertices.setUsagePattern(QOpenGLBuffer::StaticDraw);
@@ -235,8 +235,8 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program) {
 		vbo_normals.bind();
 	}
 	else {
-		cerr << "TriangleMesh::init - Error:" << endl;
-		cerr << "    vertex buffer object 'vboNormals' not created." << endl;
+		cerr << "    TriangleMesh::init - Error:" << endl;
+		cerr << "        Vertex buffer object 'vboNormals' not created." << endl;
 		return false;
 	}
 	vbo_normals.setUsagePattern(QOpenGLBuffer::StaticDraw);
@@ -249,8 +249,8 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program) {
 		vbo_triangles.bind();
 	}
 	else {
-		cerr << "TriangleMesh::init - Error:" << endl;
-		cerr << "    vertex buffer object 'vboTriangles' not created." << endl;
+		cerr << "    TriangleMesh::init - Error:" << endl;
+		cerr << "        Vertex buffer object 'vboTriangles' not created." << endl;
 		return false;
 	}
 	vbo_triangles.setUsagePattern(QOpenGLBuffer::StaticDraw);
