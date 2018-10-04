@@ -26,10 +26,10 @@ namespace PLY_reader {
 			}
 			else if (strncmp(line, "property float nx", 17) == 0) {
 				cerr << "        PLY_reader::__load_header - Error:" << endl;
-				cerr << "            This model has normals: do not know how to import them" << endl;
-				cerr << "            Besides, more vertices than necessary are created, and" << endl;
-				cerr << "            this makes it even more difficult to create the mesh." << endl;
-				assert(false);
+				cerr << "            This model has normals: more vertices than necessary" << endl;
+				cerr << "            are in the file and this makes it too difficult to" << endl;
+				cerr << "            create the mesh." << endl;
+				return false;
 			}
 			fin.getline(line, 100);
 		}
