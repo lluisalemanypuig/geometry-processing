@@ -173,28 +173,6 @@ void TriangleMesh::make_neighbourhood_data() {
 	// sort the vector so that the edge pairs are consecutive
 	sort(data.begin(), data.end());
 
-	cout << "vertices:" << endl;
-	for (size_t i = 0; i < vertices.size(); ++i) {
-		cout << "    " << i << ": ("
-			 << vertices[i][0] << ","
-			 << vertices[i][1] << ","
-			 << vertices[i][2] << ")"
-			 << endl;
-	}
-
-	cout << "triangles:" << endl;
-	for (size_t i = 0; i < triangles.size(); i += 3) {
-		cout << "    " << i << ": "
-			 << triangles[i] << ","
-			 << triangles[i+1] << ","
-			 << triangles[i+2]
-			 << endl;
-	}
-
-	for (const CornerEdge& d : data) {
-		cout << d.vertexA << ", " << d.vertexB << ", " << d.corner << endl;
-	}
-
 	// For each corner edge, check that a twin exists.
 	// If so, we have found a pair of opposite corners
 	for (size_t i = 0; i < data.size(); ++i) {
@@ -212,31 +190,37 @@ void TriangleMesh::make_neighbourhood_data() {
 			// go to the next pair.
 			++i;
 		}
+		else {
+			// this single CornerEdge contains
+			// an edge of the boundary
+			boundary.push_back( make_pair(triangles[vA], triangles[vB]) );
+		}
 	}
 
-	cout << "opposite corners:" << endl;
-	for (size_t i = 0; i < opposite_corners.size(); ++i) {
-		cout << "    corner " << i << " has opposite " << opposite_corners[i] << endl;
+	for (const pair<int,int>& edge : boundary) {
+		cout << edge.first << ", " << edge.second << endl;
 	}
 
-	auto is_sane = [&]() -> bool {
-		for (size_t i = 0; i < opposite_corners.size(); ++i) {
-			if (opposite_corners[i] != -1) {
-				int o = opposite_corners[i];
-				int c = opposite_corners[o];
-				/* we must have
-				 *     opposite_corners[c] = o <-> opposite_corners[o] = c
-				 */
-				if ((int)(i) != c) {
-					cerr << "         corner " << i << " has opposite " << o << endl;
-					cerr << "however, corner " << o << " has opposite " << c << endl;
-					return false;
-				}
+	#if defined (DEBUG)
+	bool sane = true;
+	size_t i = 0;
+	while (i < opposite_corners.size() and sane) {
+		if (opposite_corners[i] != -1) {
+			int o = opposite_corners[i];
+			int c = opposite_corners[o];
+			/* we must have
+			 *     opposite_corners[c] = o <-> opposite_corners[o] = c
+			 */
+			if ((int)(i) != c) {
+				cerr << "         corner " << i << " has opposite " << o << endl;
+				cerr << "however, corner " << o << " has opposite " << c << endl;
+				sane = false;
 			}
 		}
-		return true;
-	};
-	assert( is_sane() );
+		++i;
+	}
+	assert( sane );
+	#endif
 }
 
 void TriangleMesh::buildCube() {
@@ -266,6 +250,8 @@ void TriangleMesh::buildCube() {
 	for (int i = 0; i < 12; ++i) {
 		addTriangle(faces[3*i], faces[3*i+1], faces[3*i+2]);
 	}
+
+	make_neighbourhood_data();
 }
 
 bool TriangleMesh::init(QOpenGLShaderProgram *program) {

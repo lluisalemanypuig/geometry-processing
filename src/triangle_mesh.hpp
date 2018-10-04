@@ -53,6 +53,17 @@ class TriangleMesh {
 		 * associates each vertex to a single corner index.
 		 */
 		vector<int> corners;
+		/**
+		 * @brief Hard boundary of the mesh.
+		 *
+		 * The hard boundary is composed by pairs of vertices
+		 * (each identified with a vertex index).
+		 *
+		 * The hard is boundary is defined as those edges ({vi,vj})
+		 * of those triangles ({vi,vj,vk}) such that vk has no
+		 * opposite corner.
+		 */
+		vector<pair<int,int> > boundary;
 
 		/// Vertex array object for ...??
 		QOpenGLVertexArrayObject vao;
@@ -125,6 +136,8 @@ class TriangleMesh {
 		 * the one-ring of a vertex, ....
 		 *
 		 * Builds @ref corners and @ref opposite_corner tables.
+		 * Also, just for the sake of completeness, it computes
+		 * the boundary of the mesh in @ref boundary.
 		 *
 		 * This function should be called only after all
 		 * vertices and triangles have been added.
