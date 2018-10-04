@@ -151,6 +151,8 @@ void GLWidget::load_mesh(const QString& filename) {
 
 	cout << "GLWidget: mesh initialised succesfully." << endl;
 
+	mesh.make_neighbourhood_data();
+
 	doneCurrent();
 	update();
 }
