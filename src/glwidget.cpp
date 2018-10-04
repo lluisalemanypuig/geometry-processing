@@ -137,7 +137,6 @@ void GLWidget::load_mesh(const QString& filename) {
 
 	cout << "GLWidget: reading mesh..." << endl;
 	PLY_reader::read_mesh(filename, mesh);
-	cout << "GLWidget: mesh read succesfully" << endl;
 
 	makeCurrent();
 
@@ -148,8 +147,6 @@ void GLWidget::load_mesh(const QString& filename) {
 		cerr << "    Could not create vbo." << endl;
 		QApplication::quit();
 	}
-
-	cout << "GLWidget: mesh initialised succesfully." << endl;
 
 	mesh.make_neighbourhood_data();
 

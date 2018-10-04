@@ -42,8 +42,6 @@ namespace PLY_reader {
 		cout << "        PLY_reader: triangle mesh has:" << endl;
 		cout << "            Vertices = " << nVertices << endl;
 		cout << "            Faces = " << nFaces << endl;
-		cout << endl;
-
 		return true;
 	}
 
