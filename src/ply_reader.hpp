@@ -14,6 +14,10 @@ using namespace std;
  *
  * In order to load a mesh in ply format call only function
  * @ref read_mesh.
+ * 
+ * This reader only supports those files that do not contain
+ * anything else than vertex coordinates and the description
+ * of every face.
  */
 namespace PLY_reader {
 	bool __load_header(ifstream& fin, int& nVertices, int& nFaces, string& format);
