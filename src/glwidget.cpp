@@ -152,6 +152,7 @@ void GLWidget::load_mesh(const QString& filename) {
 	update();
 
 	mesh.make_neighbourhood_data();
+	mesh.compute_Kh(curvature_values);
 }
 
 void GLWidget::set_polygon_mode(bool bFill) {

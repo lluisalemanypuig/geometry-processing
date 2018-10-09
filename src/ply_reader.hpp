@@ -6,6 +6,9 @@
 #include <vector>
 using namespace std;
 
+// glm includes
+#include <glm/vec3.hpp>
+
 // Custom includes
 #include "triangle_mesh.hpp"
 

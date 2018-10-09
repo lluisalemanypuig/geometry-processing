@@ -2,13 +2,18 @@
 
 // LOCAL-DEFINED
 
-inline int next(int corner) {
+inline
+int next(int corner) {
 	return 3*(corner/3) + (corner + 1)%3;
 }
 
-inline int previous(int corner) {
+inline
+int previous(int corner) {
 	return 3*(corner/3) + (corner + 2)%3;
 }
+
+template<typename T>
+inline T cotan(const T& a) { return std::cos(a)/std::sin(a); }
 
 struct CornerEdge {
 	int vertexA, vertexB, corner;
@@ -39,8 +44,8 @@ struct CornerEdge {
 
 void TriangleMesh::make_VBO_data
 (
-	vector<QVector3D>& copied_vertices,
-	vector<QVector3D>& normals,
+	vector<glm::vec3>& copied_vertices,
+	vector<glm::vec3>& normals,
 	vector<unsigned int>& perFaceTriangles
 )
 {
@@ -53,12 +58,11 @@ void TriangleMesh::make_VBO_data
 		copied_vertices[i+1] = vertices[triangles[i+1]];
 		copied_vertices[i+2] = vertices[triangles[i+2]];
 
-		QVector3D N = QVector3D::crossProduct(
+		glm::vec3 N = glm::normalize(glm::cross(
 			vertices[triangles[i+1]] - vertices[triangles[i]],
 			vertices[triangles[i+2]] - vertices[triangles[i]]
-		);
+		));
 
-		N.normalize();
 		normals[i] = N;
 		normals[i+1] = N;
 		normals[i+2] = N;
@@ -71,8 +75,8 @@ void TriangleMesh::make_VBO_data
 
 void TriangleMesh::fillVBOs
 (
-	const vector<QVector3D>& copied_vertices,
-	const vector<QVector3D>& normals,
+	const vector<glm::vec3>& copied_vertices,
+	const vector<glm::vec3>& normals,
 	const vector<unsigned int>& perFaceTriangles
 )
 {
@@ -92,16 +96,16 @@ void TriangleMesh::fillVBOs
 // PUBLIC
 
 TriangleMesh::TriangleMesh()
-: vbo_vertices(QOpenGLBuffer::VertexBuffer),
-  vbo_normals(QOpenGLBuffer::VertexBuffer),
-  vbo_triangles(QOpenGLBuffer::IndexBuffer)
+	: vbo_vertices(QOpenGLBuffer::VertexBuffer),
+	  vbo_normals(QOpenGLBuffer::VertexBuffer),
+	  vbo_triangles(QOpenGLBuffer::IndexBuffer)
 { }
 
 TriangleMesh::~TriangleMesh() {
 	destroy();
 }
 
-void TriangleMesh::addVertex(const QVector3D& position) {
+void TriangleMesh::addVertex(const glm::vec3& position) {
 	vertices.push_back(position);
 }
 
@@ -192,13 +196,13 @@ void TriangleMesh::make_neighbourhood_data() {
 		}
 		else {
 			// this single CornerEdge contains
-			// an edge of the boundary
+			// an edge of the boundary -> hard boundary
 			boundary.push_back( make_pair(triangles[vA], triangles[vB]) );
 		}
 	}
-
-	for (const pair<int,int>& edge : boundary) {
-		cout << edge.first << ", " << edge.second << endl;
+	if (boundary.size() > 0) {
+		cerr << "Warning: this mesh contains hard boundary(ies)" << endl;
+		cerr << "    Computing Some curvatures may lead to a crash of the application" << endl;
 	}
 
 	#if defined (DEBUG)
@@ -245,7 +249,7 @@ void TriangleMesh::buildCube() {
 	};
 
 	for (int i = 0; i < 8; ++i) {
-		addVertex(0.5f * QVector3D(vertices[3*i], vertices[3*i+1], vertices[3*i+2]));
+		addVertex(0.5f * glm::vec3(vertices[3*i], vertices[3*i+1], vertices[3*i+2]));
 	}
 	for (int i = 0; i < 12; ++i) {
 		addTriangle(faces[3*i], faces[3*i+1], faces[3*i+2]);
@@ -255,7 +259,7 @@ void TriangleMesh::buildCube() {
 }
 
 bool TriangleMesh::init(QOpenGLShaderProgram *program) {
-	vector<QVector3D> copied_vertices, normals;
+	vector<glm::vec3> copied_vertices, normals;
 	vector<unsigned int> perFaceTriangles;
 	make_VBO_data(copied_vertices, normals, perFaceTriangles);
 
@@ -351,24 +355,67 @@ size_t TriangleMesh::n_faces() const {
 
 void TriangleMesh::compute_Kh(vector<float>& Kh) const {
 
-	// look at vertex 6
-	int i = 6;
+	auto process_pair =
+	[this](const int i, int c, glm::vec3& sum) -> int {
+		glm::vec3 u, v;
 
-	// vertex i belongs to corner c
-	int c = corners[i];
-	cout << "A corner for vertex " << i << " is " << c << endl;
-	cout << "    Corner " << c << " belongs to triangle " << c/3 << endl;
-	// corner c belongs to triangle int(c/3)
+		// take the previous and next corners
+		int pc = previous(c);
+		int nc = next(c);
 
-	// previous corner of c is
-	int cp = previous(c);
-	cout << "The previous corner of " << c << " is " << cp << endl;
-	// next corner of c is
-	int np = next(c);
-	cout << "The next corner of " << c << " is " << np << endl;
+		// --- compute angle beta
+		int vert_pv = this->triangles[pc];
+		int vert_nv = this->triangles[nc];
+		// from previous to i
+		u = glm::normalize(vertices[i] - vertices[vert_pv]);
+		// from next to i
+		v = glm::normalize(vertices[i] - vertices[vert_nv]);
+		float beta = std::acos( glm::dot(u,v) );
 
-	// compute angle vi,pc,nc
+		// now take the corner opposite to corner pc...
+		int oc = this->opposite_corners[c];
 
+		// watch out! a corner may not have opposite
+		// -> hard boundary
+		assert(oc != -1 and "Found hard boundary on the mesh. Quitting...");
+
+		// ... and the opposite's previous and next corners
+		int poc = previous(oc);
+		int noc = next(oc);
+
+		// --- compute angle alpha
+		int vert_poc = this->triangles[poc];
+		int vert_noc = this->triangles[noc];
+		// from previous to i
+		u = glm::normalize(vertices[i] - vertices[vert_poc]);
+		// from next to i
+		v = glm::normalize(vertices[i] - vertices[vert_noc]);
+		float alpha = std::acos( glm::dot(u,v) );
+
+		float F = cotan(alpha) + cotan(beta);
+		sum += F*(vertices[triangles[vert_nv]] - vertices[i]);
+
+		return poc;
+	};
+
+	for (uint i = 0; i < vertices.size(); ++i) {
+		// take a starting corner for i-th vertex
+		int v = corners[i];	// notice that triangles[v] equals i
+		glm::vec3 sum(0.0f,0.0f,0.0f);
+
+		cout << "Vertex " << i << endl;
+		cout << "    start at corner: " << v << endl;
+
+		int next = process_pair(i, v, sum);
+		cout << "    got to corner: " << next << endl;
+		while (next != v) {
+			next = process_pair(i, next, sum);
+			cout << "    got to corner: " << next << endl;
+		}
+
+		cout << "Finished vertex " << i << endl;
+		cout << "Result: (" << sum.x << "," << sum.y << "," << sum.z << ")" << endl;
+	}
 }
 
 // OTHERS

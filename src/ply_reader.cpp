@@ -174,7 +174,7 @@ namespace PLY_reader {
 		// a new vertex -> (0,1,2) are the coordinates of a vertex,
 		// (3,4,5) are the coordinates of the next vertex, and so on.
 		for (unsigned int i = 0; i < plyVertices.size(); i += 3) {
-			mesh.addVertex(QVector3D(plyVertices[i], plyVertices[i+1], plyVertices[i+2]));
+			mesh.addVertex(glm::vec3(plyVertices[i], plyVertices[i+1], plyVertices[i+2]));
 		}
 		// just like with the vertices, every position that is a
 		// multiple of 3 starts a new triangle.

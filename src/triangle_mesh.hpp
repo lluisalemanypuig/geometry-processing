@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <iostream>
 #include <vector>
+#include <cmath>
 using namespace std;
 
 // Qt includes
@@ -17,12 +18,13 @@ using namespace std;
 #include <QOpenGLShaderProgram>
 
 // glm includes
+#include <glm/geometric.hpp>
 #include <glm/vec3.hpp>
 
 class TriangleMesh {
 	private:
 		/// The set of vertices of the mesh.
-		vector<QVector3D> vertices;
+		vector<glm::vec3> vertices;
 		/**
 		 * @brief The set of triangles of the mesh.
 		 *
@@ -91,8 +93,8 @@ class TriangleMesh {
 		 * @param perFaceTriangles[out] I DO NOT KNOW!!! (YET)
 		 */
 		void make_VBO_data(
-			vector<QVector3D>& copied_vertices,
-			vector<QVector3D>& normals,
+			vector<glm::vec3>& copied_vertices,
+			vector<glm::vec3>& normals,
 			vector<unsigned int>& perFaceTriangles
 		);
 		/**
@@ -105,8 +107,8 @@ class TriangleMesh {
 		 * are the result of calling @ref make_BVO_data.
 		 */
 		void fillVBOs(
-			const vector<QVector3D>& copied_vertices,
-			const vector<QVector3D>& normals,
+			const vector<glm::vec3>& copied_vertices,
+			const vector<glm::vec3>& normals,
 			const vector<unsigned int>& perFaceTriangles
 		);
 
@@ -126,7 +128,7 @@ class TriangleMesh {
 		 *
 		 * A simple call to push_back of @ref vertices.
 		 */
-		void addVertex(const QVector3D& position);
+		void addVertex(const glm::vec3& position);
 		/**
 		 * @brief Adds a triangle to the mesh.
 		 *
