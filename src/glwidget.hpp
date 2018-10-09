@@ -33,6 +33,9 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		QOpenGLShaderProgram *program;
 		TriangleMesh mesh;
 
+		/// Values of the curvature per vertex
+		vector<float> curvature_values;
+
 	private:
 		void set_projection(float aspect);
 		void set_modelview();

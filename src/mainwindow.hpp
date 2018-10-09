@@ -20,7 +20,7 @@ class MainWindow : public QMainWindow {
 		/* Interface elements */
 		void on_cBFill_toggled(bool checked);
 
-		// curvature
+		/* Curvature radio buttons */
 		void on_rBCurvatureH_toggled(bool checked);
 		void on_rBCurvatureG_toggled(bool checked);
 		void on_rBNoCurvature_toggled(bool checked);

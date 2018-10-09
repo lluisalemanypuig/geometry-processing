@@ -226,22 +226,22 @@ void TriangleMesh::make_neighbourhood_data() {
 void TriangleMesh::buildCube() {
 	GLfloat vertices[] = {
 		-1, -1, -1,
-		 1, -1, -1,
-		 1,  1, -1,
 		-1,  1, -1,
-		-1, -1,  1,
-		 1, -1,  1,
+		 1,  1, -1,
 		 1,  1,  1,
+		 1, -1,  1,
+		 1, -1, -1,
+		-1, -1,  1,
 		-1,  1,  1
 	};
 
 	GLuint faces[] = {
-		3, 1, 0, 3, 2, 1,
-		5, 6, 7, 4, 5, 7,
-		7, 3, 0, 0, 4, 7,
-		1, 2, 6, 6, 5, 1,
-		0, 1, 4, 5, 4, 1,
-		2, 3, 7, 7, 6, 2
+		0, 1, 2, 3, 4, 2,
+		5, 2, 4, 4, 6, 5,
+		6, 0, 5, 5, 0, 2,
+		4, 3, 6, 3, 7, 6,
+		1, 0, 7, 0, 6, 7,
+		3, 2, 1, 1, 7, 3
 	};
 
 	for (int i = 0; i < 8; ++i) {
@@ -338,6 +338,40 @@ void TriangleMesh::destroy() {
 	opposite_corners.clear();
 	corners.clear();
 }
+
+// GETTERS
+
+size_t TriangleMesh::n_vertices() const {
+	return vertices.size();
+}
+
+size_t TriangleMesh::n_faces() const {
+	return triangles.size()/3;
+}
+
+void TriangleMesh::compute_Kh(vector<float>& Kh) const {
+
+	// look at vertex 6
+	int i = 6;
+
+	// vertex i belongs to corner c
+	int c = corners[i];
+	cout << "A corner for vertex " << i << " is " << c << endl;
+	cout << "    Corner " << c << " belongs to triangle " << c/3 << endl;
+	// corner c belongs to triangle int(c/3)
+
+	// previous corner of c is
+	int cp = previous(c);
+	cout << "The previous corner of " << c << " is " << cp << endl;
+	// next corner of c is
+	int np = next(c);
+	cout << "The next corner of " << c << " is " << np << endl;
+
+	// compute angle vi,pc,nc
+
+}
+
+// OTHERS
 
 void TriangleMesh::render(QOpenGLFunctions& gl) {
 	vao.bind();

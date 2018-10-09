@@ -16,6 +16,9 @@ using namespace std;
 #include <QOpenGLBuffer>
 #include <QOpenGLShaderProgram>
 
+// glm includes
+#include <glm/vec3.hpp>
+
 class TriangleMesh {
 	private:
 		/// The set of vertices of the mesh.
@@ -162,6 +165,24 @@ class TriangleMesh {
 		 * @ref vbo_triangles.
 		 */
 		void destroy();
+
+		// GETTERS
+
+		/// Returns the number of vertices.
+		size_t n_vertices() const;
+
+		/// Returns the number of faces.
+		size_t n_faces() const;
+
+		/**
+		 * @brief Computes the Mean curvature for each vertex.
+		 *
+		 * Kh is approximated using a discretisation of the
+		 * Laplace-beltrami operator.
+		 * @param[out] Kh @e Kh[i] contains an approximation of
+		 * the mean curvature at vertex i.
+		 */
+		void compute_Kh(vector<float>& Kh) const;
 
 		// OTHERS
 

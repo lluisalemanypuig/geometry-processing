@@ -118,10 +118,10 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
 // PUBLIC
 
 GLWidget::GLWidget(QWidget *parent)
-:
-QOpenGLWidget(parent),
-poly_fill(true),
-angleX(0.0f), angleY(0.0f), distance(2.0f)
+	:
+	QOpenGLWidget(parent),
+	poly_fill(true),
+	angleX(0.0f), angleY(0.0f), distance(2.0f)
 {
 	program = nullptr;
 }
@@ -148,10 +148,10 @@ void GLWidget::load_mesh(const QString& filename) {
 		QApplication::quit();
 	}
 
-	mesh.make_neighbourhood_data();
-
 	doneCurrent();
 	update();
+
+	mesh.make_neighbourhood_data();
 }
 
 void GLWidget::set_polygon_mode(bool bFill) {
@@ -176,6 +176,7 @@ void GLWidget::set_curvature_display(const curvature& _cd) {
 	}
 	else if (cd == curvature::Mean) {
 		cout << "Mean curvature" << endl;
+		mesh.compute_Kh(curvature_values);
 	}
 	else if (cd == curvature::none) {
 		cout << "No curvature to be displayed" << endl;
