@@ -33,12 +33,19 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		QOpenGLShaderProgram *program;
 		TriangleMesh mesh;
 
+		/// Vertex buffer object for colors of each vertex.
+		QOpenGLBuffer vbo_colors;
+
 		/// Values of the curvature per vertex
 		vector<float> curvature_values;
+		vector<QVector4D> vertex_color;
+		bool show_curvatures;
 
 	private:
 		void set_projection(float aspect);
 		void set_modelview();
+
+		void make_colors_rainbow_gradient();
 
 	protected:
 		void initializeGL();

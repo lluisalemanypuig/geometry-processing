@@ -4,6 +4,7 @@
 #include <assert.h>
 
 // C++ includes
+#include <functional>
 #include <algorithm>
 #include <iostream>
 #include <vector>
@@ -112,6 +113,9 @@ class TriangleMesh {
 			const vector<unsigned int>& perFaceTriangles
 		);
 
+		/// Returns the area of the triangle made by the @e i-th , @e j-th and @e k-th vertices.
+		float triangle_area(int i, int j, int v) const;
+
 	public:
 		/// Default constructor
 		TriangleMesh();
@@ -179,12 +183,22 @@ class TriangleMesh {
 		/**
 		 * @brief Computes the Mean curvature for each vertex.
 		 *
-		 * Kh is approximated using a discretisation of the
+		 * @e Kh is approximated using a discretisation of the
 		 * Laplace-beltrami operator.
 		 * @param[out] Kh @e Kh[i] contains an approximation of
-		 * the mean curvature at vertex i.
+		 * the Mean curvature at vertex i.
 		 */
 		void compute_Kh(vector<float>& Kh) const;
+
+		/**
+		 * @brief Computes the Gaussian curvature for each vertex.
+		 *
+		 * @e Kg is approximated using a discretisation of the
+		 * Laplace-beltrami operator.
+		 * @param[out] Kg @e Kg[i] contains an approximation of
+		 * the Gaussian curvature at vertex i.
+		 */
+		void compute_Kg(vector<float>& Kg) const;
 
 		// OTHERS
 

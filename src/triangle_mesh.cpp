@@ -93,6 +93,14 @@ void TriangleMesh::fillVBOs
 	vbo_triangles.release();
 }
 
+float TriangleMesh::triangle_area(int i, int j, int k) const {
+	//cout << "        triangle area of (" << i << "," << j << "," << k << ")" << endl;
+	glm::vec3 ij = vertices[j] - vertices[i];
+	glm::vec3 ik = vertices[k] - vertices[i];
+	glm::vec3 c = glm::cross(ij, ik);
+	return glm::length(c)/2.0f;
+}
+
 // PUBLIC
 
 TriangleMesh::TriangleMesh()
@@ -270,6 +278,7 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program) {
 
 	program->bind();
 
+	/* ----- VAO create ----- */
 	vao.destroy();
 	vao.create();
 	if (vao.isCreated()) {
@@ -281,6 +290,7 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program) {
 		return false;
 	}
 
+	/* ----- VBO VERTICES create ----- */
 	vbo_vertices.destroy();
 	vbo_vertices.create();
 	if (vbo_vertices.isCreated()) {
@@ -295,6 +305,7 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program) {
 	program->enableAttributeArray(0);
 	program->setAttributeBuffer(0, GL_FLOAT, 0, 3, 0);
 
+	/* ----- VBO NORMALS create ----- */
 	vbo_normals.destroy();
 	vbo_normals.create();
 	if (vbo_normals.isCreated()) {
@@ -309,6 +320,7 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program) {
 	program->enableAttributeArray(1);
 	program->setAttributeBuffer(1, GL_FLOAT, 0, 3, 0);
 
+	/* ----- VBO TRIANGLES create ----- */
 	vbo_triangles.destroy();
 	vbo_triangles.create();
 	if (vbo_triangles.isCreated()) {
@@ -321,13 +333,13 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program) {
 	}
 	vbo_triangles.setUsagePattern(QOpenGLBuffer::StaticDraw);
 
-	/* ------------------ */
-
 	// fill the vertex buffer objects for correct display.
 	fillVBOs(copied_vertices, normals, perFaceTriangles);
 
 	vao.release();
 	program->release();
+	/* ----- VAO release ----- */
+
 	return true;
 }
 
@@ -355,66 +367,223 @@ size_t TriangleMesh::n_faces() const {
 
 void TriangleMesh::compute_Kh(vector<float>& Kh) const {
 
-	auto process_pair =
-	[this](const int i, int c, glm::vec3& sum) -> int {
+	// process one-ring of vertices around corner c of vertex i
+	auto process_one_ring =
+	[this](int i, int c, glm::vec3& sum, float& area) -> int {
 		glm::vec3 u, v;
 
 		// take the previous and next corners
-		int pc = previous(c);
-		int nc = next(c);
+		int p_c = previous(c);
+		int n_c = next(c);
+
+		//cout << "    Previous of corner " << c << " is " << p_c << endl;
+		//cout << "    Next of corner " << c << " is " << n_c << endl;
 
 		// --- compute angle beta
-		int vert_pv = this->triangles[pc];
-		int vert_nv = this->triangles[nc];
+		int vert__p_c = this->triangles[p_c];
+		int vert__n_c = this->triangles[n_c];
 		// from previous to i
-		u = glm::normalize(vertices[i] - vertices[vert_pv]);
+		u = glm::normalize(vertices[i] - vertices[vert__n_c]);
 		// from next to i
-		v = glm::normalize(vertices[i] - vertices[vert_nv]);
+		v = glm::normalize(vertices[vert__p_c] - vertices[vert__n_c]);
 		float beta = std::acos( glm::dot(u,v) );
 
+		//cout << "    Angle beta: " << beta << endl;
+		//cout << "        corners: (" << c << "," << n_c << "," << p_c << ")" << endl;
+
 		// now take the corner opposite to corner pc...
-		int oc = this->opposite_corners[c];
+		int o_n_c = this->opposite_corners[n_c];
+
+		//cout << "    Corner opposite to corner " << n_c << " is " << o_n_c << endl;
 
 		// watch out! a corner may not have opposite
 		// -> hard boundary
-		assert(oc != -1 and "Found hard boundary on the mesh. Quitting...");
+		if (o_n_c == -1) {
+			cerr << "TriangleMesh::compute_Kh: Error!" << endl;
+			cerr << "    Found a hard boundary. Quitting traversal..." << endl;
+			return -1;
+		}
 
-		// ... and the opposite's previous and next corners
-		int poc = previous(oc);
-		int noc = next(oc);
+		// ... and the previous' opposite's previous and next corners
+		int p_o_n_c = previous(o_n_c);
+		int n_o_n_c = next(o_n_c);
+
+		//cout << "    Previous of corner " << o_n_c << " is " << p_o_n_c << endl;
+		//cout << "    Next of corner " << o_n_c << " is " << n_o_n_c << endl;
 
 		// --- compute angle alpha
-		int vert_poc = this->triangles[poc];
-		int vert_noc = this->triangles[noc];
+		int vert__o_n_c = this->triangles[o_n_c];
+		int vert__p_o_n_c = this->triangles[p_o_n_c];
 		// from previous to i
-		u = glm::normalize(vertices[i] - vertices[vert_poc]);
+		u = glm::normalize(vertices[i] - vertices[vert__o_n_c]);
 		// from next to i
-		v = glm::normalize(vertices[i] - vertices[vert_noc]);
+		v = glm::normalize(vertices[vert__p_o_n_c] - vertices[vert__o_n_c]);
 		float alpha = std::acos( glm::dot(u,v) );
 
-		float F = cotan(alpha) + cotan(beta);
-		sum += F*(vertices[triangles[vert_nv]] - vertices[i]);
+		//cout << "    Angle alpha: " << alpha << endl;
+		//cout << "        corners: (" << n_o_n_c << "," << o_n_c << "," << p_o_n_c << ")" << endl;
 
-		return poc;
+		/*
+		 * Find vertex vj of the formula:
+		 * if we are looking at vi, we need vj to be
+		 * the adjacent vertex to vi at the other end
+		 * of the edge that joins the triangles whose
+		 * angles we are inspecting. These are, in corners:
+		 * (c,n_c,p_c), (p_o_n_c,o_n_c,n_o_n_c)
+		 *
+		 *             (o_n_c)
+		 *              /\
+		 *             /  \
+		 * (n_o_n_c)  /    \ (p_o_n_c)
+		 *        vi < ---- > vj
+		 *       (c)  \    /  (p_c)
+		 *             \  /
+		 *              \/
+		 *              vk
+		 *             (n_c)
+		 */
+
+		// cotangent weights
+		float F = cotan(alpha) + cotan(beta);
+		//cout << "    weight: " << F << endl;
+
+		int j = triangles[p_c];
+		/*
+		cout << "        * Vertex opposite to vertex " << i << " is " << j << endl;
+		cout << "        -> this one belongs to the 1-ring" << endl;
+		*/
+
+		// compute contribution to curvature
+		sum += F*(vertices[j] - vertices[i]);
+
+		// copmute area of triangle vi,vj,vk
+		int k = triangles[n_c];
+		area += triangle_area(i,j,k);
+
+		//cout << "    triangle area: " << triangle_area(i,j,k) << endl;
+
+		// Return the next corner.
+		// This corner must correspond to vertex i.
+		assert(triangles[n_o_n_c] == i);
+
+		//cout << "    Vertex neighbour of " << i << " is " << triangles[n_c] << endl;
+		return n_o_n_c;
 	};
+
+	Kh = vector<float>(vertices.size(), 0.0);
+
+	for (uint i = 1; i < vertices.size(); ++i) {
+		// take a starting corner for i-th vertex
+		int v = corners[i];	// notice that triangles[v] equals i
+		glm::vec3 curv_vec(0.0f,0.0f,0.0f);
+		float area = 0.0;
+
+		// n: next corner
+		int n = process_one_ring(i, v, curv_vec, area);
+		while (n != v and n != -1) {
+			n = process_one_ring(i, n, curv_vec, area);
+		}
+
+		if (n == -1) {
+			Kh[i] = -1.0f;
+		}
+		else {
+			// area of the Voronoi area around i
+			area /= 3.0f;
+			curv_vec *= (1.0f/(2.0f*area));
+
+			// if we traversal went OK keep computed value
+			Kh[i] = (1/2.0f)*glm::length(curv_vec);
+			if (Kh[i] < 0.0f) {
+				cerr << "        Mesh has negative mean curvature at this vertex" << endl;
+			}
+		}
+	}
+}
+
+void TriangleMesh::compute_Kg(vector<float>& Kg) const {
+	// process one-ring of vertices around corner c of vertex i
+	auto process_one_ring =
+	[this](int i, int c, float& angles, float& area) -> int {
+		// take the previous and next corners
+		int p_c = previous(c);
+		int n_c = next(c);
+
+		// now take the corner opposite to corner n_c
+		int o_n_c = this->opposite_corners[n_c];
+
+		// watch out! a corner may not have opposite
+		// -> hard boundary
+		if (o_n_c == -1) {
+			cerr << "TriangleMesh::compute_Kh: Error!" << endl;
+			cerr << "    Found a hard boundary. Quitting traversal..." << endl;
+			return -1;
+		}
+
+		// take the next corner of opposite of next of c
+		int n_o_n_c = next(o_n_c);
+
+		/*
+		 * Find vertex vj of the formula:
+		 * if we are looking at vi, we need vj to be
+		 * the adjacent vertex to vi at the other end
+		 * of the edge that joins the triangles whose
+		 * angles we are inspecting. These are, in corners:
+		 * (c,n_c,p_c), (p_o_n_c,o_n_c,n_o_n_c)
+		 *
+		 *             (o_n_c)
+		 *              /\
+		 *             /  \
+		 * (n_o_n_c)  /    \ (p_o_n_c)
+		 *        vi < ---- > vk
+		 *       (c)  \    /  (p_c)
+		 *             \  /
+		 *              \/
+		 *              vj
+		 *             (n_c)
+		 */
+
+		int j = triangles[n_c];
+
+		// compute area of triangle vi,vj,vk
+		int k = triangles[p_c];
+		area += triangle_area(i,j,k);
+
+		glm::vec3 ij = vertices[j] - vertices[i];
+		glm::vec3 ik = vertices[k] - vertices[i];
+		ij = glm::normalize(ij);
+		ik = glm::normalize(ik);
+		float theta = std::acos( glm::dot(ij,ik) );
+		angles += theta;
+
+		// Return the next corner.
+		// This corner must correspond to vertex i.
+		assert(triangles[n_o_n_c] == i);
+
+		return n_o_n_c;
+	};
+
+	Kg = vector<float>(vertices.size(), 0.0);
 
 	for (uint i = 0; i < vertices.size(); ++i) {
 		// take a starting corner for i-th vertex
 		int v = corners[i];	// notice that triangles[v] equals i
-		glm::vec3 sum(0.0f,0.0f,0.0f);
+		float angles = 0.0f;
+		float area = 0.0;
 
-		cout << "Vertex " << i << endl;
-		cout << "    start at corner: " << v << endl;
-
-		int next = process_pair(i, v, sum);
-		cout << "    got to corner: " << next << endl;
-		while (next != v) {
-			next = process_pair(i, next, sum);
-			cout << "    got to corner: " << next << endl;
+		// n: next corner
+		int n = process_one_ring(i, v, angles, area);
+		while (n != v and n != -1) {
+			n = process_one_ring(i, n, angles, area);
 		}
 
-		cout << "Finished vertex " << i << endl;
-		cout << "Result: (" << sum.x << "," << sum.y << "," << sum.z << ")" << endl;
+		if (n != -1) {
+			// area of the Voronoi area around i
+			area /= 3.0f;
+
+			// if we traversal went OK keep computed value
+			Kg[i] = (1.0f/area)*(2*M_PI - angles);
+		}
 	}
 }
 

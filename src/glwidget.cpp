@@ -29,6 +29,38 @@ void GLWidget::set_modelview() {
 	program->release();
 }
 
+void GLWidget::make_colors_rainbow_gradient() {
+	/*
+	float m = curvature_values[0];
+	float M = curvature_values[0];
+
+	for (size_t i = 1; i < curvature_values.size(); ++i) {
+		m = std::min(m, curvature_values[i]);
+		M = std::max(M, curvature_values[i]);
+	}
+
+	for (float v : curvature_values) {
+		float c = (v - m)/(M - m);
+		vertex_color[i] = QVector4D(c, c, c, 1.0f);
+	}
+	*/
+
+	/*
+	int h = int(hue * 256 * 6);
+	int x = h % 0x100;
+
+	int r = 0, g = 0, b = 0;
+	switch (h/256) {
+		case 0: r = 255; g = x;       break;
+		case 1: g = 255; r = 255 - x; break;
+		case 2: g = 255; b = x;       break;
+		case 3: b = 255; g = 255 - x; break;
+		case 4: b = 255; r = x;       break;
+		case 5: r = 255; b = 255 - x; break;
+	}
+	*/
+}
+
 // PROTECTED
 
 void GLWidget::initializeGL() {
@@ -124,6 +156,8 @@ GLWidget::GLWidget(QWidget *parent)
 	angleX(0.0f), angleY(0.0f), distance(2.0f)
 {
 	program = nullptr;
+	show_curvatures = false;
+	vertex_color = vector<QVector4D>(mesh.n_vertices());
 }
 
 GLWidget::~GLWidget() {
@@ -152,7 +186,6 @@ void GLWidget::load_mesh(const QString& filename) {
 	update();
 
 	mesh.make_neighbourhood_data();
-	mesh.compute_Kh(curvature_values);
 }
 
 void GLWidget::set_polygon_mode(bool bFill) {
@@ -174,13 +207,22 @@ void GLWidget::set_curvature_display(const curvature& _cd) {
 
 	if (cd == curvature::Gauss) {
 		cout << "Gauss curvature" << endl;
+		mesh.compute_Kg(curvature_values);
+		show_curvatures = true;
 	}
 	else if (cd == curvature::Mean) {
 		cout << "Mean curvature" << endl;
 		mesh.compute_Kh(curvature_values);
+		show_curvatures = true;
 	}
 	else if (cd == curvature::none) {
 		cout << "No curvature to be displayed" << endl;
+		curvature_values.clear();
+		show_curvatures = false;
+	}
+
+	if (show_curvatures) {
+		make_colors_rainbow_gradient();
 	}
 }
 
