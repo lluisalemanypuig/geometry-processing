@@ -30,7 +30,7 @@ void GLWidget::set_modelview() {
 	program->release();
 }
 
-void GLWidget::make_colors_rainbow_gradient() {
+void GLWidget::make_colors_rainbow_gradient(const vector<float>& values, vector<vec3>& cols) {
 	/*
 	float m = curvature_values[0];
 	float M = curvature_values[0];
@@ -46,20 +46,21 @@ void GLWidget::make_colors_rainbow_gradient() {
 	}
 	*/
 
-	/*
-	int h = int(hue * 256 * 6);
-	int x = h % 0x100;
-
-	int r = 0, g = 0, b = 0;
-	switch (h/256) {
-		case 0: r = 255; g = x;       break;
-		case 1: g = 255; r = 255 - x; break;
-		case 2: g = 255; b = x;       break;
-		case 3: b = 255; g = 255 - x; break;
-		case 4: b = 255; r = x;       break;
-		case 5: r = 255; b = 255 - x; break;
+	float cm = numeric_limits<float>::max();
+	float cM = numeric_limits<float>::min();
+	for (float v : values) {
+		cm = std::min(cm, v);
+		cM = std::max(cm, v);
 	}
-	*/
+	float d = cM - cm;
+
+	// copy the colors into a 'sorted' vector
+	cols = vector<vec3>(mesh.n_vertices());
+	for (size_t i = 0; i < cols.size(); ++i) {
+		float v = curvature_values[i];
+		float c = v/d - cm/d;
+		cols[i] = vec3(c,c,c);
+	}
 }
 
 void GLWidget::delete_program() {
@@ -85,6 +86,27 @@ void GLWidget::load_simple_shader() {
 	}
 	set_projection();
 	set_modelview();
+}
+
+void GLWidget::compute_curvature() {
+	if (curv_display == curvature::Gauss) {
+		mesh.compute_Kg(curvature_values);
+	}
+	else if (curv_display == curvature::Mean) {
+		mesh.compute_Kh(curvature_values);
+	}
+}
+
+void GLWidget::show_curvature(bool load_shader) {
+	vector<vec3> colors;
+	make_colors_rainbow_gradient(curvature_values, colors);
+	makeCurrent();
+	if (load_shader) {
+		load_curvature_shader();
+	}
+	mesh.init(program, colors);
+	doneCurrent();
+	update();
 }
 
 void GLWidget::load_curvature_shader() {
@@ -245,6 +267,12 @@ void GLWidget::load_mesh(const QString& filename) {
 	update();
 
 	mesh.make_neighbourhood_data();
+
+	if (curv_display != curvature::none) {
+		cout << "Compute curvature" << endl;
+		compute_curvature();
+		show_curvature(false);
+	}
 }
 
 void GLWidget::set_polygon_mode(const polymode& pmode) {
@@ -268,9 +296,14 @@ void GLWidget::set_polygon_mode(const polymode& pmode) {
 	update();
 }
 
-void GLWidget::set_curvature_display(const curvature& _cd) {
-	curv_display = _cd;
+void GLWidget::set_curvature_display(const curvature& cd) {
+	// load program only if necessary
+	bool load_shader = false;
+	if (curv_display == curvature::none) {
+		load_shader = true;
+	}
 
+	curv_display = cd;
 	if (curv_display == curvature::none) {
 		cout << "No curvature to be displayed" << endl;
 		curvature_values.clear();
@@ -281,35 +314,7 @@ void GLWidget::set_curvature_display(const curvature& _cd) {
 		return;
 	}
 
-	if (curv_display == curvature::Gauss) {
-		cout << "Gauss curvature" << endl;
-		mesh.compute_Kg(curvature_values);
-	}
-	else if (curv_display == curvature::Mean) {
-		cout << "Mean curvature" << endl;
-		mesh.compute_Kh(curvature_values);
-	}
-
-	float cm = numeric_limits<float>::max();
-	float cM = numeric_limits<float>::min();
-	for (float v : curvature_values) {
-		cm = std::min(cm, v);
-		cM = std::max(cm, v);
-	}
-	float d = cM - cm;
-
-	// copy the colors into a 'sorted' vector
-	vector<vec3> colors(mesh.n_vertices());
-	for (size_t i = 0; i < colors.size(); ++i) {
-		float v = curvature_values[i];
-		float c = v/d - cm/d;
-		colors[i] = vec3(c,c,c);
-	}
-
-	makeCurrent();
-	load_curvature_shader();
-	mesh.init(program, colors);
-	doneCurrent();
-	update();
+	compute_curvature();
+	show_curvature(load_shader);
 }
 

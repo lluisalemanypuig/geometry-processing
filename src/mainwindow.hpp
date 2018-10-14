@@ -26,7 +26,7 @@ class MainWindow : public QMainWindow {
 		void on_rBNoCurvature_toggled(bool checked);
 
 	public:
-		explicit MainWindow(QWidget *parent = 0);
+		explicit MainWindow(QWidget *parent = nullptr);
 		~MainWindow();
 };
 

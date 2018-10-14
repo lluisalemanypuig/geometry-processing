@@ -52,11 +52,14 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		void set_projection();
 		void set_modelview();
 
-		void make_colors_rainbow_gradient();
+		void make_colors_rainbow_gradient(const vector<float>& v, vector<vec3>& cols);
 
 		void delete_program();
 		void load_simple_shader();
 		void load_curvature_shader();
+
+		void compute_curvature();
+		void show_curvature(bool load_shader = false);
 
 	protected:
 		void initializeGL();
