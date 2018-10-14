@@ -255,7 +255,7 @@ void TriangleMesh::make_neighbourhood_data() {
 	#endif
 }
 
-void TriangleMesh::buildCube() {
+void TriangleMesh::build_cube() {
 	GLfloat vertices[] = {
 		-1, -1, -1,
 		-1,  1, -1,
@@ -407,21 +407,6 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>& color
 	program->enableAttributeArray(0);
 	program->setAttributeBuffer(0, GL_FLOAT, 0, 3, 0);
 
-	/* ----- VBO COLORS create ----- */
-	vbo_colors.destroy();
-	vbo_colors.create();
-	if (vbo_colors.isCreated()) {
-		vbo_colors.bind();
-	}
-	else {
-		cerr << "    TriangleMesh::init - Error:" << endl;
-		cerr << "        Vertex buffer object 'vbo_colors' not created." << endl;
-		return false;
-	}
-	vbo_colors.setUsagePattern(QOpenGLBuffer::StaticDraw);
-	program->enableAttributeArray(1);
-	program->setAttributeBuffer(1, GL_FLOAT, 0, 3, 0);
-
 	/* ----- VBO NORMALS create ----- */
 	vbo_normals.destroy();
 	vbo_normals.create();
@@ -434,6 +419,21 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>& color
 		return false;
 	}
 	vbo_normals.setUsagePattern(QOpenGLBuffer::StaticDraw);
+	program->enableAttributeArray(1);
+	program->setAttributeBuffer(1, GL_FLOAT, 0, 3, 0);
+
+	/* ----- VBO COLORS create ----- */
+	vbo_colors.destroy();
+	vbo_colors.create();
+	if (vbo_colors.isCreated()) {
+		vbo_colors.bind();
+	}
+	else {
+		cerr << "    TriangleMesh::init - Error:" << endl;
+		cerr << "        Vertex buffer object 'vbo_colors' not created." << endl;
+		return false;
+	}
+	vbo_colors.setUsagePattern(QOpenGLBuffer::StaticDraw);
 	program->enableAttributeArray(2);
 	program->setAttributeBuffer(2, GL_FLOAT, 0, 3, 0);
 
@@ -455,13 +455,13 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>& color
 	vbo_vertices.allocate(&vert_info[0], 3*sizeof(float)*vert_info.size());
 	vbo_vertices.release();
 
-	vbo_colors.bind();
-	vbo_colors.allocate(&cols[0], 3*sizeof(float)*cols.size());
-	vbo_colors.release();
-
 	vbo_normals.bind();
 	vbo_normals.allocate(&normals[0], 3*sizeof(float)*normals.size());
 	vbo_normals.release();
+
+	vbo_colors.bind();
+	vbo_colors.allocate(&cols[0], 3*sizeof(float)*cols.size());
+	vbo_colors.release();
 
 	vbo_triangles.bind();
 	vbo_triangles.allocate(&perFaceTriangles[0], sizeof(unsigned int)*perFaceTriangles.size());

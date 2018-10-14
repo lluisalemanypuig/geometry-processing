@@ -24,6 +24,7 @@ void GLWidget::set_modelview() {
 	modelviewMatrix.translate(0.0f, 0.0f, -distance);
 	modelviewMatrix.rotate(angleX, 1.0f, 0.0f, 0.0f);
 	modelviewMatrix.rotate(angleY, 0.0f, 1.0f, 0.0f);
+
 	program->bind();
 	program->setUniformValue("modelview", modelviewMatrix);
 	program->setUniformValue("normal_matrix", modelviewMatrix.normalMatrix());
@@ -84,29 +85,6 @@ void GLWidget::load_simple_shader() {
 		cerr << program->log().toStdString();
 		QApplication::quit();
 	}
-	set_projection();
-	set_modelview();
-}
-
-void GLWidget::compute_curvature() {
-	if (curv_display == curvature::Gauss) {
-		mesh.compute_Kg(curvature_values);
-	}
-	else if (curv_display == curvature::Mean) {
-		mesh.compute_Kh(curvature_values);
-	}
-}
-
-void GLWidget::show_curvature(bool load_shader) {
-	vector<vec3> colors;
-	make_colors_rainbow_gradient(curvature_values, colors);
-	makeCurrent();
-	if (load_shader) {
-		load_curvature_shader();
-	}
-	mesh.init(program, colors);
-	doneCurrent();
-	update();
 }
 
 void GLWidget::load_curvature_shader() {
@@ -124,18 +102,42 @@ void GLWidget::load_curvature_shader() {
 		cerr << program->log().toStdString();
 		QApplication::quit();
 	}
-	set_projection();
-	set_modelview();
 }
 
-// PROTECTED
+void GLWidget::compute_curvature() {
+	if (curv_display == curvature::Gauss) {
+		mesh.compute_Kg(curvature_values);
+	}
+	else if (curv_display == curvature::Mean) {
+		mesh.compute_Kh(curvature_values);
+	}
+}
+
+void GLWidget::show_curvature(bool load_shader) {
+	if (load_shader) {
+		makeCurrent();
+		load_curvature_shader();
+		set_projection();
+		set_modelview();
+		doneCurrent();
+	}
+
+	vector<vec3> colors;
+	make_colors_rainbow_gradient(curvature_values, colors);
+
+	makeCurrent();
+	mesh.init(program, colors);
+	doneCurrent();
+	update();
+}
 
 void GLWidget::initializeGL() {
 	initializeOpenGLFunctions();
 
 	load_simple_shader();
+
 	program->bind();
-	mesh.buildCube();
+	mesh.build_cube();
 	bool init = mesh.init(program);
 	if (not init) {
 		cerr << "GLWidget::initializeGL - Error:" << endl;
@@ -150,16 +152,18 @@ void GLWidget::initializeGL() {
 
 void GLWidget::resizeGL(int w, int h) {
 	glViewport(0, 0, w, h);
+	makeCurrent();
 	set_projection();
 	set_modelview();
+	doneCurrent();
 }
 
 void GLWidget::paintGL() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	program->bind();
 	if (pm == polymode::wireframe) {
-		program->bind();
-
+		cout << "Display with wireframe" << endl;
 		program->setUniformValue("wireframe", true);
 
 		// 'fill' the triangles with white
@@ -180,27 +184,27 @@ void GLWidget::paintGL() {
 	}
 
 	if (pm == polymode::solid) {
+		program->setUniformValue("wireframe", false);
 
 		if (curv_display == curvature::none) {
+			cout << "Display with no wireframe, no curvature, and flat color" << endl;
+
 			// display with a flat color since there
 			// is no curvature to be displayed
-			program->bind();
 			program->setUniformValue("color", QVector4D(0.75f, 0.8f, 0.9f, 1.0f));
-			program->setUniformValue("wireframe", false);
 			mesh.render(*this);
 			program->release();
 			return;
 		}
 
 		// display with curvature color
-		program->bind();
-		program->setUniformValue("wireframe", false);
+		cout << "Display curvature" << endl;
 		mesh.render(*this);
 		program->release();
 		return;
 	}
 
-	cerr << "Displaying nothing..." << endl;
+	cerr << "Error! nothing is displayed!" << endl;
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event) {
@@ -297,22 +301,41 @@ void GLWidget::set_polygon_mode(const polymode& pmode) {
 }
 
 void GLWidget::set_curvature_display(const curvature& cd) {
-	// load program only if necessary
+	if (cd == curvature::none) {
+		cout << "No curvature to be displayed" << endl;
+		curv_display = curvature::none;
+
+		curvature_values.clear();
+
+		/* At this step the buffers of the mesh should
+		 * be cleared because there is information that
+		 * we no longer want, and could interfere in the
+		 * rendering. This buffer is the 'vbo_colors'.
+		 * However, since the corresponding attribute's
+		 * location is '2', not present in the simple
+		 * shader, then this will not interfere at all.
+		 */
+
+		makeCurrent();
+		load_simple_shader();
+		set_projection();
+		set_modelview();
+		doneCurrent();
+
+		update();
+		return;
+	}
+
+	// load program only if necessary: if a curvature
+	// was already being shown and we are told to show
+	// another curvature, do not load program. If, however,
+	// we weren't showing any then load the program.
 	bool load_shader = false;
 	if (curv_display == curvature::none) {
 		load_shader = true;
 	}
 
 	curv_display = cd;
-	if (curv_display == curvature::none) {
-		cout << "No curvature to be displayed" << endl;
-		curvature_values.clear();
-		makeCurrent();
-		load_simple_shader();
-		doneCurrent();
-		update();
-		return;
-	}
 
 	compute_curvature();
 	show_curvature(load_shader);
