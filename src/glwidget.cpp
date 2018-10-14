@@ -7,9 +7,10 @@ const float maxDistanceCamera = 3.0f;
 
 // PRIVATE
 
-void GLWidget::set_projection(float aspect) {
+void GLWidget::set_projection() {
 	QMatrix4x4 projectionMatrix;
 
+	float aspect = static_cast<float>(width())/height();
 	projectionMatrix.perspective(60.0f, aspect, 0.01f, 100.0f);
 
 	program->bind();
@@ -61,32 +62,65 @@ void GLWidget::make_colors_rainbow_gradient() {
 	*/
 }
 
-// PROTECTED
+void GLWidget::delete_program() {
+	if (program != nullptr) {
+		delete program;
+	}
+}
 
-void GLWidget::initializeGL() {
-	initializeOpenGLFunctions();
-
+void GLWidget::load_simple_shader() {
+	delete_program();
 	program = new QOpenGLShaderProgram();
-	program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/shader_vert.vert");
-	program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/shader_frag.frag");
+	program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/simple.vert");
+	program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/simple.frag");
 	program->link();
 	if (not program->isLinked()) {
 		cerr << "GLWidget::initializeGL - Error:" << endl;
-		cerr << "Shader program has not linked" << endl;
+		cerr << "Shader program 'simple' has not linked" << endl;
 		cerr << endl;
 		cerr << "Log: " << endl;
 		cerr << endl;
 		cerr << program->log().toStdString();
 		QApplication::quit();
 	}
-	program->bind();
+	set_projection();
+	set_modelview();
+}
 
+void GLWidget::load_curvature_shader() {
+	delete_program();
+	program = new QOpenGLShaderProgram();
+	program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/curvature.vert");
+	program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/curvature.frag");
+	program->link();
+	if (not program->isLinked()) {
+		cerr << "GLWidget::initializeGL - Error:" << endl;
+		cerr << "Shader program 'curvature' has not linked" << endl;
+		cerr << endl;
+		cerr << "Log: " << endl;
+		cerr << endl;
+		cerr << program->log().toStdString();
+		QApplication::quit();
+	}
+	set_projection();
+	set_modelview();
+}
+
+// PROTECTED
+
+void GLWidget::initializeGL() {
+	initializeOpenGLFunctions();
+
+	load_simple_shader();
+	program->bind();
 	mesh.buildCube();
-	if (not mesh.init(program)) {
+	bool init = mesh.init(program);
+	if (not init) {
 		cerr << "GLWidget::initializeGL - Error:" << endl;
 		cerr << "    Could not initialise mesh cube." << endl;
 		QApplication::quit();
 	}
+	program->release();
 
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -94,19 +128,18 @@ void GLWidget::initializeGL() {
 
 void GLWidget::resizeGL(int w, int h) {
 	glViewport(0, 0, w, h);
-	set_projection(static_cast<float>(w/h));
+	set_projection();
 	set_modelview();
 }
 
 void GLWidget::paintGL() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	program->bind();
-	program->setUniformValue("b_lighting", tri_fill);
-	if (tri_fill) {
-		program->setUniformValue("color", QVector4D(0.75f, 0.8f, 0.9f, 1.0f));
-	}
-	else {
+	if (pm == polymode::wireframe) {
+		program->bind();
+
+		program->setUniformValue("wireframe", true);
+
 		// 'fill' the triangles with white
 		program->setUniformValue("color", QVector4D(1.0f, 1.0f, 1.0f, 1.0f));
 		glEnable(GL_POLYGON_OFFSET_FILL);
@@ -114,14 +147,38 @@ void GLWidget::paintGL() {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		mesh.render(*this);
 
-		// render mesh in wireframe
+		// render triangle edges
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glDisable(GL_POLYGON_OFFSET_FILL);
 		program->setUniformValue("color", QVector4D(0.05f, 0.05f, 0.15f, 1.0f));
+
+		mesh.render(*this);
+		program->release();
+		return;
 	}
 
-	mesh.render(*this);
-	program->release();
+	if (pm == polymode::solid) {
+
+		if (curv_display == curvature::none) {
+			// display with a flat color since there
+			// is no curvature to be displayed
+			program->bind();
+			program->setUniformValue("color", QVector4D(0.75f, 0.8f, 0.9f, 1.0f));
+			program->setUniformValue("wireframe", false);
+			mesh.render(*this);
+			program->release();
+			return;
+		}
+
+		// display with curvature color
+		program->bind();
+		program->setUniformValue("wireframe", false);
+		mesh.render(*this);
+		program->release();
+		return;
+	}
+
+	cerr << "Displaying nothing..." << endl;
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event) {
@@ -151,15 +208,17 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
 
 // PUBLIC
 
-GLWidget::GLWidget(QWidget *parent)
-	:
-	QOpenGLWidget(parent),
-	tri_fill(true),
-	angleX(0.0f), angleY(0.0f), distance(2.0f)
+GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent)
 {
 	program = nullptr;
-	show_curvatures = false;
 	vertex_color = vector<QVector4D>(mesh.n_vertices());
+
+	pm = polymode::solid;
+	curv_display = curvature::none;
+
+	angleX = 0.0f;
+	angleY = 0.0f;
+	distance = 2.0f;
 }
 
 GLWidget::~GLWidget() {
@@ -188,37 +247,47 @@ void GLWidget::load_mesh(const QString& filename) {
 	mesh.make_neighbourhood_data();
 }
 
-void GLWidget::set_polygon_mode(bool bFill) {
-	tri_fill = bFill;
+void GLWidget::set_polygon_mode(const polymode& pmode) {
+	pm = pmode;
 
 	makeCurrent();
-	if (tri_fill) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	}
-	else {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	switch (pm) {
+		case polymode::solid:
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			program->setUniformValue("wireframe", false);
+			break;
+		case polymode::wireframe:
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			program->setUniformValue("wireframe", true);
+			break;
+		default:
+			cerr << "GLWidget::set_polygon_mode - Warning:" << endl;
+			cerr << "    No polymode selected: expect undefined behaviour" << endl;
 	}
 	doneCurrent();
 	update();
 }
 
 void GLWidget::set_curvature_display(const curvature& _cd) {
-	cd = _cd;
+	curv_display = _cd;
 
-	if (cd == curvature::Gauss) {
-		cout << "Gauss curvature" << endl;
-		mesh.compute_Kg(curvature_values);
-		show_curvatures = true;
-	}
-	else if (cd == curvature::Mean) {
-		cout << "Mean curvature" << endl;
-		mesh.compute_Kh(curvature_values);
-		show_curvatures = true;
-	}
-	else if (cd == curvature::none) {
+	if (curv_display == curvature::none) {
 		cout << "No curvature to be displayed" << endl;
 		curvature_values.clear();
-		show_curvatures = false;
+		makeCurrent();
+		load_simple_shader();
+		doneCurrent();
+		update();
+		return;
+	}
+
+	if (curv_display == curvature::Gauss) {
+		cout << "Gauss curvature" << endl;
+		mesh.compute_Kg(curvature_values);
+	}
+	else if (curv_display == curvature::Mean) {
+		cout << "Mean curvature" << endl;
+		mesh.compute_Kh(curvature_values);
 	}
 
 	float cm = numeric_limits<float>::max();
@@ -238,25 +307,8 @@ void GLWidget::set_curvature_display(const curvature& _cd) {
 	}
 
 	makeCurrent();
-
-	delete program;
-	program = new QOpenGLShaderProgram();
-	program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/vertex_col.vert");
-	program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/vertex_col.frag");
-	program->link();
-	if (not program->isLinked()) {
-		cerr << "GLWidget::initializeGL - Error:" << endl;
-		cerr << "Shader program has not linked" << endl;
-		cerr << endl;
-		cerr << "Log: " << endl;
-		cerr << endl;
-		cerr << program->log().toStdString();
-		QApplication::quit();
-	}
-
+	load_curvature_shader();
 	mesh.init(program, colors);
-	set_projection(static_cast<float>(this->width()/this->height()));
-	set_modelview();
 	doneCurrent();
 	update();
 }

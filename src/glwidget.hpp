@@ -16,6 +16,12 @@ using namespace std;
 #include "triangle_mesh.hpp"
 #include "ply_reader.hpp"
 
+enum class polymode : int8_t {
+	none = -1,
+	wireframe,	// the meshes in wireframe mode
+	solid		// fill the triangles of the meshes
+};
+
 enum class curvature : int8_t {
 	none = -1,
 	Gauss,	// display Kg = k1*k2
@@ -24,10 +30,10 @@ enum class curvature : int8_t {
 
 class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 	private:
-		/// Display the polygons filled (true), or wireframe (false)
-		bool tri_fill;
+		/// Display the mesh in a certain polygon mode. See @ref polymode.
+		polymode pm;
 		/// Type of curvature to be displayed. See @ref curvature_display.
-		curvature cd;
+		curvature curv_display;
 
 		float angleX, angleY, distance;
 		QPoint lastMousePos;
@@ -41,13 +47,16 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		/// Values of the curvature per vertex
 		vector<float> curvature_values;
 		vector<QVector4D> vertex_color;
-		bool show_curvatures;
 
 	private:
-		void set_projection(float aspect);
+		void set_projection();
 		void set_modelview();
 
 		void make_colors_rainbow_gradient();
+
+		void delete_program();
+		void load_simple_shader();
+		void load_curvature_shader();
 
 	protected:
 		void initializeGL();
@@ -63,9 +72,9 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 
 		void load_mesh(const QString& filename);
 
-		/// Sets the polygon display mode. See @ref tri_fill.
-		void set_polygon_mode(bool fill);
+		/// Sets the polygon display mode. See @ref pm.
+		void set_polygon_mode(const polymode& pm);
 		/// Sets the type of curvature to be displayed. See @ref curvature_display.
-		void set_curvature_display(const curvature& cd);
+		void set_curvature_display(const curvature& curv_display);
 };
 

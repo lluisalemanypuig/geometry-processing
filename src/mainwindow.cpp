@@ -13,8 +13,13 @@ void MainWindow::on_action_Quit_triggered() {
 	 QApplication::quit();
 }
 
-void MainWindow::on_cBFill_toggled(bool checked) {
-	 ui->openGLWidget->set_polygon_mode(checked);
+void MainWindow::on_cBWireframe_toggled(bool wireframe) {
+	if (wireframe) {
+		ui->openGLWidget->set_polygon_mode(polymode::wireframe);
+	}
+	else {
+		ui->openGLWidget->set_polygon_mode(polymode::solid);
+	}
 }
 
 void MainWindow::on_rBCurvatureG_toggled(bool checked) {

@@ -18,7 +18,7 @@ class MainWindow : public QMainWindow {
 		void on_action_Quit_triggered();
 
 		/* Interface elements */
-		void on_cBFill_toggled(bool checked);
+		void on_cBWireframe_toggled(bool checked);
 
 		/* Curvature radio buttons */
 		void on_rBCurvatureH_toggled(bool checked);

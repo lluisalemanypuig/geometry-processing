@@ -24,10 +24,10 @@ SOURCES += \
     triangle_mesh.cpp
 
 DISTFILES += \
-    shaders/shader_vert.vert \
-    shaders/shader_frag.frag \
-    shaders/vertex_col.vert \
-    shaders/vertex_col.frag
+    shaders/curvature.vert \
+    shaders/curvature.frag \
+    shaders/simple.vert \
+    shaders/simple.frag
 
 RESOURCES += \
     resources.qrc

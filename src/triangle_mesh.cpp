@@ -182,18 +182,18 @@ void TriangleMesh::make_neighbourhood_data() {
 	 */
 	vector<CornerEdge> data;
 	for (unsigned int i = 0; i < triangles.size(); i += 3) {
-		int v0 = i;
-		int v1 = i + 1;
-		int v2 = i + 2;
+		int c0 = i;
+		int c1 = i + 1;
+		int c2 = i + 2;
 
 		CornerEdge e1, e2, e3;
 
 		// edge v0,v1
-		e1.set_indexes(triangles[v0], triangles[v1], v2);
+		e1.set_indexes(triangles[c0], triangles[c1], c2);
 		// edge v1,v2
-		e2.set_indexes(triangles[v1], triangles[v2], v0);
+		e2.set_indexes(triangles[c1], triangles[c2], c0);
 		// edge v0,v2
-		e3.set_indexes(triangles[v0], triangles[v2], v1);
+		e3.set_indexes(triangles[c0], triangles[c2], c1);
 
 		data.push_back(e1);
 		data.push_back(e2);
@@ -222,7 +222,10 @@ void TriangleMesh::make_neighbourhood_data() {
 		else {
 			// this single CornerEdge contains
 			// an edge of the boundary -> hard boundary
-			boundary.push_back( make_pair(triangles[vA], triangles[vB]) );
+			boundary.push_back( make_pair(vA, vB) );
+			cout << "Hard boundary in edge (" << vA << "," << vB << ")" << endl;
+			cout << "    " << vertices[vA].x << "," << vertices[vA].y << "," << vertices[vA].z << endl;
+			cout << "    " << vertices[vB].x << "," << vertices[vB].y << "," << vertices[vB].z << endl;
 		}
 	}
 	if (boundary.size() > 0) {
@@ -481,6 +484,7 @@ void TriangleMesh::destroy() {
 	triangles.clear();
 	opposite_corners.clear();
 	corners.clear();
+	boundary.clear();
 }
 
 // GETTERS

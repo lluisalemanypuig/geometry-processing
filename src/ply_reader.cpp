@@ -7,8 +7,8 @@ namespace PLY_reader {
 
 		fin.getline(line, 100);
 		if (strncmp(line, "ply", 3) != 0) {
-			cerr << "        PLY_reader::__load_header - Error:" << endl;
-			cerr << "            Wrong format of file: first line does not contain 'ply'." << endl;
+			cerr << "    PLY_reader::__load_header - Error:" << endl;
+			cerr << "        Wrong format of file: first line does not contain 'ply'." << endl;
 			return false;
 		}
 		nVertices = 0;
@@ -185,17 +185,18 @@ namespace PLY_reader {
 		cout << "    PLY_reader: opening file '" << filename.toStdString() << "'..." << endl;
 		fin.open(filename.toStdString().c_str(), ios_base::in | ios_base::binary);
 		if (not fin.is_open()) {
-			cerr << "        PLY_reader::read_mesh - Error:" << endl;
-			cerr << "            Could not open file '" << filename.toStdString() << "'." << endl;
+			cerr << "    PLY_reader::read_mesh - Error:" << endl;
+			cerr << "        Could not open file '" << filename.toStdString() << "'." << endl;
 			return false;
 		}
 
 		cout << "    PLY_reader: reading header..." << endl;
 		string format;
-		if (not __load_header(fin, n_verts, n_faces, format)) {
+		bool header_read = __load_header(fin, n_verts, n_faces, format);
+		if (not header_read) {
 			fin.close();
-			cerr << "        PLY_reader::read_mesh - Error:" << endl;
-			cerr << "            Bad input file format." << endl;
+			cerr << "    PLY_reader::read_mesh - Error:" << endl;
+			cerr << "        Bad input file format." << endl;
 			return false;
 		}
 

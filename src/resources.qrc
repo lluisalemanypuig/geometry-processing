@@ -1,8 +1,8 @@
 <RCC>
     <qresource prefix="/">
-        <file>shaders/shader_frag.frag</file>
-        <file>shaders/shader_vert.vert</file>
-        <file>shaders/vertex_col.frag</file>
-        <file>shaders/vertex_col.vert</file>
+        <file>shaders/curvature.frag</file>
+        <file>shaders/curvature.vert</file>
+        <file>shaders/simple.frag</file>
+        <file>shaders/simple.vert</file>
     </qresource>
 </RCC>
