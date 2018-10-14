@@ -24,8 +24,10 @@ SOURCES += \
     triangle_mesh.cpp
 
 DISTFILES += \
-    shaders/simpleshader.vert \
-    shaders/simpleshader.frag
+    shaders/shader_vert.vert \
+    shaders/shader_frag.frag \
+    shaders/vertex_col.vert \
+    shaders/vertex_col.frag
 
 RESOURCES += \
     resources.qrc

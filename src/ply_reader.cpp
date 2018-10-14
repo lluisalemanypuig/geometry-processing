@@ -137,29 +137,24 @@ namespace PLY_reader {
 	}
 
 	void __rescale_model(vector<float>& plyVertices) {
-		QVector3D center(0.0f, 0.0f, 0.0f);
+		vec3 center(0.0f, 0.0f, 0.0f);
 
-		QVector3D size[2];
-		size[0] = QVector3D(1e10, 1e10, 1e10);
-		size[1] = QVector3D(-1e10, -1e10, -1e10);
+		vec3 m(1e10, 1e10, 1e10);
+		vec3 M(-1e10, -1e10, -1e10);
 
 		for (unsigned int i = 0; i < plyVertices.size(); i += 3) {
-			center += QVector3D(plyVertices[i], plyVertices[i+1], plyVertices[i+2]);
-			size[0][0] = min(size[0][0], plyVertices[i]);
-			size[0][1] = min(size[0][1], plyVertices[i+1]);
-			size[0][2] = min(size[0][2], plyVertices[i+2]);
-			size[1][0] = max(size[1][0], plyVertices[i]);
-			size[1][1] = max(size[1][1], plyVertices[i+1]);
-			size[1][2] = max(size[1][2], plyVertices[i+2]);
+			center += vec3(plyVertices[i], plyVertices[i+1], plyVertices[i+2]);
+			m[0] = std::min(m[0], plyVertices[i]);
+			m[1] = std::min(m[1], plyVertices[i+1]);
+			m[2] = std::min(m[2], plyVertices[i+2]);
+			M[0] = std::max(M[0], plyVertices[i]);
+			M[1] = std::max(M[1], plyVertices[i+1]);
+			M[2] = std::max(M[2], plyVertices[i+2]);
 		}
 		center /= plyVertices.size()/3;
 
-		float largestSize = max(
-			size[1][0] - size[0][0],
-			max(
-				size[1][1] - size[0][1],
-				size[1][2] - size[0][2]
-			)
+		float largestSize = std::max(
+			M[0] - m[0], std::max(M[1] - m[1], M[2] - m[2])
 		);
 
 		for (unsigned int i = 0; i < plyVertices.size(); i += 3) {
@@ -174,7 +169,7 @@ namespace PLY_reader {
 		// a new vertex -> (0,1,2) are the coordinates of a vertex,
 		// (3,4,5) are the coordinates of the next vertex, and so on.
 		for (unsigned int i = 0; i < plyVertices.size(); i += 3) {
-			mesh.addVertex(glm::vec3(plyVertices[i], plyVertices[i+1], plyVertices[i+2]));
+			mesh.addVertex(vec3(plyVertices[i], plyVertices[i+1], plyVertices[i+2]));
 		}
 		// just like with the vertices, every position that is a
 		// multiple of 3 starts a new triangle.

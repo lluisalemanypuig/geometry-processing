@@ -44,61 +44,78 @@ struct CornerEdge {
 
 void TriangleMesh::make_VBO_data
 (
-	vector<glm::vec3>& copied_vertices,
-	vector<glm::vec3>& normals,
+	vector<vec3>& copied_vertices,
+	vector<vec3>& normals,
 	vector<unsigned int>& perFaceTriangles
 )
 {
+	copied_vertices.resize(triangles.size());
 	normals.resize(triangles.size());
-	copied_vertices.resize(3*triangles.size());
-	perFaceTriangles.resize(3*triangles.size());
+	perFaceTriangles.resize(triangles.size());
 
 	for (unsigned int i = 0; i < triangles.size(); i += 3) {
-		copied_vertices[i] = vertices[triangles[i]];
-		copied_vertices[i+1] = vertices[triangles[i+1]];
-		copied_vertices[i+2] = vertices[triangles[i+2]];
+		copied_vertices[i    ] = vertices[triangles[i    ]];
+		copied_vertices[i + 1] = vertices[triangles[i + 1]];
+		copied_vertices[i + 2] = vertices[triangles[i + 2]];
 
-		glm::vec3 N = glm::normalize(glm::cross(
-			vertices[triangles[i+1]] - vertices[triangles[i]],
-			vertices[triangles[i+2]] - vertices[triangles[i]]
+		vec3 N = glm::normalize(cross(
+			vertices[triangles[i + 1]] - vertices[triangles[i]],
+			vertices[triangles[i + 2]] - vertices[triangles[i]]
 		));
 
-		normals[i] = N;
-		normals[i+1] = N;
-		normals[i+2] = N;
+		normals[i    ] = N;
+		normals[i + 1] = N;
+		normals[i + 2] = N;
 
-		perFaceTriangles[i] = i;
-		perFaceTriangles[i+1] = i+1;
-		perFaceTriangles[i+2] = i+2;
+		perFaceTriangles[i    ] = i;
+		perFaceTriangles[i + 1] = i + 1;
+		perFaceTriangles[i + 2] = i + 2;
 	}
 }
 
-void TriangleMesh::fillVBOs
+void TriangleMesh::make_VBO_data
 (
-	const vector<glm::vec3>& copied_vertices,
-	const vector<glm::vec3>& normals,
-	const vector<unsigned int>& perFaceTriangles
+	const vector<vec3>& colors,
+	vector<vec3>& vert_info,
+	vector<vec3>& cols,
+	vector<vec3>& normals,
+	vector<unsigned int>& perFaceTriangles
 )
 {
-	vbo_vertices.bind();
-	vbo_vertices.allocate(&copied_vertices[0], 3*sizeof(float)*copied_vertices.size());
-	vbo_vertices.release();
+	vert_info.resize(triangles.size());
+	cols.resize(triangles.size());
+	normals.resize(triangles.size());
+	perFaceTriangles.resize(triangles.size());
 
-	vbo_normals.bind();
-	vbo_normals.allocate(&normals[0], 3*sizeof(float)*normals.size());
-	vbo_normals.release();
+	for (unsigned int i = 0; i < triangles.size(); i += 3) {
+		vert_info[i    ] = vertices[triangles[i    ]];
+		vert_info[i + 1] = vertices[triangles[i + 1]];
+		vert_info[i + 2] = vertices[triangles[i + 2]];
+		cols[i    ] =   colors[triangles[i    ]];
+		cols[i + 1] =   colors[triangles[i + 1]];
+		cols[i + 2] =   colors[triangles[i + 2]];
 
-	vbo_triangles.bind();
-	vbo_triangles.allocate(&perFaceTriangles[0], sizeof(unsigned int)*perFaceTriangles.size());
-	vbo_triangles.release();
+		vec3 N = glm::normalize(cross(
+			vertices[triangles[i + 1]] - vertices[triangles[i]],
+			vertices[triangles[i + 2]] - vertices[triangles[i]]
+		));
+
+		normals[i    ] = N;
+		normals[i + 1] = N;
+		normals[i + 2] = N;
+
+		perFaceTriangles[i    ] = i;
+		perFaceTriangles[i + 1] = i + 1;
+		perFaceTriangles[i + 2] = i + 2;
+	}
 }
 
 float TriangleMesh::triangle_area(int i, int j, int k) const {
 	//cout << "        triangle area of (" << i << "," << j << "," << k << ")" << endl;
-	glm::vec3 ij = vertices[j] - vertices[i];
-	glm::vec3 ik = vertices[k] - vertices[i];
-	glm::vec3 c = glm::cross(ij, ik);
-	return glm::length(c)/2.0f;
+	vec3 ij = vertices[j] - vertices[i];
+	vec3 ik = vertices[k] - vertices[i];
+	vec3 c = cross(ij, ik);
+	return length(c)/2.0f;
 }
 
 // PUBLIC
@@ -113,7 +130,7 @@ TriangleMesh::~TriangleMesh() {
 	destroy();
 }
 
-void TriangleMesh::addVertex(const glm::vec3& position) {
+void TriangleMesh::addVertex(const vec3& position) {
 	vertices.push_back(position);
 }
 
@@ -247,7 +264,7 @@ void TriangleMesh::buildCube() {
 		-1,  1,  1
 	};
 
-	GLuint faces[] = {
+	GLint faces[] = {
 		0, 1, 2, 3, 4, 2,
 		5, 2, 4, 4, 6, 5,
 		6, 0, 5, 5, 0, 2,
@@ -257,7 +274,7 @@ void TriangleMesh::buildCube() {
 	};
 
 	for (int i = 0; i < 8; ++i) {
-		addVertex(0.5f * glm::vec3(vertices[3*i], vertices[3*i+1], vertices[3*i+2]));
+		addVertex(0.5f * vec3(vertices[3*i], vertices[3*i+1], vertices[3*i+2]));
 	}
 	for (int i = 0; i < 12; ++i) {
 		addTriangle(faces[3*i], faces[3*i+1], faces[3*i+2]);
@@ -267,14 +284,12 @@ void TriangleMesh::buildCube() {
 }
 
 bool TriangleMesh::init(QOpenGLShaderProgram *program) {
-	vector<glm::vec3> copied_vertices, normals;
+	vector<vec3> vert_info, normals;
 	vector<unsigned int> perFaceTriangles;
-	make_VBO_data(copied_vertices, normals, perFaceTriangles);
+	make_VBO_data(vert_info, normals, perFaceTriangles);
 
 	/* ------------------ */
-	/* Load the shader program.
-	 * Create the vertex array/buffer objects.
-	 */
+	/* Create the vertex array/buffer objects. */
 
 	program->bind();
 
@@ -334,11 +349,124 @@ bool TriangleMesh::init(QOpenGLShaderProgram *program) {
 	vbo_triangles.setUsagePattern(QOpenGLBuffer::StaticDraw);
 
 	// fill the vertex buffer objects for correct display.
-	fillVBOs(copied_vertices, normals, perFaceTriangles);
+	vbo_vertices.bind();
+	vbo_vertices.allocate(&vert_info[0], 3*sizeof(float)*vert_info.size());
+	vbo_vertices.release();
+
+	vbo_normals.bind();
+	vbo_normals.allocate(&normals[0], 3*sizeof(float)*normals.size());
+	vbo_normals.release();
+
+	vbo_triangles.bind();
+	vbo_triangles.allocate(&perFaceTriangles[0], sizeof(unsigned int)*perFaceTriangles.size());
+	vbo_triangles.release();
 
 	vao.release();
 	program->release();
 	/* ----- VAO release ----- */
+
+	return true;
+}
+
+bool TriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>& colors) {
+	vector<vec3> vert_info, cols, normals;
+	vector<unsigned int> perFaceTriangles;
+	make_VBO_data(colors, vert_info, cols, normals, perFaceTriangles);
+
+	/* ------------------ */
+	/* Create the vertex array/buffer objects. */
+	program->bind();
+
+	/* ----- VAO create ----- */
+	vao.destroy();
+	vao.create();
+	if (vao.isCreated()) {
+		vao.bind();
+	}
+	else {
+		cerr << "    TriangleMesh::init - Error:" << endl;
+		cerr << "        Vertex array object 'vao' not created." << endl;
+		return false;
+	}
+
+	/* ----- VBO VERTICES create ----- */
+	vbo_vertices.destroy();
+	vbo_vertices.create();
+	if (vbo_vertices.isCreated()) {
+		vbo_vertices.bind();
+	}
+	else {
+		cerr << "    TriangleMesh::init - Error:" << endl;
+		cerr << "        Vertex buffer object 'vbo_vertices' not created." << endl;
+		return false;
+	}
+	vbo_vertices.setUsagePattern(QOpenGLBuffer::StaticDraw);
+	program->enableAttributeArray(0);
+	program->setAttributeBuffer(0, GL_FLOAT, 0, 3, 0);
+
+	/* ----- VBO COLORS create ----- */
+	vbo_colors.destroy();
+	vbo_colors.create();
+	if (vbo_colors.isCreated()) {
+		vbo_colors.bind();
+	}
+	else {
+		cerr << "    TriangleMesh::init - Error:" << endl;
+		cerr << "        Vertex buffer object 'vbo_colors' not created." << endl;
+		return false;
+	}
+	vbo_colors.setUsagePattern(QOpenGLBuffer::StaticDraw);
+	program->enableAttributeArray(1);
+	program->setAttributeBuffer(1, GL_FLOAT, 0, 3, 0);
+
+	/* ----- VBO NORMALS create ----- */
+	vbo_normals.destroy();
+	vbo_normals.create();
+	if (vbo_normals.isCreated()) {
+		vbo_normals.bind();
+	}
+	else {
+		cerr << "    TriangleMesh::init - Error:" << endl;
+		cerr << "        Vertex buffer object 'vbo_normals' not created." << endl;
+		return false;
+	}
+	vbo_normals.setUsagePattern(QOpenGLBuffer::StaticDraw);
+	program->enableAttributeArray(2);
+	program->setAttributeBuffer(2, GL_FLOAT, 0, 3, 0);
+
+	/* ----- VBO TRIANGLES create ----- */
+	vbo_triangles.destroy();
+	vbo_triangles.create();
+	if (vbo_triangles.isCreated()) {
+		vbo_triangles.bind();
+	}
+	else {
+		cerr << "    TriangleMesh::init - Error:" << endl;
+		cerr << "        Vertex buffer object 'vbo_triangles' not created." << endl;
+		return false;
+	}
+	vbo_triangles.setUsagePattern(QOpenGLBuffer::StaticDraw);
+
+	/* ----- VBO fill ----- */
+	vbo_vertices.bind();
+	vbo_vertices.allocate(&vert_info[0], 3*sizeof(float)*vert_info.size());
+	vbo_vertices.release();
+
+	vbo_colors.bind();
+	vbo_colors.allocate(&cols[0], 3*sizeof(float)*cols.size());
+	vbo_colors.release();
+
+	vbo_normals.bind();
+	vbo_normals.allocate(&normals[0], 3*sizeof(float)*normals.size());
+	vbo_normals.release();
+
+	vbo_triangles.bind();
+	vbo_triangles.allocate(&perFaceTriangles[0], sizeof(unsigned int)*perFaceTriangles.size());
+	vbo_triangles.release();
+
+	/* ----- VAO,SHADER release ----- */
+	vao.release();
+	program->release();
 
 	return true;
 }
@@ -369,8 +497,8 @@ void TriangleMesh::compute_Kh(vector<float>& Kh) const {
 
 	// process one-ring of vertices around corner c of vertex i
 	auto process_one_ring =
-	[this](int i, int c, glm::vec3& sum, float& area) -> int {
-		glm::vec3 u, v;
+	[this](int i, int c, vec3& sum, float& area) -> int {
+		vec3 u, v;
 
 		// take the previous and next corners
 		int p_c = previous(c);
@@ -383,10 +511,10 @@ void TriangleMesh::compute_Kh(vector<float>& Kh) const {
 		int vert__p_c = this->triangles[p_c];
 		int vert__n_c = this->triangles[n_c];
 		// from previous to i
-		u = glm::normalize(vertices[i] - vertices[vert__n_c]);
+		u = normalize(vertices[i] - vertices[vert__n_c]);
 		// from next to i
-		v = glm::normalize(vertices[vert__p_c] - vertices[vert__n_c]);
-		float beta = std::acos( glm::dot(u,v) );
+		v = normalize(vertices[vert__p_c] - vertices[vert__n_c]);
+		float beta = std::acos( dot(u,v) );
 
 		//cout << "    Angle beta: " << beta << endl;
 		//cout << "        corners: (" << c << "," << n_c << "," << p_c << ")" << endl;
@@ -415,10 +543,10 @@ void TriangleMesh::compute_Kh(vector<float>& Kh) const {
 		int vert__o_n_c = this->triangles[o_n_c];
 		int vert__p_o_n_c = this->triangles[p_o_n_c];
 		// from previous to i
-		u = glm::normalize(vertices[i] - vertices[vert__o_n_c]);
+		u = normalize(vertices[i] - vertices[vert__o_n_c]);
 		// from next to i
-		v = glm::normalize(vertices[vert__p_o_n_c] - vertices[vert__o_n_c]);
-		float alpha = std::acos( glm::dot(u,v) );
+		v = normalize(vertices[vert__p_o_n_c] - vertices[vert__o_n_c]);
+		float alpha = std::acos( dot(u,v) );
 
 		//cout << "    Angle alpha: " << alpha << endl;
 		//cout << "        corners: (" << n_o_n_c << "," << o_n_c << "," << p_o_n_c << ")" << endl;
@@ -475,7 +603,7 @@ void TriangleMesh::compute_Kh(vector<float>& Kh) const {
 	for (uint i = 1; i < vertices.size(); ++i) {
 		// take a starting corner for i-th vertex
 		int v = corners[i];	// notice that triangles[v] equals i
-		glm::vec3 curv_vec(0.0f,0.0f,0.0f);
+		vec3 curv_vec(0.0f,0.0f,0.0f);
 		float area = 0.0;
 
 		// n: next corner
@@ -493,7 +621,7 @@ void TriangleMesh::compute_Kh(vector<float>& Kh) const {
 			curv_vec *= (1.0f/(2.0f*area));
 
 			// if we traversal went OK keep computed value
-			Kh[i] = (1/2.0f)*glm::length(curv_vec);
+			Kh[i] = (1/2.0f)*length(curv_vec);
 			if (Kh[i] < 0.0f) {
 				cerr << "        Mesh has negative mean curvature at this vertex" << endl;
 			}
@@ -549,11 +677,11 @@ void TriangleMesh::compute_Kg(vector<float>& Kg) const {
 		int k = triangles[p_c];
 		area += triangle_area(i,j,k);
 
-		glm::vec3 ij = vertices[j] - vertices[i];
-		glm::vec3 ik = vertices[k] - vertices[i];
-		ij = glm::normalize(ij);
-		ik = glm::normalize(ik);
-		float theta = std::acos( glm::dot(ij,ik) );
+		vec3 ij = vertices[j] - vertices[i];
+		vec3 ik = vertices[k] - vertices[i];
+		ij = normalize(ij);
+		ik = normalize(ik);
+		float theta = std::acos( dot(ij,ik) );
 		angles += theta;
 
 		// Return the next corner.

@@ -19,13 +19,13 @@ using namespace std;
 #include <QOpenGLShaderProgram>
 
 // glm includes
-#include <glm/geometric.hpp>
-#include <glm/vec3.hpp>
+#include <glm/glm.hpp>
+using namespace glm;
 
 class TriangleMesh {
 	private:
 		/// The set of vertices of the mesh.
-		vector<glm::vec3> vertices;
+		vector<vec3> vertices;
 		/**
 		 * @brief The set of triangles of the mesh.
 		 *
@@ -77,6 +77,8 @@ class TriangleMesh {
 		QOpenGLBuffer vbo_vertices;
 		/// Vertex buffer object for the normals.
 		QOpenGLBuffer vbo_normals;
+		/// Vertex buffer object for the colors.
+		QOpenGLBuffer vbo_colors;
 		/// Vertex buffer object for the triangles.
 		QOpenGLBuffer vbo_triangles;
 
@@ -84,33 +86,42 @@ class TriangleMesh {
 		/**
 		 * @brief Builds the necessary information for the vertex array/buffer objects.
 		 *
-		 * @param copy_verts[out] A copy of the vector @ref vertices.\n
+		 * This is used to rearrange the vertices so that the first vertex
+		 * of the first triangle is at the first position of the vector.
+		 * @param[out] copy_verts A copy of the vector @ref vertices.\n
 		 * This parameter will contain the same vertices as @ref vertices but
 		 * in the same order they appear in the vector @ref triangles.\n
 		 * This vector will be as large as @ref vertices.
-		 * @param normals[out] The normals of each of the triangles in the mesh.\n
+		 * @param[out] normals The normals of each of the triangles in the mesh.\n
 		 * For each triangle, the normal is repeated three times, so the
 		 * final size of this vector is three times the number of triangles.
-		 * @param perFaceTriangles[out] I DO NOT KNOW!!! (YET)
+		 * @param[out] perFaceTriangles I DO NOT KNOW!!! (YET)
 		 */
 		void make_VBO_data(
-			vector<glm::vec3>& copied_vertices,
-			vector<glm::vec3>& normals,
+			vector<vec3>& copied_vertices,
+			vector<vec3>& normals,
 			vector<unsigned int>& perFaceTriangles
 		);
 		/**
-		 * @brief Fills the array/buffer objects associated to this mesh.
+		 * @brief Builds the necessary information for the vertex array/buffer objects.
 		 *
-		 * These objects are @ref vao, @ref vbo_vertices, @ref vbo_normals,
-		 * and @ref vbo_triangles;
-		 *
-		 * The parameters @e copied_vertices, @e normals, and @e perFaceTriangles
-		 * are the result of calling @ref make_BVO_data.
+		 * This is used to rearrange the vertices so that the first vertex
+		 * of the first triangle is at the first position of the vector.
+		 * @param[out] copy_verts A copy of the vector @ref vertices.\n
+		 * This parameter will contain the same vertices as @ref vertices but
+		 * in the same order they appear in the vector @ref triangles.\n
+		 * This vector will be as large as @ref vertices.
+		 * @param[out] normals The normals of each of the triangles in the mesh.\n
+		 * For each triangle, the normal is repeated three times, so the
+		 * final size of this vector is three times the number of triangles.
+		 * @param[out] perFaceTriangles I DO NOT KNOW!!! (YET)
 		 */
-		void fillVBOs(
-			const vector<glm::vec3>& copied_vertices,
-			const vector<glm::vec3>& normals,
-			const vector<unsigned int>& perFaceTriangles
+		void make_VBO_data(
+			const vector<vec3>& colors,
+			vector<vec3>& copied_vertices,
+			vector<vec3>& cols,
+			vector<vec3>& normals,
+			vector<unsigned int>& perFaceTriangles
 		);
 
 		/// Returns the area of the triangle made by the @e i-th , @e j-th and @e k-th vertices.
@@ -132,7 +143,7 @@ class TriangleMesh {
 		 *
 		 * A simple call to push_back of @ref vertices.
 		 */
-		void addVertex(const glm::vec3& position);
+		void addVertex(const vec3& position);
 		/**
 		 * @brief Adds a triangle to the mesh.
 		 *
@@ -162,6 +173,16 @@ class TriangleMesh {
 		 * @return Returns false on error.
 		 */
 		bool init(QOpenGLShaderProgram *program);
+		/**
+		 * @brief Initialises the mesh with the shader @e program associated.
+		 *
+		 * Makes the data necessary to build the vertex buffer objects,
+		 * loads the shader program (bind, ...).
+		 * @param program An GLSL shader program.
+		 * @param colors Specify color per vertex.
+		 * @return Returns false on error.
+		 */
+		bool init(QOpenGLShaderProgram *program, const vector<vec3>& colors);
 		/**
 		 * @brief Frees all the memoery occupied by the mesh.
 		 *

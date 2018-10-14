@@ -1,6 +1,8 @@
 #pragma once
 
+// C++ includes
 #include <iostream>
+#include <limits>
 using namespace std;
 
 // Qt includes
@@ -23,7 +25,7 @@ enum class curvature : int8_t {
 class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 	private:
 		/// Display the polygons filled (true), or wireframe (false)
-		bool poly_fill;
+		bool tri_fill;
 		/// Type of curvature to be displayed. See @ref curvature_display.
 		curvature cd;
 
@@ -61,7 +63,7 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 
 		void load_mesh(const QString& filename);
 
-		/// Sets the polygon display mode. See @ref poly_fill.
+		/// Sets the polygon display mode. See @ref tri_fill.
 		void set_polygon_mode(bool fill);
 		/// Sets the type of curvature to be displayed. See @ref curvature_display.
 		void set_curvature_display(const curvature& cd);
