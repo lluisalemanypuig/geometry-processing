@@ -105,10 +105,7 @@ class TriangleMesh {
 		 * @brief Frees all the memoery occupied by the mesh.
 		 *
 		 * Clears the contents of @ref vertices, @ref triangles,
-		 * @ref opposite_corners, @ref corners and @ref boundary,
-		 * and destroys the vertex array object @ref vao, and
-		 * the vertex buffer objects @ref vbo_vertices, @ref vbo_normals,
-		 * @ref vbo_triangles.
+		 * @ref opposite_corners, @ref corners and @ref boundary.
 		 */
 		void destroy();
 
