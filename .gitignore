@@ -1,3 +1,5 @@
 *.pro.user
-gpr-debug/
-gpr-release/
+gpr-algorithms-debug/
+gpr-algorithms-release/
+gpr-interface-debug/
+gpr-interface-release/

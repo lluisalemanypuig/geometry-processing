@@ -12,9 +12,11 @@ using namespace std;
 #include <QMatrix4x4>
 #include <QMouseEvent>
 
+// algorithms includes
+#include <algorithms/ply_reader.hpp>
+
 // Custom includes
-#include "triangle_mesh.hpp"
-#include "ply_reader.hpp"
+#include "render_triangle_mesh.hpp"
 
 enum class polymode : int8_t {
 	none = -1,
@@ -39,7 +41,7 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		QPoint lastMousePos;
 
 		QOpenGLShaderProgram *program;
-		TriangleMesh mesh;
+		RenderTriangleMesh mesh;
 
 		/// Vertex buffer object for colors of each vertex.
 		QOpenGLBuffer vbo_colors;

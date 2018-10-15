@@ -3,6 +3,7 @@
 // C++ includes
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <vector>
 using namespace std;
 
@@ -10,7 +11,7 @@ using namespace std;
 #include <glm/vec3.hpp>
 
 // Custom includes
-#include "triangle_mesh.hpp"
+#include <algorithms/triangle_mesh.hpp>
 
 /**
  * @brief Read a mesh in .ply format
@@ -44,6 +45,6 @@ namespace PLY_reader {
 	 * @param[out] mesh YUUY
 	 * @return Returns false on error.
 	 */
-	bool read_mesh(const QString& filename, TriangleMesh& mesh);
+	bool read_mesh(const string& filename, TriangleMesh& mesh);
 
 } // -- namespace PLY_reader

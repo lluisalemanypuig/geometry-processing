@@ -178,15 +178,15 @@ namespace PLY_reader {
 		}
 	}
 
-	bool read_mesh(const QString& filename, TriangleMesh& mesh) {
+	bool read_mesh(const string& filename, TriangleMesh& mesh) {
 		ifstream fin;
 		int n_verts, n_faces;
 
-		cout << "    PLY_reader: opening file '" << filename.toStdString() << "'..." << endl;
-		fin.open(filename.toStdString().c_str(), ios_base::in | ios_base::binary);
+		cout << "    PLY_reader: opening file '" << filename << "'..." << endl;
+		fin.open(filename.c_str(), ios_base::in | ios_base::binary);
 		if (not fin.is_open()) {
 			cerr << "    PLY_reader::read_mesh - Error:" << endl;
-			cerr << "        Could not open file '" << filename.toStdString() << "'." << endl;
+			cerr << "        Could not open file '" << filename << "'." << endl;
 			return false;
 		}
 

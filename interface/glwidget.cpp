@@ -163,7 +163,6 @@ void GLWidget::paintGL() {
 
 	program->bind();
 	if (pm == polymode::wireframe) {
-		cout << "Display with wireframe" << endl;
 		program->setUniformValue("wireframe", true);
 
 		// 'fill' the triangles with white
@@ -187,8 +186,6 @@ void GLWidget::paintGL() {
 		program->setUniformValue("wireframe", false);
 
 		if (curv_display == curvature::none) {
-			cout << "Display with no wireframe, no curvature, and flat color" << endl;
-
 			// display with a flat color since there
 			// is no curvature to be displayed
 			program->setUniformValue("color", QVector4D(0.75f, 0.8f, 0.9f, 1.0f));
@@ -198,7 +195,6 @@ void GLWidget::paintGL() {
 		}
 
 		// display with curvature color
-		cout << "Display curvature" << endl;
 		mesh.render(*this);
 		program->release();
 		return;
@@ -254,10 +250,11 @@ GLWidget::~GLWidget() {
 }
 
 void GLWidget::load_mesh(const QString& filename) {
+	mesh.free_buffers();
 	mesh.destroy();
 
 	cout << "GLWidget: reading mesh..." << endl;
-	PLY_reader::read_mesh(filename, mesh);
+	PLY_reader::read_mesh(filename.toStdString(), mesh);
 
 	cout << "GLWidget: initialising mesh..." << endl;
 
@@ -302,7 +299,6 @@ void GLWidget::set_polygon_mode(const polymode& pmode) {
 
 void GLWidget::set_curvature_display(const curvature& cd) {
 	if (cd == curvature::none) {
-		cout << "No curvature to be displayed" << endl;
 		curv_display = curvature::none;
 
 		curvature_values.clear();
