@@ -302,6 +302,7 @@ void GLWidget::set_curvature_display(const curvature& cd) {
 		curv_display = curvature::none;
 
 		curvature_values.clear();
+		mesh.free_buffers();
 
 		/* At this step the buffers of the mesh should
 		 * be cleared because there is information that
@@ -316,6 +317,7 @@ void GLWidget::set_curvature_display(const curvature& cd) {
 		load_simple_shader();
 		set_projection();
 		set_modelview();
+		mesh.init(program);
 		doneCurrent();
 
 		update();
