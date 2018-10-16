@@ -254,7 +254,9 @@ void GLWidget::load_mesh(const QString& filename) {
 	mesh.destroy();
 
 	cout << "GLWidget: reading mesh..." << endl;
+
 	PLY_reader::read_mesh(filename.toStdString(), mesh);
+	mesh.scale_to_unit();
 
 	cout << "GLWidget: initialising mesh..." << endl;
 

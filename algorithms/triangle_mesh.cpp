@@ -70,6 +70,25 @@ void TriangleMesh::addTriangle(int v0, int v1, int v2) {
 	triangles.push_back(v2);
 }
 
+void TriangleMesh::scale_to_unit() {
+	glm::vec3 center(0.0f, 0.0f, 0.0f);
+	glm::vec3 m(1e10, 1e10, 1e10);
+	glm::vec3 M(-1e10, -1e10, -1e10);
+
+	for (size_t i = 0; i < vertices.size(); ++i) {
+		center += vertices[i];
+		m = glm::min(m, vertices[i]);
+		M = glm::max(M, vertices[i]);
+	}
+	center /= vertices.size();
+
+	float largestSize = std::max(M.x - m.x, std::max(M.y - m.y, M.z - m.z));
+
+	for (unsigned int i = 0; i < vertices.size(); ++i) {
+		vertices[i] = (vertices[i] - center)/largestSize;
+	}
+}
+
 void TriangleMesh::make_neighbourhood_data() {
 	// ------------------
 	// build corner table

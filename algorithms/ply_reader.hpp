@@ -1,5 +1,8 @@
 #pragma once
 
+// C includes
+#include <string.h>
+
 // C++ includes
 #include <iostream>
 #include <fstream>
@@ -36,7 +39,6 @@ namespace PLY_reader {
 	void __load_vertices_ascii_1_0(ifstream& fin, int nVertices, vector<float>& plyVertices);
 	void __load_faces_ascii_1_0(ifstream& fin, int nFaces, vector<int>& plyTriangles);
 
-	void __rescale_model(vector<float>& plyVertices);
 	void __add_model_to_mesh(const vector<float>& plyVertices, const vector<int>& plyTriangles, TriangleMesh& mesh);
 
 	/**

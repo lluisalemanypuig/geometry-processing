@@ -89,6 +89,14 @@ class TriangleMesh {
 		void addTriangle(int v0, int v1, int v2);
 
 		/**
+		 * @brief Reescales the mesh so that it fits in a unit box.
+		 *
+		 * The mesh is reescaled so that the longest length of the
+		 * sides of the bounding box equals 1.
+		 */
+		void scale_to_unit();
+
+		/**
 		 * @brief Builds the necessary tables to iterate through
 		 * the one-ring of a vertex, ....
 		 *

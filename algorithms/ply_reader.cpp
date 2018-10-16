@@ -136,34 +136,6 @@ namespace PLY_reader {
 		}
 	}
 
-	void __rescale_model(vector<float>& plyVertices) {
-		vec3 center(0.0f, 0.0f, 0.0f);
-
-		vec3 m(1e10, 1e10, 1e10);
-		vec3 M(-1e10, -1e10, -1e10);
-
-		for (unsigned int i = 0; i < plyVertices.size(); i += 3) {
-			center += vec3(plyVertices[i], plyVertices[i+1], plyVertices[i+2]);
-			m[0] = std::min(m[0], plyVertices[i]);
-			m[1] = std::min(m[1], plyVertices[i+1]);
-			m[2] = std::min(m[2], plyVertices[i+2]);
-			M[0] = std::max(M[0], plyVertices[i]);
-			M[1] = std::max(M[1], plyVertices[i+1]);
-			M[2] = std::max(M[2], plyVertices[i+2]);
-		}
-		center /= plyVertices.size()/3;
-
-		float largestSize = std::max(
-			M[0] - m[0], std::max(M[1] - m[1], M[2] - m[2])
-		);
-
-		for (unsigned int i = 0; i < plyVertices.size(); i += 3) {
-			plyVertices[i] = (plyVertices[i] - center[0])/largestSize;
-			plyVertices[i+1] = (plyVertices[i+1] - center[1])/largestSize;
-			plyVertices[i+2] = (plyVertices[i+2] - center[2])/largestSize;
-		}
-	}
-
 	void __add_model_to_mesh(const vector<float>& plyVertices, const vector<int>& plyTriangles, TriangleMesh& mesh) {
 		// every position that is a multiple of 3 starts
 		// a new vertex -> (0,1,2) are the coordinates of a vertex,
@@ -219,10 +191,6 @@ namespace PLY_reader {
 		}
 
 		fin.close();
-
-		// the model needs reescaling
-		cout << "    PLY_reader: rescaling model..." << endl;
-		__rescale_model(plyVertices);
 
 		// build the TriangleMesh object
 		cout << "    PLY_reader: building triangle mesh..." << endl;
