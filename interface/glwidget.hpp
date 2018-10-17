@@ -13,6 +13,7 @@ using namespace std;
 #include <QMouseEvent>
 
 // algorithms includes
+#include <algorithms/curvature/curvature.hpp>
 #include <algorithms/ply_reader.hpp>
 
 // Custom includes

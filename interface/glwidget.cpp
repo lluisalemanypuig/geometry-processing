@@ -106,10 +106,10 @@ void GLWidget::load_curvature_shader() {
 
 void GLWidget::compute_curvature() {
 	if (curv_display == curvature::Gauss) {
-		mesh.compute_Kg(curvature_values);
+		algorithms::curvature::Gauss(mesh, curvature_values, 4);
 	}
 	else if (curv_display == curvature::Mean) {
-		mesh.compute_Kh(curvature_values);
+		algorithms::curvature::mean(mesh, curvature_values, 4);
 	}
 }
 
