@@ -1,5 +1,5 @@
 TEMPLATE = app
-TARGET = gpr
+TARGET = interface
 
 QT += gui opengl
 CONFIG += c++11
@@ -11,10 +11,10 @@ INCLUDEPATH += ..
 FORMS += mainwindow.ui
 
 CONFIG(release, debug|release) {
-    LIBS += -L../gpr-algorithms-release/ -lgpr
+    LIBS += -L../algorithms-release/ -lgpr
 }
 CONFIG(debug, debug|release) {
-    LIBS += -L../gpr-algorithms-debug/ -lgpr
+    LIBS += -L../algorithms-debug/ -lgpr
 }
 
 HEADERS += \

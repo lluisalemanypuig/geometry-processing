@@ -1,7 +1,7 @@
 *.pro.user
-gpr-algorithms-debug/
-gpr-algorithms-release/
-gpr-interface-debug/
-gpr-interface-release/
+algorithms-debug/
+algorithms-release/
 command-line-debug/
 command-line-release/
+interface-debug/
+interface-release/
