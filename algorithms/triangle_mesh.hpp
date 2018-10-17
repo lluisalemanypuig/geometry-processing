@@ -64,9 +64,6 @@ class TriangleMesh {
 		 */
 		vector<pair<int,int> > boundary;
 
-		/// Returns the area of the triangle made by the @e i-th , @e j-th and @e k-th vertices.
-		float triangle_area(int i, int j, int v) const;
-
 	public:
 		/// Default constructor
 		TriangleMesh();
@@ -197,23 +194,22 @@ class TriangleMesh {
 		const vec3& get_vertex(int v) const;
 
 		/**
-		 * @brief Computes the Mean curvature for each vertex.
+		 * @brief Returns the area of face @e f.
 		 *
-		 * @e Kh is approximated using a discretisation of the
-		 * Laplace-beltrami operator.
-		 * @param[out] Kh @e Kh[i] contains an approximation of
-		 * the Mean curvature at vertex i.
+		 * First, retrieves the vertices of the face with
+		 * @ref get_vertices_face and then calls
+		 * @ref get_triangle_area(int,int,int)const.
+		 * @param f A valid face index.
 		 */
-		void compute_Kh(vector<float>& Kh) const;
+		float get_triangle_area(int f) const;
 
 		/**
-		 * @brief Computes the Gaussian curvature for each vertex.
-		 *
-		 * @e Kg is approximated using a discretisation of the
-		 * Laplace-beltrami operator.
-		 * @param[out] Kg @e Kg[i] contains an approximation of
-		 * the Gaussian curvature at vertex i.
+		 * @brief Assuming the vertices make a triangle, return its area.
+		 * @param i A valid vertex index.
+		 * @param j A valid vertex index.
+		 * @param k A valid vertex index.
 		 */
-		void compute_Kg(vector<float>& Kg) const;
+		float get_triangle_area(int i, int j, int k) const;
+
 };
 
