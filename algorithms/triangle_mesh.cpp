@@ -1,4 +1,4 @@
-#include "triangle_mesh.hpp"
+#include <algorithms/triangle_mesh.hpp>
 
 // LOCAL-DEFINED
 
@@ -65,6 +65,10 @@ void TriangleMesh::addVertex(const vec3& position) {
 }
 
 void TriangleMesh::addTriangle(int v0, int v1, int v2) {
+	cout << "Face " << triangles.size()/3 << " has vertices:" << endl;
+	cout << "    " << v0 << endl;
+	cout << "    " << v1 << endl;
+	cout << "    " << v2 << endl;
 	triangles.push_back(v0);
 	triangles.push_back(v1);
 	triangles.push_back(v2);
@@ -218,8 +222,55 @@ size_t TriangleMesh::n_vertices() const {
 	return vertices.size();
 }
 
-size_t TriangleMesh::n_faces() const {
+size_t TriangleMesh::n_triangles() const {
 	return triangles.size()/3;
+}
+
+int TriangleMesh::get_vertex_corner(int c) const {
+	assert(0 <= c and c < triangles.size());
+	return triangles[c];
+}
+
+int TriangleMesh::get_corner_vertex(int v) const {
+	assert(0 <= v and v < vertices.size());
+	return corners[v];
+}
+
+int TriangleMesh::get_face_corner(int c) const {
+	assert(0 <= c and c < triangles.size());
+	return c/3;
+}
+
+void TriangleMesh::get_vertices_face(int f, int& v0, int& v1, int& v2) const {
+	assert(0 <= f and 3*f < triangles.size());
+	v0 = triangles[3*f    ];
+	v1 = triangles[3*f + 1];
+	v2 = triangles[3*f + 2];
+}
+
+void TriangleMesh::get_vertices_face(int f, int v, int& v0, int& v1, int& v2) const {
+	get_vertices_face(f, v0,v1,v2);
+
+	// Resort the indexes.
+	// It is easy to see that almost two
+	// iterations will be done.
+	int v3_copy;
+	while (v0 != v) {
+		v3_copy = v2;
+		v2 = v1;
+		v1 = v0;
+		v0 = v3_copy;
+	}
+}
+
+int TriangleMesh::get_opposite_corner(int c) const {
+	assert(0 <= c and c < triangles.size());
+	return opposite_corners[c];
+}
+
+const vec3& TriangleMesh::get_vertex(int v) const {
+	assert(0 <= v and v < vertices.size());
+	return vertices[v];
 }
 
 void TriangleMesh::compute_Kh(vector<float>& Kh) const {

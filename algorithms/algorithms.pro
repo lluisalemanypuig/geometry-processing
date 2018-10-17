@@ -12,8 +12,12 @@ INCLUDEPATH += ..
 
 HEADERS += \
     ply_reader.hpp \
-    triangle_mesh.hpp
+    triangle_mesh.hpp \
+    iterators/vertex_iterators.hpp \
+    iterators/mesh_iterator.hpp
 
 SOURCES += \
     ply_reader.cpp \
-    triangle_mesh.cpp
+    triangle_mesh.cpp \
+    iterators/vertex_vertex_iterator.cpp \
+    iterators/mesh_iterator.cpp

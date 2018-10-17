@@ -122,8 +122,79 @@ class TriangleMesh {
 		/// Returns the number of vertices.
 		size_t n_vertices() const;
 
-		/// Returns the number of faces.
-		size_t n_faces() const;
+		/// Returns the number of triangles.
+		size_t n_triangles() const;
+
+		/**
+		 * @brief Returns the index of the vertex corresponding to corner @e c.
+		 * @param c Corner index: 0 <= @e c < number of triangles.
+		 */
+		int get_vertex_corner(int c) const;
+
+		/**
+		 * @brief Returns a corner index for vertex @e v.
+		 * @param v A valid vertex index: 0 <= @e v < number of vertices.
+		 * @pre Neighbourhood data must exist in this mesh.
+		 * See @ref make_neighbourhood_data.
+		 * @return Returns a valid corner index (unless there are
+		 * no faces in this mesh). Returns @e c such that
+		 * 0 <= @e c < number of triangles
+		 */
+		int get_corner_vertex(int v) const;
+
+		/**
+		 * @brief Returns a face index for corner @e c.
+		 * @param c A valid corner index: 0 <= @e c < number of triangles.
+		 * @pre Neighbourhood data must exist in this mesh.
+		 * See @ref make_neighbourhood_data.
+		 * @return If the corner index is valid, the face index @e f
+		 * returned is also valid: 0 <= @e 3*f < number of triangles.
+		 */
+		int get_face_corner(int c) const;
+
+		/**
+		 * @brief Returns the indexes of the vertices of a face.
+		 *
+		 * It is guaranteed that the order of the vertices is
+		 * the same as it is given in the loaded file.
+		 * @param f A valid face index: 0 <= @e 3*f < number of triangles.
+		 * @param[out] v1 The first vertex index of the face.
+		 * @param[out] v2 The second vertex index of the face.
+		 * @param[out] v3 The third vertex index of the face.
+		 */
+		void get_vertices_face(int f, int& v0, int& v1, int& v2) const;
+
+		/**
+		 * @brief Returns the sorted indexes of the vertices of a face.
+		 *
+		 * It is guaranteed that the order of the vertices is
+		 * the same as it is given in the loaded file.
+		 *
+		 * The vertices are sorted so that the first is equal to vertex
+		 * index @e v
+		 * @param f A valid face index: 0 <= @e 3*f < number of triangles.
+		 * @param[out] v1 The first vertex index of the face.
+		 * @param[out] v2 The second vertex index of the face.
+		 * @param[out] v3 The third vertex index of the face.
+		 */
+		void get_vertices_face(int f, int v, int& v1, int& v2, int& v3) const;
+
+		/**
+		 * @brief Returns the corner opposite to corner c.
+		 * @param c Corner index: 0 <= @e c < number of triangles.
+		 * @pre Neighbourhood data must exist in this mesh.
+		 * See @ref make_neighbourhood-data.
+		 * @return Returns -1 if there is no opposite corner (the
+		 * case of hard boundary). Returns a valid corner index
+		 * otherwise.
+		 */
+		int get_opposite_corner(int c) const;
+
+		/**
+		 * @brief Returns the coordinates of a vertex.
+		 * @param v A valid vertex index: 0 <= @e v < number of vertices.
+		 */
+		const vec3& get_vertex(int v) const;
 
 		/**
 		 * @brief Computes the Mean curvature for each vertex.

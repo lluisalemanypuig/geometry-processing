@@ -27,19 +27,19 @@ using namespace std;
  * of every face.
  */
 namespace PLY_reader {
-	bool __load_header(ifstream& fin, int& nVertices, int& nFaces, string& format);
+	bool __load_header(ifstream& fin, int& n_verts, int& n_faces, string& format);
 
 	/* Loading the vertices must be done accordingly to the format. */
 	// BINARY format
 	//     little endian 1.0
-	void __load_vertices_binary_le_1_0(ifstream& fin, int nVertices, vector<float>& plyVertices);
-	void __load_faces_binary_le_1_0(ifstream& fin, int nFaces, vector<int>& plyTriangles);
+	void __load_vertices_binary_le_1_0(ifstream& fin, int n_verts, vector<float>& verts);
+	void __load_faces_binary_le_1_0(ifstream& fin, int n_faces, vector<int>& tris);
 	// ASCII format
 	//     ascii 1.0
-	void __load_vertices_ascii_1_0(ifstream& fin, int nVertices, vector<float>& plyVertices);
-	void __load_faces_ascii_1_0(ifstream& fin, int nFaces, vector<int>& plyTriangles);
+	void __load_vertices_ascii_1_0(ifstream& fin, int n_verts, vector<float>& verts);
+	void __load_faces_ascii_1_0(ifstream& fin, int n_faces, vector<int>& tris);
 
-	void __add_model_to_mesh(const vector<float>& plyVertices, const vector<int>& plyTriangles, TriangleMesh& mesh);
+	void __add_model_to_mesh(const vector<float>& verts, const vector<int>& tris, TriangleMesh& mesh);
 
 	/**
 	 * @brief Loads a triangular mesh stored in @e filename.

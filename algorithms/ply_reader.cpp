@@ -1,8 +1,8 @@
-#include "ply_reader.hpp"
+#include <algorithms/ply_reader.hpp>
 
 namespace PLY_reader {
 
-	bool __load_header(ifstream& fin, int& nVertices, int& nFaces, string& format) {
+	bool __load_header(ifstream& fin, int& n_verts, int& n_faces, string& format) {
 		char line[100];
 
 		fin.getline(line, 100);
@@ -11,15 +11,15 @@ namespace PLY_reader {
 			cerr << "        Wrong format of file: first line does not contain 'ply'." << endl;
 			return false;
 		}
-		nVertices = 0;
+		n_verts = 0;
 		fin.getline(line, 100);
 		while (strncmp(line, "end_header", 10) != 0) {
 
 			if (strncmp(line, "element face", 12) == 0) {
-				nFaces = atoi(&line[13]);
+				n_faces = atoi(&line[13]);
 			}
 			else if (strncmp(line, "element vertex", 14) == 0) {
-				nVertices = atoi(&line[15]);
+				n_verts = atoi(&line[15]);
 			}
 			else if (strncmp(line, "format", 6) == 0) {
 				format = string(&line[7]);
@@ -33,15 +33,15 @@ namespace PLY_reader {
 			}
 			fin.getline(line, 100);
 		}
-		if (nVertices <= 0) {
+		if (n_verts <= 0) {
 			cerr << "        PLY_reader::__load_header - Error:" << endl;
 			cerr << "            Number of vertices read is negative." << endl;
 			return false;
 		}
 
 		cout << "        PLY_reader: triangle mesh has:" << endl;
-		cout << "            Vertices = " << nVertices << endl;
-		cout << "            Faces = " << nFaces << endl;
+		cout << "            Vertices = " << n_verts << endl;
+		cout << "            Faces = " << n_faces << endl;
 		return true;
 	}
 
@@ -49,7 +49,7 @@ namespace PLY_reader {
 
 	// ---------------- BINARY ----------------
 	// ---- LITTLE ENDIAN 1.0
-	void __load_vertices_binary_le_1_0(ifstream& fin, int n_verts, vector<float>& ply_verts) {
+	void __load_vertices_binary_le_1_0(ifstream& fin, int n_verts, vector<float>& verts) {
 		float v1, v2, v3;
 
 		for (int i = 0; i < n_verts; ++i) {
@@ -57,13 +57,13 @@ namespace PLY_reader {
 			fin.read((char *)&v2, sizeof(float));
 			fin.read((char *)&v3, sizeof(float));
 
-			ply_verts.push_back(v1);
-			ply_verts.push_back(v2);
-			ply_verts.push_back(v3);
+			verts.push_back(v1);
+			verts.push_back(v2);
+			verts.push_back(v3);
 		}
 	}
 
-	void __load_faces_binary_le_1_0(ifstream& fin, int n_faces, vector<int>& ply_tris) {
+	void __load_faces_binary_le_1_0(ifstream& fin, int n_faces, vector<int>& tris) {
 		// indices of vertices per face
 		int tri[3];
 		// number of vertices per face
@@ -77,17 +77,17 @@ namespace PLY_reader {
 			fin.read((char *)&tri[1], sizeof(int));
 			fin.read((char *)&tri[2], sizeof(int));
 			// put the indices in the vector
-			ply_tris.push_back(tri[0]);
-			ply_tris.push_back(tri[1]);
-			ply_tris.push_back(tri[2]);
+			tris.push_back(tri[0]);
+			tris.push_back(tri[1]);
+			tris.push_back(tri[2]);
 
 			// in case the face has 4 or more vertices...
 			for(; n_vertex_face > 3; --n_vertex_face) {
 				tri[1] = tri[2];
 				fin.read((char *)&tri[2], sizeof(int));
-				ply_tris.push_back(tri[0]);
-				ply_tris.push_back(tri[1]);
-				ply_tris.push_back(tri[2]);
+				tris.push_back(tri[0]);
+				tris.push_back(tri[1]);
+				tris.push_back(tri[2]);
 			}
 		}
 	}
@@ -95,19 +95,19 @@ namespace PLY_reader {
 	// ---------------- ASCII ----------------
 	// ---- ASCII 1.0
 
-	void __load_vertices_ascii_1_0(ifstream& fin, int n_verts, vector<float>& ply_verts) {
+	void __load_vertices_ascii_1_0(ifstream& fin, int n_verts, vector<float>& verts) {
 		float v1,v2,v3;
 
 		for (int i = 0; i < n_verts; ++i) {
 			fin >> v1 >> v2 >> v3;
 
-			ply_verts.push_back(v1);
-			ply_verts.push_back(v2);
-			ply_verts.push_back(v3);
+			verts.push_back(v1);
+			verts.push_back(v2);
+			verts.push_back(v3);
 		}
 	}
 
-	void __load_faces_ascii_1_0(ifstream& fin, int n_faces, vector<int>& ply_tris) {
+	void __load_faces_ascii_1_0(ifstream& fin, int n_faces, vector<int>& tris) {
 		// indices of vertices per face
 		int tri[3];
 		// number of vertices per face
@@ -120,33 +120,33 @@ namespace PLY_reader {
 			fin >> tri[0] >> tri[1] >> tri[2];
 
 			// put the indices in the vector
-			ply_tris.push_back(tri[0]);
-			ply_tris.push_back(tri[1]);
-			ply_tris.push_back(tri[2]);
+			tris.push_back(tri[0]);
+			tris.push_back(tri[1]);
+			tris.push_back(tri[2]);
 
 			// in case the face has 4 or more vertices...
 			for(; n_vertex_face > 3; --n_vertex_face) {
 				tri[1] = tri[2];
 				fin >> tri[2];
 
-				ply_tris.push_back(tri[0]);
-				ply_tris.push_back(tri[1]);
-				ply_tris.push_back(tri[2]);
+				tris.push_back(tri[0]);
+				tris.push_back(tri[1]);
+				tris.push_back(tri[2]);
 			}
 		}
 	}
 
-	void __add_model_to_mesh(const vector<float>& plyVertices, const vector<int>& plyTriangles, TriangleMesh& mesh) {
+	void __add_model_to_mesh(const vector<float>& verts, const vector<int>& tris, TriangleMesh& mesh) {
 		// every position that is a multiple of 3 starts
 		// a new vertex -> (0,1,2) are the coordinates of a vertex,
 		// (3,4,5) are the coordinates of the next vertex, and so on.
-		for (unsigned int i = 0; i < plyVertices.size(); i += 3) {
-			mesh.addVertex(vec3(plyVertices[i], plyVertices[i+1], plyVertices[i+2]));
+		for (unsigned int i = 0; i < verts.size(); i += 3) {
+			mesh.addVertex(vec3(verts[i], verts[i+1], verts[i+2]));
 		}
 		// just like with the vertices, every position that is a
 		// multiple of 3 starts a new triangle.
-		for (unsigned int i = 0; i < plyTriangles.size(); i += 3) {
-			mesh.addTriangle(plyTriangles[i], plyTriangles[i+1], plyTriangles[i+2]);
+		for (unsigned int i = 0; i < tris.size(); i += 3) {
+			mesh.addTriangle(tris[i], tris[i+1], tris[i+2]);
 		}
 	}
 
