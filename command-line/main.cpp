@@ -16,7 +16,8 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (strcmp(argv[1], "--help") == 0 or strcmp(argv[1], "-h") == 0) {
-		cout << "List of algorithms:" << endl;
+		cout << "List of tests:" << endl;
+		cout << "    iterate" << endl;
 		cout << "    curvature" << endl;
 		cout << "    smoothing" << endl;
 		cout << endl;
@@ -24,7 +25,13 @@ int main(int argc, char *argv[]) {
 		return 0;
 	}
 
+	if (strcmp(argv[1], "iterate") == 0) {
+		test_algorithms::test_iterate(argc, argv);
+		return 0;
+	}
+
 	if (strcmp(argv[1], "curvature") == 0) {
 		test_algorithms::test_curvature(argc, argv);
+		return 0;
 	}
 }

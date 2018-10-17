@@ -15,8 +15,8 @@ namespace test_algorithms {
 	}
 
 	void test_curvature(int argc, char *argv[]) {
-		string curvature = "none";
 		string mesh_file = "none";
+		string curvature = "none";
 
 		for (int i = 2; i < argc; ++i) {
 			if (strcmp(argv[i], "-h") == 0 or strcmp(argv[i], "--help") == 0) {

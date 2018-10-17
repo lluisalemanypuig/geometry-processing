@@ -17,7 +17,8 @@ CONFIG(debug, debug|release) {
 }
 
 SOURCES += main.cpp \
-    test_curvature.cpp
+    test_curvature.cpp \
+    test_iterate.cpp
 
 HEADERS += \
     test_algorithms.hpp
