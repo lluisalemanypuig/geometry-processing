@@ -40,11 +40,11 @@ also required). Finally, the user will need a compiler that supports C++11.
 All the projects in this repository use the _qmake_ tool for building.
 However, some projects have _less_ dependencies than others:
 
-- __gpr-algorithms/__: depends on the glm library and C++11.
+- __algorithms/__: depends on the glm library and C++11.
 - __command-line/__: depends on the glm library, C++11, and on the
-_gpr-algorithms_ library.
+_algorithms_ library.
 - __interface/__: depends on the glm, Qt libraries, C++11, and on the
-_gpr-algorithms_ library.
+_algorithms_ library.
 
 ## Context
 
