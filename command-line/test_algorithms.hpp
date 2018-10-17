@@ -6,10 +6,16 @@
 using namespace std;
 
 // geometry processing algorithms
-#include <algorithms/iterators/mesh_iterator.hpp>
-#include <algorithms/iterators/vertex_iterators.hpp>
 #include <algorithms/triangle_mesh.hpp>
 #include <algorithms/ply_reader.hpp>
+
+#include <algorithms/curvature/curvature.hpp>
+
+#include <algorithms/iterators/mesh_iterator.hpp>
+#include <algorithms/iterators/vertex_iterators.hpp>
+
+// Custom includes
+#include "time.hpp"
 
 namespace test_algorithms {
 

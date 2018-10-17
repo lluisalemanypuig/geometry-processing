@@ -12,11 +12,15 @@ namespace test_algorithms {
 		cout << "        Gauss: to evaluate the Gauss curvature Kg" << endl;
 		cout << "        mean: to evaluate the mean curvature Kh" << endl;
 		cout << endl;
+		cout << "    --threads n: specify number of threads." << endl;
+		cout << "        Default: 1" << endl;
+		cout << endl;
 	}
 
 	void test_curvature(int argc, char *argv[]) {
 		string mesh_file = "none";
 		string curvature = "none";
+		size_t nt = 1;
 
 		for (int i = 2; i < argc; ++i) {
 			if (strcmp(argv[i], "-h") == 0 or strcmp(argv[i], "--help") == 0) {
@@ -29,6 +33,10 @@ namespace test_algorithms {
 			}
 			else if (strcmp(argv[i], "--curv") == 0) {
 				curvature = string(argv[i + 1]);
+				++i;
+			}
+			else if (strcmp(argv[i], "--threads") == 0) {
+				nt = atoi(argv[i + 1]);
 				++i;
 			}
 			else {
@@ -52,16 +60,37 @@ namespace test_algorithms {
 		PLY_reader::read_mesh(mesh_file, mesh);
 		mesh.make_neighbourhood_data();
 
-		vector<float> curv;
+		timing::time_point begin, end;
+
+		vector<float> curv_mesh, curv_func;
 		if (curvature == "Gauss") {
-			mesh.compute_Kg(curv);
+			begin = timing::now();
+			algorithms::curvature::Gauss(mesh, curv_func, nt);
+			end = timing::now();
 		}
 		else if (curvature == "mean") {
-			mesh.compute_Kh(curv);
+			begin = timing::now();
+			mesh.compute_Kh(curv_mesh);
+			end = timing::now();
+			cout << "Curvature computed in "
+				 << timing::elapsed_milliseconds(begin,end)
+				 << " milliseconds" << endl;
+
+			begin = timing::now();
+			algorithms::curvature::mean(mesh, curv_func, nt);
+			end = timing::now();
 		}
 
-		for (size_t i = 0; i < curv.size(); ++i) {
-			cout << i << ": " << curv[i] << endl;
+		cout << "Curvature computed in "
+			 << timing::elapsed_milliseconds(begin,end)
+			 << " milliseconds" << endl;
+
+		for (size_t i = 0; i < mesh.n_vertices(); ++i) {
+			if (curv_mesh[i] != curv_func[i]) {
+				cout << "ERROR (" << i << "):" << endl;
+				cout << "     mesh: " << curv_mesh[i] << endl;
+				cout << "     func: " << curv_func[i] << endl;
+			}
 		}
 	}
 
