@@ -25,15 +25,26 @@ This project has several dependencies.
 ### Libraries
 
 This project relies on the [glm](https://glm.g-truc.net/0.9.9/index.html)
-library (v. 0.9.5 or greater) for the geometry-processing algorithms and the
-Qt library to compile and execute the interface to visualise the results of
-the algorithms.
+library (v. 0.9.5 or greater) for the geometry-processing algorithms and
+the Qt (v. 5.9.6) library to compile and execute the interface to visualise
+the results of the algorithms.
 
 ### Tools
 
 All subprojects of this repository rely on the _qmake_ tool for the generation
 of the Makefiles, so it is needed (needless to say that the _make_ tool is
 also required). Finally, the user will need a compiler that supports C++11.
+
+### Dependencies per project
+
+All the projects in this repository use the _qmake_ tool for building.
+However, some projects have _less_ dependencies than others:
+
+- __gpr-algorithms/__: depends on the glm library and C++11.
+- __command-line/__: depends on the glm library, C++11, and on the
+_gpr-algorithms_ library.
+- __interface/__: depends on the glm, Qt libraries, C++11, and on the
+_gpr-algorithms_ library.
 
 ## Context
 
