@@ -141,12 +141,12 @@ namespace PLY_reader {
 		// a new vertex -> (0,1,2) are the coordinates of a vertex,
 		// (3,4,5) are the coordinates of the next vertex, and so on.
 		for (unsigned int i = 0; i < verts.size(); i += 3) {
-			mesh.addVertex(vec3(verts[i], verts[i+1], verts[i+2]));
+			mesh.add_vertex(vec3(verts[i], verts[i+1], verts[i+2]));
 		}
 		// just like with the vertices, every position that is a
 		// multiple of 3 starts a new triangle.
 		for (unsigned int i = 0; i < tris.size(); i += 3) {
-			mesh.addTriangle(tris[i], tris[i+1], tris[i+2]);
+			mesh.add_triangle(tris[i], tris[i+1], tris[i+2]);
 		}
 	}
 

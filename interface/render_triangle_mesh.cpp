@@ -20,7 +20,7 @@ void RenderTriangleMesh::make_VBO_data
 		copied_vertices[i + 1] = vertices[triangles[i + 1]];
 		copied_vertices[i + 2] = vertices[triangles[i + 2]];
 
-		vec3 N = glm::normalize(cross(
+		vec3 N = glm::normalize(glm::cross(
 			vertices[triangles[i + 1]] - vertices[triangles[i]],
 			vertices[triangles[i + 2]] - vertices[triangles[i]]
 		));
@@ -108,10 +108,10 @@ void RenderTriangleMesh::build_cube() {
 	};
 
 	for (int i = 0; i < 8; ++i) {
-		addVertex(0.5f * vec3(vertices[3*i], vertices[3*i+1], vertices[3*i+2]));
+		add_vertex(0.5f * vec3(vertices[3*i], vertices[3*i+1], vertices[3*i+2]));
 	}
 	for (int i = 0; i < 12; ++i) {
-		addTriangle(faces[3*i], faces[3*i+1], faces[3*i+2]);
+		add_triangle(faces[3*i], faces[3*i+1], faces[3*i+2]);
 	}
 
 	make_neighbourhood_data();

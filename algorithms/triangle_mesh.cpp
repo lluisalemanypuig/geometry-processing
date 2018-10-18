@@ -52,11 +52,11 @@ TriangleMesh::~TriangleMesh() {
 	destroy();
 }
 
-void TriangleMesh::addVertex(const vec3& position) {
+void TriangleMesh::add_vertex(const vec3& position) {
 	vertices.push_back(position);
 }
 
-void TriangleMesh::addTriangle(int v0, int v1, int v2) {
+void TriangleMesh::add_triangle(int v0, int v1, int v2) {
 	triangles.push_back(v0);
 	triangles.push_back(v1);
 	triangles.push_back(v2);

@@ -77,13 +77,13 @@ class TriangleMesh {
 		 *
 		 * A simple call to push_back of @ref vertices.
 		 */
-		void addVertex(const vec3& position);
+		void add_vertex(const vec3& position);
 		/**
 		 * @brief Adds a triangle to the mesh.
 		 *
 		 * Three calls to push_back of @ref triangles.
 		 */
-		void addTriangle(int v0, int v1, int v2);
+		void add_triangle(int v0, int v1, int v2);
 
 		/**
 		 * @brief Reescales the mesh so that it fits in a unit box.
