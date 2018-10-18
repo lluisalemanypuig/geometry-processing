@@ -21,8 +21,9 @@ using namespace std;
 
 enum class polymode : int8_t {
 	none = -1,
-	wireframe,	// the meshes in wireframe mode
-	solid		// fill the triangles of the meshes
+	solid,				// fill the triangles of the meshes
+	wireframe,			// the meshes in wireframe mode
+	reflection_lines	// render reflection lines on the mesh
 };
 
 enum class curvature : int8_t {

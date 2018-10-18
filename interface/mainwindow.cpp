@@ -13,28 +13,37 @@ void MainWindow::on_action_Quit_triggered() {
 	 QApplication::quit();
 }
 
-void MainWindow::on_cBWireframe_toggled(bool wireframe) {
-	if (wireframe) {
-		ui->openGLWidget->set_polygon_mode(polymode::wireframe);
-	}
-	else {
+void MainWindow::on_CBSolid_toggled(bool toggled) {
+	if (toggled) {
 		ui->openGLWidget->set_polygon_mode(polymode::solid);
 	}
 }
 
-void MainWindow::on_rBCurvatureG_toggled(bool checked) {
+void MainWindow::on_CBWireframe_toggled(bool toggled) {
+	if (toggled) {
+		ui->openGLWidget->set_polygon_mode(polymode::wireframe);
+	}
+}
+
+void MainWindow::on_CBRefLines_toggled(bool toggled) {
+	if (toggled) {
+		ui->openGLWidget->set_polygon_mode(polymode::reflection_lines);
+	}
+}
+
+void MainWindow::on_RBCurvatureG_toggled(bool checked) {
 	if (checked) {
 		ui->openGLWidget->set_curvature_display(curvature::Gauss);
 	}
 }
 
-void MainWindow::on_rBCurvatureH_toggled(bool checked) {
+void MainWindow::on_RBCurvatureH_toggled(bool checked) {
 	if (checked) {
 		ui->openGLWidget->set_curvature_display(curvature::Mean);
 	}
 }
 
-void MainWindow::on_rBNoCurvature_toggled(bool checked) {
+void MainWindow::on_RBNoCurvature_toggled(bool checked) {
 	if (checked) {
 		ui->openGLWidget->set_curvature_display(curvature::none);
 	}
@@ -52,5 +61,4 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow() {
 	delete ui;
 }
-
 

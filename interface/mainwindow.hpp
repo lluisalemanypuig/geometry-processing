@@ -18,14 +18,16 @@ class MainWindow : public QMainWindow {
 		void on_action_Quit_triggered();
 
 		/* Interface elements */
-		void on_cBWireframe_toggled(bool checked);
+		void on_CBSolid_toggled(bool checked);
+		void on_CBWireframe_toggled(bool checked);
+		void on_CBRefLines_toggled(bool checked);
 
 		/* Curvature radio buttons */
-		void on_rBCurvatureH_toggled(bool checked);
-		void on_rBCurvatureG_toggled(bool checked);
-		void on_rBNoCurvature_toggled(bool checked);
+		void on_RBCurvatureH_toggled(bool checked);
+		void on_RBCurvatureG_toggled(bool checked);
+		void on_RBNoCurvature_toggled(bool checked);
 
-	public:
+public:
 		explicit MainWindow(QWidget *parent = nullptr);
 		~MainWindow();
 };

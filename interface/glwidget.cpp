@@ -293,7 +293,7 @@ void GLWidget::set_polygon_mode(const polymode& pmode) {
 			break;
 		default:
 			cerr << "GLWidget::set_polygon_mode - Warning:" << endl;
-			cerr << "    No polymode selected: expect undefined behaviour" << endl;
+			cerr << "    Unhandled selected polymode: expect undefined behaviour" << endl;
 	}
 	doneCurrent();
 	update();
