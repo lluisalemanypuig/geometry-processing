@@ -57,7 +57,7 @@ void RenderTriangleMesh::make_VBO_data
 		cols[i + 1] =   colors[triangles[i + 1]];
 		cols[i + 2] =   colors[triangles[i + 2]];
 
-		vec3 N = glm::normalize(cross(
+		vec3 N = glm::normalize(glm::cross(
 			vertices[triangles[i + 1]] - vertices[triangles[i]],
 			vertices[triangles[i + 2]] - vertices[triangles[i]]
 		));
