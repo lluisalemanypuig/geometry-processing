@@ -70,13 +70,6 @@ namespace test_algorithms {
 		}
 		else if (curvature == "mean") {
 			begin = timing::now();
-			mesh.compute_Kh(curv_mesh);
-			end = timing::now();
-			cout << "Curvature computed in "
-				 << timing::elapsed_milliseconds(begin,end)
-				 << " milliseconds" << endl;
-
-			begin = timing::now();
 			algorithms::curvature::mean(mesh, curv_func, nt);
 			end = timing::now();
 		}
