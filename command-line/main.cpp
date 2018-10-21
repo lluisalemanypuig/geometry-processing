@@ -34,4 +34,12 @@ int main(int argc, char *argv[]) {
 		test_algorithms::test_curvature(argc, argv);
 		return 0;
 	}
+
+	if (strcmp(argv[1], "smoothing") == 0) {
+		cerr << "Error: not implemented yet" << endl;
+		return 0;
+	}
+
+	cerr << "Error: algorithm '" << string(argv[1]) << "' not recognised" << endl;
+	return 1;
 }
