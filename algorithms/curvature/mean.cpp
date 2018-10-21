@@ -6,6 +6,7 @@ namespace curvature {
 	inline
 	float cotan(float a) { return std::cos(a)/std::sin(a); }
 
+	inline
 	float Kh_curvature_at(const TriangleMesh& m, int i) {
 		// Voronoi area around 'i'
 		float area = 0.0f;
@@ -13,11 +14,11 @@ namespace curvature {
 		vec3 curv_vec(0.0f,0.0f,0.0f);
 
 		iterators::vertex::vertex_face_iterator it(m);
-		it.init(i);
-		int first = it.current();
+		const int first = it.init(i);
 		int next1 = first;
 		int next2 = it.next();
 
+		float alpha, beta;
 		vec3 u,v;
 		do {
 			// it is guaranteed that
@@ -36,10 +37,10 @@ namespace curvature {
 			// compute the two angles: alpha and beta
 			u = glm::normalize( m.get_vertex(i1) - m.get_vertex(j1) );
 			v = glm::normalize( m.get_vertex(k1) - m.get_vertex(j1) );
-			float beta = glm::acos( glm::dot(u,v) );
+			beta = glm::acos( glm::dot(u,v) );
 			u = glm::normalize( m.get_vertex(i2) - m.get_vertex(k2) );
 			v = glm::normalize( m.get_vertex(j2) - m.get_vertex(k2) );
-			float alpha = glm::acos( glm::dot(u,v) );
+			alpha = glm::acos( glm::dot(u,v) );
 
 			// compute weight
 			float W = cotan(alpha) + cotan(beta);
@@ -53,11 +54,11 @@ namespace curvature {
 			next1 = next2;
 			next2 = it.next();
 		}
-		while (next1 != first and next1 != -1);
+		while (next1 != first and next2 != -1);
 
 		if (next1 == -1) {
 			// the computation of the curvature could not
-			// be completed since there is a boundary
+			// be completed since a boundary was found
 			return 0.0;
 		}
 
@@ -70,8 +71,8 @@ namespace curvature {
 	}
 
 	void mean(const TriangleMesh& mesh, vector<float>& Kh, size_t nt) {
-		size_t N = mesh.n_vertices();
-		Kh.resize(N, 0.0);
+		const size_t N = mesh.n_vertices();
+		Kh.resize(N);
 
 		#pragma omp parallel for num_threads(nt)
 		for (size_t i = 0; i < N; ++i) {

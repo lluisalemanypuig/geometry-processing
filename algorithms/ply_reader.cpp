@@ -137,17 +137,17 @@ namespace PLY_reader {
 	}
 
 	void __add_model_to_mesh(const vector<float>& verts, const vector<int>& tris, TriangleMesh& mesh) {
-		// every position that is a multiple of 3 starts
+		// (for verts)
+		// Every position that is a multiple of 3 starts
 		// a new vertex -> (0,1,2) are the coordinates of a vertex,
 		// (3,4,5) are the coordinates of the next vertex, and so on.
-		for (unsigned int i = 0; i < verts.size(); i += 3) {
-			mesh.add_vertex(vec3(verts[i], verts[i+1], verts[i+2]));
-		}
+
+		// (for tris)
 		// just like with the vertices, every position that is a
 		// multiple of 3 starts a new triangle.
-		for (unsigned int i = 0; i < tris.size(); i += 3) {
-			mesh.add_triangle(tris[i], tris[i+1], tris[i+2]);
-		}
+
+		mesh.set_vertices(verts);
+		mesh.set_triangles(tris);
 	}
 
 	bool read_mesh(const string& filename, TriangleMesh& mesh) {

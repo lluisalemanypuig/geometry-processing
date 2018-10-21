@@ -38,8 +38,11 @@ class vertex_vertex_iterator : public mesh_iterator {
 		 *
 		 * @param v Index of the vertex. Must be a valid
 		 * vertex index: 0 <= @e v < number of vertices.
+		 * @returns Returns the first iterated vertex index.
+		 * If this value is not collected, call @ref current,
+		 * before calling @ref next.
 		 */
-		void init(int v);
+		int init(int v);
 
 		/**
 		 * @brief Returns the current index of vertex.
@@ -96,8 +99,11 @@ class vertex_face_iterator : public mesh_iterator {
 		 *
 		 * @param v Index of the vertex. Must be a valid
 		 * vertex index: 0 <= @e v < number of vertices.
+		 * @returns Returns the first iterated face index.
+		 * If this value is not collected, call @ref current,
+		 * before calling @ref next.
 		 */
-		void init(int v);
+		int init(int v);
 
 		/**
 		 * @brief Returns the current index of vertex.

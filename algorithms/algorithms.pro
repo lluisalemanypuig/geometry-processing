@@ -24,7 +24,7 @@ HEADERS +=									\
 SOURCES +=									\
     ply_reader.cpp							\
     triangle_mesh.cpp						\
-    iterators/vertex_vertex_iterator.cpp	\
     iterators/mesh_iterator.cpp				\
     curvature/mean.cpp						\
-    curvature/Gauss.cpp
+    curvature/Gauss.cpp \
+    iterators/vertex_iterators.cpp

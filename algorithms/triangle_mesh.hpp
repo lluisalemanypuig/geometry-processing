@@ -73,17 +73,30 @@ class TriangleMesh {
 		// MODIFIERS
 
 		/**
-		 * @brief Adds a vertex to the mesh.
+		 * @brief Adds a collection of vertices to the mesh.
 		 *
-		 * A simple call to push_back of @ref vertices.
+		 * Each vertex starts at a position multiple of 3.
+		 * Then, the vertices are added to @ref vertices.
+		 * @param coords The coordinates of all the vertices.
+		 * The size must be a multiple of 3.
 		 */
-		void add_vertex(const vec3& position);
+		void set_vertices(const vector<float>& coords);
 		/**
-		 * @brief Adds a triangle to the mesh.
+		 * @brief Adds a collection of vertices to the mesh.
 		 *
-		 * Three calls to push_back of @ref triangles.
+		 * The vertices passed in @e vs are added to @ref vertices.
 		 */
-		void add_triangle(int v0, int v1, int v2);
+		void set_vertices(const vector<vec3>& vs);
+		/**
+		 * @brief Adds the connectivity information to the mesh.
+		 *
+		 * The contents of @e tris are the vertex indices of the
+		 * triangles of the mesh.
+		 *
+		 * That is, face @e f has vertices @ref vertices[3*@e f],
+		 * @ref vertices[3*@e f + 1], @ref vertices[3*@e f + 2].
+		 */
+		void set_triangles(const vector<int>& tris);
 
 		/**
 		 * @brief Reescales the mesh so that it fits in a unit box.

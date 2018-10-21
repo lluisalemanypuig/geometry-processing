@@ -52,14 +52,22 @@ TriangleMesh::~TriangleMesh() {
 	destroy();
 }
 
-void TriangleMesh::add_vertex(const vec3& position) {
-	vertices.push_back(position);
+void TriangleMesh::set_vertices(const vector<float>& coords){
+	assert(coords.size()%3 == 0);
+	vertices.resize(coords.size()/3);
+	for (size_t i = 0; i < coords.size(); i += 3) {
+		vertices[i/3] = vec3(coords[i], coords[i+1], coords[i+2]);
+	}
 }
 
-void TriangleMesh::add_triangle(int v0, int v1, int v2) {
-	triangles.push_back(v0);
-	triangles.push_back(v1);
-	triangles.push_back(v2);
+void TriangleMesh::set_vertices(const vector<vec3>& vs) {
+	vertices.clear();
+	vertices.insert(vertices.end(), vs.begin(), vs.end());
+}
+
+void TriangleMesh::set_triangles(const vector<int>& tris) {
+	triangles.clear();
+	triangles.insert(triangles.end(), tris.begin(), tris.end());
 }
 
 void TriangleMesh::scale_to_unit() {

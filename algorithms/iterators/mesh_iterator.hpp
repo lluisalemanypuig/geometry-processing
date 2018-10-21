@@ -33,7 +33,7 @@ class mesh_iterator {
 		virtual ~mesh_iterator();
 
 		/// Initialise iterator with an index.
-		virtual void init(int idx) = 0;
+		virtual int init(int idx) = 0;
 
 		/// Return index to current element.
 		virtual int current() const = 0;
