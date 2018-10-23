@@ -72,11 +72,11 @@ namespace curvature {
 	}
 
 	void mean(const TriangleMesh& mesh, vector<float>& Kh, size_t nt) {
-		const size_t N = mesh.n_vertices();
+		const int N = mesh.n_vertices();
 		Kh.resize(N);
 
 		#pragma omp parallel for num_threads(nt)
-		for (size_t i = 0; i < N; ++i) {
+		for (int i = 0; i < N; ++i) {
 			Kh[i] = Kh_curvature_at(mesh, i);
 		}
 	}

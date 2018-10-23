@@ -55,11 +55,11 @@ namespace curvature {
 	}
 
 	void Gauss(const TriangleMesh& mesh, vector<float>& Kg, size_t nt) {
-		const size_t N = mesh.n_vertices();
+		const int N = static_cast<int>(mesh.n_vertices());
 		Kg.resize(N);
 
 		#pragma omp parallel for num_threads(nt)
-		for (size_t i = 0; i < N; ++i) {
+		for (int i = 0; i < N; ++i) {
 			Kg[i] = Kg_curvature_at(mesh, i);
 		}
 	}

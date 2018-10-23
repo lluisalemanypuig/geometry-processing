@@ -73,6 +73,12 @@ class TriangleMesh {
 		// MODIFIERS
 
 		/**
+		 * @brief Sets the coordinate of a vertex.
+		 * @param vi A valid vertex index: 0 <= @e v < number of vertices.
+		 * @param v The new coordinates of the vertex.
+		 */
+		void set_vertex(int vi, const vec3& v);
+		/**
 		 * @brief Adds a collection of vertices to the mesh.
 		 *
 		 * Each vertex starts at a position multiple of 3.
@@ -130,14 +136,15 @@ class TriangleMesh {
 		// GETTERS
 
 		/// Returns the number of vertices.
-		size_t n_vertices() const;
-
+		int n_vertices() const;
 		/// Returns the number of triangles.
-		size_t n_triangles() const;
+		int n_triangles() const;
+		/// Returns the number of corners.
+		int n_corners() const;
 
 		/**
 		 * @brief Returns the index of the vertex corresponding to corner @e c.
-		 * @param c Corner index: 0 <= @e c < number of triangles.
+		 * @param c Valid corner index: 0 <= @e c < number of corners.
 		 */
 		int get_vertex_corner(int c) const;
 
@@ -154,7 +161,7 @@ class TriangleMesh {
 
 		/**
 		 * @brief Returns a face index for corner @e c.
-		 * @param c A valid corner index: 0 <= @e c < number of triangles.
+		 * @param c A valid corner index: 0 <= @e c < number of corners.
 		 * @pre Neighbourhood data must exist in this mesh.
 		 * See @ref make_neighbourhood_data.
 		 * @return If the corner index is valid, the face index @e f
@@ -191,7 +198,7 @@ class TriangleMesh {
 
 		/**
 		 * @brief Returns the corner opposite to corner c.
-		 * @param c Corner index: 0 <= @e c < number of triangles.
+		 * @param c Valid corner index: 0 <= @e c < number of corners.
 		 * @pre Neighbourhood data must exist in this mesh.
 		 * See @ref make_neighbourhood-data.
 		 * @return Returns -1 if there is no opposite corner (the

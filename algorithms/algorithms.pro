@@ -19,7 +19,8 @@ HEADERS +=									\
     triangle_mesh.hpp						\
     iterators/vertex_iterators.hpp			\
     iterators/mesh_iterator.hpp				\
-    curvature/curvature.hpp
+    curvature/curvature.hpp \
+    smoothing/smoothing.hpp
 
 SOURCES +=									\
     ply_reader.cpp							\
@@ -27,4 +28,5 @@ SOURCES +=									\
     iterators/mesh_iterator.cpp				\
     curvature/mean.cpp						\
     curvature/Gauss.cpp \
-    iterators/vertex_iterators.cpp
+    iterators/vertex_iterators.cpp \
+    smoothing/laplacian.cpp

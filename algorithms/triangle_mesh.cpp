@@ -39,6 +39,11 @@ TriangleMesh::~TriangleMesh() {
 	destroy();
 }
 
+void TriangleMesh::set_vertex(int vi, const vec3& v) {
+	assert(0 <= vi and vi < n_vertices());
+	vertices[vi] = v;
+}
+
 void TriangleMesh::set_vertices(const vector<float>& coords){
 	assert(coords.size()%3 == 0);
 	vertices.resize(coords.size()/3);
@@ -201,31 +206,35 @@ void TriangleMesh::destroy() {
 
 // GETTERS
 
-size_t TriangleMesh::n_vertices() const {
-	return vertices.size();
+int TriangleMesh::n_vertices() const {
+	return static_cast<int>(vertices.size());
 }
 
-size_t TriangleMesh::n_triangles() const {
-	return triangles.size()/3;
+int TriangleMesh::n_triangles() const {
+	return static_cast<int>(triangles.size()/3);
+}
+
+int TriangleMesh::n_corners() const {
+	return static_cast<int>(triangles.size());
 }
 
 int TriangleMesh::get_vertex_corner(int c) const {
-	assert(0 <= c and c < triangles.size());
+	assert(0 <= c and c < n_corners());
 	return triangles[c];
 }
 
 int TriangleMesh::get_corner_vertex(int v) const {
-	assert(0 <= v and v < vertices.size());
+	assert(0 <= v and v < n_vertices());
 	return corners[v];
 }
 
 int TriangleMesh::get_face_corner(int c) const {
-	assert(0 <= c and c < triangles.size());
+	assert(0 <= c and c < n_corners());
 	return c/3;
 }
 
 void TriangleMesh::get_vertices_face(int f, int& v0, int& v1, int& v2) const {
-	assert(0 <= f and 3*f < triangles.size());
+	assert(0 <= f and 3*f < n_triangles());
 	v0 = triangles[3*f    ];
 	v1 = triangles[3*f + 1];
 	v2 = triangles[3*f + 2];
@@ -247,26 +256,26 @@ void TriangleMesh::get_vertices_face(int f, int v, int& v0, int& v1, int& v2) co
 }
 
 int TriangleMesh::get_opposite_corner(int c) const {
-	assert(0 <= c and c < triangles.size());
+	assert(0 <= c and c < n_corners());
 	return opposite_corners[c];
 }
 
 const vec3& TriangleMesh::get_vertex(int v) const {
-	assert(0 <= v and v < vertices.size());
+	assert(0 <= v and v < n_vertices());
 	return vertices[v];
 }
 
 float TriangleMesh::get_triangle_area(int f) const {
-	assert(0 <= f and 3*f < triangles.size());
+	assert(0 <= f and 3*f < n_triangles());
 	int i, j, k;
 	get_vertices_face(f, i,j,k);
 	return get_triangle_area(i,j,k);
 }
 
 float TriangleMesh::get_triangle_area(int i, int j, int k) const {
-	assert(0 <= i and i < vertices.size());
-	assert(0 <= j and j < vertices.size());
-	assert(0 <= k and k < vertices.size());
+	assert(0 <= i and i < n_vertices());
+	assert(0 <= j and j < n_vertices());
+	assert(0 <= k and k < n_vertices());
 
 	vec3 ij = vertices[j] - vertices[i];
 	vec3 ik = vertices[k] - vertices[i];
