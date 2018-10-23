@@ -2,19 +2,6 @@
 
 // LOCAL-DEFINED
 
-inline
-int next(int corner) {
-	return 3*(corner/3) + (corner + 1)%3;
-}
-
-inline
-int previous(int corner) {
-	return 3*(corner/3) + (corner + 2)%3;
-}
-
-template<typename T>
-inline T cotan(const T& a) { return std::cos(a)/std::sin(a); }
-
 struct CornerEdge {
 	int vertexA, vertexB, corner;
 
@@ -172,13 +159,13 @@ void TriangleMesh::make_neighbourhood_data() {
 			// this single CornerEdge contains
 			// an edge of the boundary -> hard boundary
 			boundary.push_back( make_pair(vA, vB) );
-			cout << "Hard boundary in edge (" << vA << "," << vB << ")" << endl;
+			cout << "Boundary in edge (" << vA << "," << vB << ")" << endl;
 			cout << "    " << vertices[vA].x << "," << vertices[vA].y << "," << vertices[vA].z << endl;
 			cout << "    " << vertices[vB].x << "," << vertices[vB].y << "," << vertices[vB].z << endl;
 		}
 	}
 	if (boundary.size() > 0) {
-		cerr << "Warning: this mesh contains hard boundary(ies)" << endl;
+		cerr << "Warning: this mesh contains boundary(ies)" << endl;
 		cerr << "    Computing Some curvatures may lead to a crash of the application" << endl;
 	}
 
@@ -283,6 +270,6 @@ float TriangleMesh::get_triangle_area(int i, int j, int k) const {
 
 	vec3 ij = vertices[j] - vertices[i];
 	vec3 ik = vertices[k] - vertices[i];
-	vec3 c = cross(ij, ik);
-	return length(c)/2.0f;
+	vec3 c = glm::cross(ij, ik);
+	return glm::length(c)/2.0f;
 }
