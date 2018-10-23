@@ -21,13 +21,15 @@ FORMS += mainwindow.ui
 HEADERS +=						\
     glwidget.hpp				\
     mainwindow.hpp				\
-    render_triangle_mesh.hpp
+    render_triangle_mesh.hpp \
+    utils.hpp
 
 SOURCES +=						\
     main.cpp					\
     glwidget.cpp				\
     mainwindow.cpp				\
-    render_triangle_mesh.cpp
+    render_triangle_mesh.cpp \
+    utils.cpp
 
 DISTFILES +=					\
     shaders/curvature.vert		\

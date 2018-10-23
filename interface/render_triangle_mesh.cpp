@@ -87,7 +87,7 @@ RenderTriangleMesh::~RenderTriangleMesh() {
 }
 
 void RenderTriangleMesh::build_cube() {
-	GLfloat vertices[] = {
+	float vertices[] = {
 		-1, -1, -1,
 		-1,  1, -1,
 		 1,  1, -1,
@@ -98,7 +98,7 @@ void RenderTriangleMesh::build_cube() {
 		-1,  1,  1
 	};
 
-	GLint faces[] = {
+	int faces[] = {
 		0, 1, 2, 3, 4, 2,
 		5, 2, 4, 4, 6, 5,
 		6, 0, 5, 5, 0, 2,
@@ -107,12 +107,17 @@ void RenderTriangleMesh::build_cube() {
 		3, 2, 1, 1, 7, 3
 	};
 
+	set_vertices( vector<float>(&vertices[0], &vertices[24]) );
+	set_triangles( vector<int>(&faces[0], &faces[36]) );
+
+	/*
 	for (int i = 0; i < 8; ++i) {
 		add_vertex(0.5f * vec3(vertices[3*i], vertices[3*i+1], vertices[3*i+2]));
 	}
 	for (int i = 0; i < 12; ++i) {
 		add_triangle(faces[3*i], faces[3*i+1], faces[3*i+2]);
 	}
+	*/
 
 	make_neighbourhood_data();
 }

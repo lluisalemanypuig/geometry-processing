@@ -18,6 +18,7 @@ using namespace std;
 
 // Custom includes
 #include "render_triangle_mesh.hpp"
+#include "utils.hpp"
 
 enum class polymode : int8_t {
 	none = -1,
@@ -50,13 +51,13 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 
 		/// Values of the curvature per vertex
 		vector<float> curvature_values;
-		vector<QVector4D> vertex_color;
+
+		/// Number of threads to use.
+		size_t nt;
 
 	private:
 		void set_projection();
 		void set_modelview();
-
-		void make_colors_rainbow_gradient(const vector<float>& v, vector<vec3>& cols);
 
 		void delete_program();
 		void load_simple_shader();
@@ -82,5 +83,8 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		void set_polygon_mode(const polymode& pm);
 		/// Sets the type of curvature to be displayed. See @ref curvature_display.
 		void set_curvature_display(const curvature& curv_display);
+
+		/// Sets the number of threads.
+		void set_num_threads(size_t nt);
 };
 

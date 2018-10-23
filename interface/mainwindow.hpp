@@ -27,7 +27,10 @@ class MainWindow : public QMainWindow {
 		void on_RBCurvatureG_toggled(bool checked);
 		void on_RBNoCurvature_toggled(bool checked);
 
-public:
+		/* Performance options */
+		void on_SBThreads_valueChanged(int arg1);
+
+	public:
 		explicit MainWindow(QWidget *parent = nullptr);
 		~MainWindow();
 };

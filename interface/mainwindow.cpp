@@ -49,6 +49,11 @@ void MainWindow::on_RBNoCurvature_toggled(bool checked) {
 	}
 }
 
+void MainWindow::on_SBThreads_valueChanged(int val) {
+	size_t n_threads = static_cast<size_t>(val);
+	ui->openGLWidget->set_num_threads(n_threads);
+}
+
 // PUBLIC
 
 MainWindow::MainWindow(QWidget *parent)
@@ -56,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent)
 	QMainWindow(parent), ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
+	ui->openGLWidget->set_num_threads(1);
 }
 
 MainWindow::~MainWindow() {

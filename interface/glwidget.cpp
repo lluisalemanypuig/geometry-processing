@@ -5,6 +5,71 @@ const float maxRotationCamera = 75.0f;
 const float minDistanceCamera = 1.0f;
 const float maxDistanceCamera = 3.0f;
 
+inline
+void make_colors_rainbow_gradient(const vector<float>& values, vector<vec3>& cols) {
+
+	// minimum and maximum values of curvature
+	float cm = numeric_limits<float>::max();
+	float cM = -numeric_limits<float>::max();
+	for (float v : values) {
+		cm = std::min(cm, v);
+		cM = std::max(cM, v);
+	}
+	float d = cM - cm;
+	cols = vector<vec3>(values.size());
+
+	// ----------------------- //
+	// Colour rainbow gradient //
+	for (size_t i = 0; i < values.size(); ++i) {
+
+		float s = (values[i] - cm)/d;
+		float r, g, b;
+
+		if (s <= 0.0f) {
+			r = 0.0f;
+			g = 0.0f;
+			b = 0.0f;
+		}
+		else if (s <= 0.2f) {
+			// RED
+			// from 0.0 to 0.2
+			r = 5.0f*s;
+			g = 0.0f;
+			b = 0.0f;
+		}
+		else if (s <= 0.4f) {
+			// YELLOW
+			// from 0.2 to 0.4
+			r = 1.0f;
+			g = 5.0f*s - 1.0f;
+			b = 0.0f;
+		}
+		else if (s <= 0.6f) {
+			// GREEN
+			// from 0.4 to 0.6
+			r = 5.0f*s - 2.0f;
+			g = 1.0f;
+			b = 0.0f;
+		}
+		else if (s <= 0.8f) {
+			// TURQUOISE
+			// from 0.6 to 0.8
+			r = 0.0f;
+			g = 1.0f;
+			b = 5.0f*s - 3.0f;
+		}
+		else if (s <= 1.0f) {
+			// BLUE
+			// from 0.8 to 1.0
+			r = 0.0f;
+			g = 5.0f*s - 3.0f;
+			b = 1.0f;
+		}
+
+		cols[i] = vec3(r,g,b);
+	}
+}
+
 // PRIVATE
 
 void GLWidget::set_projection() {
@@ -29,39 +94,6 @@ void GLWidget::set_modelview() {
 	program->setUniformValue("modelview", modelviewMatrix);
 	program->setUniformValue("normal_matrix", modelviewMatrix.normalMatrix());
 	program->release();
-}
-
-void GLWidget::make_colors_rainbow_gradient(const vector<float>& values, vector<vec3>& cols) {
-	/*
-	float m = curvature_values[0];
-	float M = curvature_values[0];
-
-	for (size_t i = 1; i < curvature_values.size(); ++i) {
-		m = std::min(m, curvature_values[i]);
-		M = std::max(M, curvature_values[i]);
-	}
-
-	for (float v : curvature_values) {
-		float c = (v - m)/(M - m);
-		vertex_color[i] = QVector4D(c, c, c, 1.0f);
-	}
-	*/
-
-	float cm = numeric_limits<float>::max();
-	float cM = numeric_limits<float>::min();
-	for (float v : values) {
-		cm = std::min(cm, v);
-		cM = std::max(cm, v);
-	}
-	float d = cM - cm;
-
-	// copy the colors into a 'sorted' vector
-	cols = vector<vec3>(mesh.n_vertices());
-	for (size_t i = 0; i < cols.size(); ++i) {
-		float v = curvature_values[i];
-		float c = v/d - cm/d;
-		cols[i] = vec3(c,c,c);
-	}
 }
 
 void GLWidget::delete_program() {
@@ -105,12 +137,22 @@ void GLWidget::load_curvature_shader() {
 }
 
 void GLWidget::compute_curvature() {
+	timing::time_point begin = timing::now();
 	if (curv_display == curvature::Gauss) {
-		algorithms::curvature::Gauss(mesh, curvature_values, 4);
+		algorithms::curvature::Gauss(mesh, curvature_values, nt);
 	}
 	else if (curv_display == curvature::Mean) {
-		algorithms::curvature::mean(mesh, curvature_values, 4);
+		algorithms::curvature::mean(mesh, curvature_values, nt);
 	}
+	timing::time_point end = timing::now();
+
+	if (curv_display == curvature::Gauss) {
+		cout << "Gauss ";
+	}
+	else if (curv_display == curvature::Mean) {
+		cout << "Mean ";
+	}
+	cout << "curvature computed in " << timing::elapsed_seconds(begin,end) << endl;
 }
 
 void GLWidget::show_curvature(bool load_shader) {
@@ -138,6 +180,7 @@ void GLWidget::initializeGL() {
 
 	program->bind();
 	mesh.build_cube();
+	mesh.scale_to_unit();
 	bool init = mesh.init(program);
 	if (not init) {
 		cerr << "GLWidget::initializeGL - Error:" << endl;
@@ -233,7 +276,6 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
 GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent)
 {
 	program = nullptr;
-	vertex_color = vector<QVector4D>(mesh.n_vertices());
 
 	pm = polymode::solid;
 	curv_display = curvature::none;
@@ -241,6 +283,8 @@ GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent)
 	angleX = 0.0f;
 	angleY = 0.0f;
 	distance = 2.0f;
+
+	nt = 1;
 }
 
 GLWidget::~GLWidget() {
@@ -272,7 +316,6 @@ void GLWidget::load_mesh(const QString& filename) {
 	mesh.make_neighbourhood_data();
 
 	if (curv_display != curvature::none) {
-		cout << "Compute curvature" << endl;
 		compute_curvature();
 		show_curvature(false);
 	}
@@ -306,13 +349,10 @@ void GLWidget::set_curvature_display(const curvature& cd) {
 		curvature_values.clear();
 		mesh.free_buffers();
 
-		/* At this step the buffers of the mesh should
-		 * be cleared because there is information that
+		/* At this step the buffers of the mesh are
+		 * cleared because there is information that
 		 * we no longer want, and could interfere in the
 		 * rendering. This buffer is the 'vbo_colors'.
-		 * However, since the corresponding attribute's
-		 * location is '2', not present in the simple
-		 * shader, then this will not interfere at all.
 		 */
 
 		makeCurrent();
@@ -341,3 +381,6 @@ void GLWidget::set_curvature_display(const curvature& cd) {
 	show_curvature(load_shader);
 }
 
+void GLWidget::set_num_threads(size_t _nt) {
+	nt = _nt;
+}
