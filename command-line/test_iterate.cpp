@@ -3,7 +3,7 @@
 namespace test_algorithms {
 
 	void iterate_usage() {
-		cout << "Curvature evaluation" << endl;
+		cout << "Iteration classes" << endl;
 		cout << endl;
 		cout << "    --load f: load a mesh stored in the .ply file f" << endl;
 		cout << endl;

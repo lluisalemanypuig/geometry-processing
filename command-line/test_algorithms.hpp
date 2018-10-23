@@ -10,6 +10,7 @@ using namespace std;
 #include <algorithms/ply_reader.hpp>
 
 #include <algorithms/curvature/curvature.hpp>
+#include <algorithms/smoothing/smoothing.hpp>
 
 #include <algorithms/iterators/mesh_iterator.hpp>
 #include <algorithms/iterators/vertex_iterators.hpp>
@@ -21,5 +22,6 @@ namespace test_algorithms {
 
 	void test_iterate(int argc, char *argv[]);
 	void test_curvature(int argc, char *argv[]);
+	void test_smoothing(int argc, char *argv[]);
 
 } // -- namespace test_algorithms

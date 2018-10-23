@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (strcmp(argv[1], "smoothing") == 0) {
-		cerr << "Error: not implemented yet" << endl;
+		test_algorithms::test_smoothing(argc, argv);
 		return 0;
 	}
 

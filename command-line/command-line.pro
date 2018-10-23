@@ -22,7 +22,8 @@ CONFIG(debug, debug|release) {
 SOURCES += main.cpp		\
     test_curvature.cpp	\
     test_iterate.cpp	\
-    time.cpp
+    time.cpp \
+    test_smoothing.cpp
 
 HEADERS +=				\
     test_algorithms.hpp \
