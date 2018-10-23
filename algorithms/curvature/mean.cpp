@@ -32,6 +32,7 @@ namespace curvature {
 			m.get_vertices_face(next1, i, i1,j1,k1);
 			m.get_vertices_face(next2, i, i2,j2,k2);
 
+			// make sure that the orientations are correct
 			assert(k1 == j2);
 
 			// compute the two angles: alpha and beta
