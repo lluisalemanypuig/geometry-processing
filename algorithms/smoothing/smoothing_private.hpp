@@ -28,7 +28,7 @@ namespace smoothing_private {
 	 * @param m Mesh to be iterated.
 	 * @param verts Use the coordinates of the vertices in this
 	 * vector instead of the vertices in the mesh.
-	 * @param L Result of the sum.
+	 * @param[out] L Result of the sum.
 	 */
 	void make_uniform_weight
 	(int vi, const TriangleMesh& m, const vector<vec3>& verts, vec3& L);
@@ -47,7 +47,7 @@ namespace smoothing_private {
 	 * @param m Mesh to be iterated.
 	 * @param verts Use the coordinates of the vertices in this
 	 * vector instead of the vertices in the mesh.
-	 * @param L Result of the sum.
+	 * @param[out] L Result of the sum.
 	 */
 	void make_cotangent_weight
 	(int i, const TriangleMesh& m, const vector<vec3>& verts, vec3& L);
@@ -58,9 +58,17 @@ namespace smoothing_private {
 	 * @param lambda Parameter used in moving vertices:
 	 * \f$v_i' = v_i + \lambda\cdot L(v_i)\f$, where \f$L(v_i)\f$
 	 * depends on the type of weight used.
-	 * @param m The mesh to be smoothed.
+	 * @param m The mesh used to iterate on the neighbourhood of @e old_verts.
+	 * @param old_verts Coordinates of the vertices to be smoothed, whose
+	 * neighbourhood relationship is encoded in the mesh @e m.
+	 * @param[out] new_verts The coordinates of the smoothed vertices.
 	 */
-	void apply_local(const smooth_weight& w, float lambda, TriangleMesh& m);
+	void apply_local
+	(
+		const smooth_weight& w, float lambda,
+		const TriangleMesh& m, const vector<vec3>& old_verts,
+		vector<vec3>& new_verts
+	);
 
 } // -- namespace smoothing_private
 } // -- namespace smoothing
