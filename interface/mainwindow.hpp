@@ -4,7 +4,7 @@
 #include <QMainWindow>
 
 // algorithms includes
-#include <algorithms/smoothing/smoothing.hpp>
+#include <algorithms/smoothing/iterative_local.hpp>
 using namespace algorithms;
 using namespace smoothing;
 
@@ -49,7 +49,7 @@ class MainWindow : public QMainWindow {
 
 		void on_comboBox_currentIndexChanged(const QString &arg1);
 
-public:
+	public:
 		explicit MainWindow(QWidget *parent = nullptr);
 		~MainWindow();
 };

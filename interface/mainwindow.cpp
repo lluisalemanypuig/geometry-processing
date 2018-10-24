@@ -144,8 +144,11 @@ MainWindow::MainWindow(QWidget *parent)
 	QMainWindow(parent), ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
-	ui->SingleView_Renderer->set_num_threads(1);
+
 	current_tab = 1;
+	ui->SingleView_Renderer->set_num_threads(1);
+	ui->DualView_LeftRenderer->set_twin( ui->DualView_RightRenderer );
+	ui->DualView_RightRenderer->set_twin( ui->DualView_LeftRenderer );
 }
 
 MainWindow::~MainWindow() {

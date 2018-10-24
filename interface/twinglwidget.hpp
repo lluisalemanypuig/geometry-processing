@@ -13,7 +13,7 @@ using namespace std;
 #include <QMouseEvent>
 
 // algorithms includes
-#include <algorithms/smoothing/smoothing.hpp>
+#include <algorithms/smoothing/iterative_local.hpp>
 using namespace algorithms;
 using namespace smoothing;
 
@@ -30,18 +30,26 @@ enum class smoothing_operator : int8_t {
 };
 
 class TwinGLWidget : public GLWidget {
-	private:
+	protected:
 		smoothing_operator op;
 		smooth_weight wt;
 		size_t nit;
 		float lambda;
 		float mu;
 
+		void mousePressEvent(QMouseEvent *event);
+		void mouseMoveEvent(QMouseEvent *event);
+
+		TwinGLWidget *twin;
+
 	public:
 		TwinGLWidget(QWidget *parent);
 		~TwinGLWidget();
 
 		// SETTERS
+
+		void set_twin(TwinGLWidget *t);
+		void set_display(float aX, float aY, float d);
 
 		void set_n_iterations(size_t n);
 		void set_lambda(float l);

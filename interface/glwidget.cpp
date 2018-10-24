@@ -153,7 +153,9 @@ void GLWidget::compute_curvature() {
 	else if (curv_display == curv_type::Mean) {
 		cout << "Mean ";
 	}
-	cout << "curvature computed in " << timing::elapsed_seconds(begin,end) << endl;
+	cout << "curvature computed in "
+		 << timing::elapsed_seconds(begin,end)
+		 << " seconds" << endl;
 }
 
 void GLWidget::show_curvature(bool load_shader) {
