@@ -375,11 +375,6 @@ void GLWidget::set_curvature_display(const curv_type& cd) {
 }
 
 void GLWidget::change_curvature_display() {
-	cout << "Before change of curvature" << endl;
-	cout << "    " << (curv_display == curv_type::none ? "none" : (curv_display == curv_type::Gauss ? "Gauss" : "mean")) << endl;
-	cout << "New curvature" << endl;
-	cout << "    " << (change_curv_display == curv_type::none ? "none" : (change_curv_display == curv_type::Gauss ? "Gauss" : "mean")) << endl;
-
 	if (change_curv_display == curv_type::none) {
 		curv_display = curv_type::none;
 
