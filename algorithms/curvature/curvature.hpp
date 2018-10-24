@@ -28,10 +28,28 @@ namespace curvature {
 	 * using the cotangents as weights.
 	 * @param mesh Input mesh.
 	 * @param[out] Kg An approximation of the Gauss curvature per vertex.
+	 */
+	void Gauss(const TriangleMesh& mesh, vector<float>& Kg);
+	/**
+	 * @brief Computes the Gauss curvature for each vertex.
+	 *
+	 * Use the discretisation of the Laplace-Beltrami operator,
+	 * using the cotangents as weights.
+	 * @param mesh Input mesh.
+	 * @param[out] Kg An approximation of the Gauss curvature per vertex.
 	 * @param n_threads Number of threads.
 	 */
-	void Gauss(const TriangleMesh& mesh, vector<float>& Kg, size_t n_threads = 1);
+	void Gauss(const TriangleMesh& mesh, vector<float>& Kg, size_t n_threads);
 
+	/**
+	 * @brief Computes the mean curvature for each vertex.
+	 *
+	 * Use the discretisation of the Laplace-Beltrami operator,
+	 * using the cotangents as weights.
+	 * @param mesh Input mesh.
+	 * @param[out] Kh An approximation of the mean curvature per vertex.
+	 */
+	void mean(const TriangleMesh& mesh, vector<float>& Kh);
 	/**
 	 * @brief Computes the mean curvature for each vertex.
 	 *
@@ -41,7 +59,7 @@ namespace curvature {
 	 * @param[out] Kh An approximation of the mean curvature per vertex.
 	 * @param n_threads Number of threads.
 	 */
-	void mean(const TriangleMesh& mesh, vector<float>& Kh, size_t n_threads = 1);
+	void mean(const TriangleMesh& mesh, vector<float>& Kh, size_t n_threads);
 
 } // -- namespace curavture
 } // -- namespace algorithms

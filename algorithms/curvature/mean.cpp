@@ -71,6 +71,15 @@ namespace curvature {
 		return (1.0f/2.0f)*glm::length(curv_vec);
 	}
 
+	void mean(const TriangleMesh& mesh, vector<float>& Kh) {
+		const int N = mesh.n_vertices();
+		Kh.resize(N);
+
+		for (int i = 0; i < N; ++i) {
+			Kh[i] = Kh_curvature_at(mesh, i);
+		}
+	}
+
 	void mean(const TriangleMesh& mesh, vector<float>& Kh, size_t nt) {
 		const int N = mesh.n_vertices();
 		Kh.resize(N);

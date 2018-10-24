@@ -224,6 +224,9 @@ class TriangleMesh {
 		 */
 		const vec3& get_vertex(int v) const;
 
+		/// Returns a constant reference to all vertices of the mesh.
+		const vector<vec3>& get_vertices() const;
+
 		/**
 		 * @brief Returns the area of face @e f.
 		 *

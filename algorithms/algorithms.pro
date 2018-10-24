@@ -20,6 +20,9 @@ HEADERS +=									\
     iterators/vertex_iterators.hpp			\
     iterators/mesh_iterator.hpp				\
     curvature/curvature.hpp \
+    smoothing/iterative_local.hpp \
+    smoothing/smoothing_private.hpp \
+    smoothing/smoothing_defs.hpp \
     smoothing/smoothing.hpp
 
 SOURCES +=									\
@@ -29,4 +32,5 @@ SOURCES +=									\
     curvature/mean.cpp						\
     curvature/Gauss.cpp \
     iterators/vertex_iterators.cpp \
-    smoothing/laplacian.cpp
+    smoothing/laplacian.cpp \
+    smoothing/smoothing_private.cpp

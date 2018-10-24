@@ -54,6 +54,15 @@ namespace curvature {
 		return (1.0f/area)*(2.0f*M_PI - angles);
 	}
 
+	void Gauss(const TriangleMesh& mesh, vector<float>& Kg) {
+		const int N = static_cast<int>(mesh.n_vertices());
+		Kg.resize(N);
+
+		for (int i = 0; i < N; ++i) {
+			Kg[i] = Kg_curvature_at(mesh, i);
+		}
+	}
+
 	void Gauss(const TriangleMesh& mesh, vector<float>& Kg, size_t nt) {
 		const int N = static_cast<int>(mesh.n_vertices());
 		Kg.resize(N);

@@ -279,6 +279,10 @@ const vec3& TriangleMesh::get_vertex(int v) const {
 	return vertices[v];
 }
 
+const vector<vec3>& TriangleMesh::get_vertices() const {
+	return vertices;
+}
+
 float TriangleMesh::get_triangle_area(int t) const {
 	assert(0 <= t and t < n_triangles());
 	int i, j, k;

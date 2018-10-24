@@ -6,6 +6,22 @@
 namespace iterators {
 	
 	/// Iterate over vertices.
-	namespace vertex { } 
+	namespace vertex { }
+	
+	/**
+	 * @brief Implementation of different curvature algorithms.
+	 * 
+	 * The following curvatures are available:
+	 * - @ref curvature::Gauss
+	 * - @ref curvature::mean
+	 */
+	namespace curvature { }
+	
+	/**
+	 * @brief Implementation of different smoothing algorithms.
+	 * 
+	 * Iterative, local algorithms, and global algorithms.
+	 */
+	namespace smoothing { }
 	
 } // -- namespace iterators
