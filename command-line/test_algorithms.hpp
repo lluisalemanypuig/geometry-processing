@@ -10,7 +10,7 @@ using namespace std;
 #include <algorithms/ply_reader.hpp>
 
 #include <algorithms/curvature/curvature.hpp>
-#include <algorithms/smoothing/smoothing.hpp>
+#include <algorithms/smoothing/iterative_local.hpp>
 
 #include <algorithms/iterators/mesh_iterator.hpp>
 #include <algorithms/iterators/vertex_iterators.hpp>
