@@ -22,14 +22,16 @@ HEADERS +=						\
     glwidget.hpp				\
     mainwindow.hpp				\
     render_triangle_mesh.hpp \
-    utils.hpp
+    utils.hpp \
+    twinglwidget.hpp
 
 SOURCES +=						\
     main.cpp					\
     glwidget.cpp				\
     mainwindow.cpp				\
     render_triangle_mesh.cpp \
-    utils.cpp
+    utils.cpp \
+    twinglwidget.cpp
 
 DISTFILES +=					\
     shaders/curvature.vert		\

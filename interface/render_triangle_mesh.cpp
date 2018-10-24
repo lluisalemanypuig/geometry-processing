@@ -79,12 +79,34 @@ RenderTriangleMesh::RenderTriangleMesh()
 	  vbo_vertices(QOpenGLBuffer::VertexBuffer),
 	  vbo_normals(QOpenGLBuffer::VertexBuffer),
 	  vbo_triangles(QOpenGLBuffer::IndexBuffer)
-{ }
+{
+
+}
+
+RenderTriangleMesh::RenderTriangleMesh(const RenderTriangleMesh& m)
+	: TriangleMesh(m),
+	  vbo_vertices(QOpenGLBuffer::VertexBuffer),
+	  vbo_normals(QOpenGLBuffer::VertexBuffer),
+	  vbo_triangles(QOpenGLBuffer::IndexBuffer)
+{
+	// nothing to copy...
+	// buffers should be remade in init() method
+}
 
 RenderTriangleMesh::~RenderTriangleMesh() {
 	destroy();
 	free_buffers();
 }
+
+// OPERATORS
+
+RenderTriangleMesh& RenderTriangleMesh::operator= (const RenderTriangleMesh& m) {
+	free_buffers();
+	copy_mesh(m);
+	return *this;
+}
+
+// INITIALISERS
 
 void RenderTriangleMesh::build_cube() {
 	float vertices[] = {

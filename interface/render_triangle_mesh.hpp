@@ -83,8 +83,20 @@ class RenderTriangleMesh : public TriangleMesh {
 	public:
 		/// Default constructor
 		RenderTriangleMesh();
+		/**
+		 * @brief Copy constructor
+		 *
+		 * Buffers are not copied.
+		 */
+		RenderTriangleMesh(const RenderTriangleMesh& m);
 		/// Destructor
 		~RenderTriangleMesh();
+
+		// OPERATORS
+
+		RenderTriangleMesh& operator= (const RenderTriangleMesh& m);
+
+		// INITIALISERS
 
 		/// Generates the vertices and triangles of a cube.
 		void build_cube();

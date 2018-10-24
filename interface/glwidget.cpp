@@ -138,18 +138,19 @@ void GLWidget::load_curvature_shader() {
 
 void GLWidget::compute_curvature() {
 	timing::time_point begin = timing::now();
-	if (curv_display == curvature::Gauss) {
+	if (curv_display == curv_type::Gauss) {
 		algorithms::curvature::Gauss(mesh, curvature_values, nt);
 	}
-	else if (curv_display == curvature::Mean) {
+	else if (curv_display == curv_type::Mean) {
 		algorithms::curvature::mean(mesh, curvature_values, nt);
 	}
 	timing::time_point end = timing::now();
 
-	if (curv_display == curvature::Gauss) {
+	// output execution time
+	if (curv_display == curv_type::Gauss) {
 		cout << "Gauss ";
 	}
-	else if (curv_display == curvature::Mean) {
+	else if (curv_display == curv_type::Mean) {
 		cout << "Mean ";
 	}
 	cout << "curvature computed in " << timing::elapsed_seconds(begin,end) << endl;
@@ -171,6 +172,30 @@ void GLWidget::show_curvature(bool load_shader) {
 	mesh.init(program, colors);
 	doneCurrent();
 	update();
+}
+
+void GLWidget::init_mesh(bool make_neigh) {
+	cout << "GLWidget: initialising mesh..." << endl;
+
+	makeCurrent();
+	if (not mesh.init(program)) {
+		cerr << "GLWidget::load_mesh - Error:" << endl;
+		cerr << "    Could not initialise mesh." << endl;
+		QApplication::quit();
+	}
+	doneCurrent();
+	update();
+
+	if (make_neigh) {
+		mesh.make_neighbourhood_data();
+	}
+
+	if (curv_display != curv_type::none) {
+		compute_curvature();
+		show_curvature(false);
+	}
+
+	cout << "GLWidget: initialised succesfully!" << endl;
 }
 
 void GLWidget::initializeGL() {
@@ -228,7 +253,7 @@ void GLWidget::paintGL() {
 	if (pm == polymode::solid) {
 		program->setUniformValue("wireframe", false);
 
-		if (curv_display == curvature::none) {
+		if (curv_display == curv_type::none) {
 			// display with a flat color since there
 			// is no curvature to be displayed
 			program->setUniformValue("color", QVector4D(0.75f, 0.8f, 0.9f, 1.0f));
@@ -273,12 +298,11 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
 
 // PUBLIC
 
-GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent)
-{
+GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
 	program = nullptr;
 
 	pm = polymode::solid;
-	curv_display = curvature::none;
+	curv_display = curv_type::none;
 
 	angleX = 0.0f;
 	angleY = 0.0f;
@@ -293,6 +317,16 @@ GLWidget::~GLWidget() {
 	}
 }
 
+void GLWidget::set_mesh(const RenderTriangleMesh& rm) {
+	// free current mesh
+	mesh.free_buffers();
+	mesh.destroy();
+
+	mesh = rm;
+
+	init_mesh(false);
+}
+
 void GLWidget::load_mesh(const QString& filename) {
 	mesh.free_buffers();
 	mesh.destroy();
@@ -302,23 +336,13 @@ void GLWidget::load_mesh(const QString& filename) {
 	PLY_reader::read_mesh(filename.toStdString(), mesh);
 	mesh.scale_to_unit();
 
-	cout << "GLWidget: initialising mesh..." << endl;
+	init_mesh(true);
+}
 
-	makeCurrent();
-	if (not mesh.init(program)) {
-		cerr << "GLWidget::load_mesh - Error:" << endl;
-		cerr << "    Could not initialise mesh." << endl;
-		QApplication::quit();
-	}
-	doneCurrent();
+void GLWidget::clear_mesh() {
+	mesh.free_buffers();
+	mesh.destroy();
 	update();
-
-	mesh.make_neighbourhood_data();
-
-	if (curv_display != curvature::none) {
-		compute_curvature();
-		show_curvature(false);
-	}
 }
 
 void GLWidget::set_polygon_mode(const polymode& pmode) {
@@ -342,9 +366,9 @@ void GLWidget::set_polygon_mode(const polymode& pmode) {
 	update();
 }
 
-void GLWidget::set_curvature_display(const curvature& cd) {
-	if (cd == curvature::none) {
-		curv_display = curvature::none;
+void GLWidget::set_curvature_display(const curv_type& cd) {
+	if (cd == curv_type::none) {
+		curv_display = curv_type::none;
 
 		curvature_values.clear();
 		mesh.free_buffers();
@@ -371,7 +395,7 @@ void GLWidget::set_curvature_display(const curvature& cd) {
 	// another curvature, do not load program. If, however,
 	// we weren't showing any then load the program.
 	bool load_shader = false;
-	if (curv_display == curvature::none) {
+	if (curv_display == curv_type::none) {
 		load_shader = true;
 	}
 
@@ -383,4 +407,8 @@ void GLWidget::set_curvature_display(const curvature& cd) {
 
 void GLWidget::set_num_threads(size_t _nt) {
 	nt = _nt;
+}
+
+const RenderTriangleMesh& GLWidget::get_mesh() const {
+	return mesh;
 }
