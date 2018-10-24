@@ -90,7 +90,7 @@ namespace test_algorithms {
 			 << " milliseconds" << endl;
 
 		if (print_curv) {
-			for (size_t i = 0; i < mesh.n_vertices(); ++i) {
+			for (int i = 0; i < mesh.n_vertices(); ++i) {
 				cout << i << ": " << curv[i] << endl;
 			}
 		}

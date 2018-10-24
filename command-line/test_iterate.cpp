@@ -76,7 +76,7 @@ namespace test_algorithms {
 			cout << "    " << it->current() << endl;
 			if (iteration_type == "vertex-face") {
 				int v0,v1,v2;
-				mesh.get_vertices_face(it->current(), v_idx, v0,v1,v2);
+				mesh.get_vertices_triangle(it->current(), v_idx, v0,v1,v2);
 
 				cout << "        vertices: "
 					 << v0 << "," << v1 << "," << v2 << endl;
