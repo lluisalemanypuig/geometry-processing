@@ -349,7 +349,9 @@ void GLWidget::clear_mesh() {
 
 void GLWidget::set_polygon_mode(const polymode& pmode) {
 	pm = pmode;
+}
 
+void GLWidget::change_polygon_mode() {
 	makeCurrent();
 	switch (pm) {
 		case polymode::solid:
@@ -369,7 +371,16 @@ void GLWidget::set_polygon_mode(const polymode& pmode) {
 }
 
 void GLWidget::set_curvature_display(const curv_type& cd) {
-	if (cd == curv_type::none) {
+	change_curv_display = cd;
+}
+
+void GLWidget::change_curvature_display() {
+	cout << "Before change of curvature" << endl;
+	cout << "    " << (curv_display == curv_type::none ? "none" : (curv_display == curv_type::Gauss ? "Gauss" : "mean")) << endl;
+	cout << "New curvature" << endl;
+	cout << "    " << (change_curv_display == curv_type::none ? "none" : (change_curv_display == curv_type::Gauss ? "Gauss" : "mean")) << endl;
+
+	if (change_curv_display == curv_type::none) {
 		curv_display = curv_type::none;
 
 		curvature_values.clear();
@@ -401,7 +412,7 @@ void GLWidget::set_curvature_display(const curv_type& cd) {
 		load_shader = true;
 	}
 
-	curv_display = cd;
+	curv_display = change_curv_display;
 
 	compute_curvature();
 	show_curvature(load_shader);

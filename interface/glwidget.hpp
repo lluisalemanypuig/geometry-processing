@@ -39,6 +39,7 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		polymode pm;
 		/// Type of curvature to be displayed. See @ref curvature_display.
 		curv_type curv_display;
+		curv_type change_curv_display;
 
 		float angleX, angleY, distance;
 		QPoint lastMousePos;
@@ -95,8 +96,17 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 
 		/// Sets the polygon display mode. See @ref pm.
 		void set_polygon_mode(const polymode& pm);
+		/// Changes the polygon mode to the current.
+		void change_polygon_mode();
 		/// Sets the type of curvature to be displayed. See @ref curvature_display.
 		void set_curvature_display(const curv_type& curv_display);
+		/**
+		 * @brief Displays the currently selected curvature.
+		 *
+		 * Loads the appropriate shader programs. Calculates curvature
+		 * if necessary.
+		 */
+		void change_curvature_display();
 
 		/// Sets the number of threads.
 		void set_num_threads(size_t nt);

@@ -82,7 +82,7 @@ void TwinGLWidget::run_smoothing_algorithm() {
 	else if (op == smoothing_operator::Taubin) {
 		cout << "'Taubin'";
 	}
-	cout << "curvature computed in "
+	cout << " curvature computed in "
 		 << timing::elapsed_seconds(begin,end)
 		 << " seconds" << endl;
 

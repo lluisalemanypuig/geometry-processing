@@ -20,6 +20,9 @@ class MainWindow : public QMainWindow {
 		int current_tab;
 
 	private slots:
+		void renderer_change_poly_mode();
+		void renderer_change_curvature();
+
 		/* Menu buttons */
 		void on_action_Open_triggered();
 		void on_action_Quit_triggered();

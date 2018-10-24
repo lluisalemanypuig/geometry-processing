@@ -4,6 +4,26 @@
 
 // PRIVATE
 
+void MainWindow::renderer_change_poly_mode() {
+	if (current_tab == 0) {
+		ui->SingleView_Renderer->change_polygon_mode();
+	}
+	else if (current_tab == 1) {
+		ui->DualView_LeftRenderer->change_polygon_mode();
+		ui->DualView_RightRenderer->change_polygon_mode();
+	}
+}
+
+void MainWindow::renderer_change_curvature() {
+	if (current_tab == 0) {
+		ui->SingleView_Renderer->change_curvature_display();
+	}
+	else if (current_tab == 1) {
+		ui->DualView_LeftRenderer->change_curvature_display();
+		ui->DualView_RightRenderer->change_curvature_display();
+	}
+}
+
 /* Menu buttons */
 
 void MainWindow::on_action_Open_triggered() {
@@ -32,6 +52,7 @@ void MainWindow::on_CBSolid_toggled(bool toggled) {
 		ui->DualView_LeftRenderer->set_polygon_mode(polymode::solid);
 		ui->DualView_RightRenderer->set_polygon_mode(polymode::solid);
 	}
+	renderer_change_poly_mode();
 }
 
 void MainWindow::on_CBWireframe_toggled(bool toggled) {
@@ -40,6 +61,7 @@ void MainWindow::on_CBWireframe_toggled(bool toggled) {
 		ui->DualView_LeftRenderer->set_polygon_mode(polymode::wireframe);
 		ui->DualView_RightRenderer->set_polygon_mode(polymode::wireframe);
 	}
+	renderer_change_poly_mode();
 }
 
 void MainWindow::on_CBRefLines_toggled(bool toggled) {
@@ -48,6 +70,7 @@ void MainWindow::on_CBRefLines_toggled(bool toggled) {
 		ui->DualView_LeftRenderer->set_polygon_mode(polymode::reflection_lines);
 		ui->DualView_RightRenderer->set_polygon_mode(polymode::reflection_lines);
 	}
+	renderer_change_poly_mode();
 }
 
 /* Curvature radio buttons */
@@ -58,6 +81,7 @@ void MainWindow::on_RBCurvatureG_toggled(bool checked) {
 		ui->DualView_LeftRenderer->set_curvature_display(curv_type::Gauss);
 		ui->DualView_RightRenderer->set_curvature_display(curv_type::Gauss);
 	}
+	renderer_change_curvature();
 }
 
 void MainWindow::on_RBCurvatureH_toggled(bool checked) {
@@ -66,6 +90,7 @@ void MainWindow::on_RBCurvatureH_toggled(bool checked) {
 		ui->DualView_LeftRenderer->set_curvature_display(curv_type::Mean);
 		ui->DualView_RightRenderer->set_curvature_display(curv_type::Mean);
 	}
+	renderer_change_curvature();
 }
 
 void MainWindow::on_RBNoCurvature_toggled(bool checked) {
@@ -74,6 +99,7 @@ void MainWindow::on_RBNoCurvature_toggled(bool checked) {
 		ui->DualView_LeftRenderer->set_curvature_display(curv_type::none);
 		ui->DualView_RightRenderer->set_curvature_display(curv_type::none);
 	}
+	renderer_change_curvature();
 }
 
 /* Smoothing radio buttons */
@@ -135,6 +161,8 @@ void MainWindow::on_PB_ClearMesh_clicked() {
 
 void MainWindow::on_tabWidget_2_currentChanged(int index) {
 	current_tab = index;
+	renderer_change_poly_mode();
+	renderer_change_curvature();
 }
 
 // PUBLIC
@@ -145,7 +173,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
 	ui->setupUi(this);
 
-	current_tab = 1;
+	current_tab = 0;
 	ui->SingleView_Renderer->set_num_threads(1);
 	ui->DualView_LeftRenderer->set_twin( ui->DualView_RightRenderer );
 	ui->DualView_RightRenderer->set_twin( ui->DualView_LeftRenderer );
