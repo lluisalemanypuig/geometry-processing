@@ -87,7 +87,7 @@ int vertex_face_iterator::next() {
 	}
 
 	// retrieve verteface index
-	cur_face = mesh.get_face_corner(cur_corner);
+	cur_face = mesh.get_triangle_corner(cur_corner);
 
 	// find next corner of the current corner
 	int next_current = next_corner(cur_corner);

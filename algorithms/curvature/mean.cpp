@@ -29,8 +29,8 @@ namespace curvature {
 			//      i1 -> j1 -> k1 -> i1
 			// (i1) i2 -> j2 -> k2 -> i2 (i1)
 			int i1,j1,k1, i2,j2,k2;
-			m.get_vertices_face(next1, i, i1,j1,k1);
-			m.get_vertices_face(next2, i, i2,j2,k2);
+			m.get_vertices_triangle(next1, i, i1,j1,k1);
+			m.get_vertices_triangle(next2, i, i2,j2,k2);
 
 			// make sure that the orientations are correct
 			assert(k1 == j2);

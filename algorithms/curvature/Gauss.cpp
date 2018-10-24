@@ -28,7 +28,7 @@ namespace curvature {
 
 			// index vertices of current face
 			int i,j,k;
-			m.get_vertices_face(f, v, i,j,k);
+			m.get_vertices_triangle(f, v, i,j,k);
 
 			// accumulate area
 			area += m.get_triangle_area(i,j,k);

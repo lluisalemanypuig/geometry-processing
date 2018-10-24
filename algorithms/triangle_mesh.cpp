@@ -29,10 +29,24 @@ struct CornerEdge {
 
 // PRIVATE
 
+void TriangleMesh::copy_mesh(const TriangleMesh& m) {
+	destroy();
+
+	vertices = m.vertices;
+	triangles = m.triangles;
+	opposite_corners = m.opposite_corners;
+	corners = m.corners;
+	boundary = m.boundary;
+}
+
 // PUBLIC
 
 TriangleMesh::TriangleMesh() {
 
+}
+
+TriangleMesh::TriangleMesh(const TriangleMesh& m) {
+	copy_mesh(m);
 }
 
 TriangleMesh::~TriangleMesh() {
@@ -228,20 +242,20 @@ int TriangleMesh::get_corner_vertex(int v) const {
 	return corners[v];
 }
 
-int TriangleMesh::get_face_corner(int c) const {
+int TriangleMesh::get_triangle_corner(int c) const {
 	assert(0 <= c and c < n_corners());
 	return c/3;
 }
 
-void TriangleMesh::get_vertices_face(int f, int& v0, int& v1, int& v2) const {
-	assert(0 <= f and 3*f < n_triangles());
-	v0 = triangles[3*f    ];
-	v1 = triangles[3*f + 1];
-	v2 = triangles[3*f + 2];
+void TriangleMesh::get_vertices_triangle(int t, int& v0, int& v1, int& v2) const {
+	assert(0 <= t and t < n_triangles());
+	v0 = triangles[3*t    ];
+	v1 = triangles[3*t + 1];
+	v2 = triangles[3*t + 2];
 }
 
-void TriangleMesh::get_vertices_face(int f, int v, int& v0, int& v1, int& v2) const {
-	get_vertices_face(f, v0,v1,v2);
+void TriangleMesh::get_vertices_triangle(int t, int v, int& v0, int& v1, int& v2) const {
+	get_vertices_triangle(t, v0,v1,v2);
 
 	// Resort the indexes.
 	// It is easy to see that almost two
@@ -265,10 +279,10 @@ const vec3& TriangleMesh::get_vertex(int v) const {
 	return vertices[v];
 }
 
-float TriangleMesh::get_triangle_area(int f) const {
-	assert(0 <= f and 3*f < n_triangles());
+float TriangleMesh::get_triangle_area(int t) const {
+	assert(0 <= t and t < n_triangles());
 	int i, j, k;
-	get_vertices_face(f, i,j,k);
+	get_vertices_triangle(t, i,j,k);
 	return get_triangle_area(i,j,k);
 }
 

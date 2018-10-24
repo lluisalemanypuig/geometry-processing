@@ -64,9 +64,20 @@ class TriangleMesh {
 		 */
 		vector<pair<int,int> > boundary;
 
+	protected:
+		/**
+		 * @brief Copies mesh @e m contents into this one.
+		 *
+		 * This mesh is previously freed.
+		 * @param m
+		 */
+		void copy_mesh(const TriangleMesh& m);
+
 	public:
-		/// Default constructor
+		/// Default constructor.
 		TriangleMesh();
+		/// Copy constructor.
+		TriangleMesh(const TriangleMesh& m);
 		/// Destructor
 		virtual ~TriangleMesh();
 
@@ -160,26 +171,26 @@ class TriangleMesh {
 		int get_corner_vertex(int v) const;
 
 		/**
-		 * @brief Returns a face index for corner @e c.
+		 * @brief Returns a triangle index for corner @e c.
 		 * @param c A valid corner index: 0 <= @e c < number of corners.
 		 * @pre Neighbourhood data must exist in this mesh.
 		 * See @ref make_neighbourhood_data.
 		 * @return If the corner index is valid, the face index @e f
 		 * returned is also valid: 0 <= @e 3*f < number of triangles.
 		 */
-		int get_face_corner(int c) const;
+		int get_triangle_corner(int c) const;
 
 		/**
-		 * @brief Returns the indexes of the vertices of a face.
+		 * @brief Returns the indexes of the vertices of a triangle.
 		 *
 		 * It is guaranteed that the order of the vertices is
 		 * the same as it is given in the loaded file.
-		 * @param f A valid face index: 0 <= @e 3*f < number of triangles.
+		 * @param t A valid triangle index: 0 <= @e t < number of triangles.
 		 * @param[out] v1 The first vertex index of the face.
 		 * @param[out] v2 The second vertex index of the face.
 		 * @param[out] v3 The third vertex index of the face.
 		 */
-		void get_vertices_face(int f, int& v0, int& v1, int& v2) const;
+		void get_vertices_triangle(int t, int& v0, int& v1, int& v2) const;
 
 		/**
 		 * @brief Returns the sorted indexes of the vertices of a face.
@@ -189,12 +200,12 @@ class TriangleMesh {
 		 *
 		 * The vertices are sorted so that the first is equal to vertex
 		 * index @e v
-		 * @param f A valid face index: 0 <= @e 3*f < number of triangles.
+		 * @param t A valid triangle index: 0 <= @e t < number of triangles.
 		 * @param[out] v1 The first vertex index of the face.
 		 * @param[out] v2 The second vertex index of the face.
 		 * @param[out] v3 The third vertex index of the face.
 		 */
-		void get_vertices_face(int f, int v, int& v1, int& v2, int& v3) const;
+		void get_vertices_triangle(int t, int v, int& v1, int& v2, int& v3) const;
 
 		/**
 		 * @brief Returns the corner opposite to corner c.
@@ -219,9 +230,9 @@ class TriangleMesh {
 		 * First, retrieves the vertices of the face with
 		 * @ref get_vertices_face and then calls
 		 * @ref get_triangle_area(int,int,int)const.
-		 * @param f A valid face index.
+		 * @param t A valid triangle index: 0 <= @e t < number of triangles.
 		 */
-		float get_triangle_area(int f) const;
+		float get_triangle_area(int t) const;
 
 		/**
 		 * @brief Assuming the vertices make a triangle, return its area.
