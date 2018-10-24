@@ -6,14 +6,31 @@ const float minDistanceCamera = 1.0f;
 const float maxDistanceCamera = 3.0f;
 
 inline
-void make_colors_rainbow_gradient(const vector<float>& values, vector<vec3>& cols) {
+void make_colors_rainbow_gradient
+(const vector<float>& values, curv_type ct, vector<vec3>& cols)
+{
+	// maximum value to determine the [min,max]
+	// range of the mean curvature
+	const float phi = 0.5;
 
 	// minimum and maximum values of curvature
 	float cm = numeric_limits<float>::max();
 	float cM = -numeric_limits<float>::max();
 	for (float v : values) {
-		cm = std::min(cm, v);
-		cM = std::max(cM, v);
+		if (ct == curv_type::Gauss) {
+			if (v < -2*M_PI or v > 2*M_PI) {
+				// if the curvature is outside [-2pi,2pi]
+				// then discard it. The Gauss curvature
+				// can't be greater than 2pi, though.
+				continue;
+			}
+			cm = std::min(cm, v);
+			cM = std::max(cM, v);
+		}
+		else if (ct == curv_type::Mean) {
+			cm = std::min(cm, v);
+			cM = phi;
+		}
 	}
 	float d = cM - cm;
 	cols = vector<vec3>(values.size());
@@ -63,6 +80,10 @@ void make_colors_rainbow_gradient(const vector<float>& values, vector<vec3>& col
 			// from 0.8 to 1.0
 			r = 0.0f;
 			g = 5.0f*s - 3.0f;
+			b = 1.0f;
+		}
+		else if (1.0f <= s) {
+			r = g = 0.0f;
 			b = 1.0f;
 		}
 
@@ -168,7 +189,7 @@ void GLWidget::show_curvature(bool load_shader) {
 	}
 
 	vector<vec3> colors;
-	make_colors_rainbow_gradient(curvature_values, colors);
+	make_colors_rainbow_gradient(curvature_values, curv_display, colors);
 
 	makeCurrent();
 	mesh.init(program, colors);
@@ -304,6 +325,7 @@ GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
 	program = nullptr;
 
 	pm = polymode::solid;
+	change_curv_display = curv_type::none;
 	curv_display = curv_type::none;
 
 	angleX = 0.0f;
