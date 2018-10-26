@@ -80,8 +80,8 @@ void MainWindow::on_RBCurvatureG_toggled(bool checked) {
 		ui->SingleView_Renderer->set_curvature_display(curv_type::Gauss);
 		ui->DualView_LeftRenderer->set_curvature_display(curv_type::Gauss);
 		ui->DualView_RightRenderer->set_curvature_display(curv_type::Gauss);
+		renderer_change_curvature();
 	}
-	renderer_change_curvature();
 }
 
 void MainWindow::on_RBCurvatureH_toggled(bool checked) {
@@ -89,8 +89,8 @@ void MainWindow::on_RBCurvatureH_toggled(bool checked) {
 		ui->SingleView_Renderer->set_curvature_display(curv_type::Mean);
 		ui->DualView_LeftRenderer->set_curvature_display(curv_type::Mean);
 		ui->DualView_RightRenderer->set_curvature_display(curv_type::Mean);
+		renderer_change_curvature();
 	}
-	renderer_change_curvature();
 }
 
 void MainWindow::on_RBNoCurvature_toggled(bool checked) {
@@ -98,8 +98,8 @@ void MainWindow::on_RBNoCurvature_toggled(bool checked) {
 		ui->SingleView_Renderer->set_curvature_display(curv_type::none);
 		ui->DualView_LeftRenderer->set_curvature_display(curv_type::none);
 		ui->DualView_RightRenderer->set_curvature_display(curv_type::none);
+		renderer_change_curvature();
 	}
-	renderer_change_curvature();
 }
 
 /* Smoothing radio buttons */
@@ -119,15 +119,6 @@ void MainWindow::on_RB_BiLaplacian_toggled(bool checked) {
 void MainWindow::on_RB_Taubin_toggled(bool checked) {
 	if (checked) {
 		ui->DualView_RightRenderer->set_smoothing_operator(smoothing_operator::Taubin);
-	}
-}
-
-void MainWindow::on_comboBox_currentIndexChanged(const QString& arg1) {
-	if (arg1 == "Uniform") {
-		ui->DualView_RightRenderer->set_weight_type(smooth_weight::uniform);
-	}
-	else if (arg1 == "Cotangent") {
-		ui->DualView_RightRenderer->set_weight_type(smooth_weight::cotangent);
 	}
 }
 
@@ -163,6 +154,17 @@ void MainWindow::on_tabWidget_2_currentChanged(int index) {
 	current_tab = index;
 	renderer_change_poly_mode();
 	renderer_change_curvature();
+}
+
+/* Settings stuff */
+
+void MainWindow::on_comboBox_currentIndexChanged(const QString& arg1) {
+	if (arg1 == "Uniform") {
+		ui->DualView_RightRenderer->set_weight_type(smooth_weight::uniform);
+	}
+	else if (arg1 == "Cotangent") {
+		ui->DualView_RightRenderer->set_weight_type(smooth_weight::cotangent);
+	}
 }
 
 // PUBLIC

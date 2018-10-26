@@ -39,52 +39,60 @@ void make_colors_rainbow_gradient
 	// Colour rainbow gradient //
 	for (size_t i = 0; i < values.size(); ++i) {
 
-		float s = (values[i] - cm)/d;
 		float r, g, b;
-
-		if (s <= 0.0f) {
-			r = 0.0f;
-			g = 0.0f;
-			b = 0.0f;
+		if (values[i] < cm) {
+			r = g = b = 0.0f;
 		}
-		else if (s <= 0.2f) {
-			// RED
-			// from 0.0 to 0.2
-			r = 5.0f*s;
-			g = 0.0f;
-			b = 0.0f;
+		else if (values[i] >= cM) {
+			r = g = b = 1.0f;
 		}
-		else if (s <= 0.4f) {
-			// YELLOW
-			// from 0.2 to 0.4
-			r = 1.0f;
-			g = 5.0f*s - 1.0f;
-			b = 0.0f;
-		}
-		else if (s <= 0.6f) {
-			// GREEN
-			// from 0.4 to 0.6
-			r = 5.0f*s - 2.0f;
-			g = 1.0f;
-			b = 0.0f;
-		}
-		else if (s <= 0.8f) {
-			// TURQUOISE
-			// from 0.6 to 0.8
-			r = 0.0f;
-			g = 1.0f;
-			b = 5.0f*s - 3.0f;
-		}
-		else if (s <= 1.0f) {
-			// BLUE
-			// from 0.8 to 1.0
-			r = 0.0f;
-			g = 5.0f*s - 3.0f;
-			b = 1.0f;
-		}
-		else if (1.0f <= s) {
-			r = g = 0.0f;
-			b = 1.0f;
+		else {
+			float s = (values[i] - cm)/d;
+			if (s <= 0.0f) {
+				r = 0.0f;
+				g = 0.0f;
+				b = 0.0f;
+			}
+			else if (s <= 0.2f) {
+				// RED
+				// from 0.0 to 0.2
+				r = 5.0f*s;
+				g = 0.0f;
+				b = 0.0f;
+			}
+			else if (s <= 0.4f) {
+				// YELLOW
+				// from 0.2 to 0.4
+				r = 1.0f;
+				g = 5.0f*s - 1.0f;
+				b = 0.0f;
+			}
+			else if (s <= 0.6f) {
+				// GREEN
+				// from 0.4 to 0.6
+				r = 5.0f*s - 2.0f;
+				g = 1.0f;
+				b = 0.0f;
+			}
+			else if (s <= 0.8f) {
+				// TURQUOISE
+				// from 0.6 to 0.8
+				r = 0.0f;
+				g = 1.0f;
+				b = 5.0f*s - 3.0f;
+			}
+			else if (s <= 1.0f) {
+				// BLUE
+				// from 0.8 to 1.0
+				r = 0.0f;
+				g = 5.0f*s - 3.0f;
+				b = 1.0f;
+			}
+			else if (1.0f <= s) {
+				r = 0.0f;
+				g = 0.0f;
+				b = 1.0f;
+			}
 		}
 
 		cols[i] = vec3(r,g,b);
