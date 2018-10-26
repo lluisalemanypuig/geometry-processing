@@ -22,8 +22,8 @@ HEADERS +=							\
     curvature/curvature.hpp			\
     smoothing/smoothing.hpp			\
     smoothing/smoothing_defs.hpp	\
-    smoothing/iterative_local.hpp	\
-    smoothing/smoothing_private.hpp
+    smoothing/iterative_local.hpp \
+    smoothing/iterative_private.hpp
 
 SOURCES +=							\
     ply_reader.cpp					\

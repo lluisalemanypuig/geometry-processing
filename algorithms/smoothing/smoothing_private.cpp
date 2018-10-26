@@ -1,4 +1,4 @@
-#include <algorithms/smoothing/smoothing_private.hpp>
+#include <algorithms/smoothing/iterative_private.hpp>
 
 #include <iostream>
 using namespace std;
