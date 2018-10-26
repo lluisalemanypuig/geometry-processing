@@ -42,21 +42,15 @@ namespace smoothing {
 
 		// for each iteration of the algorithm
 		for (size_t it = 0; it < nit; ++it) {
-			smoothing_private::apply_local(w, l, m, old_verts, new_verts);
-			old_verts.assign(new_verts.begin(), new_verts.end());
-			smoothing_private::apply_local(w, -l, m, old_verts, new_verts);
-			if (it < nit - 1) {
-				// copy 'new_verts' to 'old_verts'
-				// only when necessary
-				old_verts.assign(new_verts.begin(), new_verts.end());
-			}
+			smoothing_private::apply_local(w,  l, m, old_verts, new_verts);
+			smoothing_private::apply_local(w, -l, m, new_verts, old_verts);
 		}
 
 		// Replace the coordinates of the old vertices in the
 		// mesh for the vertices in 'old_verts'. Notice that we
 		// are using 'move' for moving from 'new_verts' to 'old_verts'.
 		// That deletes the contents of 'new_verts'
-		m.set_vertices(new_verts);
+		m.set_vertices(old_verts);
 	}
 
 	void TaubinLM(const smooth_weight& w, float l, size_t nit, TriangleMesh& m) {
@@ -75,20 +69,14 @@ namespace smoothing {
 		// for each iteration of the algorithm
 		for (size_t it = 0; it < nit; ++it) {
 			smoothing_private::apply_local(w,  l, m, old_verts, new_verts);
-			old_verts.assign(new_verts.begin(), new_verts.end());
-			smoothing_private::apply_local(w, mu, m, old_verts, new_verts);
-			if (it < nit - 1) {
-				// copy 'new_verts' to 'old_verts'
-				// only when necessary
-				old_verts.assign(new_verts.begin(), new_verts.end());
-			}
+			smoothing_private::apply_local(w, mu, m, new_verts, old_verts);
 		}
 
 		// Replace the coordinates of the old vertices in the
 		// mesh for the vertices in 'old_verts'. Notice that we
 		// are using 'move' for moving from 'new_verts' to 'old_verts'.
 		// That deletes the contents of 'new_verts'
-		m.set_vertices(new_verts);
+		m.set_vertices(old_verts);
 	}
 
 } // -- namespace smoothing
