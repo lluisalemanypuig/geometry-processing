@@ -77,21 +77,11 @@ namespace test_algorithms {
 		cout << "Compute curvature '" << curvature << "'" << endl;
 
 		timing::time_point begin = timing::now();
-		if (nt == 1) {
-			if (curvature == "Gauss") {
-				algorithms::curvature::Gauss(mesh, curv);
-			}
-			else if (curvature == "mean") {
-				algorithms::curvature::mean(mesh, curv);
-			}
+		if (curvature == "Gauss") {
+			algorithms::curvature::Gauss(mesh, curv, nt);
 		}
-		else {
-			if (curvature == "Gauss") {
-				algorithms::curvature::Gauss(mesh, curv, nt);
-			}
-			else if (curvature == "mean") {
-				algorithms::curvature::mean(mesh, curv, nt);
-			}
+		else if (curvature == "mean") {
+			algorithms::curvature::mean(mesh, curv, nt);
 		}
 		timing::time_point end = timing::now();
 
