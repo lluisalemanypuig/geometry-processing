@@ -4,13 +4,13 @@ namespace algorithms {
 namespace smoothing {
 
 	void laplacian(const smooth_weight& w, float l, size_t nit, TriangleMesh& m) {
-		vector<vec3> old_verts;
+		std::vector<glm::vec3> old_verts;
 		old_verts = m.get_vertices();
 		old_verts.shrink_to_fit();
 
 		// there is no need to fill 'new_verts'
 		// when they are initialised
-		vector<vec3> new_verts(old_verts.size());
+		std::vector<glm::vec3> new_verts(old_verts.size());
 		new_verts.shrink_to_fit();
 
 		// for each iteration of the algorithm

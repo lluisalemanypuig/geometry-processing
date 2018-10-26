@@ -1,5 +1,8 @@
 #include <algorithms/ply_reader.hpp>
 
+#include <iostream>
+using namespace std;
+
 namespace PLY_reader {
 
 	bool __load_header(ifstream& fin, int& n_verts, int& n_faces, string& format) {

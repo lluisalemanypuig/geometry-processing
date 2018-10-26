@@ -1,5 +1,8 @@
 #include <algorithms/triangle_mesh.hpp>
 
+#include <iostream>
+using namespace std;
+
 // LOCAL-DEFINED
 
 struct CornerEdge {
@@ -20,7 +23,8 @@ struct CornerEdge {
 	}
 
 	bool operator< (const CornerEdge& cEdge) const {
-		return (vertexA < cEdge.vertexA) || ((vertexA == cEdge.vertexA) && (vertexB < cEdge.vertexB));
+		return (vertexA < cEdge.vertexA) ||
+			  ((vertexA == cEdge.vertexA) && (vertexB < cEdge.vertexB));
 	}
 	bool operator== (const CornerEdge& cEdge) const {
 		return (vertexA == cEdge.vertexA) && (vertexB == cEdge.vertexB);
@@ -53,7 +57,7 @@ TriangleMesh::~TriangleMesh() {
 	destroy();
 }
 
-void TriangleMesh::set_vertex(int vi, const vec3& v) {
+void TriangleMesh::set_vertex(int vi, const glm::vec3& v) {
 	assert(0 <= vi and vi < n_vertices());
 	vertices[vi] = v;
 }
@@ -62,11 +66,11 @@ void TriangleMesh::set_vertices(const vector<float>& coords){
 	assert(coords.size()%3 == 0);
 	vertices.resize(coords.size()/3);
 	for (size_t i = 0; i < coords.size(); i += 3) {
-		vertices[i/3] = vec3(coords[i], coords[i+1], coords[i+2]);
+		vertices[i/3] = glm::vec3(coords[i], coords[i+1], coords[i+2]);
 	}
 }
 
-void TriangleMesh::set_vertices(const vector<vec3>& vs) {
+void TriangleMesh::set_vertices(const vector<glm::vec3>& vs) {
 	vertices.clear();
 	vertices.insert(vertices.end(), vs.begin(), vs.end());
 }
@@ -88,7 +92,7 @@ void TriangleMesh::scale_to_unit() {
 	}
 	center /= vertices.size();
 
-	float largestSize = std::max(M.x - m.x, std::max(M.y - m.y, M.z - m.z));
+	float largestSize = max(M.x - m.x, max(M.y - m.y, M.z - m.z));
 
 	for (unsigned int i = 0; i < vertices.size(); ++i) {
 		vertices[i] = (vertices[i] - center)/largestSize;
@@ -179,8 +183,14 @@ void TriangleMesh::make_neighbourhood_data() {
 			// an edge of the boundary -> hard boundary
 			boundary.push_back( make_pair(vA, vB) );
 			cout << "Boundary in edge (" << vA << "," << vB << ")" << endl;
-			cout << "    " << vertices[vA].x << "," << vertices[vA].y << "," << vertices[vA].z << endl;
-			cout << "    " << vertices[vB].x << "," << vertices[vB].y << "," << vertices[vB].z << endl;
+			cout << "    "
+					  << vertices[vA].x << ","
+					  << vertices[vA].y << ","
+					  << vertices[vA].z << endl;
+			cout << "    "
+					  << vertices[vB].x << ","
+					  << vertices[vB].y << ","
+					  << vertices[vB].z << endl;
 		}
 	}
 	if (boundary.size() > 0) {
@@ -274,12 +284,12 @@ int TriangleMesh::get_opposite_corner(int c) const {
 	return opposite_corners[c];
 }
 
-const vec3& TriangleMesh::get_vertex(int v) const {
+const glm::vec3& TriangleMesh::get_vertex(int v) const {
 	assert(0 <= v and v < n_vertices());
 	return vertices[v];
 }
 
-const vector<vec3>& TriangleMesh::get_vertices() const {
+const vector<glm::vec3>& TriangleMesh::get_vertices() const {
 	return vertices;
 }
 
@@ -295,8 +305,8 @@ float TriangleMesh::get_triangle_area(int i, int j, int k) const {
 	assert(0 <= j and j < n_vertices());
 	assert(0 <= k and k < n_vertices());
 
-	vec3 ij = vertices[j] - vertices[i];
-	vec3 ik = vertices[k] - vertices[i];
-	vec3 c = glm::cross(ij, ik);
+	glm::vec3 ij = vertices[j] - vertices[i];
+	glm::vec3 ik = vertices[k] - vertices[i];
+	glm::vec3 c = glm::cross(ij, ik);
 	return glm::length(c)/2.0f;
 }

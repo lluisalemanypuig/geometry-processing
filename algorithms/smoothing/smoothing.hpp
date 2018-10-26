@@ -1,10 +1,8 @@
 #pragma once
 
 /*
- * Simple header to include the rest
- *
- *
- *
+ * Simple header to include the rest of the files
+ * that contain the headers of the smoothing functions.
  */
 
 // algorithms includes

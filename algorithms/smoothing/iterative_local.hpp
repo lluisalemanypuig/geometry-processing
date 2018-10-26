@@ -5,7 +5,6 @@
 
 // glm includes
 #include <glm/glm.hpp>
-using namespace glm;
 
 // Custom includes
 #include <algorithms/triangle_mesh.hpp>

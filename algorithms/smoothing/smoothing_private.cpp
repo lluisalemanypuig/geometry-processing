@@ -1,11 +1,14 @@
 #include <algorithms/smoothing/smoothing_private.hpp>
 
+#include <iostream>
+using namespace std;
+
 namespace algorithms {
 namespace smoothing {
 namespace smoothing_private {
 
 	void make_uniform_weight
-	(int vi, const TriangleMesh& m, const vector<vec3>& verts, vec3& L)
+	(int vi, const TriangleMesh& m, const vector<glm::vec3>& verts, glm::vec3& L)
 	{
 		iterators::vertex::vertex_vertex_iterator it(m);
 
@@ -18,7 +21,7 @@ namespace smoothing_private {
 
 		// compute the differences v_j - v_i
 		// and store them
-		vector<vec3> diffs;
+		vector<glm::vec3> diffs;
 		int j = it.current();
 		do {
 			diffs.push_back( verts[j] - verts[vi] );
@@ -38,7 +41,7 @@ namespace smoothing_private {
 	}
 
 	void make_cotangent_weight
-	(int i, const TriangleMesh& m, const vector<vec3>& verts, vec3& L)
+	(int i, const TriangleMesh& m, const vector<glm::vec3>& verts, glm::vec3& L)
 	{
 
 	}
@@ -48,13 +51,14 @@ namespace smoothing_private {
 	(
 		const smooth_weight& w, float l,
 		const TriangleMesh& m,
-		const vector<vec3>& from, vector<vec3>& to
+		const vector<glm::vec3>& from,
+		vector<glm::vec3>& to
 	)
 	{
 		// compute the new coordinates of the vertices
 		for (int i = 0; i < m.n_vertices(); ++i) {
 
-			vec3 L(0.0f,0.0f,0.0f);
+			glm::vec3 L(0.0f,0.0f,0.0f);
 			switch (w) {
 				case smooth_weight::uniform:
 					make_uniform_weight(i, m, from, L);

@@ -1,9 +1,5 @@
 #pragma once
 
-// C++ includes
-#include <vector>
-using namespace std;
-
 // Custom includes
 #include <algorithms/iterators/mesh_iterator.hpp>
 #include <algorithms/triangle_mesh.hpp>

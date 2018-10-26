@@ -6,7 +6,7 @@ namespace curvature {
 	/* ---------------------------- */
 	/* --------- PARALLEL --------- */
 
-	void Gauss(const TriangleMesh& m, vector<float>& Kg) {
+	void Gauss(const TriangleMesh& m, std::vector<float>& Kg) {
 		const int nT = m.n_triangles();
 		const int nV = m.n_vertices();
 
@@ -18,11 +18,11 @@ namespace curvature {
 		// angles[i] = 2*pi - sum_{face j adjacent to i} angle_j
 		// where angle_j is the j-th angle incident to vertex i
 		// for j = 1 to number of adjacent faces to vertex i.
-		vector<float> angles(nV, 2.0f*M_PI);
+		std::vector<float> angles(nV, 2.0f*M_PI);
 
 		int i0,i1,i2;
 		float area;
-		vec3 u,v;
+		glm::vec3 u,v;
 
 		// Compute sum of areas of triangles
 		for (int t = 0; t < nT; ++t) {
@@ -41,9 +41,9 @@ namespace curvature {
 
 			// Similarly for the angles.
 
-			const vec3& v0 = m.get_vertex(i0);
-			const vec3& v1 = m.get_vertex(i1);
-			const vec3& v2 = m.get_vertex(i2);
+			const glm::vec3& v0 = m.get_vertex(i0);
+			const glm::vec3& v1 = m.get_vertex(i1);
+			const glm::vec3& v2 = m.get_vertex(i2);
 
 			// angle <1,0,2>
 			u = glm::normalize( v1 - v0 );
@@ -92,7 +92,7 @@ namespace curvature {
 			return 0.0;
 		}
 
-		vec3 ij,ik;
+		glm::vec3 ij,ik;
 		int next;
 		do {
 			// current face
@@ -126,7 +126,7 @@ namespace curvature {
 		return (1.0f/vor_area)*(2.0f*M_PI - angle_sum);
 	}
 
-	void Gauss(const TriangleMesh& m, vector<float>& Kg, size_t nt) {
+	void Gauss(const TriangleMesh& m, std::vector<float>& Kg, size_t nt) {
 		if (nt == 1) {
 			Gauss(m, Kg);
 			return;

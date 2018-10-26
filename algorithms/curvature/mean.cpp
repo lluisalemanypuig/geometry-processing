@@ -11,7 +11,7 @@ namespace curvature {
 		// Voronoi area around 'i'
 		float area = 0.0f;
 		// curvature vector
-		vec3 curv_vec(0.0f,0.0f,0.0f);
+		glm::vec3 curv_vec(0.0f,0.0f,0.0f);
 
 		iterators::vertex::vertex_face_iterator it(m);
 		const int first = it.init(i);
@@ -19,7 +19,7 @@ namespace curvature {
 		int next2 = it.next();
 
 		float alpha, beta;
-		vec3 u,v;
+		glm::vec3 u,v;
 		do {
 			// it is guaranteed that
 			//     i1 = i
@@ -71,7 +71,7 @@ namespace curvature {
 		return (1.0f/2.0f)*glm::length(curv_vec);
 	}
 
-	void mean(const TriangleMesh& mesh, vector<float>& Kh) {
+	void mean(const TriangleMesh& mesh, std::vector<float>& Kh) {
 		const int N = mesh.n_vertices();
 		Kh.resize(N);
 
@@ -80,7 +80,7 @@ namespace curvature {
 		}
 	}
 
-	void mean(const TriangleMesh& mesh, vector<float>& Kh, size_t nt) {
+	void mean(const TriangleMesh& mesh, std::vector<float>& Kh, size_t nt) {
 		if (nt == 1) {
 			mean(mesh, Kh);
 			return;

@@ -6,19 +6,16 @@
 // C++ includes
 #include <functional>
 #include <algorithm>
-#include <iostream>
 #include <vector>
 #include <cmath>
-using namespace std;
 
 // glm includes
 #include <glm/glm.hpp>
-using namespace glm;
 
 class TriangleMesh {
 	protected:
 		/// The set of vertices of the mesh.
-		vector<vec3> vertices;
+		std::vector<glm::vec3> vertices;
 		/**
 		 * @brief The set of triangles of the mesh.
 		 *
@@ -30,7 +27,7 @@ class TriangleMesh {
 		 * Then, the @e i-th triangle has vertices
 		 * @ref triangles[i], @ref triangles[i+1], @ref triangles[i+2]
 		 */
-		vector<int> triangles;
+		std::vector<int> triangles;
 		/**
 		 * @brief The set of opposite corners.
 		 *
@@ -41,7 +38,7 @@ class TriangleMesh {
 		 * Then @ref opposite_corners[@e i] = @e j iff corner @e j
 		 * is the opposite corner of @e i.
 		 */
-		vector<int> opposite_corners;
+		std::vector<int> opposite_corners;
 		/**
 		 * @brief Corner table.
 		 *
@@ -51,7 +48,7 @@ class TriangleMesh {
 		 * as triangles it is found in), but this table
 		 * associates each vertex to a single corner index.
 		 */
-		vector<int> corners;
+		std::vector<int> corners;
 		/**
 		 * @brief Hard boundary of the mesh.
 		 *
@@ -62,7 +59,7 @@ class TriangleMesh {
 		 * of those triangles ({vi,vj,vk}) such that vk has no
 		 * opposite corner.
 		 */
-		vector<pair<int,int> > boundary;
+		std::vector<std::pair<int,int> > boundary;
 
 	protected:
 		/**
@@ -88,7 +85,7 @@ class TriangleMesh {
 		 * @param vi A valid vertex index: 0 <= @e v < number of vertices.
 		 * @param v The new coordinates of the vertex.
 		 */
-		void set_vertex(int vi, const vec3& v);
+		void set_vertex(int vi, const glm::vec3& v);
 		/**
 		 * @brief Adds a collection of vertices to the mesh.
 		 *
@@ -97,13 +94,13 @@ class TriangleMesh {
 		 * @param coords The coordinates of all the vertices.
 		 * The size must be a multiple of 3.
 		 */
-		void set_vertices(const vector<float>& coords);
+		void set_vertices(const std::vector<float>& coords);
 		/**
 		 * @brief Adds a collection of vertices to the mesh.
 		 *
 		 * The vertices passed in @e vs are added to @ref vertices.
 		 */
-		void set_vertices(const vector<vec3>& vs);
+		void set_vertices(const std::vector<glm::vec3>& vs);
 		/**
 		 * @brief Adds the connectivity information to the mesh.
 		 *
@@ -113,7 +110,7 @@ class TriangleMesh {
 		 * That is, face @e f has vertices @ref vertices[3*@e f],
 		 * @ref vertices[3*@e f + 1], @ref vertices[3*@e f + 2].
 		 */
-		void set_triangles(const vector<int>& tris);
+		void set_triangles(const std::vector<int>& tris);
 
 		/**
 		 * @brief Reescales the mesh so that it fits in a unit box.
@@ -222,10 +219,10 @@ class TriangleMesh {
 		 * @brief Returns the coordinates of a vertex.
 		 * @param v A valid vertex index: 0 <= @e v < number of vertices.
 		 */
-		const vec3& get_vertex(int v) const;
+		const glm::vec3& get_vertex(int v) const;
 
 		/// Returns a constant reference to all vertices of the mesh.
-		const vector<vec3>& get_vertices() const;
+		const std::vector<glm::vec3>& get_vertices() const;
 
 		/**
 		 * @brief Returns the area of face @e f.
