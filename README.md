@@ -4,7 +4,7 @@ Set of algorithms for geometric processing. These algorithms include:
 - Computing the curvature of the vertices of a mesh:
 	- Gauss curvature Kg
 	- Mean curvature Kh
-- Noise filtering: (coming soon)
+- Noise filtering:
 	- Laplacian
 	- Bi-Laplacian
 	- Taubin lambda-mu operator
