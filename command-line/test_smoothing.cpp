@@ -70,7 +70,8 @@ namespace test_algorithms {
 					w = algorithms::smoothing::smooth_weight::cotangent;
 				}
 				else {
-					cerr << "Value '" << string(argv[i + 1]) << "' for weight type not allowed" << endl;
+					cerr << "Value '" << string(argv[i + 1])
+						 << "' for weight type not allowed" << endl;
 					return;
 				}
 
@@ -129,6 +130,12 @@ namespace test_algorithms {
 
 		if (alg == "laplacian") {
 			algorithms::smoothing::laplacian(w, lambda, it, mesh);
+		}
+		else if (alg == "laplacian") {
+			algorithms::smoothing::bilaplacian(w, lambda, it, mesh);
+		}
+		else if (alg == "laplacian") {
+			algorithms::smoothing::TaubinLM(w, lambda, it, mesh);
 		}
 
 		cout << "Smoothed mesh:" << endl;
