@@ -127,6 +127,11 @@ namespace curvature {
 	}
 
 	void Gauss(const TriangleMesh& m, vector<float>& Kg, size_t nt) {
+		if (nt == 1) {
+			Gauss(m, Kg);
+			return;
+		}
+
 		const int N = m.n_vertices();
 		Kg.resize(N);
 

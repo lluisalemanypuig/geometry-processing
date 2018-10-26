@@ -81,6 +81,11 @@ namespace curvature {
 	}
 
 	void mean(const TriangleMesh& mesh, vector<float>& Kh, size_t nt) {
+		if (nt == 1) {
+			mean(mesh, Kh);
+			return;
+		}
+
 		const int N = mesh.n_vertices();
 		Kh.resize(N);
 
