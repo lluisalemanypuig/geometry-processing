@@ -14,23 +14,23 @@ LIBS += -fopenmp
 
 INCLUDEPATH += ..
 
-HEADERS +=									\
-    ply_reader.hpp							\
-    triangle_mesh.hpp						\
-    iterators/vertex_iterators.hpp			\
-    iterators/mesh_iterator.hpp				\
-    curvature/curvature.hpp \
-    smoothing/iterative_local.hpp \
-    smoothing/smoothing_private.hpp \
-    smoothing/smoothing_defs.hpp \
-    smoothing/smoothing.hpp
+HEADERS +=							\
+    ply_reader.hpp					\
+    triangle_mesh.hpp				\
+    iterators/vertex_iterators.hpp	\
+    iterators/mesh_iterator.hpp		\
+    curvature/curvature.hpp			\
+    smoothing/smoothing.hpp			\
+    smoothing/smoothing_defs.hpp	\
+    smoothing/iterative_local.hpp	\
+    smoothing/smoothing_private.hpp
 
-SOURCES +=									\
-    ply_reader.cpp							\
-    triangle_mesh.cpp						\
-    iterators/mesh_iterator.cpp				\
-    curvature/mean.cpp						\
-    curvature/Gauss.cpp \
-    iterators/vertex_iterators.cpp \
-    smoothing/laplacian.cpp \
+SOURCES +=							\
+    ply_reader.cpp					\
+    triangle_mesh.cpp				\
+    iterators/mesh_iterator.cpp		\
+    iterators/vertex_iterators.cpp	\
+    curvature/mean.cpp				\
+    curvature/Gauss.cpp				\
+    smoothing/laplacian.cpp			\
     smoothing/smoothing_private.cpp

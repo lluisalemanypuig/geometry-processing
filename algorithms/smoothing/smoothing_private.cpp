@@ -48,7 +48,7 @@ namespace smoothing_private {
 	(
 		const smooth_weight& w, float l,
 		const TriangleMesh& m,
-		vector<vec3>& from, vector<vec3>& to
+		const vector<vec3>& from, vector<vec3>& to
 	)
 	{
 		// compute the new coordinates of the vertices
