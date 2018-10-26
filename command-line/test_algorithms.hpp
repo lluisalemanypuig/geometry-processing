@@ -5,6 +5,10 @@
 #include <vector>
 using namespace std;
 
+// glm includes
+#include <glm/glm.hpp>
+using namespace glm;
+
 // geometry processing algorithms
 #include <algorithms/triangle_mesh.hpp>
 #include <algorithms/ply_reader.hpp>
