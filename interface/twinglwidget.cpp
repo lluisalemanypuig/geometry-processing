@@ -64,10 +64,10 @@ void TwinGLWidget::run_smoothing_algorithm() {
 		algorithms::smoothing::laplacian(wt, lambda, nit, mesh);
 	}
 	else if (op == smoothing_operator::biLaplacian) {
-
+		algorithms::smoothing::bilaplacian(wt, lambda, nit, mesh);
 	}
 	else if (op == smoothing_operator::Taubin) {
-
+		algorithms::smoothing::TaubinLM(wt, lambda, nit, mesh);
 	}
 	timing::time_point end = timing::now();
 

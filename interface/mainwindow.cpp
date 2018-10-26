@@ -131,6 +131,12 @@ void MainWindow::on_PB_RunSmooth_clicked() {
 	ui->DualView_RightRenderer->run_smoothing_algorithm();
 }
 
+void MainWindow::on_PB_ResetSmooth_clicked() {
+	ui->DualView_RightRenderer->set_mesh(
+		ui->DualView_LeftRenderer->get_mesh()
+	);
+}
+
 /* Performance options */
 
 void MainWindow::on_SBThreads_valueChanged(int val) {
@@ -175,7 +181,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
 	ui->setupUi(this);
 
-	current_tab = 0;
+	current_tab = ui->TW_View->currentIndex();
 	ui->SingleView_Renderer->set_num_threads(1);
 	ui->DualView_LeftRenderer->set_twin( ui->DualView_RightRenderer );
 	ui->DualView_RightRenderer->set_twin( ui->DualView_LeftRenderer );

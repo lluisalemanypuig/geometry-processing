@@ -37,11 +37,12 @@ class MainWindow : public QMainWindow {
 		void on_RBCurvatureG_toggled(bool checked);
 		void on_RBNoCurvature_toggled(bool checked);
 
-		/* Smoothing radio buttons */
+		/* Smoothing buttons */
 		void on_RB_Laplacian_toggled(bool checked);
 		void on_RB_BiLaplacian_toggled(bool checked);
 		void on_RB_Taubin_toggled(bool checked);
 		void on_PB_RunSmooth_clicked();
+		void on_PB_ResetSmooth_clicked();
 
 		/* Performance options */
 		void on_SBThreads_valueChanged(int arg1);
