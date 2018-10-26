@@ -19,7 +19,7 @@ namespace smoothing {
 			smoothing_private::apply_local(w, l, m, old_verts, new_verts);
 			smoothing_private::apply_local(w, l, m, new_verts, old_verts);
 		}
-		if (it == n) {
+		if (it == nit) {
 			// do one last iteration
 			smoothing_private::apply_local(w, l, m, old_verts, new_verts);
 		}
@@ -28,7 +28,7 @@ namespace smoothing {
 		// mesh for the vertices in 'old_verts'. Notice that we
 		// are using 'move' for moving from 'new_verts' to 'old_verts'.
 		// That deletes the contents of 'new_verts'
-		if (it == n) {
+		if (it == nit) {
 			m.set_vertices(new_verts);
 		}
 		else {
