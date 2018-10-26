@@ -20,6 +20,11 @@ namespace test_algorithms {
 		string iteration_type = "none";
 		int v_idx = -1;
 
+		if (argc == 2) {
+			iterate_usage();
+			return;
+		}
+
 		for (int i = 2; i < argc; ++i) {
 			if (strcmp(argv[i], "-h") == 0 or strcmp(argv[i], "--help") == 0) {
 				iterate_usage();

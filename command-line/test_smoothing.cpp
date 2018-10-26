@@ -34,6 +34,11 @@ namespace test_algorithms {
 		bool _w = false;
 		bool _it = false;
 
+		if (argc == 2) {
+			smoothing_usage();
+			return;
+		}
+
 		for (int i = 2; i < argc; ++i) {
 			if (strcmp(argv[i], "-h") == 0 or strcmp(argv[i], "--help") == 0) {
 				smoothing_usage();

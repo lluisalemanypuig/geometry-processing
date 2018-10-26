@@ -26,6 +26,11 @@ namespace test_algorithms {
 		size_t nt = 1;
 		bool print_curv = false;
 
+		if (argc == 2) {
+			curvature_usage();
+			return;
+		}
+
 		for (int i = 2; i < argc; ++i) {
 			if (strcmp(argv[i], "-h") == 0 or strcmp(argv[i], "--help") == 0) {
 				curvature_usage();
@@ -71,17 +76,24 @@ namespace test_algorithms {
 
 		cout << "Compute curvature '" << curvature << "'" << endl;
 
-		timing::time_point begin, end;
-		if (curvature == "Gauss") {
-			begin = timing::now();
-			algorithms::curvature::Gauss(mesh, curv, nt);
-			end = timing::now();
+		timing::time_point begin = timing::now();
+		if (nt == 1) {
+			if (curvature == "Gauss") {
+				algorithms::curvature::Gauss(mesh, curv);
+			}
+			else if (curvature == "mean") {
+				algorithms::curvature::mean(mesh, curv);
+			}
 		}
-		else if (curvature == "mean") {
-			begin = timing::now();
-			algorithms::curvature::mean(mesh, curv, nt);
-			end = timing::now();
+		else {
+			if (curvature == "Gauss") {
+				algorithms::curvature::Gauss(mesh, curv, nt);
+			}
+			else if (curvature == "mean") {
+				algorithms::curvature::mean(mesh, curv, nt);
+			}
 		}
+		timing::time_point end = timing::now();
 
 		cout.setf(ios::fixed);
 		cout.precision(8);
