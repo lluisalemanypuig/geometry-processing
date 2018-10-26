@@ -156,7 +156,7 @@ void MainWindow::on_PB_ClearMesh_clicked() {
 
 /* Tab widget stuff */
 
-void MainWindow::on_tabWidget_2_currentChanged(int index) {
+void MainWindow::on_TW_View_currentChanged(int index) {
 	current_tab = index;
 	renderer_change_poly_mode();
 	renderer_change_curvature();

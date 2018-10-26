@@ -49,7 +49,7 @@ class MainWindow : public QMainWindow {
 		void on_PB_ClearMesh_clicked();
 
 		/* Tab widget stuff */
-		void on_tabWidget_2_currentChanged(int index);
+		void on_TW_View_currentChanged(int index);
 
 		/* Settings stuff */
 		void on_comboBox_currentIndexChanged(const QString &arg1);
