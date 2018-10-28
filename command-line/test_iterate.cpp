@@ -15,20 +15,20 @@ namespace test_algorithms {
 		cout << endl;
 	}
 
-	void test_iterate(int argc, char *argv[]) {
+	int test_iterate(int argc, char *argv[]) {
 		string mesh_file = "none";
 		string iteration_type = "none";
 		int v_idx = -1;
 
 		if (argc == 2) {
 			iterate_usage();
-			return;
+			return 1;
 		}
 
 		for (int i = 2; i < argc; ++i) {
 			if (strcmp(argv[i], "-h") == 0 or strcmp(argv[i], "--help") == 0) {
 				iterate_usage();
-				return;
+				return 0;
 			}
 			else if (strcmp(argv[i], "--load") == 0) {
 				mesh_file = string(argv[i + 1]);
@@ -46,19 +46,19 @@ namespace test_algorithms {
 			}
 			else {
 				cerr << "Error: option '" << string(argv[i]) << "' not recognised" << endl;
-				return;
+				return 1;
 			}
 		}
 
 		if (mesh_file == "none") {
 			cerr << "Error: mesh file not specified" << endl;
 			cerr << "    Use ./command-line iterate --help to see the usage" << endl;
-			return;
+			return 1;
 		}
 		if (iteration_type == "none") {
 			cerr << "Error: iteration type not specified" << endl;
 			cerr << "    Use ./command-line iterate --help to see the usage" << endl;
-			return;
+			return 1;
 		}
 
 		TriangleMesh mesh;
@@ -88,6 +88,8 @@ namespace test_algorithms {
 			}
 		}
 		while (it->next() != first);
+
+		return 0;
 	}
 
 } // -- namespace test_algorithms

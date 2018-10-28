@@ -24,8 +24,8 @@ using namespace glm;
 
 namespace test_algorithms {
 
-	void test_iterate(int argc, char *argv[]);
-	void test_curvature(int argc, char *argv[]);
-	void test_smoothing(int argc, char *argv[]);
+	int test_iterate(int argc, char *argv[]);
+	int test_curvature(int argc, char *argv[]);
+	int test_smoothing(int argc, char *argv[]);
 
 } // -- namespace test_algorithms
