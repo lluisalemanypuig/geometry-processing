@@ -87,18 +87,29 @@ class TriangleMesh {
 		 */
 		void set_vertex(int vi, const glm::vec3& v);
 		/**
-		 * @brief Adds a collection of vertices to the mesh.
+		 * @brief Sets the vertices to the mesh.
 		 *
 		 * Each vertex starts at a position multiple of 3.
-		 * Then, the vertices are added to @ref vertices.
+		 * Then, the contents of @ref vertices is set to the
+		 * contents of @e vs.
 		 * @param coords The coordinates of all the vertices.
 		 * The size must be a multiple of 3.
 		 */
 		void set_vertices(const std::vector<float>& coords);
 		/**
-		 * @brief Adds a collection of vertices to the mesh.
+		 * @brief Sets the vertices to the mesh.
 		 *
-		 * The vertices passed in @e vs are added to @ref vertices.
+		 * The contents of @ref vertices is set to the contents of
+		 * @e vs.
+		 * @pre @e vs is not null and points to the first element
+		 * of an array of @e N vertices.
+		 */
+		void set_vertices(const glm::vec3 *vs, int N);
+		/**
+		 * @brief Sets the vertices to the mesh.
+		 *
+		 * The contents of @ref vertices is set to the contents of
+		 * @e vs.
 		 */
 		void set_vertices(const std::vector<glm::vec3>& vs);
 		/**

@@ -8,7 +8,7 @@ namespace smoothing {
 namespace smoothing_private {
 
 	void make_uniform_weight
-	(int vi, const TriangleMesh& m, const vector<glm::vec3>& verts, glm::vec3& L)
+	(int vi, const TriangleMesh& m, const glm::vec3 *verts, glm::vec3& L)
 	{
 		iterators::vertex::vertex_vertex_iterator it(m);
 
@@ -41,7 +41,7 @@ namespace smoothing_private {
 	}
 
 	void make_cotangent_weight
-	(int i, const TriangleMesh& m, const vector<glm::vec3>& verts, glm::vec3& L)
+	(int i, const TriangleMesh& m, const glm::vec3 *verts, glm::vec3& L)
 	{
 
 	}
@@ -51,10 +51,13 @@ namespace smoothing_private {
 	(
 		const smooth_weight& w, float l,
 		const TriangleMesh& m,
-		const vector<glm::vec3>& from,
-		vector<glm::vec3>& to
+		const glm::vec3 *from,
+		glm::vec3 *to
 	)
 	{
+		assert(from != nullptr);
+		assert(to != nullptr);
+
 		// compute the new coordinates of the vertices
 		for (int i = 0; i < m.n_vertices(); ++i) {
 

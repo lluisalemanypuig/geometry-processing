@@ -30,7 +30,7 @@ namespace smoothing_private {
 	 * @param[out] L Result of the sum.
 	 */
 	void make_uniform_weight
-	(int vi, const TriangleMesh& m, const std::vector<glm::vec3>& verts, glm::vec3& L);
+	(int vi, const TriangleMesh& m, const glm::vec3 *verts, glm::vec3& L);
 
 	/**
 	 * @brief Computes the sum corresponding to cotangent weights.
@@ -49,7 +49,7 @@ namespace smoothing_private {
 	 * @param[out] L Result of the sum.
 	 */
 	void make_cotangent_weight
-	(int i, const TriangleMesh& m, const std::vector<glm::vec3>& verts, glm::vec3& L);
+	(int i, const TriangleMesh& m, const glm::vec3 *verts, glm::vec3& L);
 
 	/**
 	 * @brief Applies one iteration of a local smoothing algorithm.
@@ -65,8 +65,9 @@ namespace smoothing_private {
 	void apply_local
 	(
 		const smooth_weight& w, float lambda,
-		const TriangleMesh& m, const std::vector<glm::vec3>& old_verts,
-		std::vector<glm::vec3>& new_verts
+		const TriangleMesh& m,
+		const glm::vec3 *old_verts,
+		glm::vec3 *new_verts
 	);
 
 } // -- namespace smoothing_private

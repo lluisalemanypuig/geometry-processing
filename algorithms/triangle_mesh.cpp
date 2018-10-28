@@ -68,16 +68,26 @@ void TriangleMesh::set_vertices(const vector<float>& coords){
 	for (size_t i = 0; i < coords.size(); i += 3) {
 		vertices[i/3] = glm::vec3(coords[i], coords[i+1], coords[i+2]);
 	}
+	vertices.shrink_to_fit();
+}
+
+void TriangleMesh::set_vertices(const glm::vec3 *vs, int N) {
+	assert(vs != nullptr);
+	vertices.resize(N);
+	std::copy(&vs[0], &vs[N - 1], vertices.begin());
+	vertices.shrink_to_fit();
 }
 
 void TriangleMesh::set_vertices(const vector<glm::vec3>& vs) {
-	vertices.clear();
-	vertices.insert(vertices.end(), vs.begin(), vs.end());
+	vertices.resize(vs.size());
+	std::copy(vs.begin(), vs.end(), vertices.begin());
+	vertices.shrink_to_fit();
 }
 
 void TriangleMesh::set_triangles(const vector<int>& tris) {
-	triangles.clear();
-	triangles.insert(triangles.end(), tris.begin(), tris.end());
+	triangles.resize(tris.size());
+	std::copy(tris.begin(), tris.end(), triangles.begin());
+	triangles.shrink_to_fit();
 }
 
 void TriangleMesh::scale_to_unit() {
