@@ -2,12 +2,12 @@ TEMPLATE = lib
 TARGET = gpr
 
 CONFIG += c++11
+CONFIG += staticlib
 CONFIG -= app_bundle
 CONFIG -= qt
-CONFIG += staticlib
 
 QMAKE_CXXFLAGS += -fopenmp
-QMAKE_CXXFLAGS_DEBUG += -DDEBUG
+QMAKE_CXXFLAGS_DEBUG += -DDEBUG -g
 QMAKE_CXXFLAGS_RELEASE += -DNDEBUG
 
 LIBS += -fopenmp
@@ -22,7 +22,7 @@ HEADERS +=							\
     curvature/curvature.hpp			\
     smoothing/smoothing.hpp			\
     smoothing/smoothing_defs.hpp	\
-    smoothing/iterative_local.hpp \
+    smoothing/iterative_local.hpp	\
     smoothing/iterative_private.hpp
 
 SOURCES +=							\
