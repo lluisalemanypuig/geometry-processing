@@ -1,5 +1,5 @@
 TEMPLATE = lib
-TARGET = gpr
+TARGET = geoproc
 
 CONFIG += c++11
 CONFIG += staticlib
@@ -32,5 +32,5 @@ SOURCES +=							\
     iterators/vertex_iterators.cpp	\
     curvature/mean.cpp				\
     curvature/Gauss.cpp				\
-    smoothing/laplacian.cpp			\
+    smoothing/iterative_local.cpp	\
     smoothing/smoothing_private.cpp

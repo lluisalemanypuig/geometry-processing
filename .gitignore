@@ -1,6 +1,6 @@
 *.pro.user
-algorithms-debug/
-algorithms-release/
+geoproc-debug/
+geoproc-release/
 command-line-debug/
 command-line-release/
 interface-debug/

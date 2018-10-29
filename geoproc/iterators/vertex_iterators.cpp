@@ -1,4 +1,7 @@
-#include <algorithms/iterators/vertex_iterators.hpp>
+#include <geoproc/iterators/vertex_iterators.hpp>
+
+// C includes
+#include <assert.h>
 
 inline
 int next_corner(int corner) {

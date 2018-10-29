@@ -1,4 +1,18 @@
-#include <algorithms/curvature/curvature.hpp>
+#include <geoproc/curvature/curvature.hpp>
+
+// C includes
+#include <assert.h>
+#include <omp.h>
+
+// C++ includes
+#include <cmath>
+
+// glm includes
+#include <glm/glm.hpp>
+
+// geoproc includes
+#include <geoproc/iterators/mesh_iterator.hpp>
+#include <geoproc/iterators/vertex_iterators.hpp>
 
 namespace algorithms {
 namespace curvature {

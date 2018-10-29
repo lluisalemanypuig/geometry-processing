@@ -1,4 +1,4 @@
-#include <algorithms/iterators/mesh_iterator.hpp>
+#include <geoproc/iterators/mesh_iterator.hpp>
 
 namespace iterators {
 

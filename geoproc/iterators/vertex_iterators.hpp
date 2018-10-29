@@ -1,8 +1,8 @@
 #pragma once
 
-// Custom includes
-#include <algorithms/iterators/mesh_iterator.hpp>
-#include <algorithms/triangle_mesh.hpp>
+// geoproc includes
+#include <geoproc/iterators/mesh_iterator.hpp>
+#include <geoproc/triangle_mesh.hpp>
 
 namespace iterators {
 namespace vertex {

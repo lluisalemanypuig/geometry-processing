@@ -3,11 +3,9 @@
 // glm includes
 #include <glm/glm.hpp>
 
-// algorithms includes
-#include <algorithms/triangle_mesh.hpp>
-#include <algorithms/iterators/mesh_iterator.hpp>
-#include <algorithms/iterators/vertex_iterators.hpp>
-#include <algorithms/smoothing/smoothing_defs.hpp>
+// geoproc includes
+#include <geoproc/triangle_mesh.hpp>
+#include <geoproc/smoothing/smoothing_defs.hpp>
 
 namespace algorithms {
 namespace smoothing {

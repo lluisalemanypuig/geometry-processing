@@ -1,6 +1,11 @@
-#include <algorithms/ply_reader.hpp>
+#include <geoproc/ply_reader.hpp>
 
+// C includes
+#include <string.h>
+
+// C++ includes
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 namespace PLY_reader {

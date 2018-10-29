@@ -1,9 +1,14 @@
-#include <algorithms/triangle_mesh.hpp>
+#include <geoproc/triangle_mesh.hpp>
 
+// C includes
+#include <assert.h>
+
+// C++ includes
+#include <functional>
+#include <algorithm>
 #include <iostream>
+#include <cmath>
 using namespace std;
-
-// LOCAL-DEFINED
 
 struct CornerEdge {
 	int vertexA, vertexB, corner;

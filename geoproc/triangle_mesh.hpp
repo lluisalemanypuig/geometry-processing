@@ -1,13 +1,7 @@
 #pragma once
 
-// C includes
-#include <assert.h>
-
 // C++ includes
-#include <functional>
-#include <algorithm>
 #include <vector>
-#include <cmath>
 
 // glm includes
 #include <glm/glm.hpp>

@@ -2,8 +2,8 @@
 
 // C++ includes
 
-// Custom includes
-#include <algorithms/triangle_mesh.hpp>
+// geoproc includes
+#include <geoproc/triangle_mesh.hpp>
 
 namespace iterators {
 

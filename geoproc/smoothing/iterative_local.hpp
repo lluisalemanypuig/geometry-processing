@@ -1,15 +1,8 @@
 #pragma once
 
-// C includes
-#include <omp.h>
-
-// glm includes
-#include <glm/glm.hpp>
-
-// Custom includes
-#include <algorithms/triangle_mesh.hpp>
-#include <algorithms/smoothing/smoothing_defs.hpp>
-#include <algorithms/smoothing/iterative_private.hpp>
+// geoproc includes
+#include <geoproc/triangle_mesh.hpp>
+#include <geoproc/smoothing/smoothing_defs.hpp>
 
 namespace algorithms {
 namespace smoothing {

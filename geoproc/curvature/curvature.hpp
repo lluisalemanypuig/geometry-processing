@@ -1,19 +1,10 @@
 #pragma once
 
-// C includes
-#include <omp.h>
-
 // C++ includes
 #include <vector>
-#include <cmath>
 
-// glm includes
-#include <glm/glm.hpp>
-
-// Custom includes
-#include <algorithms/triangle_mesh.hpp>
-#include <algorithms/iterators/mesh_iterator.hpp>
-#include <algorithms/iterators/vertex_iterators.hpp>
+// geoproc includes
+#include <geoproc/triangle_mesh.hpp>
 
 namespace algorithms {
 namespace curvature {

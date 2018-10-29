@@ -1,6 +1,13 @@
-#include <algorithms/smoothing/iterative_local.hpp>
+#include <geoproc/smoothing/iterative_local.hpp>
 
-#include <iostream>
+// C includes
+#include <omp.h>
+
+// glm includes
+#include <glm/glm.hpp>
+
+// geoproc includes
+#include <geoproc/smoothing/iterative_private.hpp>
 
 namespace algorithms {
 namespace smoothing {

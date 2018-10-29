@@ -1,7 +1,12 @@
-#include <algorithms/smoothing/iterative_private.hpp>
+#include <geoproc/smoothing/iterative_private.hpp>
 
+// C++ includes
 #include <iostream>
 using namespace std;
+
+// gpr algorithms includes
+#include <geoproc/iterators/mesh_iterator.hpp>
+#include <geoproc/iterators/vertex_iterators.hpp>
 
 namespace algorithms {
 namespace smoothing {

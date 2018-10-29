@@ -1,18 +1,11 @@
 #pragma once
 
-// C includes
-#include <string.h>
-
 // C++ includes
-#include <fstream>
 #include <string>
 #include <vector>
 
-// glm includes
-#include <glm/vec3.hpp>
-
-// Custom includes
-#include <algorithms/triangle_mesh.hpp>
+// geoproc includes
+#include <geoproc/triangle_mesh.hpp>
 
 /**
  * @brief Read a mesh in .ply format
