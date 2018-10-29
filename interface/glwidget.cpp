@@ -1,5 +1,17 @@
 #include "glwidget.hpp"
 
+// C++ includes
+#include <iostream>
+#include <limits>
+using namespace std;
+
+// Qt includes
+#include <QApplication>
+
+// algorithms includes
+#include <geoproc/curvature/curvature.hpp>
+#include <geoproc/ply_reader.hpp>
+
 const float rotationFactor = 0.5f;
 const float maxRotationCamera = 75.0f;
 const float minDistanceCamera = 1.0f;

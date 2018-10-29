@@ -1,5 +1,13 @@
 #include "render_triangle_mesh.hpp"
 
+// C includes
+#include <assert.h>
+
+// C++ includes
+#include <functional>
+#include <iostream>
+#include <cmath>
+
 // LOCAL-DEFINED
 
 // PRIVATE

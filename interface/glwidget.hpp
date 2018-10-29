@@ -1,20 +1,12 @@
 #pragma once
 
 // C++ includes
-#include <iostream>
-#include <limits>
-using namespace std;
+#include <vector>
 
 // Qt includes
-#include <QOpenGLWidget>
 #include <QOpenGLFunctions>
-#include <QApplication>
-#include <QMatrix4x4>
+#include <QOpenGLWidget>
 #include <QMouseEvent>
-
-// algorithms includes
-#include <algorithms/curvature/curvature.hpp>
-#include <algorithms/ply_reader.hpp>
 
 // Custom includes
 #include "render_triangle_mesh.hpp"
@@ -48,7 +40,7 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		RenderTriangleMesh mesh;
 
 		/// Values of the curvature per vertex
-		vector<float> curvature_values;
+		std::vector<float> curvature_values;
 
 		/// Number of threads to use.
 		size_t nt;

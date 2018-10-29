@@ -3,11 +3,6 @@
 // Qt includes
 #include <QMainWindow>
 
-// algorithms includes
-#include <algorithms/smoothing/iterative_local.hpp>
-using namespace algorithms;
-using namespace smoothing;
-
 namespace Ui {
 	class MainWindow;
 } // -- namespace Ui

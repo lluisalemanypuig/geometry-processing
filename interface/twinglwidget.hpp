@@ -1,10 +1,5 @@
 #pragma once
 
-// C++ includes
-#include <iostream>
-#include <limits>
-using namespace std;
-
 // Qt includes
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
@@ -12,8 +7,8 @@ using namespace std;
 #include <QMatrix4x4>
 #include <QMouseEvent>
 
-// algorithms includes
-#include <algorithms/smoothing/iterative_local.hpp>
+// geoproc includes
+#include <geoproc/smoothing/iterative_local.hpp>
 using namespace algorithms;
 using namespace smoothing;
 

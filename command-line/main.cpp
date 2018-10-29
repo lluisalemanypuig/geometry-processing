@@ -6,7 +6,7 @@
 using namespace std;
 
 // Custom includes
-#include "test_algorithms.hpp"
+#include "test_geoproc.hpp"
 
 int main(int argc, char *argv[]) {
 	if (argc == 1) {

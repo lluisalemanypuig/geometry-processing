@@ -1,5 +1,9 @@
 #include "twinglwidget.hpp"
 
+// C++ includes
+#include <iostream>
+using namespace std;
+
 // PROTECTED
 
 void TwinGLWidget::mousePressEvent(QMouseEvent *event) {

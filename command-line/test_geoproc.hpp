@@ -1,5 +1,8 @@
 #pragma once
 
+// C includes
+#include <string.h>
+
 // C++ includes
 #include <iostream>
 #include <vector>
@@ -9,15 +12,15 @@ using namespace std;
 #include <glm/glm.hpp>
 using namespace glm;
 
-// geometry processing algorithms
-#include <algorithms/triangle_mesh.hpp>
-#include <algorithms/ply_reader.hpp>
+// geoproc includes
+#include <geoproc/triangle_mesh.hpp>
+#include <geoproc/ply_reader.hpp>
 
-#include <algorithms/curvature/curvature.hpp>
-#include <algorithms/smoothing/iterative_local.hpp>
+#include <geoproc/curvature/curvature.hpp>
+#include <geoproc/smoothing/iterative_local.hpp>
 
-#include <algorithms/iterators/mesh_iterator.hpp>
-#include <algorithms/iterators/vertex_iterators.hpp>
+#include <geoproc/iterators/mesh_iterator.hpp>
+#include <geoproc/iterators/vertex_iterators.hpp>
 
 // Custom includes
 #include "time.hpp"

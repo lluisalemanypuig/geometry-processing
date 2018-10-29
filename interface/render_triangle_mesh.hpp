@@ -1,29 +1,21 @@
 #pragma once
 
-// C includes
-#include <assert.h>
-
 // C++ includes
-#include <functional>
-#include <algorithm>
-#include <iostream>
 #include <vector>
-#include <cmath>
 using namespace std;
 
 // Qt includes
-#include <QVector3D>
-#include <QOpenGLFunctions>
 #include <QOpenGLVertexArrayObject>
-#include <QOpenGLBuffer>
 #include <QOpenGLShaderProgram>
+#include <QOpenGLFunctions>
+#include <QOpenGLBuffer>
 
 // glm includes
-#include <glm/glm.hpp>
+#include <glm/vec3.hpp>
 using namespace glm;
 
 // algorithms includes
-#include <algorithms/triangle_mesh.hpp>
+#include <geoproc/triangle_mesh.hpp>
 
 class RenderTriangleMesh : public TriangleMesh {
 	private:
