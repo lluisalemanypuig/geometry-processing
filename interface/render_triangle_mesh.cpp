@@ -394,9 +394,13 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>&
 }
 
 bool RenderTriangleMesh::make_colours(QOpenGLShaderProgram *program, const vector<vec3>& colors) {
-	vector<vec3> vert_info, cols, normals;
-	vector<unsigned int> perFaceTriangles;
-	make_VBO_data(colors, vert_info, cols, normals, perFaceTriangles);
+	// make colours information
+	vector<vec3> cols(triangles.size());
+	for (unsigned int i = 0; i < triangles.size(); i += 3) {
+		cols[i    ] =   colors[triangles[i    ]];
+		cols[i + 1] =   colors[triangles[i + 1]];
+		cols[i + 2] =   colors[triangles[i + 2]];
+	}
 
 	/* ------------------ */
 	/* Create the vertex array/buffer objects. */

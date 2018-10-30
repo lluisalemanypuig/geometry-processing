@@ -182,11 +182,11 @@ void GLWidget::load_curvature_shader() {
 
 void GLWidget::compute_curvature() {
 	timing::time_point begin = timing::now();
-	if (curv_display == curv_type::Gauss) {
+	if (current_curv_display == curv_type::Gauss) {
 		cout << "    Gauss ";
 		algorithms::curvature::Gauss(mesh, curvature_values, nt);
 	}
-	else if (curv_display == curv_type::Mean) {
+	else if (current_curv_display == curv_type::Mean) {
 		cout << "    Mean ";
 		algorithms::curvature::mean(mesh, curvature_values, nt);
 	}
@@ -198,9 +198,11 @@ void GLWidget::compute_curvature() {
 		 << " seconds" << endl;
 }
 
-void GLWidget::show_curvature(bool should_load) {
+void GLWidget::show_curvature(bool should_load, bool make_all_buffers) {
 	cout << "GLWidget::show_curvature - should the shader be loaded? "
 		 << (should_load ? "Yes" : "No") << endl;
+	cout << "GLWidget::show_curvature - should all buffers be made? "
+		 << (make_all_buffers ? "Yes" : "No") << endl;
 
 	if (should_load) {
 		cout << "GLWidget::show_curvature - load curvature shader" << endl;
@@ -215,15 +217,22 @@ void GLWidget::show_curvature(bool should_load) {
 	cout << "GLWidget::show_curvature - make colours with curvature" << endl;
 
 	vector<vec3> colors;
-	make_colors_rainbow_gradient(curvature_values, curv_display, colors);
+	make_colors_rainbow_gradient(curvature_values, current_curv_display, colors);
 
 	makeCurrent();
-	mesh.init(program, colors);
+	if (make_all_buffers) {
+		cout << "    GLWidget::show_curvature - make ALL buffers" << endl;
+		mesh.init(program, colors);
+	}
+	else {
+		cout << "    GLWidget::show_curvature - make only buffer colour" << endl;
+		mesh.make_colours(program, colors);
+	}
 	doneCurrent();
 	update();
 }
 
-void GLWidget::init_mesh(bool make_neigh) {
+void GLWidget::init_mesh(bool make_neigh, bool make_all_buffers) {
 	cout << "GLWidget::init_mesh - initialising mesh..." << endl;
 
 	makeCurrent();
@@ -240,12 +249,12 @@ void GLWidget::init_mesh(bool make_neigh) {
 		mesh.make_neighbourhood_data();
 	}
 
-	if (curv_display != curv_type::none) {
+	if (current_curv_display != curv_type::none) {
 		cout << "GLWidget::init_mesh - displaying curvature" << endl;
 		cout << "    computing curvature..." << endl;
 		compute_curvature();
 		cout << "    displaying curvature..." << endl;
-		show_curvature(false);
+		show_curvature(false, make_all_buffers);
 	}
 
 	cout << "GLWidget::init_mesh - initialised succesfully!" << endl;
@@ -306,7 +315,7 @@ void GLWidget::paintGL() {
 	if (pm == polymode::solid) {
 		program->setUniformValue("wireframe", false);
 
-		if (curv_display == curv_type::none) {
+		if (current_curv_display == curv_type::none) {
 			// display with a flat color since there
 			// is no curvature to be displayed
 			program->setUniformValue("color", QVector4D(0.75f, 0.8f, 0.9f, 1.0f));
@@ -355,8 +364,8 @@ GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
 	program = nullptr;
 
 	pm = polymode::solid;
-	change_curv_display = curv_type::none;
-	curv_display = curv_type::none;
+	to_curv_display = curv_type::none;
+	current_curv_display = curv_type::none;
 
 	angleX = 0.0f;
 	angleY = 0.0f;
@@ -376,7 +385,7 @@ void GLWidget::set_mesh(const RenderTriangleMesh& rm) {
 
 	mesh = rm;
 
-	init_mesh(false);
+	init_mesh(false, true);
 }
 
 void GLWidget::load_mesh(const QString& filename) {
@@ -390,7 +399,7 @@ void GLWidget::load_mesh(const QString& filename) {
 
 	cout << "GLWidget::load_mesh - initialising mesh..." << endl;
 
-	init_mesh(true);
+	init_mesh(true, true);
 }
 
 void GLWidget::clear_mesh() {
@@ -423,14 +432,21 @@ void GLWidget::change_polygon_mode() {
 }
 
 void GLWidget::set_curvature_display(const curv_type& cd) {
-	change_curv_display = cd;
+	to_curv_display = cd;
 }
 
 void GLWidget::change_curvature_display() {
 	curvature_values.clear();
 
-	if (change_curv_display == curv_type::none) {
-		curv_display = curv_type::none;
+	// make all buffers only if the colour buffer
+	// was not made before
+	bool make_all_buffers = false;
+	if (current_curv_display == curv_type::none) {
+		make_all_buffers = true;
+	}
+
+	if (to_curv_display == curv_type::none) {
+		current_curv_display = curv_type::none;
 
 		// free only the colour buffer
 		mesh.free_buffers();
@@ -451,14 +467,14 @@ void GLWidget::change_curvature_display() {
 	// another curvature, do not load program. If, however,
 	// we weren't showing any then load the program.
 	bool load_shader = false;
-	if (curv_display == curv_type::none) {
+	if (current_curv_display == curv_type::none) {
 		load_shader = true;
 	}
 
-	curv_display = change_curv_display;
+	current_curv_display = to_curv_display;
 
 	compute_curvature();
-	show_curvature(load_shader);
+	show_curvature(load_shader, make_all_buffers);
 }
 
 void GLWidget::set_num_threads(size_t _nt) {
