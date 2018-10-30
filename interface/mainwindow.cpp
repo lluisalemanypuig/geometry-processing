@@ -29,6 +29,10 @@ void MainWindow::renderer_change_curvature() {
 void MainWindow::on_action_Open_triggered() {
 
 	QString filename = QFileDialog::getOpenFileName(this, tr("Open PLY"), ".", tr("*.ply"));
+	if (filename == "") {
+		return;
+	}
+
 	if (current_tab == 0) {
 		ui->SingleView_Renderer->load_mesh(filename);
 	}
