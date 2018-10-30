@@ -188,7 +188,7 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program) {
 		cerr << "        Vertex buffer object 'vboVertices' not created." << endl;
 		return false;
 	}
-	vbo_vertices.setUsagePattern(QOpenGLBuffer::StaticDraw);
+	vbo_vertices.setUsagePattern(QOpenGLBuffer::DynamicDraw);
 	program->enableAttributeArray(0);
 	program->setAttributeBuffer(0, GL_FLOAT, 0, 3, 0);
 
@@ -297,7 +297,7 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>&
 		cerr << "        Vertex buffer object 'vbo_vertices' not created." << endl;
 		return false;
 	}
-	vbo_vertices.setUsagePattern(QOpenGLBuffer::StaticDraw);
+	vbo_vertices.setUsagePattern(QOpenGLBuffer::DynamicDraw);
 	program->enableAttributeArray(0);
 	program->setAttributeBuffer(0, GL_FLOAT, 0, 3, 0);
 
@@ -393,6 +393,44 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>&
 	return true;
 }
 
+bool RenderTriangleMesh::make_vertices(QOpenGLShaderProgram *program) {
+	// make vertex information
+	vector<vec3> vert_info;
+	vert_info.resize(triangles.size());
+
+	for (unsigned int i = 0; i < triangles.size(); i += 3) {
+		vert_info[i    ] = vertices[triangles[i    ]];
+		vert_info[i + 1] = vertices[triangles[i + 1]];
+		vert_info[i + 2] = vertices[triangles[i + 2]];
+	}
+
+	/* ------------------ */
+	/* Create the vertex array/buffer objects. */
+	bool program_bind = program->bind();
+	if (not program_bind) {
+		cerr << "    TriangleMesh::init - Warning:" << endl;
+		cerr << "        shader program was not bound" << endl;
+		return false;
+	}
+
+	vao.bind();
+
+	/* ----- VBO fill ----- */
+	bool vertices_bind = vbo_vertices.bind();
+	if (not vertices_bind) {
+		cerr << "    TriangleMesh::init - Warning:" << endl;
+		cerr << "        vertices buffer object was not bound" << endl;
+	}
+	vbo_vertices.allocate(&vert_info[0], 3*sizeof(float)*vert_info.size());
+	vbo_vertices.release();
+
+	/* ----- VAO,SHADER release ----- */
+	vao.release();
+	program->release();
+
+	return true;
+}
+
 bool RenderTriangleMesh::make_colours(QOpenGLShaderProgram *program, const vector<vec3>& colors) {
 	// make colours information
 	vector<vec3> cols(triangles.size());
@@ -408,6 +446,7 @@ bool RenderTriangleMesh::make_colours(QOpenGLShaderProgram *program, const vecto
 	if (not program_bind) {
 		cerr << "    TriangleMesh::init - Warning:" << endl;
 		cerr << "        shader program was not bound" << endl;
+		return false;
 	}
 
 	vao.bind();

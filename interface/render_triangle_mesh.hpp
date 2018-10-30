@@ -115,7 +115,20 @@ class RenderTriangleMesh : public TriangleMesh {
 		 */
 		bool init(QOpenGLShaderProgram *program, const vector<vec3>& colors);
 
+		/**
+		 * @brief Remakes the vertex buffer object.
+		 * @pre The vertex buffer object must have been previously created.
+		 * @return Returns false on error.
+		 */
+		bool make_vertices(QOpenGLShaderProgram *program);
+
+		/**
+		 * @brief Remakes the colour buffer object.
+		 * @pre The colour buffer object must have been previously created.
+		 * @return Returns false on error.
+		 */
 		bool make_colours(QOpenGLShaderProgram *program, const vector<vec3>& colors);
+
 		/**
 		 * @brief Frees all the memoery occupied by the mesh.
 		 *

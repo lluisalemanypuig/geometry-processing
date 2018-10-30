@@ -63,36 +63,29 @@ void TwinGLWidget::set_weight_type(const smooth_weight& w) {
 // OTHERS
 
 void TwinGLWidget::run_smoothing_algorithm() {
+	cout << "Smoothed with operator ";
 	timing::time_point begin = timing::now();
 	if (op == smoothing_operator::Laplacian) {
+		cout << "'Laplacian'";
 		algorithms::smoothing::laplacian(wt, lambda, nit, mesh);
 	}
 	else if (op == smoothing_operator::biLaplacian) {
+		cout << "'biLaplacian'";
 		algorithms::smoothing::bilaplacian(wt, lambda, nit, mesh);
 	}
 	else if (op == smoothing_operator::Taubin) {
+		cout << "'Taubin'";
 		algorithms::smoothing::TaubinLM(wt, lambda, nit, mesh);
 	}
 	timing::time_point end = timing::now();
 
 	// output execution time
-	cout << "Smoothed with operator ";
-	if (op == smoothing_operator::Laplacian) {
-		cout << "'Laplacian'";
-	}
-	else if (op == smoothing_operator::biLaplacian) {
-		cout << "'biLaplacian'";
-	}
-	else if (op == smoothing_operator::Taubin) {
-		cout << "'Taubin'";
-	}
 	cout << " curvature computed in "
 		 << timing::elapsed_seconds(begin,end)
 		 << " seconds" << endl;
 
 	// update mesh
 	makeCurrent();
-	mesh.free_buffers();
 	mesh.init(program);
 	doneCurrent();
 	update();
