@@ -178,7 +178,10 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program) {
 	vbo_vertices.destroy();
 	vbo_vertices.create();
 	if (vbo_vertices.isCreated()) {
-		vbo_vertices.bind();
+		if (not vbo_vertices.bind()) {
+			cerr << "    TriangleMesh::init - Warning:" << endl;
+			cerr << "        vertex buffer object not bound" << endl;
+		}
 	}
 	else {
 		cerr << "    TriangleMesh::init - Error:" << endl;
@@ -193,7 +196,10 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program) {
 	vbo_normals.destroy();
 	vbo_normals.create();
 	if (vbo_normals.isCreated()) {
-		vbo_normals.bind();
+		if (not vbo_normals.bind()) {
+			cerr << "    TriangleMesh::init - Warning:" << endl;
+			cerr << "        normals buffer object not bound" << endl;
+		}
 	}
 	else {
 		cerr << "    TriangleMesh::init - Error:" << endl;
@@ -208,7 +214,10 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program) {
 	vbo_triangles.destroy();
 	vbo_triangles.create();
 	if (vbo_triangles.isCreated()) {
-		vbo_triangles.bind();
+		if (not vbo_triangles.bind()) {
+			cerr << "    TriangleMesh::init - Warning:" << endl;
+			cerr << "        triangles buffer object not bound" << endl;
+		}
 	}
 	else {
 		cerr << "    TriangleMesh::init - Error:" << endl;
@@ -217,22 +226,34 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program) {
 	}
 	vbo_triangles.setUsagePattern(QOpenGLBuffer::StaticDraw);
 
-	// fill the vertex buffer objects for correct display.
-	vbo_vertices.bind();
+	/* ----- VBO fill ----- */
+	bool vertices_bind = vbo_vertices.bind();
+	if (not vertices_bind) {
+		cerr << "    TriangleMesh::init - Warning:" << endl;
+		cerr << "        vertices buffer object was not bound" << endl;
+	}
 	vbo_vertices.allocate(&vert_info[0], 3*sizeof(float)*vert_info.size());
 	vbo_vertices.release();
 
-	vbo_normals.bind();
+	bool normals_bind = vbo_normals.bind();
+	if (not normals_bind) {
+		cerr << "    TriangleMesh::init - Warning:" << endl;
+		cerr << "        normals buffer object was not bound" << endl;
+	}
 	vbo_normals.allocate(&normals[0], 3*sizeof(float)*normals.size());
 	vbo_normals.release();
 
-	vbo_triangles.bind();
+	bool triangles_bind = vbo_triangles.bind();
+	if (not triangles_bind) {
+		cerr << "    TriangleMesh::init - Warning:" << endl;
+		cerr << "        triangles buffer object was not bound" << endl;
+	}
 	vbo_triangles.allocate(&perFaceTriangles[0], sizeof(unsigned int)*perFaceTriangles.size());
 	vbo_triangles.release();
 
+	/* ----- VAO,SHADER release ----- */
 	vao.release();
 	program->release();
-	/* ----- VAO release ----- */
 
 	return true;
 }
@@ -244,7 +265,11 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>&
 
 	/* ------------------ */
 	/* Create the vertex array/buffer objects. */
-	program->bind();
+	bool program_bind = program->bind();
+	if (not program_bind) {
+		cerr << "    TriangleMesh::init - Warning:" << endl;
+		cerr << "        shader program was not bound" << endl;
+	}
 
 	/* ----- VAO create ----- */
 	vao.destroy();
@@ -262,7 +287,10 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>&
 	vbo_vertices.destroy();
 	vbo_vertices.create();
 	if (vbo_vertices.isCreated()) {
-		vbo_vertices.bind();
+		if (not vbo_vertices.bind()) {
+			cerr << "    TriangleMesh::init - Warning:" << endl;
+			cerr << "        vertex buffer object not bound" << endl;
+		}
 	}
 	else {
 		cerr << "    TriangleMesh::init - Error:" << endl;
@@ -277,7 +305,10 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>&
 	vbo_normals.destroy();
 	vbo_normals.create();
 	if (vbo_normals.isCreated()) {
-		vbo_normals.bind();
+		if (not vbo_normals.bind()) {
+			cerr << "    TriangleMesh::init - Warning:" << endl;
+			cerr << "        normals buffer object not bound" << endl;
+		}
 	}
 	else {
 		cerr << "    TriangleMesh::init - Error:" << endl;
@@ -292,14 +323,17 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>&
 	vbo_colors.destroy();
 	vbo_colors.create();
 	if (vbo_colors.isCreated()) {
-		vbo_colors.bind();
+		if (not vbo_colors.bind()) {
+			cerr << "    TriangleMesh::init - Warning:" << endl;
+			cerr << "        colours buffer object not bound" << endl;
+		}
 	}
 	else {
 		cerr << "    TriangleMesh::init - Error:" << endl;
 		cerr << "        Vertex buffer object 'vbo_colors' not created." << endl;
 		return false;
 	}
-	vbo_colors.setUsagePattern(QOpenGLBuffer::StaticDraw);
+	vbo_colors.setUsagePattern(QOpenGLBuffer::DynamicDraw);
 	program->enableAttributeArray(2);
 	program->setAttributeBuffer(2, GL_FLOAT, 0, 3, 0);
 
@@ -307,7 +341,10 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>&
 	vbo_triangles.destroy();
 	vbo_triangles.create();
 	if (vbo_triangles.isCreated()) {
-		vbo_triangles.bind();
+		if (not vbo_triangles.bind()) {
+			cerr << "    TriangleMesh::init - Warning:" << endl;
+			cerr << "        triangles buffer object not bound" << endl;
+		}
 	}
 	else {
 		cerr << "    TriangleMesh::init - Error:" << endl;
@@ -317,21 +354,68 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>&
 	vbo_triangles.setUsagePattern(QOpenGLBuffer::StaticDraw);
 
 	/* ----- VBO fill ----- */
-	vbo_vertices.bind();
+	bool vertices_bind = vbo_vertices.bind();
+	if (not vertices_bind) {
+		cerr << "    TriangleMesh::init - Warning:" << endl;
+		cerr << "        vertices buffer object was not bound" << endl;
+	}
 	vbo_vertices.allocate(&vert_info[0], 3*sizeof(float)*vert_info.size());
 	vbo_vertices.release();
 
-	vbo_normals.bind();
+	bool normals_bind = vbo_normals.bind();
+	if (not normals_bind) {
+		cerr << "    TriangleMesh::init - Warning:" << endl;
+		cerr << "        normals buffer object was not bound" << endl;
+	}
 	vbo_normals.allocate(&normals[0], 3*sizeof(float)*normals.size());
 	vbo_normals.release();
 
-	vbo_colors.bind();
+	bool colors_bind = vbo_colors.bind();
+	if (not colors_bind) {
+		cerr << "    TriangleMesh::init - Warning:" << endl;
+		cerr << "        colours buffer object was not bound" << endl;
+	}
 	vbo_colors.allocate(&cols[0], 3*sizeof(float)*cols.size());
 	vbo_colors.release();
 
-	vbo_triangles.bind();
+	bool triangles_bind = vbo_triangles.bind();
+	if (not triangles_bind) {
+		cerr << "    TriangleMesh::init - Warning:" << endl;
+		cerr << "        triangles buffer object was not bound" << endl;
+	}
 	vbo_triangles.allocate(&perFaceTriangles[0], sizeof(unsigned int)*perFaceTriangles.size());
 	vbo_triangles.release();
+
+	/* ----- VAO,SHADER release ----- */
+	vao.release();
+	program->release();
+
+	return true;
+}
+
+bool RenderTriangleMesh::make_colours(QOpenGLShaderProgram *program, const vector<vec3>& colors) {
+	vector<vec3> vert_info, cols, normals;
+	vector<unsigned int> perFaceTriangles;
+	make_VBO_data(colors, vert_info, cols, normals, perFaceTriangles);
+
+	/* ------------------ */
+	/* Create the vertex array/buffer objects. */
+	bool program_bind = program->bind();
+	if (not program_bind) {
+		cerr << "    TriangleMesh::init - Warning:" << endl;
+		cerr << "        shader program was not bound" << endl;
+	}
+
+	vao.bind();
+
+	/* ----- VBO fill ----- */
+	bool colors_bind = vbo_colors.bind();
+	if (not colors_bind) {
+		cerr << "    TriangleMesh::init - Warning:" << endl;
+		cerr << "        colours buffer object was not bound" << endl;
+	}
+	vbo_colors.allocate(&cols[0], 3*sizeof(float)*cols.size());
+	vbo_colors.release();
 
 	/* ----- VAO,SHADER release ----- */
 	vao.release();
@@ -345,6 +429,11 @@ void RenderTriangleMesh::free_buffers() {
 	vbo_vertices.destroy();
 	vbo_normals.destroy();
 	vbo_triangles.destroy();
+	free_colour_buffer();
+}
+
+void RenderTriangleMesh::free_colour_buffer() {
+	vbo_colors.destroy();
 }
 
 // GETTERS

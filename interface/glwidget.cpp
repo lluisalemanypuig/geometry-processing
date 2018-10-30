@@ -2,6 +2,7 @@
 
 // C++ includes
 #include <iostream>
+#include <fstream>
 #include <limits>
 using namespace std;
 
@@ -28,7 +29,8 @@ void make_colors_rainbow_gradient
 	// minimum and maximum values of curvature
 	float cm = numeric_limits<float>::max();
 	float cM = -numeric_limits<float>::max();
-	for (float v : values) {
+	for (size_t i = 0; i < values.size(); ++i) {
+		float v = values[i];
 		if (ct == curv_type::Gauss) {
 			if (v < -2*M_PI or v > 2*M_PI) {
 				// if the curvature is outside [-2pi,2pi]
@@ -140,6 +142,7 @@ void GLWidget::set_modelview() {
 void GLWidget::delete_program() {
 	if (program != nullptr) {
 		delete program;
+		program = nullptr;
 	}
 }
 
@@ -180,33 +183,36 @@ void GLWidget::load_curvature_shader() {
 void GLWidget::compute_curvature() {
 	timing::time_point begin = timing::now();
 	if (curv_display == curv_type::Gauss) {
+		cout << "    Gauss ";
 		algorithms::curvature::Gauss(mesh, curvature_values, nt);
 	}
 	else if (curv_display == curv_type::Mean) {
+		cout << "    Mean ";
 		algorithms::curvature::mean(mesh, curvature_values, nt);
 	}
 	timing::time_point end = timing::now();
 
 	// output execution time
-	if (curv_display == curv_type::Gauss) {
-		cout << "Gauss ";
-	}
-	else if (curv_display == curv_type::Mean) {
-		cout << "Mean ";
-	}
 	cout << "curvature computed in "
 		 << timing::elapsed_seconds(begin,end)
 		 << " seconds" << endl;
 }
 
-void GLWidget::show_curvature(bool load_shader) {
-	if (load_shader) {
+void GLWidget::show_curvature(bool should_load) {
+	cout << "GLWidget::show_curvature - should the shader be loaded? "
+		 << (should_load ? "Yes" : "No") << endl;
+
+	if (should_load) {
+		cout << "GLWidget::show_curvature - load curvature shader" << endl;
+
 		makeCurrent();
 		load_curvature_shader();
 		set_projection();
 		set_modelview();
 		doneCurrent();
 	}
+
+	cout << "GLWidget::show_curvature - make colours with curvature" << endl;
 
 	vector<vec3> colors;
 	make_colors_rainbow_gradient(curvature_values, curv_display, colors);
@@ -218,27 +224,31 @@ void GLWidget::show_curvature(bool load_shader) {
 }
 
 void GLWidget::init_mesh(bool make_neigh) {
-	cout << "GLWidget: initialising mesh..." << endl;
+	cout << "GLWidget::init_mesh - initialising mesh..." << endl;
 
 	makeCurrent();
 	if (not mesh.init(program)) {
-		cerr << "GLWidget::load_mesh - Error:" << endl;
+		cerr << "GLWidget::init_mesh - Error:" << endl;
 		cerr << "    Could not initialise mesh." << endl;
 		QApplication::quit();
 	}
 	doneCurrent();
 	update();
 
+	cout << "GLWidget::init_mesh - corner edge data..." << endl;
 	if (make_neigh) {
 		mesh.make_neighbourhood_data();
 	}
 
 	if (curv_display != curv_type::none) {
+		cout << "GLWidget::init_mesh - displaying curvature" << endl;
+		cout << "    computing curvature..." << endl;
 		compute_curvature();
+		cout << "    displaying curvature..." << endl;
 		show_curvature(false);
 	}
 
-	cout << "GLWidget: initialised succesfully!" << endl;
+	cout << "GLWidget::init_mesh - initialised succesfully!" << endl;
 }
 
 void GLWidget::initializeGL() {
@@ -356,9 +366,7 @@ GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
 }
 
 GLWidget::~GLWidget() {
-	if (program) {
-		delete program;
-	}
+	delete_program();
 }
 
 void GLWidget::set_mesh(const RenderTriangleMesh& rm) {
@@ -375,10 +383,12 @@ void GLWidget::load_mesh(const QString& filename) {
 	mesh.free_buffers();
 	mesh.destroy();
 
-	cout << "GLWidget: reading mesh..." << endl;
+	cout << "GLWidget::load_mesh - reading mesh..." << endl;
 
 	PLY_reader::read_mesh(filename.toStdString(), mesh);
 	mesh.scale_to_unit();
+
+	cout << "GLWidget::load_mesh - initialising mesh..." << endl;
 
 	init_mesh(true);
 }
@@ -417,17 +427,13 @@ void GLWidget::set_curvature_display(const curv_type& cd) {
 }
 
 void GLWidget::change_curvature_display() {
+	curvature_values.clear();
+
 	if (change_curv_display == curv_type::none) {
 		curv_display = curv_type::none;
 
-		curvature_values.clear();
+		// free only the colour buffer
 		mesh.free_buffers();
-
-		/* At this step the buffers of the mesh are
-		 * cleared because there is information that
-		 * we no longer want, and could interfere in the
-		 * rendering. This buffer is the 'vbo_colors'.
-		 */
 
 		makeCurrent();
 		load_simple_shader();
@@ -435,8 +441,8 @@ void GLWidget::change_curvature_display() {
 		set_modelview();
 		mesh.init(program);
 		doneCurrent();
-
 		update();
+
 		return;
 	}
 

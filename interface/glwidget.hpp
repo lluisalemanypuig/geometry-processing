@@ -54,7 +54,7 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		void load_curvature_shader();
 
 		void compute_curvature();
-		void show_curvature(bool load_shader = false);
+		void show_curvature(bool should_load_shader = false);
 
 		/**
 		 * @brief Initialises a mesh.

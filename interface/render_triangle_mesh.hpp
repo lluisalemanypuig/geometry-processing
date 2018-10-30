@@ -114,6 +114,8 @@ class RenderTriangleMesh : public TriangleMesh {
 		 * @return Returns false on error.
 		 */
 		bool init(QOpenGLShaderProgram *program, const vector<vec3>& colors);
+
+		bool make_colours(QOpenGLShaderProgram *program, const vector<vec3>& colors);
 		/**
 		 * @brief Frees all the memoery occupied by the mesh.
 		 *
@@ -124,6 +126,9 @@ class RenderTriangleMesh : public TriangleMesh {
 		 * @ref vbo_triangles.
 		 */
 		void free_buffers();
+
+		/// Free the colour buffer.
+		void free_colour_buffer();
 
 		// OTHERS
 
