@@ -5,10 +5,7 @@
 #include <omp.h>
 
 // C++ includes
-#include <iostream>
-#include <fstream>
 #include <cmath>
-using namespace std;
 
 // glm includes
 #include <glm/glm.hpp>
@@ -23,12 +20,12 @@ namespace curvature {
 	/* ------------------------------ */
 	/* --------- SEQUENTIAL --------- */
 
-	void Gauss(const TriangleMesh& m, std::vector<float>& Kg) {
+	inline void Gauss(const TriangleMesh& m, std::vector<float>& Kg) {
 		const int nT = m.n_triangles();
 		const int nV = m.n_vertices();
 
 		// Gauss curvature per vertex
-		Kg.resize(nV, 0.0f);
+		Kg = std::vector<float>(nV, 0.0f);
 
 		// Angle around each vertex.
 		// Define this array to contain:
@@ -53,6 +50,7 @@ namespace curvature {
 			// area of a triangle once and accumulating it to
 			// each of its vertices.
 			area = m.get_triangle_area(i0,i1,i2);
+
 			Kg[i0] += area;
 			Kg[i1] += area;
 			Kg[i2] += area;
@@ -93,8 +91,7 @@ namespace curvature {
 	/* ---------------------------- */
 	/* --------- PARALLEL --------- */
 
-	inline
-	float Kg_curvature_at(const TriangleMesh& m, int v) {
+	inline float Kg_curvature_at(const TriangleMesh& m, int v) {
 
 		// sum of angles incident to 'v'
 		float angle_sum = 0.0f;
@@ -151,7 +148,7 @@ namespace curvature {
 		}
 
 		const int N = m.n_vertices();
-		Kg.resize(N, 0.0f);
+		Kg = std::vector<float>(N, 0.0f);
 
 		#pragma omp parallel for num_threads(nt)
 		for (int i = 0; i < N; ++i) {
