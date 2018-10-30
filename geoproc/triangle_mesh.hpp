@@ -55,6 +55,11 @@ class TriangleMesh {
 		 */
 		std::vector<std::pair<int,int> > boundary;
 
+		/// Minimum value of x-,y-, and z-coordinates.
+		glm::vec3 min_coord;
+		/// Maximum value of x-,y-, and z-coordinates.
+		glm::vec3 max_coord;
+
 	protected:
 		/**
 		 * @brief Copies mesh @e m contents into this one.
@@ -137,6 +142,14 @@ class TriangleMesh {
 		 * vertices and triangles have been added.
 		 */
 		void make_neighbourhood_data();
+
+		/**
+		 * @brief Makes the bounding box of the mesh.
+		 *
+		 * Computes the minimum and maximum coordinates (see @ref min,
+		 * and @ref max).
+		 */
+		void make_bounding_box();
 
 		/**
 		 * @brief Frees all the memoery occupied by the mesh.
@@ -246,6 +259,13 @@ class TriangleMesh {
 		 * @param k A valid vertex index.
 		 */
 		float get_triangle_area(int i, int j, int k) const;
+
+		/**
+		 * @brief Returns the minimum and maximum coordinates.
+		 * @param[out] m Minimum x-,y-,z- coordinates.
+		 * @param[out] M Maximum x-,y-,z- coordinates.
+		 */
+		void get_min_max_coordinates(glm::vec3& m, glm::vec3& M) const;
 
 };
 

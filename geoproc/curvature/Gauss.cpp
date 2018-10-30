@@ -5,7 +5,10 @@
 #include <omp.h>
 
 // C++ includes
+#include <iostream>
+#include <fstream>
 #include <cmath>
+using namespace std;
 
 // glm includes
 #include <glm/glm.hpp>
@@ -17,15 +20,15 @@
 namespace algorithms {
 namespace curvature {
 
-	/* ---------------------------- */
-	/* --------- PARALLEL --------- */
+	/* ------------------------------ */
+	/* --------- SEQUENTIAL --------- */
 
 	void Gauss(const TriangleMesh& m, std::vector<float>& Kg) {
 		const int nT = m.n_triangles();
 		const int nV = m.n_vertices();
 
 		// Gauss curvature per vertex
-		Kg.resize(nV);
+		Kg.resize(nV, 0.0f);
 
 		// Angle around each vertex.
 		// Define this array to contain:
@@ -39,6 +42,7 @@ namespace curvature {
 		glm::vec3 u,v;
 
 		// Compute sum of areas of triangles
+		// and angle around each vertex
 		for (int t = 0; t < nT; ++t) {
 			m.get_vertices_triangle(t, i0,i1,i2);
 
@@ -147,7 +151,7 @@ namespace curvature {
 		}
 
 		const int N = m.n_vertices();
-		Kg.resize(N);
+		Kg.resize(N, 0.0f);
 
 		#pragma omp parallel for num_threads(nt)
 		for (int i = 0; i < N; ++i) {

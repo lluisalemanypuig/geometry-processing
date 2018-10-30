@@ -8,7 +8,6 @@
 #include <algorithm>
 #include <iostream>
 #include <cmath>
-using namespace std;
 
 struct CornerEdge {
 	int vertexA, vertexB, corner;
@@ -46,6 +45,9 @@ void TriangleMesh::copy_mesh(const TriangleMesh& m) {
 	opposite_corners = m.opposite_corners;
 	corners = m.corners;
 	boundary = m.boundary;
+
+	min_coord = m.min_coord;
+	max_coord = m.max_coord;
 }
 
 // PUBLIC
@@ -67,11 +69,13 @@ void TriangleMesh::set_vertex(int vi, const glm::vec3& v) {
 	vertices[vi] = v;
 }
 
-void TriangleMesh::set_vertices(const vector<float>& coords){
+void TriangleMesh::set_vertices(const std::vector<float>& coords){
 	assert(coords.size()%3 == 0);
 	vertices.resize(coords.size()/3);
 	for (size_t i = 0; i < coords.size(); i += 3) {
-		vertices[i/3] = glm::vec3(coords[i], coords[i+1], coords[i+2]);
+		vertices[i/3].x = coords[i];
+		vertices[i/3].y = coords[i+1];
+		vertices[i/3].z = coords[i+2];
 	}
 	vertices.shrink_to_fit();
 }
@@ -83,13 +87,13 @@ void TriangleMesh::set_vertices(const glm::vec3 *vs, int N) {
 	vertices.shrink_to_fit();
 }
 
-void TriangleMesh::set_vertices(const vector<glm::vec3>& vs) {
+void TriangleMesh::set_vertices(const std::vector<glm::vec3>& vs) {
 	vertices.resize(vs.size());
 	std::copy(vs.begin(), vs.end(), vertices.begin());
 	vertices.shrink_to_fit();
 }
 
-void TriangleMesh::set_triangles(const vector<int>& tris) {
+void TriangleMesh::set_triangles(const std::vector<int>& tris) {
 	triangles.resize(tris.size());
 	std::copy(tris.begin(), tris.end(), triangles.begin());
 	triangles.shrink_to_fit();
@@ -107,7 +111,7 @@ void TriangleMesh::scale_to_unit() {
 	}
 	center /= vertices.size();
 
-	float largestSize = max(M.x - m.x, max(M.y - m.y, M.z - m.z));
+	float largestSize = std::max(M.x - m.x, std::max(M.y - m.y, M.z - m.z));
 
 	for (unsigned int i = 0; i < vertices.size(); ++i) {
 		vertices[i] = (vertices[i] - center)/largestSize;
@@ -154,7 +158,7 @@ void TriangleMesh::make_neighbourhood_data() {
 	 *     opposite_cornes[o] = c
 	 *     opposite_cornes[c] = o
 	 */
-	vector<CornerEdge> data;
+	std::vector<CornerEdge> data;
 	for (unsigned int i = 0; i < triangles.size(); i += 3) {
 		int c0 = i;
 		int c1 = i + 1;
@@ -196,21 +200,22 @@ void TriangleMesh::make_neighbourhood_data() {
 		else {
 			// this single CornerEdge contains
 			// an edge of the boundary -> hard boundary
-			boundary.push_back( make_pair(vA, vB) );
-			cout << "Boundary in edge (" << vA << "," << vB << ")" << endl;
-			cout << "    "
+			boundary.push_back( std::make_pair(vA, vB) );
+			std::cout << "Boundary in edge (" << vA << "," << vB << ")" << std::endl;
+			std::cout << "    "
 					  << vertices[vA].x << ","
 					  << vertices[vA].y << ","
-					  << vertices[vA].z << endl;
-			cout << "    "
+					  << vertices[vA].z << std::endl;
+			std::cout << "    "
 					  << vertices[vB].x << ","
 					  << vertices[vB].y << ","
-					  << vertices[vB].z << endl;
+					  << vertices[vB].z << std::endl;
 		}
 	}
 	if (boundary.size() > 0) {
-		cerr << "Warning: this mesh contains boundary(ies)" << endl;
-		cerr << "    Computing Some curvatures may lead to a crash of the application" << endl;
+		std::cerr << "Warning: this mesh contains boundary(ies)" << std::endl;
+		std::cerr << "    Computing Some curvatures may lead to"
+				  << " a crash of the application" << std::endl;
 	}
 
 	#if defined (DEBUG)
@@ -224,8 +229,8 @@ void TriangleMesh::make_neighbourhood_data() {
 			 *     opposite_corners[c] = o <-> opposite_corners[o] = c
 			 */
 			if ((int)(i) != c) {
-				cerr << "         corner " << i << " has opposite " << o << endl;
-				cerr << "however, corner " << o << " has opposite " << c << endl;
+				std::cerr << "         corner " << i << " has opposite " << o << std::endl;
+				std::cerr << "however, corner " << o << " has opposite " << c << std::endl;
 				sane = false;
 			}
 		}
@@ -233,6 +238,15 @@ void TriangleMesh::make_neighbourhood_data() {
 	}
 	assert( sane );
 	#endif
+}
+
+void TriangleMesh::make_bounding_box() {
+	min_coord = vertices[0];
+	max_coord = vertices[0];
+	for (int i = 1; i < vertices.size(); ++i) {
+		min_coord = glm::min(min_coord, vertices[i]);
+		max_coord = glm::max(max_coord, vertices[i]);
+	}
 }
 
 void TriangleMesh::destroy() {
@@ -304,7 +318,7 @@ const glm::vec3& TriangleMesh::get_vertex(int v) const {
 	return vertices[v];
 }
 
-const vector<glm::vec3>& TriangleMesh::get_vertices() const {
+const std::vector<glm::vec3>& TriangleMesh::get_vertices() const {
 	return vertices;
 }
 
@@ -324,4 +338,9 @@ float TriangleMesh::get_triangle_area(int i, int j, int k) const {
 	glm::vec3 ik = vertices[k] - vertices[i];
 	glm::vec3 c = glm::cross(ij, ik);
 	return glm::length(c)/2.0f;
+}
+
+void TriangleMesh::get_min_max_coordinates(glm::vec3& m, glm::vec3& M) const {
+	m = min_coord;
+	M = max_coord;
 }
