@@ -48,20 +48,18 @@ namespace curvature {
 		for (int t = 0; t < nT; ++t) {
 			m.get_vertices_triangle(t, i0,i1,i2);
 
-			// get area of triangle
+			// -- Accumulate areas --
+			// when the triangle has an angle that is larger
+			// than 90 degrees (pi/4) then the area contributes
+			// only by half.
 			area = mesh_areas[t];
 			if (
-				mesh_angles[t].x > M_PI_4 or
-				mesh_angles[t].y > M_PI_4 or
+				mesh_angles[t].x > M_PI_4 or mesh_angles[t].y > M_PI_4 or
 				mesh_angles[t].z > M_PI_4
 			)
 			{
-				// when the triangle has an angle that is larger
-				// than 90 degrees (pi/4) then the area contributes
-				// only by half.
 				area /= 2.0f;
 			}
-
 			Kg[i0] += area;
 			Kg[i1] += area;
 			Kg[i2] += area;
@@ -115,8 +113,19 @@ namespace curvature {
 		do {
 			// process current face (f)
 
-			// accumulate area
-			vor_area += mesh_areas[f];
+			// -- Accumulate area --
+			// when the triangle has an angle that is larger
+			// than 90 degrees (pi/4) then the area contributes
+			// only by half.
+			float area = mesh_areas[f];
+			if (
+				mesh_angles[f].x > M_PI_4 or mesh_angles[f].y > M_PI_4 or
+				mesh_angles[f].z > M_PI_4
+			)
+			{
+				area /= 2.0f;
+			}
+			vor_area += area;
 
 			// index vertices of current face
 			int i,j,k;
