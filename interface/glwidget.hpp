@@ -10,7 +10,6 @@
 
 // Custom includes
 #include "render_triangle_mesh.hpp"
-#include "utils.hpp"
 
 enum class polymode : int8_t {
 	none = -1,
@@ -63,7 +62,7 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		 * @brief Initialises a mesh.
 		 * @param make_neigh True if neighbourhood data is to be made.
 		 */
-		void init_mesh(bool make_neigh, bool make_all_buffers);
+		void init_mesh(bool make_all_buffers);
 
 		void initializeGL();
 		void resizeGL(int w, int h);

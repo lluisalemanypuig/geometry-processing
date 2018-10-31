@@ -146,6 +146,8 @@ void MainWindow::on_PB_ResetSmooth_clicked() {
 void MainWindow::on_SBThreads_valueChanged(int val) {
 	size_t n_threads = static_cast<size_t>(val);
 	ui->SingleView_Renderer->set_num_threads(n_threads);
+	ui->DualView_LeftRenderer->set_num_threads(n_threads);
+	ui->DualView_RightRenderer->set_num_threads(n_threads);
 }
 
 void MainWindow::on_PB_ClearMesh_clicked() {
