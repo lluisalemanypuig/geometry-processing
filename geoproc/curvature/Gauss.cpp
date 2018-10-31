@@ -5,6 +5,7 @@
 #include <omp.h>
 
 // C++ includes
+#include <iostream>
 #include <cmath>
 
 // glm includes
@@ -20,9 +21,14 @@ namespace curvature {
 	/* ------------------------------ */
 	/* --------- SEQUENTIAL --------- */
 
-	inline void Gauss(const TriangleMesh& m, std::vector<float>& Kg) {
+	// Use a different algorithm from the one used for
+	// the parallel computation of the curvature
+	void Gauss(const TriangleMesh& m, std::vector<float>& Kg) {
+		// mesh info
 		const int nT = m.n_triangles();
 		const int nV = m.n_vertices();
+		const std::vector<float>& mesh_areas = m.get_areas();
+		const std::vector<glm::vec3>& mesh_angles = m.get_angles();
 
 		// Gauss curvature per vertex
 		Kg = std::vector<float>(nV, 0.0f);
@@ -36,45 +42,28 @@ namespace curvature {
 
 		int i0,i1,i2;
 		float area;
-		glm::vec3 u,v;
 
 		// Compute sum of areas of triangles
 		// and angle around each vertex
 		for (int t = 0; t < nT; ++t) {
 			m.get_vertices_triangle(t, i0,i1,i2);
 
-			// When iterating around a vertex, we will compute
-			// the areas of the adjacent triangles. For several
-			// vertices, each area will be computed three times.
-			// Avoid redundant computation by computing the
-			// area of a triangle once and accumulating it to
-			// each of its vertices.
-			area = m.get_triangle_area(i0,i1,i2);
-
+			// get area of triangle
+			area = mesh_areas[t];
 			Kg[i0] += area;
 			Kg[i1] += area;
 			Kg[i2] += area;
 
 			// Similarly for the angles.
 
-			const glm::vec3& v0 = m.get_vertex(i0);
-			const glm::vec3& v1 = m.get_vertex(i1);
-			const glm::vec3& v2 = m.get_vertex(i2);
-
 			// angle <1,0,2>
-			u = glm::normalize( v1 - v0 );
-			v = glm::normalize( v2 - v0 );
-			angles[i0] -= glm::acos( glm::dot(u,v) );
+			angles[i0] -= mesh_angles[t].x;
 
 			// angle <0,1,2>
-			u = glm::normalize( v0 - v1 );
-			v = glm::normalize( v2 - v1 );
-			angles[i1] -= glm::acos( glm::dot(u,v) );
+			angles[i1] -= mesh_angles[t].y;
 
 			// angle <1,2,0>
-			u = glm::normalize( v0 - v2 );
-			v = glm::normalize( v1 - v2 );
-			angles[i2] -= glm::acos( glm::dot(u,v) );
+			angles[i2] -= mesh_angles[t].z;
 		}
 
 		// once the angles have computed, and the area
@@ -91,7 +80,10 @@ namespace curvature {
 	/* ---------------------------- */
 	/* --------- PARALLEL --------- */
 
-	inline float Kg_curvature_at(const TriangleMesh& m, int v) {
+	inline float Kg_at_vertex_par(const TriangleMesh& m, int v) {
+		// mesh info
+		const std::vector<float>& mesh_areas = m.get_areas();
+		const std::vector<glm::vec3>& mesh_angles = m.get_angles();
 
 		// sum of angles incident to 'v'
 		float angle_sum = 0.0f;
@@ -107,29 +99,27 @@ namespace curvature {
 			return 0.0;
 		}
 
-		glm::vec3 ij,ik;
-		int next;
+		int f = it.current();
 		do {
-			// current face
-			int f = it.current();
+			// process current face (f)
+
+			// accumulate area
+			vor_area += mesh_areas[f];
 
 			// index vertices of current face
 			int i,j,k;
-			m.get_vertices_triangle(f, v, i,j,k);
+			m.get_vertices_triangle(f, i,j,k);
 
-			// accumulate area
-			vor_area += m.get_triangle_area(i,j,k);
+			// accumulate angles
+			if (v == i)		 { angle_sum += mesh_angles[f].x; }
+			else if (v == j) { angle_sum += mesh_angles[f].y; }
+			else if (v == k) { angle_sum += mesh_angles[f].z; }
 
-			// compute and accumulate angles
-			ij = glm::normalize( m.get_vertex(j) - m.get_vertex(i) );
-			ik = glm::normalize( m.get_vertex(k) - m.get_vertex(i) );
-			angle_sum += glm::acos( glm::dot(ij,ik) );
-
-			next = it.next();
+			f = it.next();
 		}
-		while (next != first and next != -1);
+		while (f != first and f != -1);
 
-		if (next == -1) {
+		if (f == -1) {
 			// the computation of the curvature could not
 			// be completed since a boundary was found
 			return 0.0;
@@ -152,7 +142,7 @@ namespace curvature {
 
 		#pragma omp parallel for num_threads(nt)
 		for (int i = 0; i < N; ++i) {
-			Kg[i] = Kg_curvature_at(m, i);
+			Kg[i] = Kg_at_vertex_par(m, i);
 		}
 	}
 

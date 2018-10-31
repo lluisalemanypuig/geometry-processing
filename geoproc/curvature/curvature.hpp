@@ -14,10 +14,14 @@ namespace curvature {
 	 *
 	 * Use the discretisation of the Laplace-Beltrami operator,
 	 * using the cotangents as weights.
+	 *
+	 * If the number of threads given is 1 then
+	 * @ref Gauss(const TriangleMesh&, std::vector<float>&) is called.
 	 * @param mesh Input mesh.
 	 * @param[out] Kg An approximation of the Gauss curvature per vertex.
 	 */
 	void Gauss(const TriangleMesh& mesh, std::vector<float>& Kg);
+
 	/**
 	 * @brief Computes the Gauss curvature for each vertex.
 	 *

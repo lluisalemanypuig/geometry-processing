@@ -37,6 +37,8 @@ struct CornerEdge {
 
 // PRIVATE
 
+// PROTECTED
+
 void TriangleMesh::copy_mesh(const TriangleMesh& m) {
 	destroy();
 
@@ -48,6 +50,17 @@ void TriangleMesh::copy_mesh(const TriangleMesh& m) {
 
 	min_coord = m.min_coord;
 	max_coord = m.max_coord;
+}
+
+float TriangleMesh::get_triangle_area(int i, int j, int k) const {
+	assert(0 <= i and i < n_vertices());
+	assert(0 <= j and j < n_vertices());
+	assert(0 <= k and k < n_vertices());
+
+	glm::vec3 ij = vertices[j] - vertices[i];
+	glm::vec3 ik = vertices[k] - vertices[i];
+	glm::vec3 c = glm::cross(ij, ik);
+	return glm::length(c)/2.0f;
 }
 
 // PUBLIC
@@ -67,6 +80,9 @@ TriangleMesh::~TriangleMesh() {
 void TriangleMesh::set_vertex(int vi, const glm::vec3& v) {
 	assert(0 <= vi and vi < n_vertices());
 	vertices[vi] = v;
+
+	min_coord = glm::min(min_coord, v);
+	max_coord = glm::min(max_coord, v);
 }
 
 void TriangleMesh::set_vertices(const std::vector<float>& coords){
@@ -76,6 +92,9 @@ void TriangleMesh::set_vertices(const std::vector<float>& coords){
 		vertices[i/3].x = coords[i];
 		vertices[i/3].y = coords[i+1];
 		vertices[i/3].z = coords[i+2];
+
+		min_coord = glm::min(min_coord, vertices[i/3]);
+		max_coord = glm::min(max_coord, vertices[i/3]);
 	}
 	vertices.shrink_to_fit();
 }
@@ -83,20 +102,73 @@ void TriangleMesh::set_vertices(const std::vector<float>& coords){
 void TriangleMesh::set_vertices(const glm::vec3 *vs, int N) {
 	assert(vs != nullptr);
 	vertices.resize(N);
-	std::copy(&vs[0], &vs[N - 1], vertices.begin());
+	std::copy_if(
+		vs, vs + N, vertices.begin(),
+		[&](const glm::vec3& v) -> bool {
+			min_coord = glm::min(min_coord, v);
+			max_coord = glm::min(max_coord, v);
+			return true;
+		}
+	);
 	vertices.shrink_to_fit();
 }
 
 void TriangleMesh::set_vertices(const std::vector<glm::vec3>& vs) {
 	vertices.resize(vs.size());
-	std::copy(vs.begin(), vs.end(), vertices.begin());
+	std::copy_if(
+		vs.begin(), vs.end(), vertices.begin(),
+		[&](const glm::vec3& v) -> bool {
+			min_coord = glm::min(min_coord, v);
+			max_coord = glm::min(max_coord, v);
+			return true;
+		}
+	);
 	vertices.shrink_to_fit();
 }
 
 void TriangleMesh::set_triangles(const std::vector<int>& tris) {
 	triangles.resize(tris.size());
-	std::copy(tris.begin(), tris.end(), triangles.begin());
+	angles.resize(triangles.size()/3);
+	areas.resize(triangles.size()/3);
+
+	glm::vec3 u, v;
+	for (int t = 0; t < triangles.size(); t += 3) {
+		// copy corners
+		triangles[t    ] = tris[t    ];
+		triangles[t + 1] = tris[t + 1];
+		triangles[t + 2] = tris[t + 2];
+
+		// fill vectors 'angles', 'areas'
+		int i0 = triangles[t    ];
+		int i1 = triangles[t + 1];
+		int i2 = triangles[t + 2];
+
+		areas[t/3] = get_triangle_area(i0,i1,i2);
+
+		const glm::vec3& v0 = get_vertex(i0);
+		const glm::vec3& v1 = get_vertex(i1);
+		const glm::vec3& v2 = get_vertex(i2);
+
+		// angle <1,0,2>
+		u = glm::normalize( v1 - v0 );
+		v = glm::normalize( v2 - v0 );
+		angles[t/3].x = std::acos( glm::dot(u,v) );
+
+		// angle <0,1,2>
+		u = glm::normalize( v0 - v1 );
+		v = glm::normalize( v2 - v1 );
+		angles[t/3].y = std::acos( glm::dot(u,v) );
+
+		// angle <1,2,0>
+		u = glm::normalize( v0 - v2 );
+		v = glm::normalize( v1 - v2 );
+		angles[t/3].z = std::acos( glm::dot(u,v) );
+	}
+
+	// try optimising consumption of memory
 	triangles.shrink_to_fit();
+	angles.shrink_to_fit();
+	areas.shrink_to_fit();
 }
 
 void TriangleMesh::scale_to_unit() {
@@ -240,21 +312,14 @@ void TriangleMesh::make_neighbourhood_data() {
 	#endif
 }
 
-void TriangleMesh::make_bounding_box() {
-	min_coord = vertices[0];
-	max_coord = vertices[0];
-	for (int i = 1; i < vertices.size(); ++i) {
-		min_coord = glm::min(min_coord, vertices[i]);
-		max_coord = glm::max(max_coord, vertices[i]);
-	}
-}
-
 void TriangleMesh::destroy() {
 	vertices.clear();
 	triangles.clear();
 	opposite_corners.clear();
 	corners.clear();
 	boundary.clear();
+	angles.clear();
+	areas.clear();
 }
 
 // GETTERS
@@ -294,6 +359,7 @@ void TriangleMesh::get_vertices_triangle(int t, int& v0, int& v1, int& v2) const
 }
 
 void TriangleMesh::get_vertices_triangle(int t, int v, int& v0, int& v1, int& v2) const {
+	assert(0 <= t and t < n_triangles());
 	get_vertices_triangle(t, v0,v1,v2);
 
 	// Resort the indexes.
@@ -324,20 +390,15 @@ const std::vector<glm::vec3>& TriangleMesh::get_vertices() const {
 
 float TriangleMesh::get_triangle_area(int t) const {
 	assert(0 <= t and t < n_triangles());
-	int i, j, k;
-	get_vertices_triangle(t, i,j,k);
-	return get_triangle_area(i,j,k);
+	return areas[t];
 }
 
-float TriangleMesh::get_triangle_area(int i, int j, int k) const {
-	assert(0 <= i and i < n_vertices());
-	assert(0 <= j and j < n_vertices());
-	assert(0 <= k and k < n_vertices());
+const std::vector<float>& TriangleMesh::get_areas() const {
+	return areas;
+}
 
-	glm::vec3 ij = vertices[j] - vertices[i];
-	glm::vec3 ik = vertices[k] - vertices[i];
-	glm::vec3 c = glm::cross(ij, ik);
-	return glm::length(c)/2.0f;
+const std::vector<glm::vec3>& TriangleMesh::get_angles() const {
+	return angles;
 }
 
 void TriangleMesh::get_min_max_coordinates(glm::vec3& m, glm::vec3& M) const {

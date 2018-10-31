@@ -22,6 +22,32 @@ class TriangleMesh {
 		 * @ref triangles[i], @ref triangles[i+1], @ref triangles[i+2]
 		 */
 		std::vector<int> triangles;
+
+		/**
+		 * @brief Angles of each triangle.
+		 *
+		 * Position @e i contains three values:
+		 * - angle <1,0,2> (angle incident to 0)
+		 * - angle <0,1,2> (angle incident to 1)
+		 * - angle <1,2,0> (angle incident to 2)
+		 *
+		 * where 0,1,2 represent, respectively, the
+		 * first, second and third vertex of the
+		 * @e i-th triangle.
+		 *
+		 * Notice that its size is @ref n_triangles() or
+		 * @ref n_corners()/3.
+		 */
+		std::vector<glm::vec3> angles;
+
+		/**
+		 * @brief Area of each triangle.
+		 *
+		 * Notice that its size is @ref n_triangles() or
+		 * @ref n_corners()/3.
+		 */
+		std::vector<float> areas;
+
 		/**
 		 * @brief The set of opposite corners.
 		 *
@@ -69,6 +95,15 @@ class TriangleMesh {
 		 */
 		void copy_mesh(const TriangleMesh& m);
 
+		/**
+		 * @brief Assuming the vertices make a triangle, return its area.
+		 *
+		 * @param i A valid vertex index.
+		 * @param j A valid vertex index.
+		 * @param k A valid vertex index.
+		 */
+		float get_triangle_area(int i, int j, int k) const;
+
 	public:
 		/// Default constructor.
 		TriangleMesh();
@@ -81,6 +116,9 @@ class TriangleMesh {
 
 		/**
 		 * @brief Sets the coordinate of a vertex.
+		 *
+		 * It also, computes the minimum and maximum coordinates
+		 * (see @ref min_coord, and @ref max_coord).
 		 * @param vi A valid vertex index: 0 <= @e v < number of vertices.
 		 * @param v The new coordinates of the vertex.
 		 */
@@ -91,6 +129,9 @@ class TriangleMesh {
 		 * Each vertex starts at a position multiple of 3.
 		 * Then, the contents of @ref vertices is set to the
 		 * contents of @e vs.
+		 *
+		 * It also, computes the minimum and maximum coordinates
+		 * (see @ref min_coord, and @ref max_coord).
 		 * @param coords The coordinates of all the vertices.
 		 * The size must be a multiple of 3.
 		 */
@@ -99,7 +140,8 @@ class TriangleMesh {
 		 * @brief Sets the vertices to the mesh.
 		 *
 		 * The contents of @ref vertices is set to the contents of
-		 * @e vs.
+		 * @e vs. It also, computes the minimum and maximum coordinates
+		 * (see @ref min_coord, and @ref max_coord).
 		 * @pre @e vs is not null and points to the first element
 		 * of an array of @e N vertices.
 		 */
@@ -115,10 +157,16 @@ class TriangleMesh {
 		 * @brief Adds the connectivity information to the mesh.
 		 *
 		 * The contents of @e tris are the vertex indices of the
-		 * triangles of the mesh.
+		 * triangles of the mesh. That is, face @e f has vertices
+		 * @ref vertices[3*@e f], @ref vertices[3*@e f + 1],
+		 * @ref vertices[3*@e f + 2].
 		 *
-		 * That is, face @e f has vertices @ref vertices[3*@e f],
-		 * @ref vertices[3*@e f + 1], @ref vertices[3*@e f + 2].
+		 * Once the triangles have been copied, computes the
+		 * angles of each triangle. See @ref angles for details.
+		 * Also, computes the areas of each of the triangles
+		 * (see @ref areas).
+		 *
+		 * @pre The vertices must have been set.
 		 */
 		void set_triangles(const std::vector<int>& tris);
 
@@ -142,14 +190,6 @@ class TriangleMesh {
 		 * vertices and triangles have been added.
 		 */
 		void make_neighbourhood_data();
-
-		/**
-		 * @brief Makes the bounding box of the mesh.
-		 *
-		 * Computes the minimum and maximum coordinates (see @ref min,
-		 * and @ref max).
-		 */
-		void make_bounding_box();
 
 		/**
 		 * @brief Frees all the memoery occupied by the mesh.
@@ -252,13 +292,11 @@ class TriangleMesh {
 		 */
 		float get_triangle_area(int t) const;
 
-		/**
-		 * @brief Assuming the vertices make a triangle, return its area.
-		 * @param i A valid vertex index.
-		 * @param j A valid vertex index.
-		 * @param k A valid vertex index.
-		 */
-		float get_triangle_area(int i, int j, int k) const;
+		/// Returns the area of each triangle.
+		const std::vector<float>& get_areas() const;
+
+		/// Returns the angles on each triangle.
+		const std::vector<glm::vec3>& get_angles() const;
 
 		/**
 		 * @brief Returns the minimum and maximum coordinates.

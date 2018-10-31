@@ -21,14 +21,17 @@ namespace curvature {
 	float cotan(float a) { return std::cos(a)/std::sin(a); }
 
 	inline
-	float Kh_curvature_at(const TriangleMesh& m, int i) {
+	float Kh_at_vertex(const TriangleMesh& m, int vi) {
+		// mesh info
+		const std::vector<float>& mesh_areas = m.get_areas();
+
 		// Voronoi area around 'i'
 		float area = 0.0f;
 		// curvature vector
 		glm::vec3 curv_vec(0.0f,0.0f,0.0f);
 
 		iterators::vertex::vertex_face_iterator it(m);
-		const int first = it.init(i);
+		const int first = it.init(vi);
 		int next1 = first;
 		int next2 = it.next();
 
@@ -43,8 +46,8 @@ namespace curvature {
 			//      i1 -> j1 -> k1 -> i1
 			// (i1) i2 -> j2 -> k2 -> i2 (i1)
 			int i1,j1,k1, i2,j2,k2;
-			m.get_vertices_triangle(next1, i, i1,j1,k1);
-			m.get_vertices_triangle(next2, i, i2,j2,k2);
+			m.get_vertices_triangle(next1, vi, i1,j1,k1);
+			m.get_vertices_triangle(next2, vi, i2,j2,k2);
 
 			// make sure that the orientations are correct
 			assert(k1 == j2);
@@ -63,7 +66,7 @@ namespace curvature {
 			curv_vec += W*(m.get_vertex(i1) - m.get_vertex(k1));
 
 			// accumulate area
-			area += m.get_triangle_area(i1,j1,k1);
+			area += mesh_areas[next1];
 
 			// go to next 2 faces
 			next1 = next2;
@@ -90,7 +93,7 @@ namespace curvature {
 		Kh.resize(N);
 
 		for (int i = 0; i < N; ++i) {
-			Kh[i] = Kh_curvature_at(mesh, i);
+			Kh[i] = Kh_at_vertex(mesh, i);
 		}
 	}
 
@@ -105,7 +108,7 @@ namespace curvature {
 
 		#pragma omp parallel for num_threads(nt)
 		for (int i = 0; i < N; ++i) {
-			Kh[i] = Kh_curvature_at(mesh, i);
+			Kh[i] = Kh_at_vertex(mesh, i);
 		}
 	}
 
