@@ -68,6 +68,12 @@ namespace test_algorithms {
 			return 1;
 		}
 
+		if (curvature != "Gauss" and curvature != "mean") {
+			cerr << "Error: curvature value '" << curvature << "' not valid" << endl;
+			cerr << "    Use ./command-line curvature --help to see the usage" << endl;
+			return 1;
+		}
+
 		TriangleMesh mesh;
 		PLY_reader::read_mesh(mesh_file, mesh);
 		mesh.make_neighbourhood_data();
