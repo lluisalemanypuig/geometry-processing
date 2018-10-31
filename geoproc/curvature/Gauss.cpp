@@ -50,6 +50,18 @@ namespace curvature {
 
 			// get area of triangle
 			area = mesh_areas[t];
+			if (
+				mesh_angles[t].x > M_PI_4 or
+				mesh_angles[t].y > M_PI_4 or
+				mesh_angles[t].z > M_PI_4
+			)
+			{
+				// when the triangle has an angle that is larger
+				// than 90 degrees (pi/4) then the area contributes
+				// only by half.
+				area /= 2.0f;
+			}
+
 			Kg[i0] += area;
 			Kg[i1] += area;
 			Kg[i2] += area;

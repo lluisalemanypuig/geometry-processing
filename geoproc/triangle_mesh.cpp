@@ -37,6 +37,24 @@ struct CornerEdge {
 
 // PRIVATE
 
+void TriangleMesh::invalidate_areas_angles() {
+	angles_area_valid = false;
+	angles.clear();
+	areas.clear();
+}
+
+void TriangleMesh::invalidate_neighbourhood() {
+	neigh_valid = false;
+	opposite_corners.clear();
+	corners.clear();
+	boundary.clear();
+}
+
+void TriangleMesh::invalidate_state() {
+	invalidate_areas_angles();
+	invalidate_neighbourhood();
+}
+
 // PROTECTED
 
 void TriangleMesh::copy_mesh(const TriangleMesh& m) {
@@ -50,6 +68,9 @@ void TriangleMesh::copy_mesh(const TriangleMesh& m) {
 
 	min_coord = m.min_coord;
 	max_coord = m.max_coord;
+
+	neigh_valid = m.neigh_valid;
+	angles_area_valid = m.angles_area_valid;
 }
 
 float TriangleMesh::get_triangle_area(int i, int j, int k) const {
@@ -66,7 +87,7 @@ float TriangleMesh::get_triangle_area(int i, int j, int k) const {
 // PUBLIC
 
 TriangleMesh::TriangleMesh() {
-
+	neigh_valid = angles_area_valid = false;
 }
 
 TriangleMesh::TriangleMesh(const TriangleMesh& m) {
@@ -75,14 +96,6 @@ TriangleMesh::TriangleMesh(const TriangleMesh& m) {
 
 TriangleMesh::~TriangleMesh() {
 	destroy();
-}
-
-void TriangleMesh::set_vertex(int vi, const glm::vec3& v) {
-	assert(0 <= vi and vi < n_vertices());
-	vertices[vi] = v;
-
-	min_coord = glm::min(min_coord, v);
-	max_coord = glm::min(max_coord, v);
 }
 
 void TriangleMesh::set_vertices(const std::vector<float>& coords){
@@ -97,6 +110,8 @@ void TriangleMesh::set_vertices(const std::vector<float>& coords){
 		max_coord = glm::min(max_coord, vertices[i/3]);
 	}
 	vertices.shrink_to_fit();
+
+	invalidate_areas_angles();
 }
 
 void TriangleMesh::set_vertices(const glm::vec3 *vs, int N) {
@@ -124,51 +139,17 @@ void TriangleMesh::set_vertices(const std::vector<glm::vec3>& vs) {
 		}
 	);
 	vertices.shrink_to_fit();
+
+	invalidate_areas_angles();
 }
 
 void TriangleMesh::set_triangles(const std::vector<int>& tris) {
 	triangles.resize(tris.size());
-	angles.resize(triangles.size()/3);
-	areas.resize(triangles.size()/3);
-
-	glm::vec3 u, v;
-	for (int t = 0; t < triangles.size(); t += 3) {
-		// copy corners
-		triangles[t    ] = tris[t    ];
-		triangles[t + 1] = tris[t + 1];
-		triangles[t + 2] = tris[t + 2];
-
-		// fill vectors 'angles', 'areas'
-		int i0 = triangles[t    ];
-		int i1 = triangles[t + 1];
-		int i2 = triangles[t + 2];
-
-		areas[t/3] = get_triangle_area(i0,i1,i2);
-
-		const glm::vec3& v0 = get_vertex(i0);
-		const glm::vec3& v1 = get_vertex(i1);
-		const glm::vec3& v2 = get_vertex(i2);
-
-		// angle <1,0,2>
-		u = glm::normalize( v1 - v0 );
-		v = glm::normalize( v2 - v0 );
-		angles[t/3].x = std::acos( glm::dot(u,v) );
-
-		// angle <0,1,2>
-		u = glm::normalize( v0 - v1 );
-		v = glm::normalize( v2 - v1 );
-		angles[t/3].y = std::acos( glm::dot(u,v) );
-
-		// angle <1,2,0>
-		u = glm::normalize( v0 - v2 );
-		v = glm::normalize( v1 - v2 );
-		angles[t/3].z = std::acos( glm::dot(u,v) );
-	}
-
+	std::copy(tris.begin(), tris.end(), triangles.begin());
 	// try optimising consumption of memory
 	triangles.shrink_to_fit();
-	angles.shrink_to_fit();
-	areas.shrink_to_fit();
+
+	invalidate_state();
 }
 
 void TriangleMesh::scale_to_unit() {
@@ -188,9 +169,16 @@ void TriangleMesh::scale_to_unit() {
 	for (unsigned int i = 0; i < vertices.size(); ++i) {
 		vertices[i] = (vertices[i] - center)/largestSize;
 	}
+
+	invalidate_areas_angles();
 }
 
 void TriangleMesh::make_neighbourhood_data() {
+	// compute this data only when needed
+	if (neigh_valid) {
+		return;
+	}
+
 	// ------------------
 	// build corner table
 	corners.resize(vertices.size());
@@ -252,6 +240,7 @@ void TriangleMesh::make_neighbourhood_data() {
 	// sort the vector so that the edge pairs are consecutive
 	sort(data.begin(), data.end());
 
+	boundary.clear();
 	// For each corner edge, check that a twin exists.
 	// If so, we have found a pair of opposite corners
 	for (size_t i = 0; i < data.size(); ++i) {
@@ -310,6 +299,55 @@ void TriangleMesh::make_neighbourhood_data() {
 	}
 	assert( sane );
 	#endif
+
+	// validate neighbourhood data
+	neigh_valid = true;
+}
+
+void TriangleMesh::make_angles_area() {
+	// compute this data only when needed
+	if (angles_area_valid) {
+		continue;
+	}
+
+	angles.resize(triangles.size()/3);
+	areas.resize(triangles.size()/3);
+
+	glm::vec3 u, v;
+	for (int t = 0; t < triangles.size(); t += 3) {
+
+		// fill vectors 'angles', 'areas'
+		int i0 = triangles[t    ];
+		int i1 = triangles[t + 1];
+		int i2 = triangles[t + 2];
+
+		areas[t/3] = get_triangle_area(i0,i1,i2);
+
+		const glm::vec3& v0 = get_vertex(i0);
+		const glm::vec3& v1 = get_vertex(i1);
+		const glm::vec3& v2 = get_vertex(i2);
+
+		// angle <1,0,2>
+		u = glm::normalize( v1 - v0 );
+		v = glm::normalize( v2 - v0 );
+		angles[t/3].x = std::acos( glm::dot(u,v) );
+
+		// angle <0,1,2>
+		u = glm::normalize( v0 - v1 );
+		v = glm::normalize( v2 - v1 );
+		angles[t/3].y = std::acos( glm::dot(u,v) );
+
+		// angle <1,2,0>
+		u = glm::normalize( v0 - v2 );
+		v = glm::normalize( v1 - v2 );
+		angles[t/3].z = std::acos( glm::dot(u,v) );
+	}
+	// try optimising consumption of memory
+	angles.shrink_to_fit();
+	areas.shrink_to_fit();
+
+	// validate areas and angles data
+	angles_area_valid = true;
 }
 
 void TriangleMesh::destroy() {
@@ -320,6 +358,8 @@ void TriangleMesh::destroy() {
 	boundary.clear();
 	angles.clear();
 	areas.clear();
+
+	invalidate_state();
 }
 
 // GETTERS
@@ -342,6 +382,7 @@ int TriangleMesh::get_vertex_corner(int c) const {
 }
 
 int TriangleMesh::get_corner_vertex(int v) const {
+	assert(neigh_valid);
 	assert(0 <= v and v < n_vertices());
 	return corners[v];
 }
@@ -375,6 +416,7 @@ void TriangleMesh::get_vertices_triangle(int t, int v, int& v0, int& v1, int& v2
 }
 
 int TriangleMesh::get_opposite_corner(int c) const {
+	assert(neigh_valid);
 	assert(0 <= c and c < n_corners());
 	return opposite_corners[c];
 }
@@ -394,11 +436,21 @@ float TriangleMesh::get_triangle_area(int t) const {
 }
 
 const std::vector<float>& TriangleMesh::get_areas() const {
+	assert(angles_area_valid);
 	return areas;
 }
 
 const std::vector<glm::vec3>& TriangleMesh::get_angles() const {
+	assert(angles_area_valid);
 	return angles;
+}
+
+bool TriangleMesh::are_angles_area_valid() const {
+	return angles_area_valid;
+}
+
+bool TriangleMesh::is_neighbourhood_valid() const {
+	return neigh_valid;
 }
 
 void TriangleMesh::get_min_max_coordinates(glm::vec3& m, glm::vec3& M) const {

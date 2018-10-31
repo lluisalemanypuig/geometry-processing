@@ -86,7 +86,31 @@ class TriangleMesh {
 		/// Maximum value of x-,y-, and z-coordinates.
 		glm::vec3 max_coord;
 
+		/// Are the computed triangle angles and areas valid?
+		bool angles_area_valid;
+		/**
+		 * @brief Is the neighbourhood data valid?
+		 *
+		 * Is the data in @ref corners, @ref opposite_corners
+		 * and @ref boundary valid?
+		 */
+		bool neigh_valid;
+
 	protected:
+		/// Sets to false the attributes @ref angles_area_valid.
+		void invalidate_areas_angles();
+		/// Sets to false the attributes @ref neigh_valid.
+		void invalidate_neighbourhood();
+
+		/**
+		 * @brief Invalidates the whole state of the mesh.
+		 *
+		 * Sets to false all validty attributes:
+		 * - @ref angles_area_valid
+		 * - @ref neigh_valid
+		 */
+		void invalidate_state();
+
 		/**
 		 * @brief Copies mesh @e m contents into this one.
 		 *
@@ -115,15 +139,6 @@ class TriangleMesh {
 		// MODIFIERS
 
 		/**
-		 * @brief Sets the coordinate of a vertex.
-		 *
-		 * It also, computes the minimum and maximum coordinates
-		 * (see @ref min_coord, and @ref max_coord).
-		 * @param vi A valid vertex index: 0 <= @e v < number of vertices.
-		 * @param v The new coordinates of the vertex.
-		 */
-		void set_vertex(int vi, const glm::vec3& v);
-		/**
 		 * @brief Sets the vertices to the mesh.
 		 *
 		 * Each vertex starts at a position multiple of 3.
@@ -134,6 +149,8 @@ class TriangleMesh {
 		 * (see @ref min_coord, and @ref max_coord).
 		 * @param coords The coordinates of all the vertices.
 		 * The size must be a multiple of 3.
+		 *
+		 * @post The angles and areas of the triangles are invalidated.
 		 */
 		void set_vertices(const std::vector<float>& coords);
 		/**
@@ -144,6 +161,8 @@ class TriangleMesh {
 		 * (see @ref min_coord, and @ref max_coord).
 		 * @pre @e vs is not null and points to the first element
 		 * of an array of @e N vertices.
+		 *
+		 * @post The angles and areas of the triangles are invalidated.
 		 */
 		void set_vertices(const glm::vec3 *vs, int N);
 		/**
@@ -151,6 +170,8 @@ class TriangleMesh {
 		 *
 		 * The contents of @ref vertices is set to the contents of
 		 * @e vs.
+		 *
+		 * @post The angles and areas of the triangles are invalidated.
 		 */
 		void set_vertices(const std::vector<glm::vec3>& vs);
 		/**
@@ -167,6 +188,8 @@ class TriangleMesh {
 		 * (see @ref areas).
 		 *
 		 * @pre The vertices must have been set.
+		 * @post The state of the mesh is invalidated (angles, area,
+		 * neighbourhood data is not valid).
 		 */
 		void set_triangles(const std::vector<int>& tris);
 
@@ -190,6 +213,9 @@ class TriangleMesh {
 		 * vertices and triangles have been added.
 		 */
 		void make_neighbourhood_data();
+
+		/// Computes the angles and the areas stored in @ref angles, @ref areas.
+		void make_angles_area();
 
 		/**
 		 * @brief Frees all the memoery occupied by the mesh.
@@ -217,8 +243,9 @@ class TriangleMesh {
 		/**
 		 * @brief Returns a corner index for vertex @e v.
 		 * @param v A valid vertex index: 0 <= @e v < number of vertices.
-		 * @pre Neighbourhood data must exist in this mesh.
-		 * See @ref make_neighbourhood_data.
+		 * @pre Neighbourhood data must be valid, i.e, the result of
+		 * @ref is_neighbourhood_valid() must be true. If false,
+		 * call @ref make_neighbourhood_data.
 		 * @return Returns a valid corner index (unless there are
 		 * no faces in this mesh). Returns @e c such that
 		 * 0 <= @e c < number of triangles
@@ -265,8 +292,9 @@ class TriangleMesh {
 		/**
 		 * @brief Returns the corner opposite to corner c.
 		 * @param c Valid corner index: 0 <= @e c < number of corners.
-		 * @pre Neighbourhood data must exist in this mesh.
-		 * See @ref make_neighbourhood-data.
+		 * @pre Neighbourhood data must be valid, i.e, the result of
+		 * @ref is_neighbourhood_valid() must be true. If false,
+		 * call @ref make_neighbourhood_data.
 		 * @return Returns -1 if there is no opposite corner (the
 		 * case of hard boundary). Returns a valid corner index
 		 * otherwise.
@@ -297,6 +325,11 @@ class TriangleMesh {
 
 		/// Returns the angles on each triangle.
 		const std::vector<glm::vec3>& get_angles() const;
+
+		/// Is neighbourhood data valid?
+		bool are_angles_area_valid() const;
+		/// Is neighbourhood data valid?
+		bool is_neighbourhood_valid() const;
 
 		/**
 		 * @brief Returns the minimum and maximum coordinates.
