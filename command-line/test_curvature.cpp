@@ -77,6 +77,7 @@ namespace test_algorithms {
 		TriangleMesh mesh;
 		PLY_reader::read_mesh(mesh_file, mesh);
 		mesh.make_neighbourhood_data();
+		mesh.make_angles_area();
 
 		vector<float> curv;
 

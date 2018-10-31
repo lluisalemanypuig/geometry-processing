@@ -73,12 +73,12 @@ namespace test_algorithms {
 			it = new iterators::vertex::vertex_face_iterator(mesh);
 		}
 
-		it->init(v_idx);
+		int first = it->init(v_idx);
 
 		// first element
-		int first = it->current();
+		int v = it->current();
 		do {
-			cout << "    " << it->current() << endl;
+			cout << "    " << v << endl;
 			if (iteration_type == "vertex-face") {
 				int v0,v1,v2;
 				mesh.get_vertices_triangle(it->current(), v_idx, v0,v1,v2);
@@ -86,8 +86,18 @@ namespace test_algorithms {
 				cout << "        vertices: "
 					 << v0 << "," << v1 << "," << v2 << endl;
 			}
+			int k = it->next();
+			if (k == v) {
+				cout << "comand-line: infinite loop encountered" << endl;
+				cout << "    iteration will never finish" << endl;
+			}
+			v = k;
+
+			char step;
+			cout << "Do step:";
+			cin >> step;
 		}
-		while (it->next() != first);
+		while (v != first);
 
 		return 0;
 	}
