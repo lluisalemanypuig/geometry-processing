@@ -17,6 +17,9 @@ namespace curvature {
 	 *
 	 * If the number of threads given is 1 then
 	 * @ref Gauss(const TriangleMesh&, std::vector<float>&) is called.
+	 *
+	 * This function needs the meshe's angles and areas (see
+	 * @ref mesh::make_angles_area).
 	 * @param mesh Input mesh.
 	 * @param[out] Kg An approximation of the Gauss curvature per vertex.
 	 */
@@ -30,6 +33,9 @@ namespace curvature {
 	 *
 	 * If the number of threads given is 1 then
 	 * @ref Gauss(const TriangleMesh&, std::vector<float>&) is called.
+	 *
+	 * This function needs neighbourhood data and the meshe's angles
+	 * and areas (see @ref mesh::make_angles_area).
 	 * @param mesh Input mesh.
 	 * @param[out] Kg An approximation of the Gauss curvature per vertex.
 	 * @param n_threads Number of threads.
@@ -41,6 +47,9 @@ namespace curvature {
 	 *
 	 * Use the discretisation of the Laplace-Beltrami operator,
 	 * using the cotangents as weights.
+	 *
+	 * This function needs neighbourhood data and the meshe's angles
+	 * and areas (see @ref mesh::make_angles_area).
 	 * @param mesh Input mesh.
 	 * @param[out] Kh An approximation of the mean curvature per vertex.
 	 */
@@ -53,6 +62,9 @@ namespace curvature {
 	 *
 	 * If the number of threads given is 1 then
 	 * @ref mean(const TriangleMesh&, std::vector<float>&) is called.
+	 *
+	 * This function needs neighbourhood data and the meshe's angles
+	 * and areas (see @ref mesh::make_angles_area).
 	 * @param mesh Input mesh.
 	 * @param[out] Kh An approximation of the mean curvature per vertex.
 	 * @param n_threads Number of threads.

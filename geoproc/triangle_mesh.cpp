@@ -69,6 +69,9 @@ void TriangleMesh::copy_mesh(const TriangleMesh& m) {
 	min_coord = m.min_coord;
 	max_coord = m.max_coord;
 
+	angles = m.angles;
+	areas = m.areas;
+
 	neigh_valid = m.neigh_valid;
 	angles_area_valid = m.angles_area_valid;
 }
@@ -307,14 +310,14 @@ void TriangleMesh::make_neighbourhood_data() {
 void TriangleMesh::make_angles_area() {
 	// compute this data only when needed
 	if (angles_area_valid) {
-		continue;
+		return;
 	}
 
 	angles.resize(triangles.size()/3);
 	areas.resize(triangles.size()/3);
 
 	glm::vec3 u, v;
-	for (int t = 0; t < triangles.size(); t += 3) {
+	for (size_t t = 0; t < triangles.size(); t += 3) {
 
 		// fill vectors 'angles', 'areas'
 		int i0 = triangles[t    ];

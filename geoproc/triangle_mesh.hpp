@@ -211,10 +211,17 @@ class TriangleMesh {
 		 *
 		 * This function should be called only after all
 		 * vertices and triangles have been added.
+		 *
+		 * If this function is called when the corresponding state
+		 * is valid then this function does nothing.
 		 */
 		void make_neighbourhood_data();
 
-		/// Computes the angles and the areas stored in @ref angles, @ref areas.
+		/**
+		 * @brief Computes the angles and the areas of the triangles.
+		 *
+		 * Fills the containers @ref angles, @ref areas
+		 */
 		void make_angles_area();
 
 		/**
