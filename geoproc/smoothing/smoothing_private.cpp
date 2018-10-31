@@ -1,5 +1,8 @@
 #include <geoproc/smoothing/iterative_private.hpp>
 
+// C includes
+#include <omp.h>
+
 // C++ includes
 #include <iostream>
 using namespace std;
@@ -51,37 +54,87 @@ namespace smoothing_private {
 
 	}
 
-	// applies laplacian operator once
 	void apply_local
 	(
 		const smooth_weight& w, float l,
 		const TriangleMesh& m,
-		const glm::vec3 *from,
-		glm::vec3 *to
+		const glm::vec3 *from, glm::vec3 *to
 	)
 	{
 		assert(from != nullptr);
 		assert(to != nullptr);
 
 		// compute the new coordinates of the vertices
-		for (int i = 0; i < m.n_vertices(); ++i) {
 
-			glm::vec3 L(0.0f,0.0f,0.0f);
-			switch (w) {
-				case smooth_weight::uniform:
+		glm::vec3 L;
+		switch (w) {
+			case smooth_weight::uniform:
+				for (int i = 0; i < m.n_vertices(); ++i) {
+					L = glm::vec3(0.0f,0.0f,0.0f);
 					make_uniform_weight(i, m, from, L);
-					break;
-				case smooth_weight::cotangent:
-					make_cotangent_weight(i, m, from, L);
-					break;
-				default:
-					cerr << "Warning (in algorithms::smoothing::laplacian)" << endl;
-					cerr << "    Value for smoothing weight not implemented" << endl;
-			}
+					// apply formula
+					to[i] = from[i] + l*L;
+				}
+				break;
 
-			// apply formula
-			to[i] = from[i] + l*L;
+			case smooth_weight::cotangent:
+				for (int i = 0; i < m.n_vertices(); ++i) {
+					L = glm::vec3(0.0f,0.0f,0.0f);
+					make_cotangent_weight(i, m, from, L);
+					// apply formula
+					to[i] = from[i] + l*L;
+				}
+				break;
+
+			default:
+				cerr << "Warning (in algorithms::smoothing::laplacian)" << endl;
+				cerr << "    Value for smoothing weight not recognised" << endl;
 		}
+
+	}
+
+	void apply_local
+	(
+		const smooth_weight& w, float l,
+		const TriangleMesh& m,
+		size_t nt,
+		const glm::vec3 *from, glm::vec3 *to
+	)
+	{
+		assert(from != nullptr);
+		assert(to != nullptr);
+
+		// compute the new coordinates of the vertices
+
+		glm::vec3 L;
+		switch (w) {
+			case smooth_weight::uniform:
+
+				#pragma omp parallel for num_threads(nt) private(L)
+				for (int i = 0; i < m.n_vertices(); ++i) {
+					L = glm::vec3(0.0f,0.0f,0.0f);
+					make_uniform_weight(i, m, from, L);
+					// apply formula
+					to[i] = from[i] + l*L;
+				}
+				break;
+
+			case smooth_weight::cotangent:
+
+				#pragma omp parallel for num_threads(nt) private(L)
+				for (int i = 0; i < m.n_vertices(); ++i) {
+					L = glm::vec3(0.0f,0.0f,0.0f);
+					make_cotangent_weight(i, m, from, L);
+					// apply formula
+					to[i] = from[i] + l*L;
+				}
+				break;
+
+			default:
+				cerr << "Warning (in algorithms::smoothing::laplacian)" << endl;
+				cerr << "    Value for smoothing weight not recognised" << endl;
+		}
+
 	}
 
 } // -- namespace smoothing_private

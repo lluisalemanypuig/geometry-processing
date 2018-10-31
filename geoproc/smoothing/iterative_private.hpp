@@ -67,6 +67,26 @@ namespace smoothing_private {
 		const glm::vec3 *old_verts,
 		glm::vec3 *new_verts
 	);
+	/**
+	 * @brief Applies one parallelised iteration of a local smoothing algorithm.
+	 * @param w Type of smoothing weight.
+	 * @param lambda Parameter used in moving vertices:
+	 * \f$v_i' = v_i + \lambda\cdot L(v_i)\f$, where \f$L(v_i)\f$
+	 * depends on the type of weight used.
+	 * @param m The mesh used to iterate on the neighbourhood of @e old_verts.
+	 * @param nt Number of threads.
+	 * @param old_verts Coordinates of the vertices to be smoothed, whose
+	 * neighbourhood relationship is encoded in the mesh @e m.
+	 * @param[out] new_verts The coordinates of the smoothed vertices.
+	 */
+	void apply_local
+	(
+		const smooth_weight& w, float lambda,
+		const TriangleMesh& m,
+		size_t nt,
+		const glm::vec3 *old_verts,
+		glm::vec3 *new_verts
+	);
 
 } // -- namespace smoothing_private
 } // -- namespace smoothing
