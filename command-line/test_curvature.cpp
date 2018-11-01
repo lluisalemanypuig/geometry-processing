@@ -83,12 +83,14 @@ namespace test_algorithms {
 
 		cout << "Compute curvature '" << curvature << "'" << endl;
 
+		float min, max;
+
 		timing::time_point begin = timing::now();
 		if (curvature == "Gauss") {
-			algorithms::curvature::Gauss(mesh, curv, nt);
+			algorithms::curvature::Gauss(mesh, curv, nt, &min, &max);
 		}
 		else if (curvature == "mean") {
-			algorithms::curvature::mean(mesh, curv, nt);
+			algorithms::curvature::mean(mesh, curv, nt, &min, &max);
 		}
 		timing::time_point end = timing::now();
 
@@ -97,6 +99,8 @@ namespace test_algorithms {
 		cout << "Curvature computed in "
 			 << timing::elapsed_milliseconds(begin,end)
 			 << " milliseconds" << endl;
+		cout << "Minimum value of curvature: " << min << endl;
+		cout << "Maximum value of curvature: " << max << endl;
 
 		if (print_curv) {
 			for (int i = 0; i < mesh.n_vertices(); ++i) {
