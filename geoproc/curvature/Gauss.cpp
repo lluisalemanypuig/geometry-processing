@@ -6,6 +6,7 @@
 
 // C++ includes
 #include <iostream>
+#include <limits>
 #include <cmath>
 
 // glm includes
@@ -23,12 +24,14 @@ namespace curvature {
 
 	// Use a different algorithm from the one used for
 	// the parallel computation of the curvature
-	void Gauss(const TriangleMesh& m, std::vector<float>& Kg) {
+	void Gauss
+	(const TriangleMesh& mesh, std::vector<float>& Kg, float *m, float *M)
+	{
 		// mesh info
-		const int nT = m.n_triangles();
-		const int nV = m.n_vertices();
-		const std::vector<float>& mesh_areas = m.get_areas();
-		const std::vector<glm::vec3>& mesh_angles = m.get_angles();
+		const int nT = mesh.n_triangles();
+		const int nV = mesh.n_vertices();
+		const std::vector<float>& mesh_areas = mesh.get_areas();
+		const std::vector<glm::vec3>& mesh_angles = mesh.get_angles();
 
 		// Gauss curvature per vertex
 		Kg = std::vector<float>(nV, 0.0f);
@@ -46,7 +49,7 @@ namespace curvature {
 		// Compute sum of areas of triangles
 		// and angle around each vertex
 		for (int t = 0; t < nT; ++t) {
-			m.get_vertices_triangle(t, i0,i1,i2);
+			mesh.get_vertices_triangle(t, i0,i1,i2);
 
 			// -- Accumulate areas --
 			// when the triangle has an angle that is larger
@@ -81,9 +84,23 @@ namespace curvature {
 		// too much memory consumption), calculate the
 		// actual value of the curvature:
 
+		if (m != nullptr) {
+			*m = std::numeric_limits<float>::max();
+		}
+		if (M != nullptr) {
+			*M = -std::numeric_limits<float>::max();
+		}
+
 		// compute curvature per vertex
 		for (int i = 0; i < nV; ++i) {
 			Kg[i] = 3.0f*(angles[i]/Kg[i]);
+
+			if (m != nullptr) {
+				*m = std::min(*m, Kg[i]);
+			}
+			if (M != nullptr) {
+				*M = std::max(*M, Kg[i]);
+			}
 		}
 	}
 
@@ -165,6 +182,30 @@ namespace curvature {
 		for (int i = 0; i < N; ++i) {
 			Kg[i] = Kg_at_vertex_par(m, i);
 		}
+	}
+
+	void Gauss
+	(const TriangleMesh& mesh, std::vector<float>& Kg, size_t nt, float *m, float *M)
+	{
+		if (nt == 1) {
+			Gauss(mesh, Kg, m, M);
+			return;
+		}
+
+		const int N = mesh.n_vertices();
+		Kg = std::vector<float>(N, 0.0f);
+
+		float mm, MM;
+
+		#pragma omp parallel for num_threads(nt) reduction(min:mm) reduction(max:MM)
+		for (int i = 0; i < N; ++i) {
+			Kg[i] = Kg_at_vertex_par(mesh, i);
+			mm = std::min(mm, Kg[i]);
+			MM = std::max(MM, Kg[i]);
+		}
+
+		*m = mm;
+		*M = MM;
 	}
 
 } // -- namespace curavture

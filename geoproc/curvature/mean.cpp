@@ -5,6 +5,7 @@
 #include <omp.h>
 
 // C++ includes
+#include <limits>
 #include <cmath>
 
 // glm includes
@@ -100,12 +101,26 @@ namespace curvature {
 		return (1.0f/2.0f)*glm::length(curv_vec);
 	}
 
-	void mean(const TriangleMesh& mesh, std::vector<float>& Kh) {
+	void mean
+	(const TriangleMesh& mesh, std::vector<float>& Kh, float *m, float *M) {
 		const int N = mesh.n_vertices();
 		Kh.resize(N);
 
+		if (m != nullptr) {
+			*m = std::numeric_limits<float>::max();
+		}
+		if (M != nullptr) {
+			*M = -std::numeric_limits<float>::max();
+		}
+
 		for (int i = 0; i < N; ++i) {
 			Kh[i] = Kh_at_vertex(mesh, i);
+			if (m != nullptr) {
+				*m = std::min(*m, Kh[i]);
+			}
+			if (M != nullptr) {
+				*M = std::max(*M, Kh[i]);
+			}
 		}
 	}
 
@@ -122,6 +137,30 @@ namespace curvature {
 		for (int i = 0; i < N; ++i) {
 			Kh[i] = Kh_at_vertex(mesh, i);
 		}
+	}
+
+	void mean
+	(const TriangleMesh& mesh, std::vector<float>& Kh, size_t nt, float *m, float *M)
+	{
+		if (nt == 1) {
+			mean(mesh, Kh, m, M);
+			return;
+		}
+
+		const int N = mesh.n_vertices();
+		Kh.resize(N);
+
+		float mm, MM;
+
+		#pragma omp parallel for num_threads(nt) reduction(min:mm) reduction(max:MM)
+		for (int i = 0; i < N; ++i) {
+			Kh[i] = Kh_at_vertex(mesh, i);
+			mm = std::min(mm, Kh[i]);
+			MM = std::max(MM, Kh[i]);
+		}
+
+		*m = mm;
+		*M = MM;
 	}
 
 } // -- namespace curavture

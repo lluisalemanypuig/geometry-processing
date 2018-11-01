@@ -1,6 +1,7 @@
 #include <geoproc/smoothing/iterative_local.hpp>
 
 // C includes
+#include <stdlib.h>
 #include <omp.h>
 
 // glm includes
