@@ -18,11 +18,13 @@
 namespace algorithms {
 namespace curvature {
 
-	inline
-	float cotan(float a) { return std::cos(a)/std::sin(a); }
+	inline bool has_big_angle(const glm::vec3& angles) {
+		return angles.x > M_PI_4 or angles.y > M_PI_4 or angles.z > M_PI_4;
+	}
 
-	inline
-	float Kh_at_vertex(const TriangleMesh& m, int vi) {
+	inline float cotan(float a) { return std::cos(a)/std::sin(a); }
+
+	inline float Kh_at_vertex(const TriangleMesh& m, int vi) {
 		// mesh info
 		const std::vector<float>& mesh_areas = m.get_areas();
 		const std::vector<glm::vec3>& mesh_angles = m.get_angles();
@@ -72,11 +74,7 @@ namespace curvature {
 			// than 90 degrees (pi/4) then the area contributes
 			// only by half.
 			float area = mesh_areas[next1];
-			if (
-				mesh_angles[next1].x > M_PI_4 or mesh_angles[next1].y > M_PI_4 or
-				mesh_angles[next1].z > M_PI_4
-			)
-			{
+			if (has_big_angle(mesh_angles[next1])) {
 				area /= 2.0f;
 			}
 			vor_area += area;

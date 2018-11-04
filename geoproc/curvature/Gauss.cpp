@@ -19,6 +19,10 @@
 namespace algorithms {
 namespace curvature {
 
+	inline bool has_big_angle(const glm::vec3& angles) {
+		return angles.x > M_PI_4 or angles.y > M_PI_4 or angles.z > M_PI_4;
+	}
+
 	/* ------------------------------ */
 	/* --------- SEQUENTIAL --------- */
 
@@ -56,11 +60,7 @@ namespace curvature {
 			// than 90 degrees (pi/4) then the area contributes
 			// only by half.
 			area = mesh_areas[t];
-			if (
-				mesh_angles[t].x > M_PI_4 or mesh_angles[t].y > M_PI_4 or
-				mesh_angles[t].z > M_PI_4
-			)
-			{
+			if (has_big_angle(mesh_angles[t])) {
 				area /= 2.0f;
 			}
 			Kg[i0] += area;
@@ -79,8 +79,8 @@ namespace curvature {
 			angles[i2] -= mesh_angles[t].z;
 		}
 
-		// once the angles have computed, and the area
-		// stored in the curvature vector (to avoid
+		// once the angles have been computed, and the
+		// areas stored in the curvature vector (to avoid
 		// too much memory consumption), calculate the
 		// actual value of the curvature:
 
@@ -135,11 +135,7 @@ namespace curvature {
 			// than 90 degrees (pi/4) then the area contributes
 			// only by half.
 			float area = mesh_areas[f];
-			if (
-				mesh_angles[f].x > M_PI_4 or mesh_angles[f].y > M_PI_4 or
-				mesh_angles[f].z > M_PI_4
-			)
-			{
+			if (has_big_angle(mesh_angles[f])) {
 				area /= 2.0f;
 			}
 			vor_area += area;
