@@ -74,10 +74,18 @@ namespace test_algorithms {
 			return 1;
 		}
 
+		timing::time_point begin, end;
+
+		cout << "Preparing mesh..." << endl;
+
+		begin = timing::now();
 		TriangleMesh mesh;
 		PLY_reader::read_mesh(mesh_file, mesh);
 		mesh.make_neighbourhood_data();
 		mesh.make_angles_area();
+		end = timing::now();
+		cout << "    Angles and areas computed in "
+			 << timing::elapsed_seconds(begin, end) << " seconds" << endl;
 
 		vector<float> curv;
 
@@ -85,14 +93,14 @@ namespace test_algorithms {
 
 		float min, max;
 
-		timing::time_point begin = timing::now();
+		begin = timing::now();
 		if (curvature == "Gauss") {
 			algorithms::curvature::Gauss(mesh, curv, nt, &min, &max);
 		}
 		else if (curvature == "mean") {
 			algorithms::curvature::mean(mesh, curv, nt, &min, &max);
 		}
-		timing::time_point end = timing::now();
+		end = timing::now();
 
 		cout.setf(ios::fixed);
 		cout.precision(8);
