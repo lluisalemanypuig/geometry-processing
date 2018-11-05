@@ -129,6 +129,8 @@ void TriangleMesh::set_vertices(const glm::vec3 *vs, int N) {
 		}
 	);
 	vertices.shrink_to_fit();
+
+	invalidate_areas_angles();
 }
 
 void TriangleMesh::set_vertices(const std::vector<glm::vec3>& vs) {
