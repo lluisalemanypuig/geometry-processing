@@ -26,16 +26,49 @@ namespace timing {
 
 } // -- namespace timing
 
+namespace min_max {
+
+	/* Finds the minimum and maximum values within the set of values
+	 * 'data' that comprise most of the values of data.
+	 *
+	 * This "most" is guided by the tolerant (%).
+	 * For example:
+	 * - if prop = 100.0 then min and max will take the
+	 * minimum and maximum values in data.
+	 * - if prop = 50.0 then min and max will take two values
+	 * in data so that 50% of the values in data are between min and max,
+	 * both included.
+	 */
+	void binning(
+		const std::vector<float>& data,
+		float& min, float& max, float prop
+	);
+
+	/* Find the minimum and maximum value among those
+	 * that are below the quantity
+	 *
+	 * (1 + prop)*dev
+	 *
+	 * where dev is the square root of the variance of
+	 * the curvature values.
+	 */
+	void below_dev(
+		const std::vector<float>& data,
+		float& min, float& max, float prop
+	);
+
+} // -- namespace min_max
+
 namespace coloring {
 
-	/*
-	 * Makes colours using the values in data. The colours are
+	/* Makes colours using the values in data. The colours are
 	 * interpolated so that they make the colours of the rainbow.
 	 *
 	 * The heuristic used is binning.
 	 */
-	void colors_rainbow_binning
-	(const std::vector<float>& data, std::vector<glm::vec3>& cols);
-
+	void colors_rainbow(
+		const std::vector<float>& data, float m, float M,
+		std::vector<glm::vec3>& cols
+	);
 
 } // -- namespace coloring

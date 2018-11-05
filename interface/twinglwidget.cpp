@@ -87,15 +87,21 @@ void TwinGLWidget::run_smoothing_algorithm() {
 		 << timing::elapsed_seconds(begin,end)
 		 << " seconds" << endl;
 
-	// update mesh
-	makeCurrent();
 	if (current_curv_display != curv_type::none) {
 		compute_curvature();
+	}
+
+	// update mesh
+	if (current_curv_display != curv_type::none) {
+
+		// show curvature already has
+		// makeCurrent() .. doneCurrent()
 		show_curvature(false, true);
 	}
 	else {
+		makeCurrent();
 		mesh.init(program);
+		doneCurrent();
 	}
-	doneCurrent();
 	update();
 }

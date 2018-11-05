@@ -40,6 +40,9 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 
 		/// Values of the curvature per vertex
 		std::vector<float> curvature_values;
+		/// Proportion of curvature values to be used.
+		float prop;
+		float to_prop;
 
 		/// Number of threads to use.
 		size_t nt;
@@ -101,6 +104,12 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		 * if necessary.
 		 */
 		void change_curvature_display();
+
+		/// Sets the proportion (in %) of curvature values to be used for display.
+		/// Displays the curvature values afterwards.
+		void change_display_curvature_proportion(float p);
+		/// Sets the proportion (in %) of curvature values to be used for display.
+		void change_curvature_proportion(float p);
 
 		/// Sets the number of threads.
 		void set_num_threads(size_t nt);

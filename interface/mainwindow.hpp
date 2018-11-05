@@ -15,8 +15,9 @@ class MainWindow : public QMainWindow {
 		int current_tab;
 
 	private slots:
-		void renderer_change_poly_mode();
-		void renderer_change_curvature();
+		void change_poly_mode();
+		void change_curvature();
+		void change_curvature_prop_display(float p);
 
 		/* Menu buttons */
 		void on_action_Open_triggered();
@@ -28,6 +29,9 @@ class MainWindow : public QMainWindow {
 		void on_CBRefLines_toggled(bool checked);
 
 		/* Curvature radio buttons */
+		bool get_prop_curvature_values(float& p);
+		void set_prop_values_to_all();
+		void on_LE_PropCurvValues_returnPressed();
 		void on_RBCurvatureH_toggled(bool checked);
 		void on_RBCurvatureG_toggled(bool checked);
 		void on_RBNoCurvature_toggled(bool checked);
@@ -49,7 +53,7 @@ class MainWindow : public QMainWindow {
 		/* Settings stuff */
 		void on_comboBox_currentIndexChanged(const QString &arg1);
 
-	public:
+public:
 		explicit MainWindow(QWidget *parent = nullptr);
 		~MainWindow();
 };

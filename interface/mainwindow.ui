@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1267</width>
+    <width>1245</width>
     <height>681</height>
    </rect>
   </property>
@@ -368,11 +368,48 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
-            <widget class="QRadioButton" name="RBCurvatureG">
-             <property name="text">
-              <string>&amp;Kg</string>
-             </property>
-            </widget>
+            <layout class="QHBoxLayout" name="horizontalLayout_6">
+             <item>
+              <widget class="QRadioButton" name="RBCurvatureG">
+               <property name="text">
+                <string>&amp;Kg</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_4">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>13</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_5">
+               <property name="text">
+                <string>%</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="LE_PropCurvValues">
+               <property name="maximumSize">
+                <size>
+                 <width>41</width>
+                 <height>26</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>85</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item>
             <widget class="QRadioButton" name="RBCurvatureH">
@@ -466,7 +503,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1267</width>
+     <width>1245</width>
      <height>23</height>
     </rect>
    </property>

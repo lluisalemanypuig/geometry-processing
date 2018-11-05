@@ -1,10 +1,16 @@
-#include <QFileDialog>
 #include "mainwindow.hpp"
+
+// C++ includes
+#include <iostream>
+using namespace std;
+
+// Qt includes
+#include <QFileDialog>
 #include "ui_mainwindow.h"
 
 // PRIVATE
 
-void MainWindow::renderer_change_poly_mode() {
+void MainWindow::change_poly_mode() {
 	if (current_tab == 0) {
 		ui->SingleView_Renderer->change_polygon_mode();
 	}
@@ -14,13 +20,26 @@ void MainWindow::renderer_change_poly_mode() {
 	}
 }
 
-void MainWindow::renderer_change_curvature() {
+void MainWindow::change_curvature() {
 	if (current_tab == 0) {
 		ui->SingleView_Renderer->change_curvature_display();
 	}
 	else if (current_tab == 1) {
 		ui->DualView_LeftRenderer->change_curvature_display();
 		ui->DualView_RightRenderer->change_curvature_display();
+	}
+}
+
+void MainWindow::change_curvature_prop_display(float p) {
+	if (current_tab == 0) {
+		ui->SingleView_Renderer->change_display_curvature_proportion(p);
+		ui->DualView_LeftRenderer->change_curvature_proportion(p);
+		ui->DualView_RightRenderer->change_curvature_proportion(p);
+	}
+	else if (current_tab == 1) {
+		ui->SingleView_Renderer->change_curvature_proportion(p);
+		ui->DualView_LeftRenderer->change_display_curvature_proportion(p);
+		ui->DualView_RightRenderer->change_display_curvature_proportion(p);
 	}
 }
 
@@ -56,7 +75,7 @@ void MainWindow::on_CBSolid_toggled(bool toggled) {
 		ui->DualView_LeftRenderer->set_polygon_mode(polymode::solid);
 		ui->DualView_RightRenderer->set_polygon_mode(polymode::solid);
 	}
-	renderer_change_poly_mode();
+	change_poly_mode();
 }
 
 void MainWindow::on_CBWireframe_toggled(bool toggled) {
@@ -65,7 +84,7 @@ void MainWindow::on_CBWireframe_toggled(bool toggled) {
 		ui->DualView_LeftRenderer->set_polygon_mode(polymode::wireframe);
 		ui->DualView_RightRenderer->set_polygon_mode(polymode::wireframe);
 	}
-	renderer_change_poly_mode();
+	change_poly_mode();
 }
 
 void MainWindow::on_CBRefLines_toggled(bool toggled) {
@@ -74,26 +93,54 @@ void MainWindow::on_CBRefLines_toggled(bool toggled) {
 		ui->DualView_LeftRenderer->set_polygon_mode(polymode::reflection_lines);
 		ui->DualView_RightRenderer->set_polygon_mode(polymode::reflection_lines);
 	}
-	renderer_change_poly_mode();
+	change_poly_mode();
 }
 
 /* Curvature radio buttons */
 
+bool MainWindow::get_prop_curvature_values(float& p) {
+	bool ok = true;
+	p = ui->LE_PropCurvValues->text().toFloat(&ok);
+	if (not ok) {
+		cerr << "MainWindow::on_LE_PropCurvValues_returnPressed - error:" << endl;
+		cerr << "    value entered in text box is not valid" << endl;
+	}
+	return ok;
+}
+
+void MainWindow::set_prop_values_to_all() {
+	float p;
+	if (get_prop_curvature_values(p)) {
+		ui->SingleView_Renderer->change_curvature_proportion(p);
+		ui->DualView_LeftRenderer->change_curvature_proportion(p);
+		ui->DualView_RightRenderer->change_curvature_proportion(p);
+	}
+}
+
+void MainWindow::on_LE_PropCurvValues_returnPressed() {
+	float p;
+	if (get_prop_curvature_values(p)) {
+		change_curvature_prop_display(p);
+	}
+}
+
 void MainWindow::on_RBCurvatureG_toggled(bool checked) {
 	if (checked) {
+		set_prop_values_to_all();
 		ui->SingleView_Renderer->set_curvature_display(curv_type::Gauss);
 		ui->DualView_LeftRenderer->set_curvature_display(curv_type::Gauss);
 		ui->DualView_RightRenderer->set_curvature_display(curv_type::Gauss);
-		renderer_change_curvature();
+		change_curvature();
 	}
 }
 
 void MainWindow::on_RBCurvatureH_toggled(bool checked) {
 	if (checked) {
+		set_prop_values_to_all();
 		ui->SingleView_Renderer->set_curvature_display(curv_type::Mean);
 		ui->DualView_LeftRenderer->set_curvature_display(curv_type::Mean);
 		ui->DualView_RightRenderer->set_curvature_display(curv_type::Mean);
-		renderer_change_curvature();
+		change_curvature();
 	}
 }
 
@@ -102,7 +149,7 @@ void MainWindow::on_RBNoCurvature_toggled(bool checked) {
 		ui->SingleView_Renderer->set_curvature_display(curv_type::none);
 		ui->DualView_LeftRenderer->set_curvature_display(curv_type::none);
 		ui->DualView_RightRenderer->set_curvature_display(curv_type::none);
-		renderer_change_curvature();
+		change_curvature();
 	}
 }
 
@@ -164,8 +211,8 @@ void MainWindow::on_PB_ClearMesh_clicked() {
 
 void MainWindow::on_TW_View_currentChanged(int index) {
 	current_tab = index;
-	renderer_change_poly_mode();
-	renderer_change_curvature();
+	change_poly_mode();
+	change_curvature();
 }
 
 /* Settings stuff */

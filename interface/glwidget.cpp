@@ -92,6 +92,8 @@ void GLWidget::compute_curvature() {
 	mesh.make_neighbourhood_data();
 	mesh.make_angles_area();
 
+	curvature_values.clear();
+
 	timing::time_point begin = timing::now();
 	if (current_curv_display == curv_type::Gauss) {
 		cout << "    Gauss ";
@@ -128,7 +130,9 @@ void GLWidget::show_curvature(bool should_load, bool make_all_buffers) {
 	cout << "GLWidget::show_curvature - make colours with curvature" << endl;
 
 	vector<vec3> cols;
-	coloring::colors_rainbow_binning(curvature_values, cols);
+	float min, max;
+	min_max::binning(curvature_values, min, max, prop);
+	coloring::colors_rainbow(curvature_values, min, max, cols);
 
 	makeCurrent();
 	if (make_all_buffers) {
@@ -281,6 +285,7 @@ GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
 	angleY = 0.0f;
 	distance = 2.0f;
 
+	prop = 80.0f;
 	nt = 1;
 }
 
@@ -346,8 +351,6 @@ void GLWidget::set_curvature_display(const curv_type& cd) {
 }
 
 void GLWidget::change_curvature_display() {
-	curvature_values.clear();
-
 	// make all buffers only if the colour buffer
 	// was not made before
 	bool make_all_buffers = false;
@@ -358,6 +361,7 @@ void GLWidget::change_curvature_display() {
 	if (to_curv_display == curv_type::none) {
 		current_curv_display = curv_type::none;
 
+		curvature_values.clear();
 		// free only the colour buffer
 		mesh.free_buffers();
 
@@ -381,10 +385,35 @@ void GLWidget::change_curvature_display() {
 		load_shader = true;
 	}
 
+	if (current_curv_display == to_curv_display) {
+		// do not recompute...
+
+		// ... but maybe remake colours
+		if (to_prop != prop) {
+			to_prop = prop;
+			show_curvature(load_shader, make_all_buffers);
+		}
+		return;
+	}
+
 	current_curv_display = to_curv_display;
 
 	compute_curvature();
 	show_curvature(load_shader, make_all_buffers);
+}
+
+void GLWidget::change_display_curvature_proportion(float p) {
+	prop = p;
+	to_prop = p;
+
+	if (current_curv_display == curv_type::none) {
+		return;
+	}
+	show_curvature(false, false);
+}
+
+void GLWidget::change_curvature_proportion(float p) {
+	to_prop = p;
 }
 
 void GLWidget::set_num_threads(size_t _nt) {
