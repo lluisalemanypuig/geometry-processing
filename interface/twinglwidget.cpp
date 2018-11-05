@@ -100,7 +100,7 @@ void TwinGLWidget::run_smoothing_algorithm() {
 	}
 	else {
 		makeCurrent();
-		mesh.init(program);
+		mesh.make_vertices(program);
 		doneCurrent();
 	}
 	update();
