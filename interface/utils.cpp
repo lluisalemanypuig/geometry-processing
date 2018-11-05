@@ -133,9 +133,6 @@ namespace min_max {
 				++right;
 				move_right = (right < nbins ? true : false);
 			}
-
-			cout << "left: " << left << ", "
-				 << "right: " << right << endl;
 		}
 
 		#if defined (DEBUG)
