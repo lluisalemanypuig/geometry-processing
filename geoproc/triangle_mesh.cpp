@@ -336,13 +336,13 @@ void TriangleMesh::make_angles_area() {
 		angles[t/3].x = std::acos( glm::dot(u,v) );
 
 		// angle <0,1,2>
-		u = glm::normalize( v0 - v1 );
+		u = -u;
 		v = glm::normalize( v2 - v1 );
 		angles[t/3].y = std::acos( glm::dot(u,v) );
 
 		// angle <1,2,0>
 		u = glm::normalize( v0 - v2 );
-		v = glm::normalize( v1 - v2 );
+		v = -v;
 		angles[t/3].z = std::acos( glm::dot(u,v) );
 	}
 	// try optimising consumption of memory
