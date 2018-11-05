@@ -18,9 +18,7 @@
 namespace algorithms {
 namespace curvature {
 
-	inline bool has_big_angle(const glm::vec3& angles) {
-		return angles.x >= M_PI_2 or angles.y >= M_PI_2 or angles.z >= M_PI_2;
-	}
+	#define has_big_angle(a) (((a).x >= M_PI_2) or ((a).y >= M_PI_2) or ((a).z >= M_PI_2))
 
 	inline float cotan(float a) { return std::cos(a)/std::sin(a); }
 
@@ -57,9 +55,18 @@ namespace curvature {
 			const glm::vec3 angles1 = mesh_angles[next1];
 			const glm::vec3 angles2 = mesh_angles[next2];
 
-			if (vi == i1)		{ alpha = angles1.y; diff = m.get_vertex(k1) - m.get_vertex(vi); }
-			else if (vi == j1)	{ alpha = angles1.z; diff = m.get_vertex(i1) - m.get_vertex(vi); }
-			else if (vi == k1)	{ alpha = angles1.x; diff = m.get_vertex(j1) - m.get_vertex(vi); }
+			if (vi == i1)		{
+				alpha = angles1.y;
+				diff = m.get_vertex(k1) - m.get_vertex(vi);
+			}
+			else if (vi == j1)	{
+				alpha = angles1.z;
+				diff = m.get_vertex(i1) - m.get_vertex(vi);
+			}
+			else if (vi == k1)	{
+				alpha = angles1.x;
+				diff = m.get_vertex(j1) - m.get_vertex(vi);
+			}
 			if (vi == i2)		{ beta = angles2.z; }
 			else if (vi == j2)	{ beta = angles2.x; }
 			else if (vi == k2)	{ beta = angles2.y; }
@@ -71,7 +78,7 @@ namespace curvature {
 
 			// -- Accumulate area --
 			// when the triangle has an angle that is larger
-			// than 90 degrees (pi/4) then the area contributes
+			// than 90 degrees (pi/2) then the area contributes
 			// only by half.
 			float area = mesh_areas[next1];
 			if (has_big_angle(mesh_angles[next1])) {
