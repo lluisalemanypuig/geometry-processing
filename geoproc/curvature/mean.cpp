@@ -19,7 +19,7 @@ namespace algorithms {
 namespace curvature {
 
 	inline bool has_big_angle(const glm::vec3& angles) {
-		return angles.x > M_PI_4 or angles.y > M_PI_4 or angles.z > M_PI_4;
+		return angles.x >= M_PI_2 or angles.y >= M_PI_2 or angles.z >= M_PI_2;
 	}
 
 	inline float cotan(float a) { return std::cos(a)/std::sin(a); }
@@ -29,45 +29,45 @@ namespace curvature {
 		const std::vector<float>& mesh_areas = m.get_areas();
 		const std::vector<glm::vec3>& mesh_angles = m.get_angles();
 
-		// Voronoi area around 'i'
-		float vor_area = 0.0f;
-		// curvature vector
-		glm::vec3 curv_vec(0.0f,0.0f,0.0f);
-
 		iterators::vertex::vertex_face_iterator it(m);
 		const int first = it.init(vi);
 		int next1 = first;
 		int next2 = it.next();
 
+		if (next1 == -1 or next2 == -1) {
+			return 0.0f;
+		}
+
+		// Voronoi area around 'i'
+		float vor_area = 0.0f;
+		// curvature vector
+		glm::vec3 curv_vec(0.0f,0.0f,0.0f);
+
+		// loop variables
+		glm::vec3 diff;
 		float alpha, beta;
-		glm::vec3 u,v;
 		do {
-			// it is guaranteed that
-			//     i1 = i
-			//     i2 = i
-			// also, faces are sorted in counterclockwise order
-			// therefore:
-			//      i1 -> j1 -> k1 -> i1
-			// (i1) i2 -> j2 -> k2 -> i2 (i1)
 			int i1,j1,k1, i2,j2,k2;
-			m.get_vertices_triangle(next1, vi, i1,j1,k1);
-			m.get_vertices_triangle(next2, vi, i2,j2,k2);
+			m.get_vertices_triangle(next1, i1,j1,k1);
+			m.get_vertices_triangle(next2, i2,j2,k2);
 
-			// make sure that the orientations are correct
-			assert(k1 == j2);
+			// Compute the two angles (alpha and beta).
+			// At the same time, compute the difference vector.
 
-			// compute the two angles: alpha and beta
-			u = glm::normalize( m.get_vertex(i1) - m.get_vertex(j1) );
-			v = glm::normalize( m.get_vertex(k1) - m.get_vertex(j1) );
-			beta = glm::acos( glm::dot(u,v) );
-			u = glm::normalize( m.get_vertex(i2) - m.get_vertex(k2) );
-			v = glm::normalize( m.get_vertex(j2) - m.get_vertex(k2) );
-			alpha = glm::acos( glm::dot(u,v) );
+			const glm::vec3 angles1 = mesh_angles[next1];
+			const glm::vec3 angles2 = mesh_angles[next2];
+
+			if (vi == i1)		{ alpha = angles1.y; diff = m.get_vertex(k1) - m.get_vertex(vi); }
+			else if (vi == j1)	{ alpha = angles1.z; diff = m.get_vertex(i1) - m.get_vertex(vi); }
+			else if (vi == k1)	{ alpha = angles1.x; diff = m.get_vertex(j1) - m.get_vertex(vi); }
+			if (vi == i2)		{ beta = angles2.z; }
+			else if (vi == j2)	{ beta = angles2.x; }
+			else if (vi == k2)	{ beta = angles2.y; }
 
 			// compute weight
 			float W = cotan(alpha) + cotan(beta);
 			// accumulate curvature vector
-			curv_vec += W*(m.get_vertex(i1) - m.get_vertex(k1));
+			curv_vec += W*diff;
 
 			// -- Accumulate area --
 			// when the triangle has an angle that is larger

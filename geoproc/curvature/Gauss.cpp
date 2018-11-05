@@ -20,7 +20,7 @@ namespace algorithms {
 namespace curvature {
 
 	inline bool has_big_angle(const glm::vec3& angles) {
-		return angles.x > M_PI_4 or angles.y > M_PI_4 or angles.z > M_PI_4;
+		return angles.x >= M_PI_2 or angles.y >= M_PI_2 or angles.z >= M_PI_2;
 	}
 
 	/* ------------------------------ */
