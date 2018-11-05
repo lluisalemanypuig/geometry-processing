@@ -60,8 +60,6 @@ namespace smoothing_private {
 	void make_cotangent_weight
 	(int vi, const TriangleMesh& m, const glm::vec3 *verts, glm::vec3& L)
 	{
-		const std::vector<glm::vec3>& mesh_angles = m.get_angles();
-
 		iterators::vertex::vertex_face_iterator it(m);
 		const int first = it.init(vi);
 		int next1 = first;
@@ -79,32 +77,39 @@ namespace smoothing_private {
 		float S = 0.0f;
 
 		// loop variables
-		glm::vec3 diff;
+		glm::vec3 u, v;
 		float alpha, beta;
 		do {
+			// it is guaranteed that
+			//     i1 = i
+			//     i2 = i
+			// also, faces are sorted in counterclockwise order
+			// therefore:
+			//      i1 -> j1 -> k1 -> i1
+			// (i1) i2 -> j2 -> k2 -> i2 (i1)
 			int i1,j1,k1, i2,j2,k2;
-			m.get_vertices_triangle(next1, i1,j1,k1);
-			m.get_vertices_triangle(next2, i2,j2,k2);
+			m.get_vertices_triangle(next1, vi, i1,j1,k1);
+			m.get_vertices_triangle(next2, vi, i2,j2,k2);
 
 			// Compute the two angles (alpha and beta).
-			// At the same time, compute the difference vector.
 
-			const glm::vec3 angles1 = mesh_angles[next1];
-			const glm::vec3 angles2 = mesh_angles[next2];
+			// make sure that the orientations are correct
+			assert(k1 == j2);
 
-			if (vi == i1)		{ alpha = angles1.y; diff = verts[k1] - verts[vi]; }
-			else if (vi == j1)	{ alpha = angles1.z; diff = verts[i1] - verts[vi]; }
-			else if (vi == k1)	{ alpha = angles1.x; diff = verts[j1] - verts[vi]; }
-			if (vi == i2)		{ beta = angles2.z; }
-			else if (vi == j2)	{ beta = angles2.x; }
-			else if (vi == k2)	{ beta = angles2.y; }
-
-			diffs.push_back( diff );
+			// compute the two angles: alpha and beta
+			u = glm::normalize( verts[i1] - verts[j1] );
+			v = glm::normalize( verts[k1] - verts[j1] );
+			alpha = glm::acos( glm::dot(u,v) );
+			u = glm::normalize( verts[i2] - verts[k2] );
+			v = glm::normalize( verts[j2] - verts[k2] );
+			beta = glm::acos( glm::dot(u,v) );
 
 			// compute weight
 			float W = cotan(alpha) + cotan(beta);
-			weights.push_back(W);
 			S += W;
+			weights.push_back(W);
+			// accumulate curvature vector
+			diffs.push_back(verts[i1] - verts[k1]);
 
 			// go to next 2 faces
 			next1 = next2;
