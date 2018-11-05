@@ -20,6 +20,9 @@ namespace test_algorithms {
 		cout << "        of the input mesh and of the smoothed mesh." << endl;
 		cout << "        Default: do not print." << endl;
 		cout << endl;
+		cout << "    --threads n: specify number of threads." << endl;
+		cout << "        Default: 1" << endl;
+		cout << endl;
 		cout << "    Parameters of each algorithm." << endl;
 		cout << "    Unless stated otherwise, all of them are mandatory" << endl;
 		cout << "    * laplacian:" << endl;
@@ -53,6 +56,7 @@ namespace test_algorithms {
 		string alg = "none";
 		string weight_type = "none";
 		float lambda;
+		size_t nt = 1;
 		size_t it;
 
 		bool _print = false;
@@ -92,6 +96,10 @@ namespace test_algorithms {
 			}
 			else if (strcmp(argv[i], "--weight-type") == 0) {
 				weight_type = string(argv[i + 1]);
+				++i;
+			}
+			else if (strcmp(argv[i], "--threads") == 0) {
+				nt = atoi(argv[i + 1]);
 				++i;
 			}
 			else {
@@ -152,6 +160,7 @@ namespace test_algorithms {
 		TriangleMesh mesh;
 		PLY_reader::read_mesh(mesh_file, mesh);
 		mesh.make_neighbourhood_data();
+		mesh.make_angles_area();
 
 		if (_print) {
 			cout << "Loaded mesh:" << endl;
@@ -164,13 +173,13 @@ namespace test_algorithms {
 
 		timing::time_point begin = timing::now();
 		if (alg == "laplacian") {
-			algorithms::smoothing::laplacian(w, lambda, it, mesh);
+			algorithms::smoothing::laplacian(w, lambda, it, nt, mesh);
 		}
 		else if (alg == "bilaplacian") {
-			algorithms::smoothing::bilaplacian(w, lambda, it, mesh);
+			algorithms::smoothing::bilaplacian(w, lambda, it, nt, mesh);
 		}
 		else if (alg == "TaubinLM") {
-			algorithms::smoothing::TaubinLM(w, lambda, it, mesh);
+			algorithms::smoothing::TaubinLM(w, lambda, it, nt, mesh);
 		}
 		timing::time_point end = timing::now();
 		cout << "Smoothed mesh in "
