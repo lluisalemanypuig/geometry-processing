@@ -212,49 +212,53 @@ namespace coloring {
 
 			float r, g, b;
 			if (s <= 0.0f) {
-				r = 0.0f;
+				// RED
+				// below 0.0
+				r = 1.0f;
 				g = 0.0f;
 				b = 0.0f;
 			}
 			else if (s <= 0.2f) {
-				// RED
+				// RED to YELLOW
 				// from 0.0 to 0.2
-				r = 5.0f*(s - 0.0f);
-				g = 0.0f;
+				r = 1.0f;
+				g = 5.0f*(s - 0.0f);
 				b = 0.0f;
 			}
 			else if (s <= 0.4f) {
-				// YELLOW
+				// YELLOW to GREEN
 				// from 0.2 to 0.4
-				r = 1.0f;
-				g = 5.0f*(s - 0.2f);
+				r = -5.0f*s + 2.0f;
+				g = 1.0f;
 				b = 0.0f;
 			}
 			else if (s <= 0.6f) {
-				// GREEN
+				// GREEN to CYAN
 				// from 0.4 to 0.6
-				r = 5.0f*(s - 0.4f);
+				r = 0.0f;
 				g = 1.0f;
-				b = 0.0f;
+				b = 5.0f*(s - 0.4f);
 			}
 			else if (s <= 0.8f) {
-				// TURQUOISE
+				// CYAN to BLUE
 				// from 0.6 to 0.8
 				r = 0.0f;
-				g = 1.0f;
-				b = 5.0f*(s - 0.6f);
+				g = -5.0f*s + 4.0f;
+				b = 1.0f;
 			}
 			else if (s <= 1.0f) {
-				// BLUE
+				// BLUE to PURPLE
 				// from 0.8 to 1.0
-				r = 0.0f;
-				g = 5.0f*(s - 0.8f);
+				r = 5.0f*(s - 0.8f);
+				g = 0.0f;
 				b = 1.0f;
 			}
 			else if (1.0f <= s) {
-				r = 5.0f*(s - 1.0f);
+				// PURPLE
+				// above 1.0
+				r = 1.0f;
 				g = 0.0f;
-				b = 5.0f*(s - 1.0f);
+				b = 1.0f;
 			}
 
 			cols[i].x = r;
