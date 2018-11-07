@@ -19,8 +19,6 @@
 namespace algorithms {
 namespace curvature {
 
-	#define has_big_angle(a) (((a).x >= M_PI_2) or ((a).y >= M_PI_2) or ((a).z >= M_PI_2))
-
 	/* ------------------------------ */
 	/* --------- SEQUENTIAL --------- */
 
@@ -58,9 +56,6 @@ namespace curvature {
 			// than 90 degrees (pi/4) then the area contributes
 			// only by half.
 			area = mesh_areas[t];
-			if (has_big_angle(mesh_angles[t])) {
-				area /= 2.0f;
-			}
 			Kg[i0] += area;
 			Kg[i1] += area;
 			Kg[i2] += area;

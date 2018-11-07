@@ -18,8 +18,6 @@
 namespace algorithms {
 namespace curvature {
 
-	#define has_big_angle(a) (((a).x >= M_PI_2) or ((a).y >= M_PI_2) or ((a).z >= M_PI_2))
-
 	inline float cotan(float a) { return std::cos(a)/std::sin(a); }
 
 	inline float Kh_at_vertex(const TriangleMesh& m, int vi) {
@@ -81,9 +79,6 @@ namespace curvature {
 			// than 90 degrees (pi/2) then the area contributes
 			// only by half.
 			float area = mesh_areas[next1];
-			if (has_big_angle(mesh_angles[next1])) {
-				area /= 2.0f;
-			}
 			vor_area += area;
 
 			// go to next 2 faces
