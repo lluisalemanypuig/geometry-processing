@@ -53,7 +53,6 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 
 		void delete_program();
 		void load_simple_shader();
-		void load_curvature_shader();
 
 		void compute_curvature();
 		void show_curvature(

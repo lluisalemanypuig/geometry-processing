@@ -26,7 +26,6 @@ SOURCES +=						\
 	utils.cpp
 
 DISTFILES +=					\
-	shaders/curvature.vert		\
 	shaders/curvature.frag		\
 	shaders/simple.vert			\
 	shaders/simple.frag

@@ -18,7 +18,7 @@ using namespace std;
 
 const float rotationFactor = 0.5f;
 const float maxRotationCamera = 75.0f;
-const float minDistanceCamera = 1.0f;
+const float minDistanceCamera = 0.25f;
 const float maxDistanceCamera = 3.0f;
 
 // PRIVATE
@@ -71,23 +71,6 @@ void GLWidget::load_simple_shader() {
 	}
 }
 
-void GLWidget::load_curvature_shader() {
-	delete_program();
-	program = new QOpenGLShaderProgram();
-	program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/curvature.vert");
-	program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/curvature.frag");
-	program->link();
-	if (not program->isLinked()) {
-		cerr << "GLWidget::initializeGL - Error:" << endl;
-		cerr << "Shader program 'curvature' has not linked" << endl;
-		cerr << endl;
-		cerr << "Log: " << endl;
-		cerr << endl;
-		cerr << program->log().toStdString();
-		QApplication::quit();
-	}
-}
-
 void GLWidget::compute_curvature() {
 	mesh.make_neighbourhood_data();
 	mesh.make_angles_area();
@@ -121,7 +104,7 @@ void GLWidget::show_curvature(bool should_load, bool make_all_buffers) {
 		cout << "GLWidget::show_curvature - load curvature shader" << endl;
 
 		makeCurrent();
-		load_curvature_shader();
+		load_simple_shader();
 		set_projection();
 		set_modelview();
 		doneCurrent();
@@ -210,6 +193,7 @@ void GLWidget::paintGL() {
 		program->setUniformValue("wireframe", true);
 
 		// 'fill' the triangles with white
+		program->setUniformValue("curvature", false);
 		program->setUniformValue("color", QVector4D(1.0f, 1.0f, 1.0f, 1.0f));
 		glEnable(GL_POLYGON_OFFSET_FILL);
 		glPolygonOffset(0.5f, 1.0f);
@@ -220,6 +204,12 @@ void GLWidget::paintGL() {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glDisable(GL_POLYGON_OFFSET_FILL);
 		program->setUniformValue("color", QVector4D(0.05f, 0.05f, 0.15f, 1.0f));
+		if (curvature_values.size() == 0) {
+			program->setUniformValue("curvature", false);
+		}
+		else {
+			program->setUniformValue("curvature", true);
+		}
 
 		mesh.render(*this);
 		program->release();
@@ -239,6 +229,7 @@ void GLWidget::paintGL() {
 		}
 
 		// display with curvature color
+		program->setUniformValue("curvature", true);
 		mesh.render(*this);
 		program->release();
 		return;
@@ -285,7 +276,7 @@ GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
 	angleY = 0.0f;
 	distance = 2.0f;
 
-	prop = 80.0f;
+	prop = 95.0f;
 	nt = 1;
 }
 
@@ -376,22 +367,13 @@ void GLWidget::change_curvature_display() {
 		return;
 	}
 
-	// load program only if necessary: if a curvature
-	// was already being shown and we are told to show
-	// another curvature, do not load program. If, however,
-	// we weren't showing any then load the program.
-	bool load_shader = false;
-	if (current_curv_display == curv_type::none) {
-		load_shader = true;
-	}
-
 	if (current_curv_display == to_curv_display) {
 		// do not recompute...
 
 		// ... but maybe remake colours
 		if (to_prop != prop) {
 			to_prop = prop;
-			show_curvature(load_shader, make_all_buffers);
+			show_curvature(false, make_all_buffers);
 		}
 		return;
 	}
@@ -399,7 +381,7 @@ void GLWidget::change_curvature_display() {
 	current_curv_display = to_curv_display;
 
 	compute_curvature();
-	show_curvature(load_shader, make_all_buffers);
+	show_curvature(false, make_all_buffers);
 }
 
 void GLWidget::change_display_curvature_proportion(float p) {

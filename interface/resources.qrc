@@ -1,8 +1,7 @@
 <RCC>
     <qresource prefix="/">
-        <file>shaders/curvature.frag</file>
-        <file>shaders/curvature.vert</file>
         <file>shaders/simple.frag</file>
         <file>shaders/simple.vert</file>
+        <file>images/raindow.jpeg</file>
     </qresource>
 </RCC>

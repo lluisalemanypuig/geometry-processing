@@ -253,8 +253,8 @@ namespace coloring {
 			}
 			else if (1.0f <= s) {
 				r = 5.0f*(s - 1.0f);
-				g = 1.0f;
-				b = 1.0f;
+				g = 0.0f;
+				b = 5.0f*(s - 1.0f);
 			}
 
 			cols[i].x = r;
