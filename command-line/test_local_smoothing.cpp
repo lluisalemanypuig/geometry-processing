@@ -5,16 +5,10 @@
 
 namespace test_algorithms {
 
-	void smoothing_usage() {
-		cout << "Smoothing evaluation" << endl;
+	void local_smoothing_usage() {
+		cout << "Local smoothing evaluation" << endl;
 		cout << endl;
 		cout << "    --load f: load a mesh stored in the .ply file f" << endl;
-		cout << endl;
-		cout << "    --algorithm: choose the algorithm to evaluate" << endl;
-		cout << "        Allowed values:" << endl;
-		cout << "        * laplacian" << endl;
-		cout << "        * bilaplacian" << endl;
-		cout << "        * TaubinLM" << endl;
 		cout << endl;
 		cout << "    --print: prints to standard output the coordinates" << endl;
 		cout << "        of the input mesh and of the smoothed mesh." << endl;
@@ -22,6 +16,12 @@ namespace test_algorithms {
 		cout << endl;
 		cout << "    --threads n: specify number of threads." << endl;
 		cout << "        Default: 1" << endl;
+		cout << endl;
+		cout << "    --algorithm: choose the algorithm to evaluate" << endl;
+		cout << "        Allowed values:" << endl;
+		cout << "        * laplacian" << endl;
+		cout << "        * bilaplacian" << endl;
+		cout << "        * TaubinLM" << endl;
 		cout << endl;
 		cout << "    Parameters of each algorithm." << endl;
 		cout << "    Unless stated otherwise, all of them are mandatory" << endl;
@@ -49,7 +49,7 @@ namespace test_algorithms {
 		cout << endl;
 	}
 
-	int test_smoothing(int argc, char *argv[]) {
+	int test_local_smoothing(int argc, char *argv[]) {
 		const set<string> allowed_algorithms({"laplacian", "bilaplacian", "TaubinLM"});
 
 		string mesh_file = "none";
@@ -64,13 +64,13 @@ namespace test_algorithms {
 		bool _it = false;
 
 		if (argc == 2) {
-			smoothing_usage();
+			local_smoothing_usage();
 			return 0;
 		}
 
 		for (int i = 2; i < argc; ++i) {
 			if (strcmp(argv[i], "-h") == 0 or strcmp(argv[i], "--help") == 0) {
-				smoothing_usage();
+				local_smoothing_usage();
 				return 1;
 			}
 			else if (strcmp(argv[i], "--load") == 0) {

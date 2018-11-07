@@ -19,8 +19,9 @@ int main(int argc, char *argv[]) {
 		cout << "List of tests:" << endl;
 		cout << "    iterate" << endl;
 		cout << "    curvature" << endl;
-		cout << "    smoothing" << endl;
-		cout << endl;
+		cout << "    local-smoothing" << endl;
+		cout << "    global-smoothing (coming soon)" << endl;
+		cout << "    high-frequency" << endl;
 		cout << "Use [-h|--help] on every option to see its usage." << endl;
 		return 0;
 	}
@@ -33,8 +34,18 @@ int main(int argc, char *argv[]) {
 		return test_algorithms::test_curvature(argc, argv);
 	}
 
-	if (strcmp(argv[1], "smoothing") == 0) {
-		return test_algorithms::test_smoothing(argc, argv);
+	if (strcmp(argv[1], "local-smoothing") == 0) {
+		return test_algorithms::test_local_smoothing(argc, argv);
+	}
+
+	if (strcmp(argv[1], "global-smoothing") == 0) {
+		cerr << "Not implemented yet" << endl;
+		return 1;
+	}
+
+	if (strcmp(argv[1], "high-frequency") == 0) {
+		return test_algorithms::high_frequency(argc, argv);
+		return 1;
 	}
 
 	cerr << "Error: algorithm '" << string(argv[1]) << "' not recognised" << endl;

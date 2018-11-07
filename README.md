@@ -2,12 +2,13 @@
 
 Set of algorithms for geometric processing. These algorithms include:
 - Computing the curvature of the vertices of a mesh:
-	- Gauss curvature Kg
-	- Mean curvature Kh
+	- Gauss curvature (Kg)
+	- Mean curvature (Kh)
 - Noise filtering:
 	- Laplacian
 	- Bi-Laplacian
 	- Taubin lambda-mu operator
+- High frequencies highlighting
 
 The algorithms' implementations are inside the _algorithms/_ directory.
 That directory also includes a small data structure for triangular meshes
