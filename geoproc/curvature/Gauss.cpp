@@ -128,9 +128,6 @@ namespace curvature {
 			// than 90 degrees (pi/4) then the area contributes
 			// only by half.
 			float area = mesh_areas[f];
-			if (has_big_angle(mesh_angles[f])) {
-				area /= 2.0f;
-			}
 			vor_area += area;
 
 			// index vertices of current face
