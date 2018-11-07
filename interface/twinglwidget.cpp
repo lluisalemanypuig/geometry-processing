@@ -82,6 +82,8 @@ void TwinGLWidget::run_smoothing_algorithm() {
 	}
 	timing::time_point end = timing::now();
 
+	mesh.make_normal_vectors();
+
 	// output execution time
 	cout << " in "
 		 << timing::elapsed_seconds(begin,end)
