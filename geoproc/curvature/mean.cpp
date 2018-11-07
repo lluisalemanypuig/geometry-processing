@@ -15,7 +15,7 @@
 #include <geoproc/iterators/mesh_iterator.hpp>
 #include <geoproc/iterators/vertex_iterators.hpp>
 
-namespace algorithms {
+namespace geoproc {
 namespace curvature {
 
 	inline float cotan(float a) { return std::cos(a)/std::sin(a); }
@@ -164,4 +164,4 @@ namespace curvature {
 	}
 
 } // -- namespace curavture
-} // -- namespace algorithms
+} // -- namespace geoproc

@@ -1,6 +1,12 @@
 #include "test_geoproc.hpp"
 
-namespace test_algorithms {
+// geoproc includes
+#include <geoproc/curvature/curvature.hpp>
+#include <geoproc/triangle_mesh.hpp>
+#include <geoproc/ply_reader.hpp>
+using namespace geoproc;
+
+namespace test_geoproc {
 
 	void curvature_usage() {
 		cout << "Curvature evaluation" << endl;
@@ -95,10 +101,10 @@ namespace test_algorithms {
 
 		begin = timing::now();
 		if (curvature == "Gauss") {
-			algorithms::curvature::Gauss(mesh, curv, nt, &min, &max);
+			curvature::Gauss(mesh, curv, nt, &min, &max);
 		}
 		else if (curvature == "mean") {
-			algorithms::curvature::mean(mesh, curv, nt, &min, &max);
+			curvature::mean(mesh, curv, nt, &min, &max);
 		}
 		end = timing::now();
 

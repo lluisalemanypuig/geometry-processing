@@ -3,7 +3,12 @@
 // C++ includes
 #include <set>
 
-namespace test_algorithms {
+// geoproc includes
+#include <geoproc/triangle_mesh.hpp>
+#include <geoproc/ply_reader.hpp>
+using namespace geoproc;
+
+namespace test_geoproc {
 
 	void high_frequencies_usage() {
 		cout << "High frequencies evaluation" << endl;
@@ -19,7 +24,7 @@ namespace test_algorithms {
 		cout << endl;
 	}
 
-	int test_high_frequencies(int argc, char *argv[]) {
+	int test_high_frequency(int argc, char *argv[]) {
 
 		string mesh_file = "none";
 		size_t nt = 1;
@@ -33,7 +38,7 @@ namespace test_algorithms {
 
 		for (int i = 2; i < argc; ++i) {
 			if (strcmp(argv[i], "-h") == 0 or strcmp(argv[i], "--help") == 0) {
-				local_smoothing_usage();
+				high_frequencies_usage();
 				return 1;
 			}
 			else if (strcmp(argv[i], "--load") == 0) {

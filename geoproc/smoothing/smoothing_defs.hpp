@@ -1,6 +1,8 @@
 #pragma once
 
-namespace algorithms {
+#include <cstdint>
+
+namespace geoproc {
 namespace smoothing {
 
 	/**
@@ -56,4 +58,4 @@ namespace smoothing {
 	};
 
 } // -- namespace smoothing
-} // -- namespace algorithms
+} // -- namespace geoproc

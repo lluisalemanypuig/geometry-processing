@@ -8,26 +8,18 @@
 #include <QMouseEvent>
 
 // geoproc includes
-#include <geoproc/smoothing/iterative_local.hpp>
-using namespace algorithms;
-using namespace smoothing;
+#include <geoproc/smoothing/smoothing_defs.hpp>
+using namespace geoproc;
 
 // Custom includes
 #include "render_triangle_mesh.hpp"
 #include "glwidget.hpp"
 #include "utils.hpp"
 
-enum class smoothing_operator : int8_t {
-	none = -1,
-	Laplacian,		// Laplacian smoothing algorithm
-	biLaplacian,	// Bi-Laplacian smoothing algorithm
-	Taubin			// Taubin l-m operator
-};
-
 class TwinGLWidget : public GLWidget {
 	protected:
-		smoothing_operator op;
-		smooth_weight wt;
+		smoothing::smooth_operator op;
+		smoothing::smooth_weight wt;
 		size_t nit;
 		float lambda;
 		float mu;
@@ -48,8 +40,8 @@ class TwinGLWidget : public GLWidget {
 
 		void set_n_iterations(size_t n);
 		void set_lambda(float l);
-		void set_smoothing_operator(const smoothing_operator& o);
-		void set_weight_type(const smooth_weight& w);
+		void set_smooth_operator(const smoothing::smooth_operator& o);
+		void set_smooth_weight_type(const smoothing::smooth_weight& w);
 
 		// OTHERS
 

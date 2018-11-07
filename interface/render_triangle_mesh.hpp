@@ -16,6 +16,7 @@ using namespace glm;
 
 // algorithms includes
 #include <geoproc/triangle_mesh.hpp>
+using namespace geoproc;
 
 class RenderTriangleMesh : public TriangleMesh {
 	private:

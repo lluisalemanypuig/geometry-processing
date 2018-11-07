@@ -11,7 +11,7 @@ using namespace std;
 #include <geoproc/iterators/mesh_iterator.hpp>
 #include <geoproc/iterators/vertex_iterators.hpp>
 
-namespace algorithms {
+namespace geoproc {
 namespace smoothing {
 namespace smoothing_private {
 
@@ -214,4 +214,4 @@ namespace smoothing_private {
 
 } // -- namespace smoothing_private
 } // -- namespace smoothing
-} // -- namespace algorithms
+} // -- namespace geoproc

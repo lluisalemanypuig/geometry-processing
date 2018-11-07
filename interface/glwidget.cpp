@@ -80,11 +80,11 @@ void GLWidget::compute_curvature() {
 	timing::time_point begin = timing::now();
 	if (current_curv_display == curv_type::Gauss) {
 		cout << "    Gauss ";
-		algorithms::curvature::Gauss(mesh, curvature_values, nt);
+		geoproc::curvature::Gauss(mesh, curvature_values, nt);
 	}
 	else if (current_curv_display == curv_type::Mean) {
 		cout << "    Mean ";
-		algorithms::curvature::mean(mesh, curvature_values, nt);
+		geoproc::curvature::mean(mesh, curvature_values, nt);
 	}
 	timing::time_point end = timing::now();
 
@@ -306,7 +306,7 @@ void GLWidget::load_mesh(const QString& filename) {
 
 	cout << "GLWidget::load_mesh - reading mesh..." << endl;
 
-	PLY_reader::read_mesh(filename.toStdString(), mesh);
+	geoproc::PLY_reader::read_mesh(filename.toStdString(), mesh);
 	mesh.make_normal_vectors();
 	mesh.scale_to_unit();
 

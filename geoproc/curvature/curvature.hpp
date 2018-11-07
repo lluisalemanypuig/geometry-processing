@@ -6,7 +6,7 @@
 // geoproc includes
 #include <geoproc/triangle_mesh.hpp>
 
-namespace algorithms {
+namespace geoproc {
 namespace curvature {
 
 	/**
@@ -128,4 +128,4 @@ namespace curvature {
 	);
 
 } // -- namespace curavture
-} // -- namespace algorithms
+} // -- namespace geoproc

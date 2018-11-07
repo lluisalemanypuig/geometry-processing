@@ -10,7 +10,7 @@
 // geoproc includes
 #include <geoproc/smoothing/iterative_private.hpp>
 
-namespace algorithms {
+namespace geoproc {
 namespace smoothing {
 
 	void laplacian(const smooth_weight& w, float l, size_t nit, TriangleMesh& m) {
@@ -221,4 +221,4 @@ namespace smoothing {
 	}
 
 } // -- namespace smoothing
-} // -- namespace algorithms
+} // -- namespace geoproc

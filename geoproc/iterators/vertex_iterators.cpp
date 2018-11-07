@@ -13,6 +13,7 @@ int previous_corner(int corner) {
 	return 3*(corner/3) + (corner + 2)%3;
 }
 
+namespace geoproc {
 namespace iterators {
 namespace vertex {
 
@@ -104,3 +105,4 @@ int vertex_face_iterator::next() {
 
 } // -- namespace vertex
 } // -- namespace iterators
+} // -- namespace geoproc

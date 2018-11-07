@@ -4,7 +4,7 @@
 #include <geoproc/triangle_mesh.hpp>
 #include <geoproc/smoothing/smoothing_defs.hpp>
 
-namespace algorithms {
+namespace geoproc {
 namespace smoothing {
 
 	/**
@@ -123,4 +123,4 @@ namespace smoothing {
 	(const smooth_weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);
 
 } // -- namespace smoothing
-} // -- namespace algorithms
+} // -- namespace geoproc

@@ -4,6 +4,7 @@
 #include <geoproc/iterators/mesh_iterator.hpp>
 #include <geoproc/triangle_mesh.hpp>
 
+namespace geoproc {
 namespace iterators {
 namespace vertex {
 
@@ -130,3 +131,4 @@ class vertex_face_iterator : public mesh_iterator {
 
 } // -- namespace vertex
 } // -- namespace iterators
+} // -- namespace geoproc

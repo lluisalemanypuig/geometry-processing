@@ -1,6 +1,6 @@
-#include "highfrequencies.hpp"
+#include <geoproc/high-frequencies/highfrequencies.hpp>
 
-namespace algorithms {
+namespace geoproc {
 namespace high_frequencies {
 
 void high_frequency_details(const smoothing_configuration& S, TriangleMesh& m) {

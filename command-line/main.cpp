@@ -27,15 +27,15 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (strcmp(argv[1], "iterate") == 0) {
-		return test_algorithms::test_iterate(argc, argv);
+		return test_geoproc::test_iterate(argc, argv);
 	}
 
 	if (strcmp(argv[1], "curvature") == 0) {
-		return test_algorithms::test_curvature(argc, argv);
+		return test_geoproc::test_curvature(argc, argv);
 	}
 
 	if (strcmp(argv[1], "local-smoothing") == 0) {
-		return test_algorithms::test_local_smoothing(argc, argv);
+		return test_geoproc::test_local_smoothing(argc, argv);
 	}
 
 	if (strcmp(argv[1], "global-smoothing") == 0) {
@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (strcmp(argv[1], "high-frequency") == 0) {
-		return test_algorithms::high_frequency(argc, argv);
+		return test_geoproc::test_high_frequency(argc, argv);
 		return 1;
 	}
 

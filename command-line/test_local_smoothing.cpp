@@ -3,7 +3,13 @@
 // C++ includes
 #include <set>
 
-namespace test_algorithms {
+// geoproc includes
+#include <geoproc/smoothing/iterative_local.hpp>
+#include <geoproc/triangle_mesh.hpp>
+#include <geoproc/ply_reader.hpp>
+using namespace geoproc;
+
+namespace test_geoproc {
 
 	void local_smoothing_usage() {
 		cout << "Local smoothing evaluation" << endl;
@@ -147,13 +153,13 @@ namespace test_algorithms {
 			}
 		}
 
-		algorithms::smoothing::smooth_weight w;
+		smoothing::smooth_weight w;
 		if (weight_type != "none") {
 			if (weight_type == "uniform") {
-				w = algorithms::smoothing::smooth_weight::uniform;
+				w = smoothing::smooth_weight::uniform;
 			}
 			else if (weight_type == "cotangent") {
-				w = algorithms::smoothing::smooth_weight::cotangent;
+				w = smoothing::smooth_weight::cotangent;
 			}
 		}
 
@@ -173,13 +179,13 @@ namespace test_algorithms {
 
 		timing::time_point begin = timing::now();
 		if (alg == "laplacian") {
-			algorithms::smoothing::laplacian(w, lambda, it, nt, mesh);
+			smoothing::laplacian(w, lambda, it, nt, mesh);
 		}
 		else if (alg == "bilaplacian") {
-			algorithms::smoothing::bilaplacian(w, lambda, it, nt, mesh);
+			smoothing::bilaplacian(w, lambda, it, nt, mesh);
 		}
 		else if (alg == "TaubinLM") {
-			algorithms::smoothing::TaubinLM(w, lambda, it, nt, mesh);
+			smoothing::TaubinLM(w, lambda, it, nt, mesh);
 		}
 		timing::time_point end = timing::now();
 		cout << "Smoothed mesh in "

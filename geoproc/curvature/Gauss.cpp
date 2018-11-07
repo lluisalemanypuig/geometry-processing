@@ -16,7 +16,7 @@
 #include <geoproc/iterators/mesh_iterator.hpp>
 #include <geoproc/iterators/vertex_iterators.hpp>
 
-namespace algorithms {
+namespace geoproc {
 namespace curvature {
 
 	/* ------------------------------ */
@@ -195,4 +195,4 @@ namespace curvature {
 	}
 
 } // -- namespace curavture
-} // -- namespace algorithms
+} // -- namespace geoproc

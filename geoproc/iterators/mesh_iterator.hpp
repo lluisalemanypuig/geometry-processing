@@ -5,6 +5,7 @@
 // geoproc includes
 #include <geoproc/triangle_mesh.hpp>
 
+namespace geoproc {
 namespace iterators {
 
 /**
@@ -50,3 +51,4 @@ class mesh_iterator {
 };
 
 } // -- namespace iterators
+} // -- namespace geoproc

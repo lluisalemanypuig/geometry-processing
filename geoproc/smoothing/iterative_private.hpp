@@ -7,7 +7,7 @@
 #include <geoproc/triangle_mesh.hpp>
 #include <geoproc/smoothing/smoothing_defs.hpp>
 
-namespace algorithms {
+namespace geoproc {
 namespace smoothing {
 namespace smoothing_private {
 
@@ -90,4 +90,4 @@ namespace smoothing_private {
 
 } // -- namespace smoothing_private
 } // -- namespace smoothing
-} // -- namespace algorithms
+} // -- namespace geoproc

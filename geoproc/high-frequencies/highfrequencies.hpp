@@ -8,7 +8,7 @@
 #include <geoproc/smoothing/smoothing_defs.hpp>
 #include <geoproc/triangle_mesh.hpp>
 
-namespace algorithms {
+namespace geoproc {
 namespace high_frequencies {
 
 	/**

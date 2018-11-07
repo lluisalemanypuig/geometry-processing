@@ -7,6 +7,8 @@
 // geoproc includes
 #include <geoproc/triangle_mesh.hpp>
 
+namespace geoproc {
+
 /**
  * @brief Read a mesh in .ply format
  *
@@ -42,3 +44,4 @@ namespace PLY_reader {
 	bool read_mesh(const std::string& filename, TriangleMesh& mesh);
 
 } // -- namespace PLY_reader
+} // -- namespace geoproc

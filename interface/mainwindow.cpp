@@ -157,19 +157,25 @@ void MainWindow::on_RBNoCurvature_toggled(bool checked) {
 
 void MainWindow::on_RB_Laplacian_toggled(bool checked) {
 	if (checked) {
-		ui->DualView_RightRenderer->set_smoothing_operator(smoothing_operator::Laplacian);
+		ui->DualView_RightRenderer->set_smooth_operator(
+			geoproc::smoothing::smooth_operator::Laplacian
+		);
 	}
 }
 
 void MainWindow::on_RB_BiLaplacian_toggled(bool checked) {
 	if (checked) {
-		ui->DualView_RightRenderer->set_smoothing_operator(smoothing_operator::biLaplacian);
+		ui->DualView_RightRenderer->set_smooth_operator(
+			geoproc::smoothing::smooth_operator::BiLaplacian
+		);
 	}
 }
 
 void MainWindow::on_RB_Taubin_toggled(bool checked) {
 	if (checked) {
-		ui->DualView_RightRenderer->set_smoothing_operator(smoothing_operator::Taubin);
+		ui->DualView_RightRenderer->set_smooth_operator(
+			geoproc::smoothing::smooth_operator::TaubinLM
+		);
 	}
 }
 
@@ -219,10 +225,14 @@ void MainWindow::on_TW_View_currentChanged(int index) {
 
 void MainWindow::on_comboBox_currentIndexChanged(const QString& arg1) {
 	if (arg1 == "Uniform") {
-		ui->DualView_RightRenderer->set_weight_type(smooth_weight::uniform);
+		ui->DualView_RightRenderer->set_smooth_weight_type(
+			geoproc::smoothing::smooth_weight::uniform
+		);
 	}
 	else if (arg1 == "Cotangent") {
-		ui->DualView_RightRenderer->set_weight_type(smooth_weight::cotangent);
+		ui->DualView_RightRenderer->set_smooth_weight_type(
+			geoproc::smoothing::smooth_weight::cotangent
+		);
 	}
 }
 

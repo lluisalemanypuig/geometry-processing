@@ -8,6 +8,7 @@
 #include <fstream>
 using namespace std;
 
+namespace geoproc {
 namespace PLY_reader {
 
 	bool __load_header(ifstream& fin, int& n_verts, int& n_faces, string& format) {
@@ -209,3 +210,4 @@ namespace PLY_reader {
 	}
 
 } // -- namespace PLY_reader
+} // -- namespace geoproc

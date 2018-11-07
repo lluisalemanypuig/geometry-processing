@@ -9,6 +9,8 @@
 #include <iostream>
 #include <cmath>
 
+namespace geoproc {
+
 struct CornerEdge {
 	int vertexA, vertexB, corner;
 
@@ -476,3 +478,5 @@ void TriangleMesh::get_min_max_coordinates(glm::vec3& m, glm::vec3& M) const {
 	m = min_coord;
 	M = max_coord;
 }
+
+} // -- namespace geoproc

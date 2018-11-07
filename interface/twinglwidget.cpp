@@ -4,6 +4,9 @@
 #include <iostream>
 using namespace std;
 
+// geoproc includes
+#include <geoproc/smoothing/iterative_local.hpp>
+
 // PROTECTED
 
 void TwinGLWidget::mousePressEvent(QMouseEvent *event) {
@@ -18,7 +21,7 @@ void TwinGLWidget::mouseMoveEvent(QMouseEvent *event) {
 // PUBLIC
 
 TwinGLWidget::TwinGLWidget(QWidget *parent) : GLWidget(parent) {
-	op = smoothing_operator::Laplacian;
+	op = smoothing::smooth_operator::Laplacian;
 	twin = nullptr;
 }
 
@@ -52,11 +55,11 @@ void TwinGLWidget::set_lambda(float l) {
 	mu = 1.0f/(0.1f - 1.0f/lambda);
 }
 
-void TwinGLWidget::set_smoothing_operator(const smoothing_operator& o) {
+void TwinGLWidget::set_smooth_operator(const smoothing::smooth_operator& o) {
 	op = o;
 }
 
-void TwinGLWidget::set_weight_type(const smooth_weight& w) {
+void TwinGLWidget::set_smooth_weight_type(const smoothing::smooth_weight& w) {
 	wt = w;
 }
 
@@ -68,17 +71,17 @@ void TwinGLWidget::run_smoothing_algorithm() {
 
 	cout << "Smoothed with operator ";
 	timing::time_point begin = timing::now();
-	if (op == smoothing_operator::Laplacian) {
+	if (op == smoothing::smooth_operator::Laplacian) {
 		cout << "'Laplacian'";
-		algorithms::smoothing::laplacian(wt, lambda, nit, nt, mesh);
+		smoothing::laplacian(wt, lambda, nit, nt, mesh);
 	}
-	else if (op == smoothing_operator::biLaplacian) {
+	else if (op == smoothing::smooth_operator::BiLaplacian) {
 		cout << "'biLaplacian'";
-		algorithms::smoothing::bilaplacian(wt, lambda, nit, nt, mesh);
+		smoothing::bilaplacian(wt, lambda, nit, nt, mesh);
 	}
-	else if (op == smoothing_operator::Taubin) {
+	else if (op == smoothing::smooth_operator::TaubinLM) {
 		cout << "'Taubin'";
-		algorithms::smoothing::TaubinLM(wt, lambda, nit, nt, mesh);
+		smoothing::TaubinLM(wt, lambda, nit, nt, mesh);
 	}
 	timing::time_point end = timing::now();
 

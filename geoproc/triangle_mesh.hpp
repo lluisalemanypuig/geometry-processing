@@ -6,6 +6,8 @@
 // glm includes
 #include <glm/glm.hpp>
 
+namespace geoproc {
+
 class TriangleMesh {
 	protected:
 		/// The set of vertices of the mesh.
@@ -378,3 +380,4 @@ class TriangleMesh {
 
 };
 
+} // -- namespace geoproc

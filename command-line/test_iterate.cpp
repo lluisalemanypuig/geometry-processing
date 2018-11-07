@@ -1,6 +1,13 @@
 #include "test_geoproc.hpp"
 
-namespace test_algorithms {
+// geoproc includes
+#include <geoproc/iterators/mesh_iterator.hpp>
+#include <geoproc/iterators/vertex_iterators.hpp>
+#include <geoproc/triangle_mesh.hpp>
+#include <geoproc/ply_reader.hpp>
+using namespace geoproc;
+
+namespace test_geoproc {
 
 	void iterate_usage() {
 		cout << "Iteration classes" << endl;
