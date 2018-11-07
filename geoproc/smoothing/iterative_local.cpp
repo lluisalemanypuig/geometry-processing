@@ -49,6 +49,7 @@ namespace smoothing {
 		else {
 			m.set_vertices(old_verts, N);
 		}
+		m.make_normal_vectors();
 
 		// free memory
 		free(old_verts);
@@ -96,6 +97,7 @@ namespace smoothing {
 		else {
 			m.set_vertices(old_verts, N);
 		}
+		m.make_normal_vectors();
 
 		// free memory
 		free(old_verts);
@@ -122,6 +124,7 @@ namespace smoothing {
 		// are using 'move' for moving from 'new_verts' to 'old_verts'.
 		// That deletes the contents of 'new_verts'
 		m.set_vertices(old_verts, N);
+		m.make_normal_vectors();
 
 		// free memory
 		free(old_verts);
@@ -153,6 +156,7 @@ namespace smoothing {
 		// are using 'move' for moving from 'new_verts' to 'old_verts'.
 		// That deletes the contents of 'new_verts'
 		m.set_vertices(old_verts, N);
+		m.make_normal_vectors();
 
 		// free memory
 		free(old_verts);
@@ -181,6 +185,7 @@ namespace smoothing {
 		// are using 'move' for moving from 'new_verts' to 'old_verts'.
 		// That deletes the contents of 'new_verts'
 		m.set_vertices(old_verts, N);
+		m.make_normal_vectors();
 
 		// free memory
 		free(old_verts);
@@ -214,6 +219,7 @@ namespace smoothing {
 		// are using 'move' for moving from 'new_verts' to 'old_verts'.
 		// That deletes the contents of 'new_verts'
 		m.set_vertices(old_verts, N);
+		m.make_normal_vectors();
 
 		// free memory
 		free(old_verts);

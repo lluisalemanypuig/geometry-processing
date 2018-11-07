@@ -24,6 +24,16 @@ class TriangleMesh {
 		std::vector<int> triangles;
 
 		/**
+		 * @brief Normal vector for every triangle of the mesh.
+		 *
+		 * The @e i-th vector of this container corresponds to the normal
+		 * vector of the @e i-th triangle of the mesh. This container
+		 * can be filled after having set the vertices and the
+		 * triangles.
+		 */
+		std::vector<glm::vec3> normal_vectors;
+
+		/**
 		 * @brief Angles of each triangle.
 		 *
 		 * Position @e i contains three values:
@@ -192,6 +202,27 @@ class TriangleMesh {
 		 * neighbourhood data is not valid).
 		 */
 		void set_triangles(const std::vector<int>& tris);
+
+		/**
+		 * @brief Computes the normal of every triangle.
+		 *
+		 * Once the triangles and vertices have been set to the mesh,
+		 * this method can compute the normal vectors for every triangle.
+		 *
+		 * The container is resized to be able to allocate as many
+		 * normal vectors as triangles in the mesh.
+		 *
+		 * The normal is calculated as the normalisation of the cross
+		 * product of the vectors from the first vertex of the triangle
+		 * to the other two vertices:
+		 *
+		 * \f$ n_i = \frac{ u_1 \times u_2 }{ || u_1 \times u_2 || } \f$
+		 *
+		 * where \f$ u_1 = v_1 - v_0 \f$ and \f$ u_2 = v_2 - v_0 \f$,
+		 * and \f$v_0,v_1,v_2\f$ are the first, second and third vertices
+		 * of the triangle.
+		 */
+		void make_normal_vectors();
 
 		/**
 		 * @brief Reescales the mesh so that it fits in a unit box.

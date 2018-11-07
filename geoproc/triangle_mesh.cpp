@@ -62,6 +62,7 @@ void TriangleMesh::copy_mesh(const TriangleMesh& m) {
 
 	vertices = m.vertices;
 	triangles = m.triangles;
+	normal_vectors = m.normal_vectors;
 	opposite_corners = m.opposite_corners;
 	corners = m.corners;
 	boundary = m.boundary;
@@ -155,6 +156,19 @@ void TriangleMesh::set_triangles(const std::vector<int>& tris) {
 	triangles.shrink_to_fit();
 
 	invalidate_state();
+}
+
+void TriangleMesh::make_normal_vectors() {
+	normal_vectors.resize(n_triangles());
+
+	int v0,v1,v2;
+	for (int t = 0; t < n_triangles(); ++t) {
+		get_vertices_triangle(t, v0,v1,v2);
+		normal_vectors[t] = glm::normalize(glm::cross(
+			vertices[v1] - vertices[v0],
+			vertices[v2] - vertices[v0]
+		));
+	}
 }
 
 void TriangleMesh::scale_to_unit() {
