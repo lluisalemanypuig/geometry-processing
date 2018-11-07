@@ -28,14 +28,9 @@ void RenderTriangleMesh::make_VBO_data
 		copied_vertices[i + 1] = vertices[triangles[i + 1]];
 		copied_vertices[i + 2] = vertices[triangles[i + 2]];
 
-		vec3 N = glm::normalize(glm::cross(
-			vertices[triangles[i + 1]] - vertices[triangles[i]],
-			vertices[triangles[i + 2]] - vertices[triangles[i]]
-		));
-
-		normals[i    ] = N;
-		normals[i + 1] = N;
-		normals[i + 2] = N;
+		normals[i    ] = normal_vectors[i/3];
+		normals[i + 1] = normal_vectors[i/3];
+		normals[i + 2] = normal_vectors[i/3];
 
 		perFaceTriangles[i    ] = i;
 		perFaceTriangles[i + 1] = i + 1;
@@ -65,14 +60,9 @@ void RenderTriangleMesh::make_VBO_data
 		cols[i + 1] =   colors[triangles[i + 1]];
 		cols[i + 2] =   colors[triangles[i + 2]];
 
-		vec3 N = glm::normalize(glm::cross(
-			vertices[triangles[i + 1]] - vertices[triangles[i]],
-			vertices[triangles[i + 2]] - vertices[triangles[i]]
-		));
-
-		normals[i    ] = N;
-		normals[i + 1] = N;
-		normals[i + 2] = N;
+		normals[i    ] = normal_vectors[i/3];
+		normals[i + 1] = normal_vectors[i/3];
+		normals[i + 2] = normal_vectors[i/3];
 
 		perFaceTriangles[i    ] = i;
 		perFaceTriangles[i + 1] = i + 1;
@@ -139,6 +129,7 @@ void RenderTriangleMesh::build_cube() {
 
 	set_vertices( vector<float>(&vertices[0], &vertices[24]) );
 	set_triangles( vector<int>(&faces[0], &faces[36]) );
+	make_normal_vectors();
 
 	/*
 	for (int i = 0; i < 8; ++i) {
@@ -398,10 +389,10 @@ bool RenderTriangleMesh::make_vertices(QOpenGLShaderProgram *program) {
 	vector<vec3> vert_info;
 	vert_info.resize(triangles.size());
 
-	for (unsigned int i = 0; i < triangles.size(); i += 3) {
-		vert_info[i    ] = vertices[triangles[i    ]];
-		vert_info[i + 1] = vertices[triangles[i + 1]];
-		vert_info[i + 2] = vertices[triangles[i + 2]];
+	for (unsigned int t = 0; t < triangles.size(); t += 3) {
+		vert_info[t    ] = vertices[triangles[t    ]];
+		vert_info[t + 1] = vertices[triangles[t + 1]];
+		vert_info[t + 2] = vertices[triangles[t + 2]];
 	}
 
 	/* ------------------ */
@@ -423,6 +414,57 @@ bool RenderTriangleMesh::make_vertices(QOpenGLShaderProgram *program) {
 	}
 	vbo_vertices.allocate(&vert_info[0], 3*sizeof(float)*vert_info.size());
 	vbo_vertices.release();
+
+	/* ----- VAO,SHADER release ----- */
+	vao.release();
+	program->release();
+
+	return true;
+}
+
+bool RenderTriangleMesh::make_vertices_normals(QOpenGLShaderProgram *program) {
+	// make vertex information
+	vector<vec3> vert_info, normal_info;
+	vert_info.resize(triangles.size());
+	normal_info.resize(triangles.size());
+
+	for (unsigned int t = 0; t < triangles.size(); t += 3) {
+		vert_info[t    ] = vertices[triangles[t    ]];
+		vert_info[t + 1] = vertices[triangles[t + 1]];
+		vert_info[t + 2] = vertices[triangles[t + 2]];
+
+		normal_info[t    ] = normal_vectors[t/3];
+		normal_info[t + 1] = normal_vectors[t/3];
+		normal_info[t + 2] = normal_vectors[t/3];
+	}
+
+	/* ------------------ */
+	/* Create the vertex array/buffer objects. */
+	bool program_bind = program->bind();
+	if (not program_bind) {
+		cerr << "    TriangleMesh::init - Warning:" << endl;
+		cerr << "        shader program was not bound" << endl;
+		return false;
+	}
+
+	vao.bind();
+
+	/* ----- VBO fill ----- */
+	bool vertices_bind = vbo_vertices.bind();
+	if (not vertices_bind) {
+		cerr << "    TriangleMesh::init - Warning:" << endl;
+		cerr << "        vertices buffer object was not bound" << endl;
+	}
+	vbo_vertices.allocate(&vert_info[0], 3*sizeof(float)*vert_info.size());
+	vbo_vertices.release();
+
+	bool normals_bind = vbo_normals.bind();
+	if (not normals_bind) {
+		cerr << "    TriangleMesh::init - Warning:" << endl;
+		cerr << "        normals buffer object was not bound" << endl;
+	}
+	vbo_normals.allocate(&normal_info[0], 3*sizeof(float)*normal_info.size());
+	vbo_normals.release();
 
 	/* ----- VAO,SHADER release ----- */
 	vao.release();

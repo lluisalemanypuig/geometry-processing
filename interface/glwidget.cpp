@@ -301,6 +301,7 @@ void GLWidget::load_mesh(const QString& filename) {
 	cout << "GLWidget::load_mesh - reading mesh..." << endl;
 
 	PLY_reader::read_mesh(filename.toStdString(), mesh);
+	mesh.make_normal_vectors();
 	mesh.scale_to_unit();
 
 	cout << "GLWidget::load_mesh - initialising mesh..." << endl;
