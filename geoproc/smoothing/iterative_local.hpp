@@ -41,7 +41,7 @@ namespace smoothing {
 	 * @param w The type of weight used.
 	 * @param lambda Smoothing parameter.
 	 * @param n_iter Number of iterations of the algorithm.
-	 * @param m Mesh to be smoothed.
+	 * @param[out] m Mesh to be smoothed.
 	 */
 	void laplacian
 	(const smooth_weight& w, float lambda, size_t n_iter, TriangleMesh& m);
@@ -54,7 +54,7 @@ namespace smoothing {
 	 * @param lambda Smoothing parameter.
 	 * @param n_iter Number of iterations of the algorithm.
 	 * @param nthreads Number of threads.
-	 * @param m Mesh to be smoothed.
+	 * @param[out] m Mesh to be smoothed.
 	 */
 	void laplacian
 	(const smooth_weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);
@@ -68,7 +68,7 @@ namespace smoothing {
 	 * @param w The type of weight used.
 	 * @param lambda Smoothing parameter.
 	 * @param n_iter Number of iterations of the algorithm.
-	 * @param m Mesh to be smoothed.
+	 * @param[out] m Mesh to be smoothed.
 	 */
 	void bilaplacian
 	(const smooth_weight& w, float lambda, size_t n_iter, TriangleMesh& m);
@@ -81,7 +81,7 @@ namespace smoothing {
 	 * @param lambda Smoothing parameter.
 	 * @param n_iter Number of iterations of the algorithm.
 	 * @param nt Number of threads.
-	 * @param m Mesh to be smoothed.
+	 * @param[out] m Mesh to be smoothed.
 	 */
 	void bilaplacian
 	(const smooth_weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);
@@ -104,9 +104,9 @@ namespace smoothing {
 	 * @param w The type of weight used.
 	 * @param lambda Smoothing parameter.
 	 * @param n_iter Number of iterations of the algorithm.
-	 * @param m Mesh to be smoothed.
+	 * @param[out] m Mesh to be smoothed.
 	 */
-	void TaubinLM
+	void bilaplacian
 	(const smooth_weight& w, float lambda, size_t n_iter, TriangleMesh& m);
 	/**
 	 * @brief Parallel Taubin $\f\lambda-\mu\f$ operator for mesh smoothing.
@@ -117,7 +117,7 @@ namespace smoothing {
 	 * @param lambda Smoothing parameter.
 	 * @param n_iter Number of iterations of the algorithm.
 	 * @param nt Number of threads.
-	 * @param m Mesh to be smoothed.
+	 * @param[out] m Mesh to be smoothed.
 	 */
 	void TaubinLM
 	(const smooth_weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);

@@ -4,6 +4,22 @@ namespace algorithms {
 namespace smoothing {
 
 	/**
+	 * @brief The different types of operators available.
+	 *
+	 * - Laplacian: see @ref Laplacian.
+	 * - Bi-Laplacian: see @ref BiLaplacian.
+	 * - TaubinLM: see @ref TaubinLM.
+	 */
+	enum class smooth_operator : int8_t {
+		/// Detailed in documentation of function @ref smoothing::laplacian.
+		Laplacian,
+		/// Detailed in documentation of function @ref smoothing::bilaplacian.
+		BiLaplacian,
+		/// Detailed in documentation of function @ref smoothing::TaubinLM.
+		TaubinLM
+	};
+
+	/**
 	 * @brief The different types of weights for smoothing.
 	 *
 	 * - uniform: see @ref smooth_weight::uniform.
