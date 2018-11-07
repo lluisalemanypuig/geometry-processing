@@ -26,9 +26,8 @@ SOURCES +=						\
 	utils.cpp
 
 DISTFILES +=					\
-	shaders/curvature.frag		\
-	shaders/simple.vert			\
-	shaders/simple.frag
+    shaders/simple.vert			\
+    shaders/simple.frag
 
 RESOURCES +=					\
 	resources.qrc
