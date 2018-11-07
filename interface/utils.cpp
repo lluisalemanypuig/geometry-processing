@@ -27,8 +27,8 @@ namespace timing {
 
 namespace min_max {
 
-	void binning(
-		const std::vector<float>& data,
+	void generic_binning(
+		const std::vector<float>& data, float val, bool around_val,
 		float& min, float& max, float prop
 	)
 	{
@@ -81,28 +81,34 @@ namespace min_max {
 
 		// maximum size among the bins,
 		// and the corresponding index
-		int max_size = 0;
-		int max_idx = 0;
+		int center_size = 0;
+		int center_idx = 0;
 		for (size_t i = 0; i < data.size(); ++i) {
 			int idx = (data[i] - vm)/step;
 			++bins[idx];
 
-			if (max_size < bins[idx]) {
-				max_size = bins[idx];
-				max_idx = idx;
+			if (center_size < bins[idx]) {
+				center_size = bins[idx];
+				center_idx = idx;
 			}
+		}
+
+		if (around_val) {
+			int idx = (val - vm)/step;
+			center_idx = idx;
+			center_size = bins[idx];
 		}
 
 		#if defined (DEBUG)
 		cout << "Binning result:" << endl;
-		cout << "    found largest bin at: " << max_idx << endl;
-		cout << "        with " << bins[max_idx] << " values in it" << endl;
+		cout << "    starting bin at: " << center_idx << endl;
+		cout << "        with " << bins[center_idx] << " values in it" << endl;
 		#endif
 
 		// amount of curvature values covered
-		int count = max_size;
-		int left = max_idx;
-		int right = max_idx;
+		int count = center_size;
+		int left = center_idx;
+		int right = center_idx;
 		bool move_left = (0 < left ? true : false);
 		bool move_right = (right < nbins ? true : false);
 
@@ -156,6 +162,22 @@ namespace min_max {
 		max = vM;
 
 		free(bins);
+	}
+
+	void binning(
+		const std::vector<float>& data,
+		float& min, float& max, float prop
+	)
+	{
+		generic_binning(data, 0.0, false, min, max, prop);
+	}
+
+	void binning_around(
+		const std::vector<float>& data, float center,
+		float& min, float& max, float prop
+	)
+	{
+		generic_binning(data, center, true, min, max, prop);
 	}
 
 	void below_dev(

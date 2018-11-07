@@ -114,7 +114,13 @@ void GLWidget::show_curvature(bool should_load, bool make_all_buffers) {
 
 	vector<vec3> cols;
 	float min, max;
-	min_max::binning(curvature_values, min, max, prop);
+
+	if (current_curv_display == curv_type::Gauss) {
+		min_max::binning_around(curvature_values, 0.0, min, max, prop);
+	}
+	else {
+		min_max::binning(curvature_values, min, max, prop);
+	}
 	coloring::colors_rainbow(curvature_values, min, max, cols);
 
 	makeCurrent();

@@ -38,9 +38,34 @@ namespace min_max {
 	 * - if prop = 50.0 then min and max will take two values
 	 * in data so that 50% of the values in data are between min and max,
 	 * both included.
+	 *
+	 * The algorithm starts finding the most occupied bin and computes
+	 * a range containing this maximum in which we find the (%) of
+	 * values.
 	 */
 	void binning(
 		const std::vector<float>& data,
+		float& min, float& max, float prop
+	);
+
+	/* Finds the minimum and maximum values within the set of values
+	 * 'data' that comprise most of the values of data starting at
+	 * a given value.
+	 *
+	 * This "most" is guided by the tolerant (%).
+	 * For example:
+	 * - if prop = 100.0 then min and max will take the
+	 * minimum and maximum values in data.
+	 * - if prop = 50.0 then min and max will take two values
+	 * in data so that 50% of the values in data are between min and max,
+	 * both included.
+	 *
+	 * The algorithm starts at the bin corresponding to the given value
+	 * (center) and computes a range containing this maximum in which we find
+	 * the (%) of values.
+	 */
+	void binning_around(
+		const std::vector<float>& data, float center,
 		float& min, float& max, float prop
 	);
 
