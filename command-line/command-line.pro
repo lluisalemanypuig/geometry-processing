@@ -24,15 +24,13 @@ HEADERS +=						\
     time.hpp
 
 # geoproc library
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../geoproc-release/ -lgeoproc
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../geoproc-debug/ -lgeoproc
-else:unix: LIBS += -L$$PWD/../geoproc-debug/ -lgeoproc
-
-INCLUDEPATH += $$PWD/..
-DEPENDPATH += $$PWD/..
-
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../geoproc-release/libgeoproc.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../geoproc-debug/libgeoproc.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../geoproc-release/geoproc.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../geoproc-debug/geoproc.lib
-else:unix: PRE_TARGETDEPS += $$PWD/../geoproc-debug/libgeoproc.a
+CONFIG(debug, debug|release) {
+    LIBS += -L../geoproc-debug/ -lgeoproc
+    PRE_TARGETDEPS += ../geoproc-debug/libgeoproc.a
+}
+CONFIG(release, debug|release) {
+    LIBS += -L../geoproc-release/ -lgeoproc
+    PRE_TARGETDEPS += ../geoproc-release/libgeoproc.a
+}
+INCLUDEPATH += ..
+DEPENDPATH += ..
