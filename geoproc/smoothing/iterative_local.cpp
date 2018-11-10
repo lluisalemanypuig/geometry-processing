@@ -22,28 +22,8 @@ namespace smoothing {
 		// Fill the first array (there is no need to fill the second).
 		std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
 
-		// if the number of iterations is odd, the for
-		// loop below will apply one extra iteration
-		if (nit%2 == 1) {
-			--nit;
-		}
-
-		// for every two iterations, apply two steps.
-		size_t it;
-		for (it = 0; it < nit; it += 2) {
-			smoothing_private::apply_local(w, l, m, old_verts, new_verts);
-			smoothing_private::apply_local(w, l, m, new_verts, old_verts);
-		}
-
-		// Do one more iteration if necessary. Then,
-		// replace the coordinates of the old vertices in the
-		// mesh for the vertices in 'old_verts'. Notice that we
-		// are using 'move' for moving from 'new_verts' to 'old_verts'.
-		// That deletes the contents of 'new_verts'
-
-		if (it == nit) {
-			// do one last iteration
-			smoothing_private::apply_local(w, l, m, old_verts, new_verts);
+		bool res = smoothing_private::apply_once_per_it(w, l, nit, m, old_verts, new_verts);
+		if (res) {
 			m.set_vertices(new_verts, N);
 		}
 		else {
@@ -69,28 +49,8 @@ namespace smoothing {
 		// Fill the first array (there is no need to fill the second).
 		std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
 
-		// if the number of iterations is odd, the for
-		// loop below will apply one extra iteration
-		if (nit%2 == 1) {
-			--nit;
-		}
-
-		// for every two iterations, apply two steps.
-		size_t it;
-		for (it = 0; it < nit; it += 2) {
-			smoothing_private::apply_local(w, l, m, nt, old_verts, new_verts);
-			smoothing_private::apply_local(w, l, m, nt, new_verts, old_verts);
-		}
-
-		// Do one more iteration if necessary. Then,
-		// replace the coordinates of the old vertices in the
-		// mesh for the vertices in 'old_verts'. Notice that we
-		// are using 'move' for moving from 'new_verts' to 'old_verts'.
-		// That deletes the contents of 'new_verts'
-
-		if (it == nit) {
-			// do one last iteration
-			smoothing_private::apply_local(w, l, m, nt, old_verts, new_verts);
+		bool res = smoothing_private::apply_once_per_it(w, l, nit, nt, m, old_verts, new_verts);
+		if (res) {
 			m.set_vertices(new_verts, N);
 		}
 		else {
@@ -111,16 +71,10 @@ namespace smoothing {
 		// Fill the first array (there is no need to fill the second).
 		std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
 
-		// for each iteration of the algorithm
-		for (size_t it = 0; it < nit; ++it) {
-			smoothing_private::apply_local(w,  l, m, old_verts, new_verts);
-			smoothing_private::apply_local(w, -l, m, new_verts, old_verts);
-		}
+		smoothing_private::apply_twice_per_it(w, l, -l, nit, m, old_verts, new_verts);
 
 		// Replace the coordinates of the old vertices in the
-		// mesh for the vertices in 'old_verts'. Notice that we
-		// are using 'move' for moving from 'new_verts' to 'old_verts'.
-		// That deletes the contents of 'new_verts'
+		// mesh for the vertices in 'old_verts'.
 		m.set_vertices(old_verts, N);
 
 		// free memory
@@ -142,16 +96,10 @@ namespace smoothing {
 		// Fill the first array (there is no need to fill the second).
 		std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
 
-		// for each iteration of the algorithm
-		for (size_t it = 0; it < nit; ++it) {
-			smoothing_private::apply_local(w,  l, m, nt, old_verts, new_verts);
-			smoothing_private::apply_local(w, -l, m, nt, new_verts, old_verts);
-		}
+		smoothing_private::apply_twice_per_it(w, l, -l, nit,  nt, m, old_verts, new_verts);
 
 		// Replace the coordinates of the old vertices in the
-		// mesh for the vertices in 'old_verts'. Notice that we
-		// are using 'move' for moving from 'new_verts' to 'old_verts'.
-		// That deletes the contents of 'new_verts'
+		// mesh for the vertices in 'old_verts'.
 		m.set_vertices(old_verts, N);
 
 		// free memory
@@ -170,16 +118,10 @@ namespace smoothing {
 		// Fill the first array (there is no need to fill the second).
 		std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
 
-		// for each iteration of the algorithm
-		for (size_t it = 0; it < nit; ++it) {
-			smoothing_private::apply_local(w,  l, m, old_verts, new_verts);
-			smoothing_private::apply_local(w, mu, m, new_verts, old_verts);
-		}
+		smoothing_private::apply_twice_per_it(w, l, mu, nit, m, old_verts, new_verts);
 
 		// Replace the coordinates of the old vertices in the
-		// mesh for the vertices in 'old_verts'. Notice that we
-		// are using 'move' for moving from 'new_verts' to 'old_verts'.
-		// That deletes the contents of 'new_verts'
+		// mesh for the vertices in 'old_verts'.
 		m.set_vertices(old_verts, N);
 
 		// free memory
@@ -203,16 +145,10 @@ namespace smoothing {
 		// Fill the first array (there is no need to fill the second).
 		std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
 
-		// for each iteration of the algorithm
-		for (size_t it = 0; it < nit; ++it) {
-			smoothing_private::apply_local(w,  l, m, nt, old_verts, new_verts);
-			smoothing_private::apply_local(w, mu, m, nt, new_verts, old_verts);
-		}
+		smoothing_private::apply_twice_per_it(w, l, mu, nit, nt, m, old_verts, new_verts);
 
 		// Replace the coordinates of the old vertices in the
-		// mesh for the vertices in 'old_verts'. Notice that we
-		// are using 'move' for moving from 'new_verts' to 'old_verts'.
-		// That deletes the contents of 'new_verts'
+		// mesh for the vertices in 'old_verts'.
 		m.set_vertices(old_verts, N);
 
 		// free memory

@@ -212,6 +212,110 @@ namespace smoothing_private {
 
 	}
 
+	bool apply_once_per_it
+	(
+		const smooth_weight& w, float l,
+		size_t nit,
+		const TriangleMesh& m,
+		glm::vec3 *old_verts,
+		glm::vec3 *new_verts
+	)
+	{
+		assert(old_verts != nullptr);
+		assert(new_verts != nullptr);
+
+		// if the number of iterations is odd, the for
+		// loop below will apply one extra iteration
+		if (nit%2 == 1) {
+			--nit;
+		}
+
+		// for every two iterations, apply two steps, in total nit steps
+		size_t it;
+		for (it = 0; it < nit; it += 2) {
+			smoothing_private::apply_local(w, l, m, old_verts, new_verts);
+			smoothing_private::apply_local(w, l, m, new_verts, old_verts);
+		}
+
+		// Do one more iteration if necessary.
+
+		if (it == nit) {
+			smoothing_private::apply_local(w, l, m, old_verts, new_verts);
+			return true;
+		}
+
+		return false;
+	}
+
+	bool apply_once_per_it
+	(
+		const smooth_weight& w, float l,
+		size_t nit, size_t n_threads,
+		const TriangleMesh& m,
+		glm::vec3 *old_verts,
+		glm::vec3 *new_verts
+	)
+	{
+		assert(old_verts != nullptr);
+		assert(new_verts != nullptr);
+
+		// if the number of iterations is odd, the for
+		// loop below will apply one extra iteration
+		if (nit%2 == 1) {
+			--nit;
+		}
+
+		// for every two iterations, apply two steps, in total nit steps
+		size_t it;
+		for (it = 0; it < nit; it += 2) {
+			smoothing_private::apply_local(w, l, m, n_threads, old_verts, new_verts);
+			smoothing_private::apply_local(w, l, m, n_threads, new_verts, old_verts);
+		}
+
+		// Do one more iteration if necessary.
+
+		if (it == nit) {
+			smoothing_private::apply_local(w, l, m, n_threads, old_verts, new_verts);
+			return true;
+		}
+
+		return false;
+	}
+
+	void apply_twice_per_it
+	(
+		const smooth_weight& w,
+		float l1, float l2,
+		size_t nit,
+		const TriangleMesh& m,
+		glm::vec3 *old_verts,
+		glm::vec3 *new_verts
+	)
+	{
+		// for each iteration of the algorithm
+		for (size_t it = 0; it < nit; ++it) {
+			smoothing_private::apply_local(w, l1, m, old_verts, new_verts);
+			smoothing_private::apply_local(w, l2, m, new_verts, old_verts);
+		}
+	}
+
+	void apply_twice_per_it
+	(
+		const smooth_weight& w,
+		float l1, float l2,
+		size_t nit, size_t n_threads,
+		const TriangleMesh& m,
+		glm::vec3 *old_verts,
+		glm::vec3 *new_verts
+	)
+	{
+		// for each iteration of the algorithm
+		for (size_t it = 0; it < nit; ++it) {
+			smoothing_private::apply_local(w, l1, m, n_threads, old_verts, new_verts);
+			smoothing_private::apply_local(w, l2, m, n_threads, new_verts, old_verts);
+		}
+	}
+
 } // -- namespace smoothing_private
 } // -- namespace smoothing
 } // -- namespace geoproc

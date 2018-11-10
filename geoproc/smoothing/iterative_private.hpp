@@ -88,6 +88,106 @@ namespace smoothing_private {
 		glm::vec3 *new_verts
 	);
 
+	/**
+	 * @brief Applies a sequential local procedure once at every @e nit iterations.
+	 * @param w Type of smoothing weight.
+	 * @param l Parameter used in moving vertices:
+	 * \f$v_i' = v_i + \lambda\cdot L(v_i)\f$, where \f$L(v_i)\f$
+	 * depends on the type of weight used.
+	 * @param nit Number of iterations of the algorithm.
+	 * @param m The mesh used to iterate on the neighbourhood of @e old_verts.
+	 * @param[out] old_verts Initially, the vertices of the mesh. At the end of
+	 * algorithm they may contain the final coordinates of the vertices of the
+	 * mesh depending on the returned value.
+	 * @param[out] new_verts At the end of algorithm they may contain the final
+	 * coordinates of the vertices of the mesh depending on the returned value.
+	 * @return Returns true if the final coordinates of the vertices are in
+	 * new_verts. Returns false if otherwise.
+	 */
+	bool apply_once_per_it
+	(
+		const smooth_weight& w, float l,
+		size_t nit,
+		const TriangleMesh& m,
+		glm::vec3 *old_verts,
+		glm::vec3 *new_verts
+	);
+	/**
+	 * @brief Applies a parallel local procedure once at every @e nit iterations.
+	 * @param w Type of smoothing weight.
+	 * @param l Parameter used in moving vertices:
+	 * \f$v_i' = v_i + \lambda\cdot L(v_i)\f$, where \f$L(v_i)\f$
+	 * depends on the type of weight used.
+	 * @param nit Number of iterations of the algorithm.
+	 * @param n_threads Number of threads.
+	 * @param m The mesh used to iterate on the neighbourhood of @e old_verts.
+	 * @param[out] old_verts Initially, the vertices of the mesh. At the end of
+	 * algorithm they may contain the final coordinates of the vertices of the
+	 * mesh depending on the returned value.
+	 * @param[out] new_verts At the end of algorithm they may contain the final
+	 * coordinates of the vertices of the mesh depending on the returned value.
+	 * @return Returns true if the final coordinates of the vertices are in
+	 * new_verts. Returns false if otherwise.
+	 */
+	bool apply_once_per_it
+	(
+		const smooth_weight& w, float l,
+		size_t nit, size_t n_threads,
+		const TriangleMesh& m,
+		glm::vec3 *old_verts,
+		glm::vec3 *new_verts
+	);
+
+	/**
+	 * @brief Applies two sequential local procedure at every @e nit iterations.
+	 * @param w Type of smoothing weight.
+	 * @param l1 Parameter used in moving vertices:
+	 * \f$v_i' = v_i + \lambda_1\cdot L(v_i)\f$, where \f$L(v_i)\f$
+	 * depends on the type of weight used.
+	 * @param l2 Parameter used in moving vertices:
+	 * \f$v_i'' = v_i' + \lambda_2\cdot L(v_i')\f$, where \f$L(v_i')\f$
+	 * depends on the type of weight used.
+	 * @param nit Number of iterations of the algorithm.
+	 * @param m The mesh used to iterate on the neighbourhood of @e old_verts.
+	 * @param[in] old_verts Initially, the vertices of the mesh.
+	 * @param[out] new_verts At the end of algorithm they contain the final
+	 * coordinates of the vertices of the mesh.
+	 */
+	void apply_twice_per_it
+	(
+		const smooth_weight& w,
+		float l1, float l2,
+		size_t nit,
+		const TriangleMesh& m,
+		glm::vec3 *old_verts,
+		glm::vec3 *new_verts
+	);
+	/**
+	 * @brief Applies twice parallel local procedure at every @e nit iterations.
+	 * @param w Type of smoothing weight.
+	 * @param l1 Parameter used in moving vertices:
+	 * \f$v_i' = v_i + \lambda_1\cdot L(v_i)\f$, where \f$L(v_i)\f$
+	 * depends on the type of weight used.
+	 * @param l2 Parameter used in moving vertices:
+	 * \f$v_i'' = v_i' + \lambda_2\cdot L(v_i')\f$, where \f$L(v_i')\f$
+	 * depends on the type of weight used.
+	 * @param nit Number of iterations of the algorithm.
+	 * @param n_threads Number of threads.
+	 * @param m The mesh used to iterate on the neighbourhood of @e old_verts.
+	 * @param[in] old_verts Initially, the vertices of the mesh.
+	 * @param[out] new_verts At the end of algorithm they contain the final
+	 * coordinates of the vertices of the mesh.
+	 */
+	void apply_twice_per_it
+	(
+		const smooth_weight& w,
+		float l1, float l2,
+		size_t nit, size_t n_threads,
+		const TriangleMesh& m,
+		glm::vec3 *old_verts,
+		glm::vec3 *new_verts
+	);
+
 } // -- namespace smoothing_private
 } // -- namespace smoothing
 } // -- namespace geoproc
