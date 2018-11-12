@@ -121,7 +121,33 @@ void MainWindow::on_LE_PropCurvValues_returnPressed() {
 	float p;
 	if (get_prop_curvature_values(p)) {
 		change_curvature_prop_display(p);
+		if (p < 85.0f) {
+			ui->VE_PropCurvValues->setValue(1);
+		}
+		else if (p > 99.0f) {
+			ui->VE_PropCurvValues->setValue(10000);
+		}
+		else {
+			ui->VE_PropCurvValues->setValue(int((p - 85.0f)*10000.0f/14.0f));
+		}
 	}
+}
+
+void MainWindow::on_VE_PropCurvValues_sliderMoved(int value) {
+	float p = value*14.0f/10000.0f + 85.0f;
+	change_curvature_prop_display(p);
+	int v = int(p*100);
+	string s = std::to_string(v);
+	if (s.length() == 2) {
+		s += ".00";
+	}
+	else if (s.length() == 3) {
+		s = s.substr(0,2) + "." + s[2] + "0";
+	}
+	else if (s.length() == 4) {
+		s = s.substr(0,2) + "." + s.substr(2,2);
+	}
+	ui->LE_PropCurvValues->setText(QString::fromStdString(s));
 }
 
 void MainWindow::on_RBCurvatureG_toggled(bool checked) {
@@ -253,3 +279,4 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow() {
 	delete ui;
 }
+

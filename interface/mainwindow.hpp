@@ -32,6 +32,7 @@ class MainWindow : public QMainWindow {
 		bool get_prop_curvature_values(float& p);
 		void set_prop_values_to_all();
 		void on_LE_PropCurvValues_returnPressed();
+		void on_VE_PropCurvValues_sliderMoved(int value);
 		void on_RBCurvatureH_toggled(bool checked);
 		void on_RBCurvatureG_toggled(bool checked);
 		void on_RBNoCurvature_toggled(bool checked);
@@ -53,7 +54,7 @@ class MainWindow : public QMainWindow {
 		/* Settings stuff */
 		void on_comboBox_currentIndexChanged(const QString &arg1);
 
-public:
+	public:
 		explicit MainWindow(QWidget *parent = nullptr);
 		~MainWindow();
 };

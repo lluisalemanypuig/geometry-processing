@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1245</width>
+    <width>1206</width>
     <height>681</height>
    </rect>
   </property>
@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout_10">
     <item>
      <widget class="QTabWidget" name="TW_View">
       <property name="currentIndex">
@@ -24,7 +24,7 @@
        <attribute name="title">
         <string>Single View</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <layout class="QHBoxLayout" name="horizontalLayout_9">
         <item>
          <widget class="GLWidget" name="SingleView_Renderer">
           <property name="sizePolicy">
@@ -309,7 +309,7 @@
        <attribute name="title">
         <string>Render</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_7">
+       <layout class="QVBoxLayout" name="verticalLayout_8">
         <item>
          <widget class="QGroupBox" name="groupBox_2">
           <property name="title">
@@ -323,6 +323,12 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>135</width>
+               <height>25</height>
+              </size>
              </property>
              <property name="text">
               <string>Solid</string>
@@ -340,6 +346,12 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="maximumSize">
+              <size>
+               <width>135</width>
+               <height>25</height>
+              </size>
+             </property>
              <property name="text">
               <string>Wirefra&amp;me</string>
              </property>
@@ -355,6 +367,12 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>135</width>
+               <height>25</height>
+              </size>
              </property>
              <property name="text">
               <string>Reflection lines</string>
@@ -372,16 +390,144 @@
           <property name="title">
            <string>Curvature</string>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
+          <layout class="QVBoxLayout" name="verticalLayout_7">
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <layout class="QHBoxLayout" name="horizontalLayout_8">
              <item>
-              <widget class="QRadioButton" name="RBCurvatureG">
-               <property name="text">
-                <string>&amp;Kg</string>
-               </property>
-              </widget>
+              <layout class="QVBoxLayout" name="verticalLayout_3">
+               <item>
+                <widget class="QRadioButton" name="RBCurvatureG">
+                 <property name="text">
+                  <string>&amp;Kg</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="RBCurvatureH">
+                 <property name="text">
+                  <string>Kh</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="RBNoCurvature">
+                 <property name="text">
+                  <string>&amp;none</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="verticalSpacer_5">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
              </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_6">
+               <item>
+                <widget class="QSlider" name="VE_PropCurvValues">
+                 <property name="minimumSize">
+                  <size>
+                   <width>16</width>
+                   <height>211</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16</width>
+                   <height>211</height>
+                  </size>
+                 </property>
+                 <property name="minimum">
+                  <number>0</number>
+                 </property>
+                 <property name="maximum">
+                  <number>10000</number>
+                 </property>
+                 <property name="singleStep">
+                  <number>1</number>
+                 </property>
+                 <property name="value">
+                  <number>7142</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="verticalLayout_2">
+                 <item>
+                  <widget class="QLabel" name="label_6">
+                   <property name="minimumSize">
+                    <size>
+                     <width>35</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>35</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string>99%</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="verticalSpacer_6">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_7">
+                   <property name="minimumSize">
+                    <size>
+                     <width>35</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>35</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string>85%</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_11">
              <item>
               <spacer name="horizontalSpacer_4">
                <property name="orientation">
@@ -389,50 +535,49 @@
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>13</width>
+                 <width>40</width>
                  <height>20</height>
                 </size>
                </property>
               </spacer>
              </item>
              <item>
-              <widget class="QLabel" name="label_5">
-               <property name="text">
-                <string>%</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="LE_PropCurvValues">
-               <property name="maximumSize">
-                <size>
-                 <width>41</width>
-                 <height>26</height>
-                </size>
-               </property>
-               <property name="text">
-                <string>95</string>
-               </property>
-              </widget>
+              <layout class="QHBoxLayout" name="horizontalLayout">
+               <item>
+                <widget class="QLabel" name="label_5">
+                 <property name="minimumSize">
+                  <size>
+                   <width>15</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>15</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>%</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="LE_PropCurvValues">
+                 <property name="maximumSize">
+                  <size>
+                   <width>50</width>
+                   <height>26</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>95</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </item>
             </layout>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="RBCurvatureH">
-             <property name="text">
-              <string>Kh</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="RBNoCurvature">
-             <property name="text">
-              <string>&amp;none</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
            </item>
           </layout>
          </widget>
@@ -461,6 +606,12 @@
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <widget class="QLabel" name="label">
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>16777215</height>
+             </size>
+            </property>
             <property name="text">
              <string>Num threads</string>
             </property>
@@ -468,6 +619,12 @@
           </item>
           <item>
            <widget class="QSpinBox" name="SBThreads">
+            <property name="maximumSize">
+             <size>
+              <width>45</width>
+              <height>35</height>
+             </size>
+            </property>
             <property name="minimum">
              <number>1</number>
             </property>
@@ -509,8 +666,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1245</width>
-     <height>23</height>
+     <width>1206</width>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">

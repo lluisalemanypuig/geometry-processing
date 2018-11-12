@@ -67,7 +67,7 @@ namespace min_max {
 		cout << "    step= " << step << endl;
 		#endif
 
-		int *bins = (int *)malloc((nbins + 1)*sizeof(int));
+		int *bins = static_cast<int *>(malloc((nbins + 1)*sizeof(int)));
 		for (size_t i = 0; i < nbins + 1; ++i) {
 			bins[i] = 0;
 		}
@@ -94,7 +94,7 @@ namespace min_max {
 		}
 
 		if (around_val) {
-			int idx = (val - vm)/step;
+			int idx = int((val - vm)/step);
 			center_idx = idx;
 			center_size = bins[idx];
 		}
@@ -129,15 +129,18 @@ namespace min_max {
 					move_right = (right < nbins ? true : false);
 				}
 			}
-			else if (move_left) {
-				count += bins[left - 1];
-				--left;
-				move_left = (0 < left ? true : false);
-			}
 			else {
-				count += bins[right + 1];
-				++right;
-				move_right = (right < nbins ? true : false);
+				// can move only one
+				if (move_left) {
+					count += bins[left - 1];
+					--left;
+					move_left = (0 < left ? true : false);
+				}
+				else {
+					count += bins[right + 1];
+					++right;
+					move_right = (right < nbins ? true : false);
+				}
 			}
 		}
 
