@@ -52,10 +52,24 @@ namespace high_frequencies {
 	 * \f$M - S(M)\f$
 	 *
 	 * where \f$S(M)\f$ is the mesh smoothed using the configuration @e S.
-	 * @param[in] S Configuration of the smoothing operation.
+	 * @param C Configuration of the smoothing operation.
 	 * @param[out] m Mesh to be smoothed.
 	 */
-	void high_frequency_details(const smoothing_configuration& S, TriangleMesh& m);
+	void high_frequency_details(const smoothing_configuration& C, TriangleMesh& m);
+	/**
+	 * @brief Applies the difference of mesh and a smoothed version of it.
+	 *
+	 * Given a triangular mesh @e M, a configuration for a smoothing
+	 * algorithm @e S, apply the operation:
+	 *
+	 * \f$M - S(M)\f$
+	 *
+	 * where \f$S(M)\f$ is the mesh smoothed using the configuration @e S.
+	 * @param C Configuration of the smoothing operation.
+	 * @param nt Number of threads.
+	 * @param[out] m Mesh to be smoothed.
+	 */
+	void high_frequency_details(const smoothing_configuration& C, size_t nt, TriangleMesh& m);
 
 	/**
 	 * @brief Applies the difference of mesh and a smoothed version of it.
@@ -66,10 +80,24 @@ namespace high_frequencies {
 	 * \f$M + \lambda(M - S(M))\f$
 	 *
 	 * where \f$S(M)\f$ is the mesh smoothed using the configuration @e S.
-	 * @param[in] S Configuration of the smoothing operation.
+	 * @param C Configuration of the smoothing operation.
 	 * @param[out] m Mesh to be smoothed.
 	 */
-	void exaggerate_high_frequencies(const smoothing_configuration& S, TriangleMesh& m);
+	void exaggerate_high_frequencies(const smoothing_configuration& C, TriangleMesh& m);
+	/**
+	 * @brief Applies the difference of mesh and a smoothed version of it.
+	 *
+	 * Given a triangular mesh @e M, a configuration for a smoothing
+	 * algorithm @e S, apply the operation:
+	 *
+	 * \f$M + \lambda(M - S(M))\f$
+	 *
+	 * where \f$S(M)\f$ is the mesh smoothed using the configuration @e S.
+	 * @param C Configuration of the smoothing operation.
+	 * @param nt Number of threads.
+	 * @param[out] m Mesh to be smoothed.
+	 */
+	void exaggerate_high_frequencies(const smoothing_configuration& C, size_t nt, TriangleMesh& m);
 
 	/**
 	 * @brief Band frequencies operator.
@@ -89,10 +117,35 @@ namespace high_frequencies {
 	 *
 	 * \f$D_i = S_i(M) - S_{i+1}(M)\f$, where \f$S_i\f$ is the @e i-th smoothing
 	 * configuration in parameter @e confs.
-	 * @param[in] confs The different configurations to be applied.
+	 * @param confs The different configurations to be applied.
 	 * @param[out] m The mesh resulting of applying the operations described above.
 	 */
-	void band_frequencies(const std::vector<smoothing_configuration>& confs, TriangleMesh& m);
+	void band_frequencies
+	(const std::vector<smoothing_configuration>& confs, TriangleMesh& m);
+	/**
+	 * @brief Band frequencies operator.
+	 *
+	 * Apply several smoothing operations onto the mesh @e m. Each operation
+	 * is described by a @ref smoothing_configuration struct.
+	 *
+	 * The operations applied are:
+	 *
+	 * \f$M + \sum_{i=1}^n \lambda_i \cdot D_i\f$
+	 *
+	 * where \f$D_i\f$ is the difference of meshes resulting from two consecutive
+	 * smoothing operations, and \f$lambda_i\f$ are the values of \f$\lambda\f$
+	 * in each configuration.
+	 *
+	 * The \f$D_i\f$ are more precisely defined as:
+	 *
+	 * \f$D_i = S_i(M) - S_{i+1}(M)\f$, where \f$S_i\f$ is the @e i-th smoothing
+	 * configuration in parameter @e confs.
+	 * @param confs The different configurations to be applied.
+	 * @param nt Number of threads.
+	 * @param[out] m The mesh resulting of applying the operations described above.
+	 */
+	void band_frequencies
+	(const std::vector<smoothing_configuration>& confs, size_t nt, TriangleMesh& m);
 
 } // -- namespace high_frequencies
 } // -- namespace geoproc

@@ -138,18 +138,24 @@ namespace test_geoproc {
 		return lambda and it and weight and oper;
 	}
 
-	void exe_high_freq(const string& alg, TriangleMesh& m) {
+	void exe_high_freq(const string& alg, size_t nt, TriangleMesh& m) {
 
-		if (alg == "high_freq_dets") {
+		timing::time_point begin, end;
+
+		if (alg == "high-freq-dets") {
 			smoothing_configuration C;
 			if (read_smooth_conf(C)) {
-				high_frequencies::high_frequency_details(C, m);
+				begin = timing::now();
+				high_frequencies::high_frequency_details(C, nt, m);
+				end = timing::now();
 			}
 		}
 		else if (alg == "exaggerate-high-freqs") {
 			smoothing_configuration C;
 			if (read_smooth_conf(C)) {
-				high_frequencies::exaggerate_high_frequencies(C, m);
+				begin = timing::now();
+				high_frequencies::exaggerate_high_frequencies(C, nt, m);
+				end = timing::now();
 			}
 		}
 		else if (alg == "band-freqs") {
@@ -168,8 +174,13 @@ namespace test_geoproc {
 			// read trailing '1' character
 			char one; cin >> one;
 
-			high_frequencies::band_frequencies(Cs, m);
+			begin = timing::now();
+			high_frequencies::band_frequencies(Cs, nt, m);
+			end = timing::now();
 		}
+
+		cout << "Applied algorithm in "
+			 << timing::elapsed_seconds(begin, end) << " seconds" << endl;
 
 	}
 
@@ -242,7 +253,7 @@ namespace test_geoproc {
 			}
 		}
 
-		exe_high_freq(alg, mesh);
+		exe_high_freq(alg, nt, mesh);
 
 		if (_print) {
 			cout << "Mesh with high frequencies:" << endl;
