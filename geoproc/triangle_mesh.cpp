@@ -117,7 +117,7 @@ void TriangleMesh::set_vertices(const std::vector<float>& coords){
 	max_coord.z = coords[2];
 
 	vertices.resize(coords.size()/3);
-	for (size_t i = 3; i < coords.size(); i += 3) {
+	for (size_t i = 0; i < coords.size(); i += 3) {
 		vertices[i/3].x = coords[i];
 		vertices[i/3].y = coords[i+1];
 		vertices[i/3].z = coords[i+2];

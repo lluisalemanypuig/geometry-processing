@@ -55,8 +55,8 @@ void high_frequency_details(const smoothing_configuration& S, TriangleMesh& m) {
 	const int N = m.n_vertices();
 
 	// Allocate memory for two arrays of vertices.
-	vec3 *old_verts = (vec3 *)malloc(N*sizeof(vec3));
-	vec3 *new_verts = (vec3 *)malloc(N*sizeof(vec3));
+	vec3 *old_verts = static_cast<vec3 *>(malloc(N*sizeof(vec3)));
+	vec3 *new_verts = static_cast<vec3 *>(malloc(N*sizeof(vec3)));
 	// Fill the first array (there is no need to fill the second).
 	std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
 
@@ -108,8 +108,8 @@ void band_frequencies(const vector<smoothing_configuration>& confs, TriangleMesh
 	// two, but each pair is packed together into a single one.
 	// They will be used for computing the different smoothings of the mesh
 	// while avoiding recomputing old results
-	vec3 *vertsi  = (vec3 *)malloc(2*N*sizeof(vec3));
-	vec3 *vertsi1 = (vec3 *)malloc(2*N*sizeof(vec3));
+	vec3 *vertsi  = static_cast<vec3 *>(malloc(2*N*sizeof(vec3)));
+	vec3 *vertsi1 = static_cast<vec3 *>(malloc(2*N*sizeof(vec3)));
 
 	// Fill the array i
 	std::copy(m.get_vertices().begin(), m.get_vertices().end(), &vertsi[0]);
