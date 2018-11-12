@@ -47,7 +47,7 @@ namespace smoothing_private {
 	 * @param[out] L Result of the sum.
 	 */
 	void make_cotangent_weight
-	(int i, const TriangleMesh& m, const glm::vec3 *verts, glm::vec3& L);
+	(int vi, const TriangleMesh& m, const glm::vec3 *verts, glm::vec3& L);
 
 	/**
 	 * @brief Applies one iteration of a local smoothing algorithm.

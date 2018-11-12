@@ -110,7 +110,7 @@ namespace smoothing {
 
 	void TaubinLM(const smooth_weight& w, float l, size_t nit, TriangleMesh& m) {
 		const int N = m.n_vertices();
-		const float Kpb = 0.1;
+		const float Kpb = 0.1f;
 		const float mu = 1.0f/(Kpb - 1.0f/l);
 
 		// Allocate memory for two arrays of vertices.
@@ -137,7 +137,7 @@ namespace smoothing {
 		}
 
 		const int N = m.n_vertices();
-		const float Kpb = 0.1;
+		const float Kpb = 0.1f;
 		const float mu = 1.0f/(Kpb - 1.0f/l);
 
 		// Allocate memory for two arrays of vertices.
