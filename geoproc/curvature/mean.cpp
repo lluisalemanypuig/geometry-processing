@@ -7,9 +7,11 @@
 // C++ includes
 #include <limits>
 #include <cmath>
+using namespace std;
 
 // glm includes
 #include <glm/glm.hpp>
+using namespace glm;
 
 // geoproc includes
 #include <geoproc/iterators/mesh_iterator.hpp>
@@ -18,12 +20,12 @@
 namespace geoproc {
 namespace curvature {
 
-	inline float cotan(float a) { return std::cos(a)/std::sin(a); }
+	inline float cotan(float a) { return cos(a)/sin(a); }
 
 	inline float Kh_at_vertex(const TriangleMesh& m, int vi) {
 		// mesh info
-		const std::vector<float>& mesh_areas = m.get_areas();
-		const std::vector<glm::vec3>& mesh_angles = m.get_angles();
+		const vector<float>& mesh_areas = m.get_areas();
+		const vector<vec3>& mesh_angles = m.get_angles();
 
 		iterators::vertex::vertex_face_iterator it(m);
 		const int first = it.init(vi);
@@ -37,10 +39,10 @@ namespace curvature {
 		// Voronoi area around 'i'
 		float vor_area = 0.0f;
 		// curvature vector
-		glm::vec3 curv_vec(0.0f,0.0f,0.0f);
+		vec3 curv_vec(0.0f,0.0f,0.0f);
 
 		// loop variables
-		glm::vec3 diff;
+		vec3 diff;
 		float alpha, beta;
 		do {
 			int i1,j1,k1, i2,j2,k2;
@@ -50,8 +52,8 @@ namespace curvature {
 			// Compute the two angles (alpha and beta).
 			// At the same time, compute the difference vector.
 
-			const glm::vec3 angles1 = mesh_angles[next1];
-			const glm::vec3 angles2 = mesh_angles[next2];
+			const vec3 angles1 = mesh_angles[next1];
+			const vec3 angles2 = mesh_angles[next2];
 
 			if (vi == i1)		{
 				alpha = angles1.y;
@@ -98,33 +100,33 @@ namespace curvature {
 		// finish computation of curvature vector
 		curv_vec *= (1.0f/(2.0f*vor_area));
 
-		return (1.0f/2.0f)*glm::length(curv_vec);
+		return (1.0f/2.0f)*length(curv_vec);
 	}
 
 	void mean
-	(const TriangleMesh& mesh, std::vector<float>& Kh, float *m, float *M) {
+	(const TriangleMesh& mesh, vector<float>& Kh, float *m, float *M) {
 		const int N = mesh.n_vertices();
 		Kh.resize(N);
 
 		if (m != nullptr) {
-			*m = std::numeric_limits<float>::max();
+			*m = numeric_limits<float>::max();
 		}
 		if (M != nullptr) {
-			*M = -std::numeric_limits<float>::max();
+			*M = -numeric_limits<float>::max();
 		}
 
 		for (int i = 0; i < N; ++i) {
 			Kh[i] = Kh_at_vertex(mesh, i);
 			if (m != nullptr) {
-				*m = std::min(*m, Kh[i]);
+				*m = min(*m, Kh[i]);
 			}
 			if (M != nullptr) {
-				*M = std::max(*M, Kh[i]);
+				*M = max(*M, Kh[i]);
 			}
 		}
 	}
 
-	void mean(const TriangleMesh& mesh, std::vector<float>& Kh, size_t nt) {
+	void mean(const TriangleMesh& mesh, vector<float>& Kh, size_t nt) {
 		if (nt == 1) {
 			mean(mesh, Kh);
 			return;
@@ -140,7 +142,7 @@ namespace curvature {
 	}
 
 	void mean
-	(const TriangleMesh& mesh, std::vector<float>& Kh, size_t nt, float *m, float *M)
+	(const TriangleMesh& mesh, vector<float>& Kh, size_t nt, float *m, float *M)
 	{
 		if (nt == 1) {
 			mean(mesh, Kh, m, M);
@@ -155,8 +157,8 @@ namespace curvature {
 		#pragma omp parallel for num_threads(nt) reduction(min:mm) reduction(max:MM)
 		for (int i = 0; i < N; ++i) {
 			Kh[i] = Kh_at_vertex(mesh, i);
-			mm = std::min(mm, Kh[i]);
-			MM = std::max(MM, Kh[i]);
+			mm = min(mm, Kh[i]);
+			MM = max(MM, Kh[i]);
 		}
 
 		*m = mm;

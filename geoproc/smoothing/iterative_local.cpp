@@ -6,6 +6,7 @@
 
 // glm includes
 #include <glm/glm.hpp>
+using namespace glm;
 
 // geoproc includes
 #include <geoproc/smoothing/iterative_private.hpp>
@@ -17,8 +18,8 @@ namespace smoothing {
 		const int N = m.n_vertices();
 
 		// Allocate memory for two arrays of vertices.
-		glm::vec3 *old_verts = (glm::vec3 *)malloc(N*sizeof(glm::vec3));
-		glm::vec3 *new_verts = (glm::vec3 *)malloc(N*sizeof(glm::vec3));
+		vec3 *old_verts = (vec3 *)malloc(N*sizeof(vec3));
+		vec3 *new_verts = (vec3 *)malloc(N*sizeof(vec3));
 		// Fill the first array (there is no need to fill the second).
 		std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
 
@@ -44,8 +45,8 @@ namespace smoothing {
 		const int N = m.n_vertices();
 
 		// Allocate memory for two arrays of vertices.
-		glm::vec3 *old_verts = (glm::vec3 *)malloc(N*sizeof(glm::vec3));
-		glm::vec3 *new_verts = (glm::vec3 *)malloc(N*sizeof(glm::vec3));
+		vec3 *old_verts = (vec3 *)malloc(N*sizeof(vec3));
+		vec3 *new_verts = (vec3 *)malloc(N*sizeof(vec3));
 		// Fill the first array (there is no need to fill the second).
 		std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
 
@@ -66,8 +67,8 @@ namespace smoothing {
 		const int N = m.n_vertices();
 
 		// Allocate memory for two arrays of vertices.
-		glm::vec3 *old_verts = (glm::vec3 *)malloc(N*sizeof(glm::vec3));
-		glm::vec3 *new_verts = (glm::vec3 *)malloc(N*sizeof(glm::vec3));
+		vec3 *old_verts = (vec3 *)malloc(N*sizeof(vec3));
+		vec3 *new_verts = (vec3 *)malloc(N*sizeof(vec3));
 		// Fill the first array (there is no need to fill the second).
 		std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
 
@@ -91,8 +92,8 @@ namespace smoothing {
 		const int N = m.n_vertices();
 
 		// Allocate memory for two arrays of vertices.
-		glm::vec3 *old_verts = (glm::vec3 *)malloc(N*sizeof(glm::vec3));
-		glm::vec3 *new_verts = (glm::vec3 *)malloc(N*sizeof(glm::vec3));
+		vec3 *old_verts = (vec3 *)malloc(N*sizeof(vec3));
+		vec3 *new_verts = (vec3 *)malloc(N*sizeof(vec3));
 		// Fill the first array (there is no need to fill the second).
 		std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
 
@@ -113,8 +114,8 @@ namespace smoothing {
 		const float mu = 1.0f/(Kpb - 1.0f/l);
 
 		// Allocate memory for two arrays of vertices.
-		glm::vec3 *old_verts = (glm::vec3 *)malloc(N*sizeof(glm::vec3));
-		glm::vec3 *new_verts = (glm::vec3 *)malloc(N*sizeof(glm::vec3));
+		vec3 *old_verts = (vec3 *)malloc(N*sizeof(vec3));
+		vec3 *new_verts = (vec3 *)malloc(N*sizeof(vec3));
 		// Fill the first array (there is no need to fill the second).
 		std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
 
@@ -140,8 +141,8 @@ namespace smoothing {
 		const float mu = 1.0f/(Kpb - 1.0f/l);
 
 		// Allocate memory for two arrays of vertices.
-		glm::vec3 *old_verts = (glm::vec3 *)malloc(N*sizeof(glm::vec3));
-		glm::vec3 *new_verts = (glm::vec3 *)malloc(N*sizeof(glm::vec3));
+		vec3 *old_verts = (vec3 *)malloc(N*sizeof(vec3));
+		vec3 *new_verts = (vec3 *)malloc(N*sizeof(vec3));
 		// Fill the first array (there is no need to fill the second).
 		std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
 

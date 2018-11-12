@@ -7,6 +7,9 @@
 #include <iostream>
 using namespace std;
 
+// glm includes
+using namespace glm;
+
 // gpr algorithms includes
 #include <geoproc/iterators/mesh_iterator.hpp>
 #include <geoproc/iterators/vertex_iterators.hpp>
@@ -16,7 +19,7 @@ namespace smoothing {
 namespace smoothing_private {
 
 	void make_uniform_weight
-	(int vi, const TriangleMesh& m, const glm::vec3 *verts, glm::vec3& L)
+	(int vi, const TriangleMesh& m, const vec3 *verts, vec3& L)
 	{
 		iterators::vertex::vertex_vertex_iterator it(m);
 
@@ -30,7 +33,7 @@ namespace smoothing_private {
 		// compute the differences v_j - v_i and store them
 
 		// differences vector
-		vector<glm::vec3> diffs;
+		vector<vec3> diffs;
 		int j = it.current();
 		do {
 			diffs.push_back( verts[j] - verts[vi] );
@@ -58,7 +61,7 @@ namespace smoothing_private {
 	inline float cotan(float a) { return std::cos(a)/std::sin(a); }
 
 	void make_cotangent_weight
-	(int vi, const TriangleMesh& m, const glm::vec3 *verts, glm::vec3& L)
+	(int vi, const TriangleMesh& m, const vec3 *verts, vec3& L)
 	{
 		iterators::vertex::vertex_face_iterator it(m);
 		const int first = it.init(vi);
@@ -70,14 +73,14 @@ namespace smoothing_private {
 		}
 
 		// differences vector
-		vector<glm::vec3> diffs;
+		vector<vec3> diffs;
 		// sum of cotangents vector
 		vector<float> weights;
 		// sum of all weights
 		float S = 0.0f;
 
 		// loop variables
-		glm::vec3 u, v;
+		vec3 u, v;
 		float alpha, beta;
 		do {
 			// it is guaranteed that
@@ -97,12 +100,12 @@ namespace smoothing_private {
 			assert(k1 == j2);
 
 			// compute the two angles: alpha and beta
-			u = glm::normalize( verts[i1] - verts[j1] );
-			v = glm::normalize( verts[k1] - verts[j1] );
-			alpha = glm::acos( glm::dot(u,v) );
-			u = glm::normalize( verts[i2] - verts[k2] );
-			v = glm::normalize( verts[j2] - verts[k2] );
-			beta = glm::acos( glm::dot(u,v) );
+			u = normalize( verts[i1] - verts[j1] );
+			v = normalize( verts[k1] - verts[j1] );
+			alpha = acos( dot(u,v) );
+			u = normalize( verts[i2] - verts[k2] );
+			v = normalize( verts[j2] - verts[k2] );
+			beta = acos( dot(u,v) );
 
 			// compute weight
 			float W = cotan(alpha) + cotan(beta);
@@ -133,7 +136,7 @@ namespace smoothing_private {
 	(
 		const smooth_weight& w, float l,
 		const TriangleMesh& m,
-		const glm::vec3 *from, glm::vec3 *to
+		const vec3 *from, vec3 *to
 	)
 	{
 		assert(from != nullptr);
@@ -141,11 +144,11 @@ namespace smoothing_private {
 
 		// compute the new coordinates of the vertices
 
-		glm::vec3 L;
+		vec3 L;
 		switch (w) {
 			case smooth_weight::uniform:
 				for (int i = 0; i < m.n_vertices(); ++i) {
-					L = glm::vec3(0.0f,0.0f,0.0f);
+					L = vec3(0.0f,0.0f,0.0f);
 					make_uniform_weight(i, m, from, L);
 					// apply formula
 					to[i] = from[i] + l*L;
@@ -154,7 +157,7 @@ namespace smoothing_private {
 
 			case smooth_weight::cotangent:
 				for (int i = 0; i < m.n_vertices(); ++i) {
-					L = glm::vec3(0.0f,0.0f,0.0f);
+					L = vec3(0.0f,0.0f,0.0f);
 					make_cotangent_weight(i, m, from, L);
 					// apply formula
 					to[i] = from[i] + l*L;
@@ -173,7 +176,7 @@ namespace smoothing_private {
 		const smooth_weight& w, float l,
 		const TriangleMesh& m,
 		size_t nt,
-		const glm::vec3 *from, glm::vec3 *to
+		const vec3 *from, vec3 *to
 	)
 	{
 		assert(from != nullptr);
@@ -181,13 +184,13 @@ namespace smoothing_private {
 
 		// compute the new coordinates of the vertices
 
-		glm::vec3 L;
+		vec3 L;
 		switch (w) {
 			case smooth_weight::uniform:
 
 				#pragma omp parallel for num_threads(nt) private(L)
 				for (int i = 0; i < m.n_vertices(); ++i) {
-					L = glm::vec3(0.0f,0.0f,0.0f);
+					L = vec3(0.0f,0.0f,0.0f);
 					make_uniform_weight(i, m, from, L);
 					// apply formula
 					to[i] = from[i] + l*L;
@@ -198,7 +201,7 @@ namespace smoothing_private {
 
 				#pragma omp parallel for num_threads(nt) private(L)
 				for (int i = 0; i < m.n_vertices(); ++i) {
-					L = glm::vec3(0.0f,0.0f,0.0f);
+					L = vec3(0.0f,0.0f,0.0f);
 					make_cotangent_weight(i, m, from, L);
 					// apply formula
 					to[i] = from[i] + l*L;
@@ -217,8 +220,8 @@ namespace smoothing_private {
 		const smooth_weight& w, float l,
 		size_t nit,
 		const TriangleMesh& m,
-		glm::vec3 *old_verts,
-		glm::vec3 *new_verts
+		vec3 *old_verts,
+		vec3 *new_verts
 	)
 	{
 		assert(old_verts != nullptr);
@@ -252,8 +255,8 @@ namespace smoothing_private {
 		const smooth_weight& w, float l,
 		size_t nit, size_t n_threads,
 		const TriangleMesh& m,
-		glm::vec3 *old_verts,
-		glm::vec3 *new_verts
+		vec3 *old_verts,
+		vec3 *new_verts
 	)
 	{
 		assert(old_verts != nullptr);
@@ -288,8 +291,8 @@ namespace smoothing_private {
 		float l1, float l2,
 		size_t nit,
 		const TriangleMesh& m,
-		glm::vec3 *old_verts,
-		glm::vec3 *new_verts
+		vec3 *old_verts,
+		vec3 *new_verts
 	)
 	{
 		// for each iteration of the algorithm
@@ -305,8 +308,8 @@ namespace smoothing_private {
 		float l1, float l2,
 		size_t nit, size_t n_threads,
 		const TriangleMesh& m,
-		glm::vec3 *old_verts,
-		glm::vec3 *new_verts
+		vec3 *old_verts,
+		vec3 *new_verts
 	)
 	{
 		// for each iteration of the algorithm

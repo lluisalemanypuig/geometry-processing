@@ -8,9 +8,11 @@
 #include <iostream>
 #include <limits>
 #include <cmath>
+using namespace std;
 
 // glm includes
 #include <glm/glm.hpp>
+using namespace glm;
 
 // geoproc includes
 #include <geoproc/iterators/mesh_iterator.hpp>
@@ -25,23 +27,23 @@ namespace curvature {
 	// Use a different algorithm from the one used for
 	// the parallel computation of the curvature
 	void Gauss
-	(const TriangleMesh& mesh, std::vector<float>& Kg, float *m, float *M)
+	(const TriangleMesh& mesh, vector<float>& Kg, float *m, float *M)
 	{
 		// mesh info
 		const int nT = mesh.n_triangles();
 		const int nV = mesh.n_vertices();
-		const std::vector<float>& mesh_areas = mesh.get_areas();
-		const std::vector<glm::vec3>& mesh_angles = mesh.get_angles();
+		const vector<float>& mesh_areas = mesh.get_areas();
+		const vector<vec3>& mesh_angles = mesh.get_angles();
 
 		// Gauss curvature per vertex
-		Kg = std::vector<float>(nV, 0.0f);
+		Kg = vector<float>(nV, 0.0f);
 
 		// Angle around each vertex.
 		// Define this array to contain:
 		// angles[i] = 2*pi - sum_{face j adjacent to i} angle_j
 		// where angle_j is the j-th angle incident to vertex i
 		// for j = 1 to number of adjacent faces to vertex i.
-		std::vector<float> angles(nV, 2.0f*M_PI);
+		vector<float> angles(nV, 2.0f*M_PI);
 
 		int i0,i1,i2;
 		float area;
@@ -78,10 +80,10 @@ namespace curvature {
 		// actual value of the curvature:
 
 		if (m != nullptr) {
-			*m = std::numeric_limits<float>::max();
+			*m = numeric_limits<float>::max();
 		}
 		if (M != nullptr) {
-			*M = -std::numeric_limits<float>::max();
+			*M = -numeric_limits<float>::max();
 		}
 
 		// compute curvature per vertex
@@ -89,10 +91,10 @@ namespace curvature {
 			Kg[i] = 3.0f*(angles[i]/Kg[i]);
 
 			if (m != nullptr) {
-				*m = std::min(*m, Kg[i]);
+				*m = min(*m, Kg[i]);
 			}
 			if (M != nullptr) {
-				*M = std::max(*M, Kg[i]);
+				*M = max(*M, Kg[i]);
 			}
 		}
 	}
@@ -102,8 +104,8 @@ namespace curvature {
 
 	inline float Kg_at_vertex_par(const TriangleMesh& m, int v) {
 		// mesh info
-		const std::vector<float>& mesh_areas = m.get_areas();
-		const std::vector<glm::vec3>& mesh_angles = m.get_angles();
+		const vector<float>& mesh_areas = m.get_areas();
+		const vector<vec3>& mesh_angles = m.get_angles();
 
 		// sum of angles incident to 'v'
 		float angle_sum = 0.0f;
@@ -155,14 +157,14 @@ namespace curvature {
 		return (1.0f/vor_area)*(2.0f*M_PI - angle_sum);
 	}
 
-	void Gauss(const TriangleMesh& m, std::vector<float>& Kg, size_t nt) {
+	void Gauss(const TriangleMesh& m, vector<float>& Kg, size_t nt) {
 		if (nt == 1) {
 			Gauss(m, Kg);
 			return;
 		}
 
 		const int N = m.n_vertices();
-		Kg = std::vector<float>(N, 0.0f);
+		Kg = vector<float>(N, 0.0f);
 
 		#pragma omp parallel for num_threads(nt)
 		for (int i = 0; i < N; ++i) {
@@ -171,7 +173,7 @@ namespace curvature {
 	}
 
 	void Gauss
-	(const TriangleMesh& mesh, std::vector<float>& Kg, size_t nt, float *m, float *M)
+	(const TriangleMesh& mesh, vector<float>& Kg, size_t nt, float *m, float *M)
 	{
 		if (nt == 1) {
 			Gauss(mesh, Kg, m, M);
@@ -179,15 +181,15 @@ namespace curvature {
 		}
 
 		const int N = mesh.n_vertices();
-		Kg = std::vector<float>(N, 0.0f);
+		Kg = vector<float>(N, 0.0f);
 
 		float mm, MM;
 
 		#pragma omp parallel for num_threads(nt) reduction(min:mm) reduction(max:MM)
 		for (int i = 0; i < N; ++i) {
 			Kg[i] = Kg_at_vertex_par(mesh, i);
-			mm = std::min(mm, Kg[i]);
-			MM = std::max(MM, Kg[i]);
+			mm = min(mm, Kg[i]);
+			MM = max(MM, Kg[i]);
 		}
 
 		*m = mm;
