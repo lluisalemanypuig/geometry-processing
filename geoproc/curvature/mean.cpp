@@ -118,10 +118,10 @@ namespace curvature {
 		for (int i = 0; i < N; ++i) {
 			Kh[i] = Kh_at_vertex(mesh, i);
 			if (m != nullptr) {
-				*m = min(*m, Kh[i]);
+				*m = std::min(*m, Kh[i]);
 			}
 			if (M != nullptr) {
-				*M = max(*M, Kh[i]);
+				*M = std::max(*M, Kh[i]);
 			}
 		}
 	}
@@ -157,8 +157,8 @@ namespace curvature {
 		#pragma omp parallel for num_threads(nt) reduction(min:mm) reduction(max:MM)
 		for (int i = 0; i < N; ++i) {
 			Kh[i] = Kh_at_vertex(mesh, i);
-			mm = min(mm, Kh[i]);
-			MM = max(MM, Kh[i]);
+			mm = std::min(mm, Kh[i]);
+			MM = std::max(MM, Kh[i]);
 		}
 
 		*m = mm;

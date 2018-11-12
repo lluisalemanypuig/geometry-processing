@@ -91,10 +91,10 @@ namespace curvature {
 			Kg[i] = 3.0f*(angles[i]/Kg[i]);
 
 			if (m != nullptr) {
-				*m = min(*m, Kg[i]);
+				*m = std::min(*m, Kg[i]);
 			}
 			if (M != nullptr) {
-				*M = max(*M, Kg[i]);
+				*M = std::max(*M, Kg[i]);
 			}
 		}
 	}
@@ -188,8 +188,8 @@ namespace curvature {
 		#pragma omp parallel for num_threads(nt) reduction(min:mm) reduction(max:MM)
 		for (int i = 0; i < N; ++i) {
 			Kg[i] = Kg_at_vertex_par(mesh, i);
-			mm = min(mm, Kg[i]);
-			MM = max(MM, Kg[i]);
+			mm = std::min(mm, Kg[i]);
+			MM = std::max(MM, Kg[i]);
 		}
 
 		*m = mm;
