@@ -349,6 +349,8 @@ class TriangleMesh {
 
 		/// Returns a constant reference to all vertices of the mesh.
 		const std::vector<glm::vec3>& get_vertices() const;
+		/// Returns a constant reference to all vertices of the mesh.
+		const glm::vec3 *get_pvertices() const;
 
 		/**
 		 * @brief Returns the area of face @e f.

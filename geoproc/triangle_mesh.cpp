@@ -106,8 +106,18 @@ TriangleMesh::~TriangleMesh() {
 
 void TriangleMesh::set_vertices(const std::vector<float>& coords){
 	assert(coords.size()%3 == 0);
+	assert(coords.size() >= 2); // at least one vertex
+
+	// initialise min,max coords so that valgrind doesn't cry
+	min_coord.x = coords[0];
+	min_coord.y = coords[1];
+	min_coord.z = coords[2];
+	max_coord.x = coords[0];
+	max_coord.y = coords[1];
+	max_coord.z = coords[2];
+
 	vertices.resize(coords.size()/3);
-	for (size_t i = 0; i < coords.size(); i += 3) {
+	for (size_t i = 3; i < coords.size(); i += 3) {
 		vertices[i/3].x = coords[i];
 		vertices[i/3].y = coords[i+1];
 		vertices[i/3].z = coords[i+2];
@@ -122,6 +132,12 @@ void TriangleMesh::set_vertices(const std::vector<float>& coords){
 
 void TriangleMesh::set_vertices(const glm::vec3 *vs, int N) {
 	assert(vs != nullptr);
+	assert(N >= 1); // at least one vertex
+
+	// initialise min,max coords so that valgrind doesn't cry
+	min_coord = vs[0];
+	max_coord = vs[0];
+
 	vertices.resize(N);
 	std::copy_if(
 		vs, vs + N, vertices.begin(),
@@ -137,6 +153,12 @@ void TriangleMesh::set_vertices(const glm::vec3 *vs, int N) {
 }
 
 void TriangleMesh::set_vertices(const std::vector<glm::vec3>& vs) {
+	assert(vs.size() >= 1); // at least one vertex
+
+	// initialise min,max coords so that valgrind doesn't cry
+	min_coord = vs[0];
+	max_coord = vs[0];
+
 	vertices.resize(vs.size());
 	std::copy_if(
 		vs.begin(), vs.end(), vertices.begin(),
@@ -449,6 +471,10 @@ const glm::vec3& TriangleMesh::get_vertex(int v) const {
 
 const std::vector<glm::vec3>& TriangleMesh::get_vertices() const {
 	return vertices;
+}
+
+const glm::vec3 *TriangleMesh::get_pvertices() const {
+	return &vertices[0];
 }
 
 float TriangleMesh::get_triangle_area(int t) const {
