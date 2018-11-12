@@ -45,7 +45,8 @@ namespace min_max {
 	 */
 	void binning(
 		const std::vector<float>& data,
-		float& min, float& max, float prop
+		float dmin, float dmax, float prop,
+		float& min, float& max
 	);
 
 	/* Finds the minimum and maximum values within the set of values
@@ -66,7 +67,8 @@ namespace min_max {
 	 */
 	void binning_around(
 		const std::vector<float>& data, float center,
-		float& min, float& max, float prop
+		float dmin, float dmax, float prop,
+		float& min, float& max
 	);
 
 	/* Find the minimum and maximum value among those
@@ -79,7 +81,7 @@ namespace min_max {
 	 */
 	void below_dev(
 		const std::vector<float>& data,
-		float& min, float& max, float prop
+		float prop, float& min, float& max
 	);
 
 } // -- namespace min_max

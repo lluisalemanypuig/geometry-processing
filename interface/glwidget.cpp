@@ -80,11 +80,11 @@ void GLWidget::compute_curvature() {
 	timing::time_point begin = timing::now();
 	if (current_curv_display == curv_type::Gauss) {
 		cout << "    Gauss ";
-		geoproc::curvature::Gauss(mesh, curvature_values, nt);
+		geoproc::curvature::Gauss(mesh, curvature_values, nt, &cm, &cM);
 	}
 	else if (current_curv_display == curv_type::Mean) {
 		cout << "    Mean ";
-		geoproc::curvature::mean(mesh, curvature_values, nt);
+		geoproc::curvature::mean(mesh, curvature_values, nt, &cm, &cM);
 	}
 	timing::time_point end = timing::now();
 
@@ -116,11 +116,12 @@ void GLWidget::show_curvature(bool should_load, bool make_all_buffers) {
 	float min, max;
 
 	if (current_curv_display == curv_type::Gauss) {
-		min_max::binning_around(curvature_values, 0.0, min, max, prop);
+		min_max::binning_around(curvature_values, 0.0, cm, cM, prop, min, max);
 	}
 	else {
-		min_max::binning(curvature_values, min, max, prop);
+		min_max::binning(curvature_values, cm, cM, prop, min, max);
 	}
+
 	coloring::colors_rainbow(curvature_values, min, max, cols);
 
 	makeCurrent();

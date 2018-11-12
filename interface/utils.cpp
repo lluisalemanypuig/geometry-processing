@@ -27,93 +27,67 @@ namespace timing {
 
 namespace min_max {
 
-	void generic_binning(
-		const std::vector<float>& data, float val, bool around_val,
-		float& min, float& max, float prop
-	)
-	{
-		// find minimum and maximum values of curvature
-		float vm = numeric_limits<float>::max();
-		float vM = -numeric_limits<float>::max();
-		for (size_t i = 0; i < data.size(); ++i) {
-			vm = std::min(vm, data[i]);
-			vM = std::max(vM, data[i]);
-		}
-
-		#if defined (DEBUG)
-		cout << "Binning start up:" << endl;
-		cout << "    total values: " << data.size() << endl;
-		cout << "    min value: " << vm << endl;
-		cout << "    max value: " << vM << endl;
-		cout << "        difference: " << vM - vm << endl;
-		#endif
-
-		// do binning on # of bins as a function
-		// of the difference between the maximum
-		// and minimum values
-
-		size_t nbins;
-		if (vM - vm <= 10.0f)			{ nbins = 1; }
-		else if (vM - vm <= 100.0f)		{ nbins = 10; }
-		else if (vM - vm <= 1000.0f)	{ nbins = 100; }
-		else if (vM - vm <= 10000.0f)	{ nbins = 1000; }
-		else if (vM - vm <= 100000.0f)	{ nbins = 10000; }
-		else if (vM - vm <= 1000000.0f)	{ nbins = 100000; }
-		else							{ nbins = 1000000; }
-		float step = (vM - vm)/nbins;
-
-		#if defined (DEBUG)
-		cout << "    use " << nbins << " bins" << endl;
-		cout << "    step= " << step << endl;
-		#endif
-
-		int *bins = static_cast<int *>(malloc((nbins + 1)*sizeof(int)));
+	static inline
+	void init_bins(size_t nbins, int *bins) {
 		for (size_t i = 0; i < nbins + 1; ++i) {
 			bins[i] = 0;
 		}
+	}
 
-		// i-th bin comprises the values
-		//
-		//  [ m + i*(M - m)/nbins,
-		//    m + (i + 1)*(M - m)/nbins] =
-		// = [m + i*step, m + (i + 1)*step]
-		//
+	static inline
+	void fill_bins
+	(
+		const vector<float>& data,
+		float dmin, float dmax, float step,
+		float val, bool around_val,
+		int nbins, int *bins, int& start_at
+	)
+	{
+		/* fill bins */
 
 		// maximum size among the bins,
 		// and the corresponding index
-		int center_size = 0;
-		int center_idx = 0;
+		int max_size = 0;
+		start_at = 0;
 		for (size_t i = 0; i < data.size(); ++i) {
-			int idx = (data[i] - vm)/step;
-			++bins[idx];
+			int idx = (data[i] - dmin)/step;
 
-			if (center_size < bins[idx]) {
-				center_size = bins[idx];
-				center_idx = idx;
+			// since we are doing adaptative binning
+			// the index may be out of bounds
+			if (idx < 0 or idx > nbins) {
+				continue;
+			}
+
+			++bins[idx];
+			if (max_size < bins[idx]) {
+				max_size = bins[idx];
+				start_at = idx;
 			}
 		}
 
 		if (around_val) {
-			int idx = int((val - vm)/step);
-			center_idx = idx;
-			center_size = bins[idx];
+			int idx = int((val - dmin)/step);
+			start_at = idx;
 		}
+	}
 
-		#if defined (DEBUG)
-		cout << "Binning result:" << endl;
-		cout << "    starting bin at: " << center_idx << endl;
-		cout << "        with " << bins[center_idx] << " values in it" << endl;
-		#endif
-
+	static inline
+	int find_left_right
+	(
+		const int *bins, size_t nbins,
+		size_t ndata, float prop,
+		int start_at, int& left, int& right
+	)
+	{
 		// amount of curvature values covered
-		int count = center_size;
-		int left = center_idx;
-		int right = center_idx;
+		int count = bins[start_at];
+		left = start_at;
+		right = start_at;
 		bool move_left = (0 < left ? true : false);
 		bool move_right = (right < nbins ? true : false);
 
 		while (
-			(100.0f*count)/data.size() < prop and
+			(100.0f*count)/ndata < prop and
 			(move_left or move_right)
 		)
 		{
@@ -143,49 +117,135 @@ namespace min_max {
 				}
 			}
 		}
+		return count;
+	}
+
+	void generic_binning(
+		const vector<float>& data, float val, bool around_val,
+		float dmin, float dmax, float prop,
+		float& m, float& M
+	)
+	{
+		size_t ndata = data.size();
 
 		#if defined (DEBUG)
-		cout << "    Found " << prop << "% of values between: " << endl;
-		cout << "        left=  " << left << endl;
-		cout << "        right= " << right << endl;
-		cout << "        count= " << count << endl;
-		cout << "            proportion: " << float(count)/data.size() << endl;
+		cout << "Binning start up:" << endl;
+		cout << "    total values: " << ndata << endl;
+		cout << "    min value: " << dmin << endl;
+		cout << "    max value: " << dmax << endl;
+		cout << "        difference: " << dmax - dmin << endl;
 		#endif
+
+		// do binning on # of bins as a function
+		// of the difference between the maximum
+		// and minimum values
+
+		size_t nbins;
+		if (dmax - dmin <= 10.0f)			{ nbins = 1; }
+		else if (dmax - dmin <= 100.0f)		{ nbins = 10; }
+		else if (dmax - dmin <= 1000.0f)	{ nbins = 100; }
+		else if (dmax - dmin <= 10000.0f)	{ nbins = 1000; }
+		else if (dmax - dmin <= 100000.0f)	{ nbins = 10000; }
+		else if (dmax - dmin <= 1000000.0f)	{ nbins = 100000; }
+		else								{ nbins = 1000000; }
+		++nbins;
+
+		float step = (dmax - dmin)/(nbins - 1);
+
+		#if defined (DEBUG)
+		cout << "    use " << nbins << " bins" << endl;
+		cout << "    step: " << step << endl;
+		#endif
+
+		// allocate and initialise memory for bins
+		int *bins = static_cast<int *>(malloc((nbins + 1)*sizeof(int)));
+
+		size_t num_step = 0;
+		float actual_prop, err;
+		bool terminate = false;
+		do {
+			init_bins(nbins, bins);
+
+			// dump data into the bins
+			int start_at;
+			fill_bins(data, dmin, dmax, step, val, around_val, nbins, bins, start_at);
+
+			#if defined (DEBUG)
+			cout << "Binning result:" << endl;
+			cout << "    starting bin at: " << start_at << endl;
+			cout << "        with " << bins[start_at] << " values in it" << endl;
+			#endif
+
+			// find the left and right bins so that the collection
+			// of values between them
+			int left, right;
+			int count = find_left_right
+				(bins, nbins, ndata, prop, start_at, left, right);
+
+			actual_prop = (100.0f*count)/ndata;
+			err = std::abs(prop - actual_prop);
+
+			#if defined (DEBUG)
+			cout << "    Found " << prop << "% of values between: " << endl;
+			cout << "        left=  " << left << endl;
+			cout << "        right= " << right << endl;
+			cout << "        count= " << count << endl;
+			cout << "            actual proportion: " << actual_prop << endl;
+			cout << "            error: " << err << endl;
+			cout << "        at step: " << num_step << endl;
+			#endif
+
+			// Find values of data in the left and right bins.
+			// These are the new "minimum" and "maximum" of the data.
+			dmax = dmin + right*step;
+			dmin = dmin + left*step;
+			// make new step
+			step = (dmax - dmin)/(nbins - 1);
+
+			if (left == 0 and right == nbins - 1) {
+				terminate = true;
+			}
+			++num_step;
+			if (num_step >= 30) {
+				terminate = true;
+			}
+		}
+		while (err > 0.01f and not terminate);
 
 		// compute actual minimum and maximum
-		vM = vm + right*step;
-		vm = vm + left*step;
+		m = dmin;
+		M = dmax;
 
 		#if defined (DEBUG)
-		cout << "    new minimum: " << vm << endl;
-		cout << "    new maximum: " << vM << endl;
+		cout << "    new minimum: " << m << endl;
+		cout << "    new maximum: " << M << endl;
 		#endif
 
-		min = vm;
-		max = vM;
-
+		// free memory allocated for the bins
 		free(bins);
 	}
 
 	void binning(
-		const std::vector<float>& data,
-		float& min, float& max, float prop
+		const vector<float>& data,
+		float dmin, float dmax, float prop,
+		float& min, float& max
 	)
 	{
-		generic_binning(data, 0.0, false, min, max, prop);
+		generic_binning(data, 0.0, false, dmin, dmax, prop, min, max);
 	}
 
 	void binning_around(
-		const std::vector<float>& data, float center,
-		float& min, float& max, float prop
+		const vector<float>& data, float center,
+		float dmin, float dmax, float prop,
+		float& min, float& max
 	)
 	{
-		generic_binning(data, center, true, min, max, prop);
+		generic_binning(data, center, true, dmin, dmax, prop, min, max);
 	}
 
 	void below_dev(
-		const std::vector<float>& data,
-		float& min, float& max, float prop
+		const vector<float>& data,
+		float prop, float& min, float& max
 	)
 	{
 		float mean = 0.0f;
@@ -201,7 +261,7 @@ namespace min_max {
 
 		float vm = numeric_limits<float>::max();
 		float vM = -numeric_limits<float>::max();
-		float dev = std::sqrt(var);
+		float dev = sqrt(var);
 		dev *= (1.0f + prop/100.0f);
 
 		for (float v : data) {
@@ -224,8 +284,8 @@ namespace coloring {
 
 	void colors_rainbow
 	(
-		const std::vector<float>& values, float m, float M,
-		std::vector<glm::vec3>& cols
+		const vector<float>& values, float m, float M,
+		vector<glm::vec3>& cols
 	)
 	{
 		// ----------------------- //

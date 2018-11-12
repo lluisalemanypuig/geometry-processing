@@ -38,6 +38,8 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		QOpenGLShaderProgram *program;
 		RenderTriangleMesh mesh;
 
+		/// Minimum and maximum curvature values
+		float cm, cM;
 		/// Values of the curvature per vertex
 		std::vector<float> curvature_values;
 		/// Proportion of curvature values to be used.
