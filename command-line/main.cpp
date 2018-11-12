@@ -45,7 +45,6 @@ int main(int argc, char *argv[]) {
 
 	if (strcmp(argv[1], "high-frequency") == 0) {
 		return test_geoproc::test_high_frequency(argc, argv);
-		return 1;
 	}
 
 	cerr << "Error: algorithm '" << string(argv[1]) << "' not recognised" << endl;

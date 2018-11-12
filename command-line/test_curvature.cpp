@@ -65,18 +65,21 @@ namespace test_geoproc {
 
 		if (mesh_file == "none") {
 			cerr << "Error: mesh file not specified" << endl;
-			cerr << "    Use ./command-line curvature --help to see the usage" << endl;
+			cerr << "    Use ./command-line curvature --help" << endl;
+			cerr << "to see the usage" << endl;
 			return 1;
 		}
 		if (curvature == "none") {
 			cerr << "Error: curvature to be evaluated not specified" << endl;
-			cerr << "    Use ./command-line curvature --help to see the usage" << endl;
+			cerr << "    Use ./command-line curvature --help" << endl;
+			cerr << "to see the usage" << endl;
 			return 1;
 		}
 
 		if (curvature != "Gauss" and curvature != "mean") {
 			cerr << "Error: curvature value '" << curvature << "' not valid" << endl;
-			cerr << "    Use ./command-line curvature --help to see the usage" << endl;
+			cerr << "    Use ./command-line curvature --help" << endl;
+			cerr << "to see the usage" << endl;
 			return 1;
 		}
 

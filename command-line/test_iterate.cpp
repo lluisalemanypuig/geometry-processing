@@ -59,12 +59,14 @@ namespace test_geoproc {
 
 		if (mesh_file == "none") {
 			cerr << "Error: mesh file not specified" << endl;
-			cerr << "    Use ./command-line iterate --help to see the usage" << endl;
+			cerr << "    Use ./command-line iterate --help" << endl;
+			cerr << "to see the usage" << endl;
 			return 1;
 		}
 		if (iteration_type == "none") {
 			cerr << "Error: iteration type not specified" << endl;
-			cerr << "    Use ./command-line iterate --help to see the usage" << endl;
+			cerr << "    Use ./command-line iterate --help" << endl;
+			cerr << "to see the usage" << endl;
 			return 1;
 		}
 

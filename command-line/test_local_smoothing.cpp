@@ -29,29 +29,29 @@ namespace test_geoproc {
 		cout << "        * bilaplacian" << endl;
 		cout << "        * TaubinLM" << endl;
 		cout << endl;
-		cout << "    Parameters of each algorithm." << endl;
-		cout << "    Unless stated otherwise, all of them are mandatory" << endl;
-		cout << "    * laplacian:" << endl;
-		cout << "        --lambda" << endl;
-		cout << "        --it: number of iterations" << endl;
-		cout << "        --weight-type" << endl;
-		cout << "            Allowed values:" << endl;
-		cout << "            * uniform" << endl;
-		cout << "            * cotangent" << endl;
-		cout << "    * bilaplacian:" << endl;
-		cout << "        --lambda" << endl;
-		cout << "        --it: number of iterations" << endl;
-		cout << "        --weight-type" << endl;
-		cout << "            Allowed values:" << endl;
-		cout << "            * uniform" << endl;
-		cout << "            * cotangent" << endl;
-		cout << "    * TaubinLM:" << endl;
-		cout << "        --lambda" << endl;
-		cout << "        --it: number of iterations" << endl;
-		cout << "        --weight-type" << endl;
-		cout << "            Allowed values:" << endl;
-		cout << "            * uniform" << endl;
-		cout << "            * cotangent" << endl;
+		cout << "        Parameters of each algorithm." << endl;
+		cout << "        Unless stated otherwise, all of them are mandatory" << endl;
+		cout << "        * laplacian:" << endl;
+		cout << "            --lambda" << endl;
+		cout << "            --it: number of iterations" << endl;
+		cout << "            --weight-type" << endl;
+		cout << "                Allowed values:" << endl;
+		cout << "                * uniform" << endl;
+		cout << "                * cotangent" << endl;
+		cout << "        * bilaplacian:" << endl;
+		cout << "            --lambda" << endl;
+		cout << "            --it: number of iterations" << endl;
+		cout << "            --weight-type" << endl;
+		cout << "                Allowed values:" << endl;
+		cout << "                * uniform" << endl;
+		cout << "                * cotangent" << endl;
+		cout << "        * TaubinLM:" << endl;
+		cout << "            --lambda" << endl;
+		cout << "            --it: number of iterations" << endl;
+		cout << "            --weight-type" << endl;
+		cout << "                Allowed values:" << endl;
+		cout << "                * uniform" << endl;
+		cout << "                * cotangent" << endl;
 		cout << endl;
 	}
 
@@ -116,17 +116,20 @@ namespace test_geoproc {
 
 		if (mesh_file == "none") {
 			cerr << "Error: mesh file not specified" << endl;
-			cerr << "    Use ./command-line smoothing --help to see the usage" << endl;
+			cerr << "    Use ./command-line smoothing --help" << endl;
+			cerr << "to see the usage" << endl;
 			return 1;
 		}
 		if (alg == "none") {
 			cerr << "Error: algorithm not specified" << endl;
-			cerr << "    Use ./command-line smoothing --help to see the usage" << endl;
+			cerr << "    Use ./command-line smoothing --help" << endl;
+			cerr << "to see the usage" << endl;
 			return 1;
 		}
 		if (allowed_algorithms.find(alg) == allowed_algorithms.end()) {
 			cerr << "Error: value '" << alg << "' for algorithm parameter not valid" << endl;
-			cerr << "    Use ./command-line smoothing --help to see the usage" << endl;
+			cerr << "    Use ./command-line smoothing --help" << endl;
+			cerr << "to see the usage" << endl;
 			return 1;
 		}
 
