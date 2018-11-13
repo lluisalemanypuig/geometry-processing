@@ -14,21 +14,24 @@ class MainWindow : public QMainWindow {
 
 		int current_tab;
 
-	private slots:
 		void change_poly_mode();
 		void change_curvature();
 		void change_curvature_prop_display(float p);
+		void set_Smooth_params();
+		void set_HighFreqs_params();
 
-		/* Menu buttons */
+	private slots:
+
+		/* Menu */
 		void on_action_Open_triggered();
 		void on_action_Quit_triggered();
 
-		/* Render radio buttons */
+		/* Render */
 		void on_CBSolid_toggled(bool checked);
 		void on_CBWireframe_toggled(bool checked);
 		void on_CBRefLines_toggled(bool checked);
 
-		/* Curvature radio buttons */
+		/* Curvature */
 		bool get_prop_curvature_values(float& p);
 		void set_prop_values_to_all();
 		void on_LE_PropCurvValues_returnPressed();
@@ -37,12 +40,18 @@ class MainWindow : public QMainWindow {
 		void on_RBCurvatureG_toggled(bool checked);
 		void on_RBNoCurvature_toggled(bool checked);
 
-		/* Smoothing buttons */
-		void on_RB_Laplacian_toggled(bool checked);
-		void on_RB_BiLaplacian_toggled(bool checked);
-		void on_RB_Taubin_toggled(bool checked);
+		/* Smoothing */
 		void on_PB_RunSmooth_clicked();
-		void on_PB_ResetSmooth_clicked();
+		void on_PB_ResetDualView_clicked();
+
+		/* High frequencies */
+
+		void on_PB_HighFreqs_clicked();
+		void on_PB_ExagHighFreqs_clicked();
+
+		/* band frequencies */
+
+		void on_PB_RunBandFreqs_clicked();
 
 		/* Performance options */
 		void on_SBThreads_valueChanged(int arg1);
@@ -51,10 +60,7 @@ class MainWindow : public QMainWindow {
 		/* Tab widget stuff */
 		void on_TW_View_currentChanged(int index);
 
-		/* Settings stuff */
-		void on_comboBox_currentIndexChanged(const QString &arg1);
-
-	public:
+public:
 		explicit MainWindow(QWidget *parent = nullptr);
 		~MainWindow();
 };

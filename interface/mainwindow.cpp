@@ -4,7 +4,14 @@
 #include <iostream>
 using namespace std;
 
+// geoproc includes
+#include <geoproc/high-frequencies/highfrequencies.hpp>
+#include <geoproc/smoothing/smoothing_defs.hpp>
+using namespace geoproc;
+
 // Qt includes
+#include <QJsonDocument>
+#include <QJsonArray>
 #include <QFileDialog>
 #include "ui_mainwindow.h"
 
@@ -41,6 +48,96 @@ void MainWindow::change_curvature_prop_display(float p) {
 		ui->DualView_LeftRenderer->change_display_curvature_proportion(p);
 		ui->DualView_RightRenderer->change_display_curvature_proportion(p);
 	}
+}
+
+void MainWindow::set_Smooth_params() {
+	const QString& smooth_operator = ui->smooth_CB_operators->currentText();
+	if (smooth_operator == "Laplacian") {
+		ui->DualView_RightRenderer->set_smooth_operator(
+			smoothing::smooth_operator::Laplacian
+		);
+	}
+	else if (smooth_operator == "Bilaplacian") {
+		ui->DualView_RightRenderer->set_smooth_operator(
+			smoothing::smooth_operator::BiLaplacian
+		);
+	}
+	else if (smooth_operator == "TaubinLM") {
+		ui->DualView_RightRenderer->set_smooth_operator(
+			smoothing::smooth_operator::TaubinLM
+		);
+	}
+	else {
+		cerr << "Error: value in combo box for smoothing operator '"
+			 << smooth_operator.toStdString() << "' not recognised." << endl;
+	}
+
+	const QString& weight_type = ui->smooth_CB_weight_type->currentText();
+	if (weight_type == "Uniform") {
+		ui->DualView_RightRenderer->set_smooth_weight_type(
+			smoothing::smooth_weight::uniform
+		);
+	}
+	else if (weight_type == "Cotangent") {
+		ui->DualView_RightRenderer->set_smooth_weight_type(
+			smoothing::smooth_weight::cotangent
+		);
+	}
+	else {
+		cerr << "Error: value in combo box for weight type '"
+			 << weight_type.toStdString() << "' not recognised." << endl;
+	}
+
+	size_t nit = ui->Smooth_LE_Iter->text().toInt();
+	float lambda = ui->Smooth_LE_Lambda->text().toFloat();
+
+	ui->DualView_RightRenderer->set_n_iterations(nit);
+	ui->DualView_RightRenderer->set_lambda(lambda);
+}
+
+void MainWindow::set_HighFreqs_params() {
+	const QString& smooth_operator = ui->HighFreqs_CB_operators->currentText();
+	if (smooth_operator == "Laplacian") {
+		ui->DualView_RightRenderer->set_smooth_operator(
+			smoothing::smooth_operator::Laplacian
+		);
+	}
+	else if (smooth_operator == "Bilaplacian") {
+		ui->DualView_RightRenderer->set_smooth_operator(
+			smoothing::smooth_operator::BiLaplacian
+		);
+	}
+	else if (smooth_operator == "TaubinLM") {
+		ui->DualView_RightRenderer->set_smooth_operator(
+			smoothing::smooth_operator::TaubinLM
+		);
+	}
+	else {
+		cerr << "Error: value in combo box for smoothing operator '"
+			 << smooth_operator.toStdString() << "' not recognised." << endl;
+	}
+
+	const QString& weight_type = ui->HighFreqs_CB_weight_type->currentText();
+	if (weight_type == "Uniform") {
+		ui->DualView_RightRenderer->set_smooth_weight_type(
+			smoothing::smooth_weight::uniform
+		);
+	}
+	else if (weight_type == "Cotangent") {
+		ui->DualView_RightRenderer->set_smooth_weight_type(
+			smoothing::smooth_weight::cotangent
+		);
+	}
+	else {
+		cerr << "Error: value in combo box for weight type '"
+			 << weight_type.toStdString() << "' not recognised." << endl;
+	}
+
+	size_t nit = ui->HighFreqs_LE_Iter->text().toInt();
+	float lambda = ui->HighFreqs_LE_Lambda->text().toFloat();
+
+	ui->DualView_RightRenderer->set_n_iterations(nit);
+	ui->DualView_RightRenderer->set_lambda(lambda);
 }
 
 /* Menu buttons */
@@ -181,43 +278,43 @@ void MainWindow::on_RBNoCurvature_toggled(bool checked) {
 
 /* Smoothing radio buttons */
 
-void MainWindow::on_RB_Laplacian_toggled(bool checked) {
-	if (checked) {
-		ui->DualView_RightRenderer->set_smooth_operator(
-			geoproc::smoothing::smooth_operator::Laplacian
-		);
-	}
-}
-
-void MainWindow::on_RB_BiLaplacian_toggled(bool checked) {
-	if (checked) {
-		ui->DualView_RightRenderer->set_smooth_operator(
-			geoproc::smoothing::smooth_operator::BiLaplacian
-		);
-	}
-}
-
-void MainWindow::on_RB_Taubin_toggled(bool checked) {
-	if (checked) {
-		ui->DualView_RightRenderer->set_smooth_operator(
-			geoproc::smoothing::smooth_operator::TaubinLM
-		);
-	}
-}
-
 void MainWindow::on_PB_RunSmooth_clicked() {
-	size_t nit = ui->lE_Iter->text().toInt();
-	float lambda = ui->lE_Lambda->text().toFloat();
-
-	ui->DualView_RightRenderer->set_n_iterations(nit);
-	ui->DualView_RightRenderer->set_lambda(lambda);
+	set_Smooth_params();
 	ui->DualView_RightRenderer->run_smoothing_algorithm();
 }
 
-void MainWindow::on_PB_ResetSmooth_clicked() {
+void MainWindow::on_PB_ResetDualView_clicked() {
 	ui->DualView_RightRenderer->set_mesh(
 		ui->DualView_LeftRenderer->get_mesh()
 	);
+}
+
+/* High frequencies */
+
+void MainWindow::on_PB_HighFreqs_clicked() {
+	set_HighFreqs_params();
+	ui->DualView_RightRenderer->run_high_freqs_algorithm();
+}
+
+void MainWindow::on_PB_ExagHighFreqs_clicked() {
+	set_HighFreqs_params();
+	ui->DualView_RightRenderer->run_exagg_high_freqs_algorithm();
+}
+
+/* band frequencies */
+
+void MainWindow::on_PB_RunBandFreqs_clicked() {
+	const QString& txt = ui->TxtEdit_BandFreqs->toPlainText();
+	QJsonDocument doc = QJsonDocument::fromJson(txt.toUtf8());
+
+	if (doc.isNull()) {
+		cerr << "Error: data entered:" << endl;
+		cerr << txt.toStdString() << endl;
+		cerr << "is not valid" << endl;
+		return;
+	}
+
+	ui->DualView_RightRenderer->run_band_frequencies(doc);
 }
 
 /* Performance options */
@@ -245,21 +342,6 @@ void MainWindow::on_TW_View_currentChanged(int index) {
 	current_tab = index;
 	change_poly_mode();
 	change_curvature();
-}
-
-/* Settings stuff */
-
-void MainWindow::on_comboBox_currentIndexChanged(const QString& arg1) {
-	if (arg1 == "Uniform") {
-		ui->DualView_RightRenderer->set_smooth_weight_type(
-			geoproc::smoothing::smooth_weight::uniform
-		);
-	}
-	else if (arg1 == "Cotangent") {
-		ui->DualView_RightRenderer->set_smooth_weight_type(
-			geoproc::smoothing::smooth_weight::cotangent
-		);
-	}
 }
 
 // PUBLIC
