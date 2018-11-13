@@ -159,7 +159,7 @@ void TwinGLWidget::run_smoothing_algorithm() {
 	}
 	else {
 		makeCurrent();
-		mesh.make_vertices_normals(program);
+		mesh.make_vertices_normals_buffers(program);
 		doneCurrent();
 	}
 	update();
@@ -215,7 +215,7 @@ void TwinGLWidget::run_high_freqs_algorithm() {
 	}
 	else {
 		makeCurrent();
-		mesh.make_vertices_normals(program);
+		mesh.make_vertices_normals_buffers(program);
 		doneCurrent();
 	}
 	update();
@@ -258,7 +258,7 @@ void TwinGLWidget::run_exagg_high_freqs_algorithm() {
 	}
 	else {
 		makeCurrent();
-		mesh.make_vertices_normals(program);
+		mesh.make_vertices_normals_buffers(program);
 		doneCurrent();
 	}
 	update();
@@ -410,9 +410,9 @@ void TwinGLWidget::run_band_frequencies(const QJsonDocument& doc) {
 		show_curvature(false, true);
 	}
 	else {
-		cout << "Remake vertices and normals" << endl;
+		cout << "Remake buffers for vertices and normals" << endl;
 		makeCurrent();
-		mesh.make_vertices_normals(program);
+		mesh.make_vertices_normals_buffers(program);
 		doneCurrent();
 	}
 	update();

@@ -384,7 +384,7 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>&
 	return true;
 }
 
-bool RenderTriangleMesh::make_vertices(QOpenGLShaderProgram *program) {
+bool RenderTriangleMesh::make_vertices_buffers(QOpenGLShaderProgram *program) {
 	// make vertex information
 	vector<vec3> vert_info;
 	vert_info.resize(triangles.size());
@@ -422,7 +422,7 @@ bool RenderTriangleMesh::make_vertices(QOpenGLShaderProgram *program) {
 	return true;
 }
 
-bool RenderTriangleMesh::make_vertices_normals(QOpenGLShaderProgram *program) {
+bool RenderTriangleMesh::make_vertices_normals_buffers(QOpenGLShaderProgram *program) {
 	// make vertex information
 	vector<vec3> vert_info, normal_info;
 	vert_info.resize(triangles.size());
@@ -473,7 +473,7 @@ bool RenderTriangleMesh::make_vertices_normals(QOpenGLShaderProgram *program) {
 	return true;
 }
 
-bool RenderTriangleMesh::make_colours(QOpenGLShaderProgram *program, const vector<vec3>& colors) {
+bool RenderTriangleMesh::make_colours_buffer(QOpenGLShaderProgram *program, const vector<vec3>& colors) {
 	// make colours information
 	vector<vec3> cols(triangles.size());
 	for (unsigned int i = 0; i < triangles.size(); i += 3) {

@@ -131,7 +131,7 @@ void GLWidget::show_curvature(bool should_load, bool make_all_buffers) {
 	}
 	else {
 		cout << "    GLWidget::show_curvature - make only buffer colour" << endl;
-		mesh.make_colours(program, cols);
+		mesh.make_colours_buffer(program, cols);
 	}
 	doneCurrent();
 	update();

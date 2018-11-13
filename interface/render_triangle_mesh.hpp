@@ -121,7 +121,7 @@ class RenderTriangleMesh : public TriangleMesh {
 		 * @pre The vertex buffer object must have been previously created.
 		 * @return Returns false on error.
 		 */
-		bool make_vertices(QOpenGLShaderProgram *program);
+		bool make_vertices_buffers(QOpenGLShaderProgram *program);
 
 		/**
 		 * @brief Remakes the vertex and normal buffer objects.
@@ -129,14 +129,14 @@ class RenderTriangleMesh : public TriangleMesh {
 		 * previously created.
 		 * @return Returns false on error.
 		 */
-		bool make_vertices_normals(QOpenGLShaderProgram *program);
+		bool make_vertices_normals_buffers(QOpenGLShaderProgram *program);
 
 		/**
 		 * @brief Remakes the colour buffer object.
 		 * @pre The colour buffer object must have been previously created.
 		 * @return Returns false on error.
 		 */
-		bool make_colours(QOpenGLShaderProgram *program, const vector<vec3>& colors);
+		bool make_colours_buffer(QOpenGLShaderProgram *program, const vector<vec3>& colors);
 
 		/**
 		 * @brief Frees all the memoery occupied by the mesh.
