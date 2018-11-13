@@ -68,6 +68,12 @@ namespace min_max {
 		if (around_val) {
 			int idx = int((val - dmin)/step);
 			start_at = idx;
+			if (start_at < 0) {
+				start_at = 0;
+			}
+			else if (start_at > nbins) {
+				start_at = nbins;
+			}
 		}
 	}
 
