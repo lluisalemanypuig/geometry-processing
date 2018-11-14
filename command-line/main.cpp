@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
 		cout << "    curvature" << endl;
 		cout << "    local-smoothing" << endl;
 		cout << "    global-smoothing (coming soon)" << endl;
-		cout << "    high-frequency" << endl;
+		cout << "    band-frequencies" << endl;
 		cout << "Use [-h|--help] on every option to see its usage." << endl;
 		return 0;
 	}
@@ -43,8 +43,8 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	if (strcmp(argv[1], "high-frequency") == 0) {
-		return test_geoproc::test_high_frequency(argc, argv);
+	if (strcmp(argv[1], "band-frequencies") == 0) {
+		return test_geoproc::test_band_frequency(argc, argv);
 	}
 
 	cerr << "Error: algorithm '" << string(argv[1]) << "' not recognised" << endl;

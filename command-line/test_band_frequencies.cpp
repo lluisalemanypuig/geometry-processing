@@ -4,7 +4,7 @@
 #include <set>
 
 // geoproc includes
-#include <geoproc/high-frequencies/highfrequencies.hpp>
+#include <geoproc/filter_frequencies/band_frequencies.hpp>
 #include <geoproc/smoothing/smoothing_defs.hpp>
 #include <geoproc/triangle_mesh.hpp>
 #include <geoproc/ply_reader.hpp>
@@ -13,8 +13,9 @@ using namespace high_frequencies;
 
 namespace test_geoproc {
 
-	void high_frequencies_usage() {
-		cout << "High frequencies evaluation" << endl;
+	void band_frequencies_usage() {
+		cout << "Band frequencies evaluation:" << endl;
+		cout << "Apply several smoothing configurations to a mesh" << endl;
 		cout << endl;
 		cout << "    --load f: load a mesh stored in the .ply file f" << endl;
 		cout << endl;
@@ -25,35 +26,31 @@ namespace test_geoproc {
 		cout << "    --threads n: specify number of threads." << endl;
 		cout << "        Default: 1" << endl;
 		cout << endl;
-		cout << "    --algorithm: choose the algorithm to evaluate" << endl;
-		cout << "        Allowed values:" << endl;
-		cout << "        * high-freq-dets" << endl;
-		cout << "        * exaggerate-high-freqs" << endl;
-		cout << "        * band-freqs" << endl;
+		cout << "    Since each configuration requires a lot of parameters," << endl;
+		cout << "    their parameters are read from standard input." << endl;
+		cout << "    The format for a single smoothing algorithm is the following:" << endl;
+		cout << "    {                    -- start a new smoothing algorithm" << endl;
+		cout << "        lambda l         -- smothing factor" << endl;
+		cout << "        it n             -- iterations of the algorithm" << endl;
+		cout << "        operator op      -- smoothing operator" << endl;
+		cout << "            laplacian,   -- Laplacian smoothing operator" << endl;
+		cout << "            bilaplacian, -- Bi-Laplacian smoothing operator" << endl;
+		cout << "            TaubinLM     -- Taubin Lambda-Mu operator" << endl;
+		cout << "        weight-type w    -- type of weight used" << endl;
+		cout << "            uniform,     -- uniform weights" << endl;
+		cout << "            cotangent    -- cotangent weights" << endl;
+		cout << "    }" << endl;
+		cout << "    mu m                 -- the weight for a band frequency" << endl;
 		cout << endl;
-		cout << "        Since each algorithm requires a lot of parameters" << endl;
-		cout << "        their configuration is read from standard input." << endl;
-		cout << "        Basically, each of them need one smoothing algorithm," << endl;
-		cout << "        at least. The format for a single smoothing algorithm is" << endl;
-		cout << "        following:" << endl;
-		cout << "        {                    -- start a new smoothing algorithm" << endl;
-		cout << "            lambda l         -- smothing factor" << endl;
-		cout << "            it n             -- iterations of the algorithm" << endl;
-		cout << "            operator op      -- smoothing operator" << endl;
-		cout << "                laplacian,   -- Laplacian smoothing operator" << endl;
-		cout << "                bilaplacian, -- Bi-Laplacian smoothing operator" << endl;
-		cout << "                TaubinLM     -- Taubin Lambda-Mu operator" << endl;
-		cout << "            weight-type w    -- type of weight used" << endl;
-		cout << "                uniform,     -- uniform weights" << endl;
-		cout << "                cotangent    -- cotangent weights" << endl;
-		cout << "        }" << endl;
-		cout << "        The specification of the different smoothing algorithms" << endl;
-		cout << "        is done by simply writing all of them following the previous" << endl;
-		cout << "        format. When the whole list has been given, enter" << endl;
-		cout << "            -1" << endl;
+		cout << "    The weights of the band frequencies should be given after each" << endl;
+		cout << "    smoothing configuration, exceptuating the last one." << endl;
+		cout << "    The first value of 'mu' found correspond to the weight of the" << endl;
+		cout << "    first smoothing configuration, the second to the second, and so on." << endl;
+		cout << "    When the whole list has been given, enter" << endl;
+		cout << "        -1" << endl;
 	}
 
-	bool read_smooth_conf(smoothing_configuration& S) {
+	bool read_smooth_conf(smoothing_configuration& S, float& MU) {
 		char lcurlbracket;
 		cin >> lcurlbracket;
 
@@ -61,6 +58,7 @@ namespace test_geoproc {
 		bool it = false;
 		bool oper = false;
 		bool weight = false;
+		bool mu = false;
 
 		string option;
 		while (cin >> option and option != "}") {
@@ -70,6 +68,13 @@ namespace test_geoproc {
 				}
 				cin >> S.lambda;
 				lambda = true;
+			}
+			else if (option == "mu") {
+				if (mu) {
+					cerr << "Warning: mu already entered." << endl;
+				}
+				cin >> MU;
+				mu = true;
 			}
 			else if (option == "it") {
 				if (it) {
@@ -138,70 +143,73 @@ namespace test_geoproc {
 		return lambda and it and weight and oper;
 	}
 
-	void exe_high_freq(const string& alg, size_t nt, TriangleMesh& m) {
+	void exe_band_freq(size_t nt, TriangleMesh& m) {
+
+		cout << "Describe the band frequencies used:" << endl;
+		cout << "Remember that these consist of a smoothing configuration" << endl;
+		cout << "and a weight value (mu). Recall the format:" << endl;
+		cout << "    {                    -- start a new smoothing algorithm" << endl;
+		cout << "        lambda l         -- smothing factor" << endl;
+		cout << "        it n             -- iterations of the algorithm" << endl;
+		cout << "        operator op      -- smoothing operator" << endl;
+		cout << "            laplacian,   -- Laplacian smoothing operator" << endl;
+		cout << "            bilaplacian, -- Bi-Laplacian smoothing operator" << endl;
+		cout << "            TaubinLM     -- Taubin Lambda-Mu operator" << endl;
+		cout << "        weight-type w    -- type of weight used" << endl;
+		cout << "            uniform,     -- uniform weights" << endl;
+		cout << "            cotangent    -- cotangent weights" << endl;
+		cout << "    }" << endl;
+		cout << "    mu m                 -- the weight for a band frequency" << endl;
+		cout << endl;
+		cout << "    The weights of the band frequencies should be given after each" << endl;
+		cout << "    smoothing configuration, exceptuating the last one." << endl;
 
 		timing::time_point begin, end;
 
-		if (alg == "high-freq-dets") {
+		vector<smoothing_configuration> Cs;
+		vector<float> mus;
+
+		bool keep_reading = true;
+		while (keep_reading) {
+			float mu;
 			smoothing_configuration C;
-			if (read_smooth_conf(C)) {
-				begin = timing::now();
-				high_frequencies::high_frequency_details(C, nt, m);
-				end = timing::now();
+			if (read_smooth_conf(C, mu)) {
+				Cs.push_back(C);
+				cin >> std::ws;
+				int c = cin.peek();
+				keep_reading = (char(c) != '-');
+			}
+			if (keep_reading) {
+				mus.push_back(mu);
 			}
 		}
-		else if (alg == "exaggerate-high-freqs") {
-			smoothing_configuration C;
-			if (read_smooth_conf(C)) {
-				begin = timing::now();
-				high_frequencies::exaggerate_high_frequencies(C, nt, m);
-				end = timing::now();
-			}
-		}
-		else if (alg == "band-freqs") {
-			vector<smoothing_configuration> Cs;
-			bool keep_reading = true;
-			while (keep_reading) {
-				smoothing_configuration C;
-				if (read_smooth_conf(C)) {
-					Cs.push_back(C);
-					cin >> std::ws;
-					int c = cin.peek();
-					keep_reading = (char(c) != '-');
-				}
-			}
 
-			// read trailing '1' character
-			char one; cin >> one;
+		// read trailing '1' character
+		char one; cin >> one;
 
-			begin = timing::now();
-			high_frequencies::band_frequencies(Cs, nt, m);
-			end = timing::now();
-		}
+		begin = timing::now();
+		high_frequencies::band_frequencies(Cs, mus, nt, m);
+		end = timing::now();
 
-		cout << "Applied algorithm in "
+		cout << "Applied band frequencies in "
 			 << timing::elapsed_seconds(begin, end) << " seconds" << endl;
-
 	}
 
-	int test_high_frequency(int argc, char *argv[]) {
-		const set<string> allowed_algorithms(
-		{"high-freq-dets", "exaggerate-high-freqs", "band-freqs"});
+	int test_band_frequency(int argc, char *argv[]) {
 
-		string alg = "none";
 		string mesh_file = "none";
 		size_t nt = 1;
 
 		bool _print = false;
 
 		if (argc == 2) {
-			high_frequencies_usage();
+			band_frequencies_usage();
 			return 0;
 		}
 
 		for (int i = 2; i < argc; ++i) {
 			if (strcmp(argv[i], "-h") == 0 or strcmp(argv[i], "--help") == 0) {
-				high_frequencies_usage();
+				band_frequencies_usage();
 				return 1;
 			}
 			else if (strcmp(argv[i], "--load") == 0) {
@@ -215,10 +223,6 @@ namespace test_geoproc {
 				nt = atoi(argv[i + 1]);
 				++i;
 			}
-			else if (strcmp(argv[i], "--algorithm") == 0) {
-				alg = string(argv[i + 1]);
-				++i;
-			}
 			else {
 				cerr << "Error: option '" << string(argv[i]) << "' not recognised" << endl;
 				return 1;
@@ -227,13 +231,6 @@ namespace test_geoproc {
 
 		if (mesh_file == "none") {
 			cerr << "Error: mesh file not specified" << endl;
-			cerr << "    Use ./command-line high-frequency --help" << endl;
-			cerr << "to see the usage" << endl;
-			return 1;
-		}
-
-		if (allowed_algorithms.find(alg) == allowed_algorithms.end()) {
-			cerr << "Error: value '" << alg << "' for algorithm parameter not valid" << endl;
 			cerr << "    Use ./command-line high-frequency --help" << endl;
 			cerr << "to see the usage" << endl;
 			return 1;
@@ -253,10 +250,10 @@ namespace test_geoproc {
 			}
 		}
 
-		exe_high_freq(alg, nt, mesh);
+		exe_band_freq(nt, mesh);
 
 		if (_print) {
-			cout << "Mesh with high frequencies:" << endl;
+			cout << "Mesh after applying band frequencies:" << endl;
 			for (int i = 0; i < mesh.n_vertices(); ++i) {
 				const vec3& v = mesh.get_vertex(i);
 				cout << "    " << i << ": "
