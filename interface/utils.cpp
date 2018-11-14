@@ -38,7 +38,7 @@ namespace min_max {
 	void fill_bins
 	(
 		const vector<float>& data,
-		float dmin, float dmax, float step,
+		float dmin, float step,
 		float val, bool around_val,
 		int nbins, int *bins, int& start_at
 	)
@@ -50,7 +50,7 @@ namespace min_max {
 		int max_size = 0;
 		start_at = 0;
 		for (size_t i = 0; i < data.size(); ++i) {
-			int idx = (data[i] - dmin)/step;
+			int idx = int((data[i] - dmin)/step);
 
 			// since we are doing adaptative binning
 			// the index may be out of bounds
@@ -80,7 +80,7 @@ namespace min_max {
 	static inline
 	int find_left_right
 	(
-		const int *bins, size_t nbins,
+		const int *bins, int nbins,
 		size_t ndata, float prop,
 		int start_at, int& left, int& right
 	)
@@ -135,6 +135,7 @@ namespace min_max {
 		size_t ndata = data.size();
 
 		#if defined (DEBUG)
+		cout << "-------------------------" << endl;
 		cout << "Binning start up:" << endl;
 		cout << "    total values: " << ndata << endl;
 		cout << "    min value: " << dmin << endl;
@@ -155,6 +156,7 @@ namespace min_max {
 		else if (dmax - dmin <= 1000000.0f)	{ nbins = 100000; }
 		else								{ nbins = 1000000; }
 		++nbins;
+		int inbins = static_cast<int>(nbins);
 
 		float step = (dmax - dmin)/(nbins - 1);
 
@@ -166,40 +168,25 @@ namespace min_max {
 		// allocate and initialise memory for bins
 		int *bins = static_cast<int *>(malloc((nbins + 1)*sizeof(int)));
 
-		size_t num_step = 0;
-		float actual_prop, err;
+		int count;
+		size_t num_steps = 0;
+		float current_prop, err;
 		bool terminate = false;
 		do {
 			init_bins(nbins, bins);
 
 			// dump data into the bins
 			int start_at;
-			fill_bins(data, dmin, dmax, step, val, around_val, nbins, bins, start_at);
-
-			#if defined (DEBUG)
-			cout << "Binning result:" << endl;
-			cout << "    starting bin at: " << start_at << endl;
-			cout << "        with " << bins[start_at] << " values in it" << endl;
-			#endif
+			fill_bins(data, dmin, step, val, around_val, inbins, bins, start_at);
 
 			// find the left and right bins so that the collection
 			// of values between them
 			int left, right;
-			int count = find_left_right
-				(bins, nbins, ndata, prop, start_at, left, right);
+			count = find_left_right
+				(bins, inbins, ndata, prop, start_at, left, right);
 
-			actual_prop = (100.0f*count)/ndata;
-			err = std::abs(prop - actual_prop);
-
-			#if defined (DEBUG)
-			cout << "    Found " << prop << "% of values between: " << endl;
-			cout << "        left=  " << left << endl;
-			cout << "        right= " << right << endl;
-			cout << "        count= " << count << endl;
-			cout << "            actual proportion: " << actual_prop << endl;
-			cout << "            error: " << err << endl;
-			cout << "        at step: " << num_step << endl;
-			#endif
+			current_prop = (100.0f*count)/ndata;
+			err = std::abs(prop - current_prop);
 
 			// Find values of data in the left and right bins.
 			// These are the new "minimum" and "maximum" of the data.
@@ -208,23 +195,31 @@ namespace min_max {
 			// make new step
 			step = (dmax - dmin)/(nbins - 1);
 
-			if (left == 0 and right == nbins - 1) {
+			++num_steps;
+			if (num_steps >= 100) {
 				terminate = true;
 			}
-			++num_step;
-			if (num_step >= 30) {
+			if (err < 0.001f and current_prop > prop) {
 				terminate = true;
 			}
 		}
-		while (err > 0.01f and not terminate);
+		while (not terminate);
 
-		// compute actual minimum and maximum
+		// compute current minimum and maximum
 		m = dmin;
 		M = dmax;
 
 		#if defined (DEBUG)
-		cout << "    new minimum: " << m << endl;
-		cout << "    new maximum: " << M << endl;
+		cout << "    Binning result:" << endl;
+		cout << "        Found " << prop << "% of values between: " << endl;
+		cout << "            left=  " << left << endl;
+		cout << "            right= " << right << endl;
+		cout << "            count= " << count << endl;
+		cout << "               actual proportion: " << current_prop << endl;
+		cout << "                error: " << err << endl;
+		cout << "        new minimum: " << m << endl;
+		cout << "        new maximum: " << M << endl;
+		cout << "        in " << num_steps + 1 << " steps" << endl;
 		#endif
 
 		// free memory allocated for the bins
@@ -296,12 +291,13 @@ namespace coloring {
 	{
 		// ----------------------- //
 		// Colour rainbow gradient //
+		float r, g, b;
+		r = g = b = 0.0f;
 		cols = vector<glm::vec3>(values.size());
 		for (size_t i = 0; i < values.size(); ++i) {
 			float v = values[i];
 			float s = (v - m)/(M - m);
 
-			float r, g, b;
 			if (s <= 0.0f) {
 				// RED
 				// below 0.0
