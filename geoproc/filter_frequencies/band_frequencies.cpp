@@ -17,7 +17,7 @@ using namespace glm;
 namespace geoproc {
 using namespace smoothing;
 
-namespace high_frequencies {
+namespace filter_frequencies {
 
 vec3 *apply_conf_get_verts
 (
@@ -201,5 +201,5 @@ void band_frequencies
 	free(vertsi1);
 }
 
-} // -- namespace high_frequencies
+} // -- namespace filter_frequencies
 } // -- namespace geoproc

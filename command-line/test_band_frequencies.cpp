@@ -9,7 +9,7 @@
 #include <geoproc/triangle_mesh.hpp>
 #include <geoproc/ply_reader.hpp>
 using namespace geoproc;
-using namespace high_frequencies;
+using namespace filter_frequencies;
 
 namespace test_geoproc {
 
@@ -188,7 +188,7 @@ namespace test_geoproc {
 		char one; cin >> one;
 
 		begin = timing::now();
-		high_frequencies::band_frequencies(Cs, mus, nt, m);
+		band_frequencies(Cs, mus, nt, m);
 		end = timing::now();
 
 		cout << "Applied band frequencies in "

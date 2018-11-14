@@ -9,7 +9,7 @@
 #include <geoproc/triangle_mesh.hpp>
 
 namespace geoproc {
-namespace high_frequencies {
+namespace filter_frequencies {
 
 	/**
 	 * @brief A smoothing algorithm configuration.
@@ -99,5 +99,5 @@ namespace high_frequencies {
 	(const std::vector<smoothing_configuration>& confs,
 	 const std::vector<float>& mus, size_t nt, TriangleMesh& m);
 
-} // -- namespace high_frequencies
+} // -- namespace filter_frequencies
 } // -- namespace geoproc
