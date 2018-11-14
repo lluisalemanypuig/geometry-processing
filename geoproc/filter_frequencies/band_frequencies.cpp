@@ -1,4 +1,4 @@
-#include <geoproc/high-frequencies/highfrequencies.hpp>
+#include <geoproc/filter_frequencies/band_frequencies.hpp>
 
 // C includes
 #include <stdlib.h>
@@ -84,124 +84,16 @@ vec3 *apply_conf_get_verts
 	return old_verts;
 }
 
-/* HIGH-FREQUENCY DETAILS
- */
-
-void high_frequency_details(const smoothing_configuration& C, TriangleMesh& m) {
-	const int N = m.n_vertices();
-
-	// Allocate memory for two arrays of vertices.
-	vec3 *old_verts = static_cast<vec3 *>(malloc(N*sizeof(vec3)));
-	vec3 *new_verts = static_cast<vec3 *>(malloc(N*sizeof(vec3)));
-	// Fill the first array (there is no need to fill the second).
-	std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
-
-	// output vertices
-	vec3 *out_verts = apply_conf_get_verts(C, m, old_verts, new_verts);
-
-	// old_vertices contained, at first, the vertices of the mesh.
-	// Now contain rubbish.
-
-	const vec3 *m_verts = m.get_pvertices();
-	for (int i = 0; i < N; ++i) {
-		// out verts is initialised since we assign to it
-		// the array with the vertices resulting from the
-		// smoothing process.
-		out_verts[i] = m_verts[i] - out_verts[i];
-	}
-
-	m.set_vertices(out_verts, N);
-
-	// free memory: out_verts is just a pointer to the
-	// one of the two arrays, no need to free it
-	free(old_verts);
-	free(new_verts);
-}
-
-void high_frequency_details(const smoothing_configuration& C, size_t nt, TriangleMesh& m) {
-	if (nt == 1) {
-		high_frequency_details(C, m);
-		return;
-	}
-
-	const int N = m.n_vertices();
-
-	// Allocate memory for two arrays of vertices.
-	vec3 *old_verts = static_cast<vec3 *>(malloc(N*sizeof(vec3)));
-	vec3 *new_verts = static_cast<vec3 *>(malloc(N*sizeof(vec3)));
-	// Fill the first array (there is no need to fill the second).
-	std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
-
-	// output vertices
-	vec3 *out_verts = apply_conf_get_verts(C, m, nt, old_verts, new_verts);
-
-	// old_vertices contained, at first, the vertices of the mesh.
-	// Now contain rubbish.
-
-	const vec3 *m_verts = m.get_pvertices();
-
-	#pragma omp parallel for num_threads(nt)
-	for (int i = 0; i < N; ++i) {
-		// out verts is initialised since we assign to it
-		// the array with the vertices resulting from the
-		// smoothing process.
-		out_verts[i] = m_verts[i] - out_verts[i];
-	}
-
-	m.set_vertices(out_verts, N);
-
-	// free memory: out_verts is just a pointer to the
-	// one of the two arrays, no need to free it
-	free(old_verts);
-	free(new_verts);
-}
-
-/* EXAGGERATE HIGH FREQUENCIES
- */
-
-void exaggerate_high_frequencies(const smoothing_configuration& C, TriangleMesh& m) {
-	// copy original vertices
-	vector<vec3> orig_verts = m.get_vertices();
-
-	// apply high frequency details...
-	high_frequency_details(C, m);
-
-	// ... then exaggerate
-	vector<vec3> m_verts(m.n_vertices());
-	for (int i = 0; i < m.n_vertices(); ++i) {
-		m_verts[i] = orig_verts[i] + C.lambda*m.get_vertex(i);
-	}
-
-	m.set_vertices(m_verts);
-}
-
-void exaggerate_high_frequencies(const smoothing_configuration& C, size_t nt, TriangleMesh& m) {
-	if (nt == 1) {
-		exaggerate_high_frequencies(C, m);
-		return;
-	}
-
-	// copy original vertices
-	vector<vec3> orig_verts = m.get_vertices();
-
-	// apply high frequency details...
-	high_frequency_details(C, nt, m);
-
-	// ... then exaggerate
-	vector<vec3> m_verts(m.n_vertices());
-
-	#pragma omp parallel for num_threads(nt)
-	for (int i = 0; i < m.n_vertices(); ++i) {
-		m_verts[i] = orig_verts[i] + C.lambda*m.get_vertex(i);
-	}
-
-	m.set_vertices(m_verts);
-}
-
 /* BAND FREQUENCIES
  */
 
-void band_frequencies(const vector<smoothing_configuration>& confs, TriangleMesh& m) {
+void band_frequencies
+(
+	const vector<smoothing_configuration>& confs,
+	const vector<float>& mus,
+	TriangleMesh& m
+)
+{
 	const int N = m.n_vertices();
 
 	// copy original vertices
@@ -228,7 +120,7 @@ void band_frequencies(const vector<smoothing_configuration>& confs, TriangleMesh
 
 		// operate: M += lambda_i*(smooth_i - smooth_i+1)
 		for (int j = 0; j < m.n_vertices(); ++j) {
-			out_verts[j] = out_verts[j] + confs[i - 1].lambda*(outi[j] - outi1[j]);
+			out_verts[j] = out_verts[j] + mus[i - 1]*(outi[j] - outi1[j]);
 		}
 
 		// Copy the computed results so as to use them in the next iteration.
@@ -244,9 +136,15 @@ void band_frequencies(const vector<smoothing_configuration>& confs, TriangleMesh
 	free(vertsi1);
 }
 
-void band_frequencies(const vector<smoothing_configuration>& confs, size_t nt, TriangleMesh& m) {
+void band_frequencies
+(
+	const vector<smoothing_configuration>& confs,
+	const vector<float>& mus, size_t nt,
+	TriangleMesh& m
+)
+{
 	if (nt == 1) {
-		band_frequencies(confs, m);
+		band_frequencies(confs, mus, m);
 		return;
 	}
 
@@ -277,7 +175,7 @@ void band_frequencies(const vector<smoothing_configuration>& confs, size_t nt, T
 		// operate: M += lambda_i*(smooth_i - smooth_i+1)
 		#pragma omp parallel for num_threads(nt)
 		for (int j = 0; j < m.n_vertices(); ++j) {
-			out_verts[j] = out_verts[j] + confs[i - 1].lambda*(outi[j] - outi1[j]);
+			out_verts[j] = out_verts[j] + mus[i - 1]*(outi[j] - outi1[j]);
 		}
 
 		// Copy the computed results so as to use them in the next iteration.

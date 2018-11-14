@@ -24,7 +24,7 @@ HEADERS += \
 	smoothing/smoothing_defs.hpp \
 	smoothing/iterative_local.hpp \
 	smoothing/iterative_private.hpp \
-	high-frequencies/highfrequencies.hpp
+    filter_frequencies/band_frequencies.hpp
 
 SOURCES += \
 	ply_reader.cpp \
@@ -35,4 +35,4 @@ SOURCES += \
 	curvature/Gauss.cpp \
 	smoothing/iterative_local.cpp \
 	smoothing/iterative_private.cpp \
-	high-frequencies/highfrequencies.cpp
+    filter_frequencies/band_frequencies.cpp
