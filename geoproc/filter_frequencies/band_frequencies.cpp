@@ -94,15 +94,20 @@ void band_frequencies
 	TriangleMesh& m
 )
 {
+	assert(mus.size() == confs.size() - 1);
+
 	const int N = m.n_vertices();
 
-	// copy original vertices
+	// copy original vertices, store result of band frequencies here
 	vector<vec3> out_verts = m.get_vertices();
 
 	// Allocate memory for "four" arrays of vertices. Actually, there are only
 	// two, but each pair is packed together into a single one.
 	// They will be used for computing the different smoothings of the mesh
-	// while avoiding recomputing old results
+	// while avoiding recomputing old results.
+	// Each array is used as two, namely, the interval [0,N) corresponds
+	// to a series of vertices, and the interval [N,2*N) to another series
+	// of vertices.
 	vec3 *vertsi  = static_cast<vec3 *>(malloc(2*N*sizeof(vec3)));
 	vec3 *vertsi1 = static_cast<vec3 *>(malloc(2*N*sizeof(vec3)));
 
@@ -118,7 +123,7 @@ void band_frequencies
 		// apply configuration i+1
 		vec3 *outi1 = apply_conf_get_verts(confs[i], m, &vertsi1[0], &vertsi1[N]);
 
-		// operate: M += lambda_i*(smooth_i - smooth_i+1)
+		// operate: M += mu_i*(smooth_i - smooth_i+1)
 		for (int j = 0; j < m.n_vertices(); ++j) {
 			out_verts[j] = out_verts[j] + mus[i - 1]*(outi[j] - outi1[j]);
 		}
@@ -143,6 +148,8 @@ void band_frequencies
 	TriangleMesh& m
 )
 {
+	assert(mus.size() == confs.size() - 1);
+
 	if (nt == 1) {
 		band_frequencies(confs, mus, m);
 		return;
@@ -150,13 +157,16 @@ void band_frequencies
 
 	const int N = m.n_vertices();
 
-	// copy original vertices
+	// copy original vertices, store result of band frequencies here
 	vector<vec3> out_verts = m.get_vertices();
 
 	// Allocate memory for "four" arrays of vertices. Actually, there are only
 	// two, but each pair is packed together into a single one.
 	// They will be used for computing the different smoothings of the mesh
 	// while avoiding recomputing old results
+	// Each array is used as two, namely, the interval [0,N) corresponds
+	// to a series of vertices, and the interval [N,2*N) to another series
+	// of vertices.
 	vec3 *vertsi  = static_cast<vec3 *>(malloc(2*N*sizeof(vec3)));
 	vec3 *vertsi1 = static_cast<vec3 *>(malloc(2*N*sizeof(vec3)));
 
@@ -172,7 +182,7 @@ void band_frequencies
 		// apply configuration i+1
 		vec3 *outi1 = apply_conf_get_verts(confs[i], m, nt, &vertsi1[0], &vertsi1[N]);
 
-		// operate: M += lambda_i*(smooth_i - smooth_i+1)
+		// operate: M += mu_i*(smooth_i - smooth_i+1)
 		#pragma omp parallel for num_threads(nt)
 		for (int j = 0; j < m.n_vertices(); ++j) {
 			out_verts[j] = out_verts[j] + mus[i - 1]*(outi[j] - outi1[j]);
