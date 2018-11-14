@@ -11,14 +11,14 @@ using namespace std;
 
 // geoproc includes
 #include <geoproc/smoothing/iterative_local.hpp>
-#include <geoproc/high-frequencies/highfrequencies.hpp>
+#include <geoproc/filter_frequencies/band_frequencies.hpp>
 
 // OTHERS
 
 static inline
 void print_smoothing_configuration
 (
-	const high_frequencies::smoothing_configuration& conf,
+	const filter_frequencies::smoothing_configuration& conf,
 	size_t nt,
 	const string& tab = ""
 )
@@ -111,7 +111,7 @@ void TwinGLWidget::run_smoothing_algorithm() {
 	mesh.make_neighbourhood_data();
 	mesh.make_angles_area();
 
-	cout << "Smooth with:" << endl;
+	cout << "Smooth with:." << endl;
 	cout << "    operator ";
 	if (op == smoothing::smooth_operator::Laplacian) {
 		cout << "'Laplacian'";
@@ -144,106 +144,7 @@ void TwinGLWidget::run_smoothing_algorithm() {
 	// output execution time
 	cout << "    in "
 		 << timing::elapsed_seconds(begin,end)
-		 << " seconds" << endl;
-
-	if (current_curv_display != curv_type::none) {
-		compute_curvature();
-	}
-
-	// update mesh
-	if (current_curv_display != curv_type::none) {
-
-		// show curvature already has
-		// makeCurrent() .. doneCurrent()
-		show_curvature(false, true);
-	}
-	else {
-		makeCurrent();
-		mesh.make_vertices_normals_buffers(program);
-		doneCurrent();
-	}
-	update();
-}
-
-void TwinGLWidget::run_high_freqs_algorithm() {
-	mesh.make_neighbourhood_data();
-	mesh.make_angles_area();
-
-	high_frequencies::smoothing_configuration C;
-	C.lambda = lambda;
-	C.n_it = nit;
-	C.so = op;
-	C.sw = wt;
-
-	cout << "Highlight high frequencies with:" << endl;;
-	cout << "    operator ";
-	if (op == smoothing::smooth_operator::Laplacian) {
-		cout << "'Laplacian'";
-	}
-	else if (op == smoothing::smooth_operator::BiLaplacian) {
-		cout << "'biLaplacian'";
-	}
-	else if (op == smoothing::smooth_operator::TaubinLM) {
-		cout << "'Taubin'";
-	}
-	cout << endl;
-	cout << "    lambda: " << lambda << endl;
-	cout << "    # iterations: " << nit << endl;
-	cout << "    # threads: " << nt << endl;
-
-	timing::time_point begin = timing::now();
-	high_frequencies::high_frequency_details(C, nt, mesh);
-	timing::time_point end = timing::now();
-
-	mesh.make_normal_vectors();
-
-	// output execution time
-	cout << "    in "
-		 << timing::elapsed_seconds(begin,end)
-		 << " seconds" << endl;
-
-	if (current_curv_display != curv_type::none) {
-		compute_curvature();
-	}
-
-	// update mesh
-	if (current_curv_display != curv_type::none) {
-
-		// show curvature already has
-		// makeCurrent() .. doneCurrent()
-		show_curvature(false, true);
-	}
-	else {
-		makeCurrent();
-		mesh.make_vertices_normals_buffers(program);
-		doneCurrent();
-	}
-	update();
-}
-
-void TwinGLWidget::run_exagg_high_freqs_algorithm() {
-	mesh.make_neighbourhood_data();
-	mesh.make_angles_area();
-
-	high_frequencies::smoothing_configuration C;
-	C.lambda = lambda;
-	C.n_it = nit;
-	C.so = op;
-	C.sw = wt;
-
-	cout << "Exaggerate high frequencies with:" << endl;;
-	print_smoothing_configuration(C, nt, "    ");
-
-	timing::time_point begin = timing::now();
-	high_frequencies::exaggerate_high_frequencies(C, nt, mesh);
-	timing::time_point end = timing::now();
-
-	mesh.make_normal_vectors();
-
-	// output execution time
-	cout << "    in "
-		 << timing::elapsed_seconds(begin,end)
-		 << " seconds" << endl;
+		 << " seconds." << endl;
 
 	if (current_curv_display != curv_type::none) {
 		compute_curvature();
@@ -268,48 +169,56 @@ static inline
 bool parseJsonObject
 (
 	const QJsonObject& obj,
-	vector<high_frequencies::smoothing_configuration>& confs
+	vector<filter_frequencies::smoothing_configuration>& confs,
+	float& mu
 )
 {
 	// error control
 	if (obj.find(QString("A")) == obj.end()) {
-		cerr << "Error: missing algorithm parameter A" << endl;
+		cerr << "Error: missing algorithm parameter A." << endl;
 		return false;
 	}
 	if (obj.find(QString("W")) == obj.end()) {
-		cerr << "Error: missing weight type parameter W" << endl;
+		cerr << "Error: missing weight type parameter W." << endl;
 		return false;
 	}
 	if (obj.find(QString("N")) == obj.end()) {
-		cerr << "Error: missing number of iterations parameter N" << endl;
+		cerr << "Error: missing number of iterations parameter N." << endl;
 		return false;
 	}
 	if (obj.find(QString("L")) == obj.end()) {
-		cerr << "Error: missing lambda parameter L" << endl;
+		cerr << "Error: missing lambda parameter L." << endl;
 		return false;
 	}
 	QJsonValue alg_value = obj.value("A");
 	if (not alg_value.isString()) {
-		cerr << "Error: algorithm parameter value is not a string" << endl;
+		cerr << "Error: algorithm parameter value is not a string." << endl;
 		return false;
 	}
 	QJsonValue weight_value = obj.value("W");
 	if (not weight_value.isString()) {
-		cerr << "Error: weight type parameter value is not a string" << endl;
+		cerr << "Error: weight type parameter value is not a string." << endl;
 		return false;
 	}
 	QJsonValue nit_value = obj.value("N");
 	if (not nit_value.isDouble()) {
-		cerr << "Error: number of iterations parameter value is not a number" << endl;
+		cerr << "Error: number of iterations parameter value is not a number." << endl;
 		return false;
 	}
 	QJsonValue lambda_value = obj.value("L");
 	if (not lambda_value.isDouble()) {
-		cerr << "Error: lambda parameter value is not a number" << endl;
+		cerr << "Error: lambda parameter value is not a number." << endl;
 		return false;
 	}
+	if (obj.find(QString("mu")) != obj.end()) {
+		QJsonValue mu_value = obj.value("mu");
+		if (not mu_value.isDouble()) {
+			cerr << "Error: mu parameter value is not a number." << endl;
+			return false;
+		}
+	}
 
-	high_frequencies::smoothing_configuration conf;
+	filter_frequencies::smoothing_configuration conf;
 
 	/* parse ALGORITHM */
 	QString alg_str = alg_value.toString();
@@ -324,7 +233,7 @@ bool parseJsonObject
 	}
 	else {
 		cerr << "Error: algorithm parameter value '"
-			 << alg_str.toStdString() << "' is not valid" << endl;
+			 << alg_str.toStdString() << "' is not valid." << endl;
 		return false;
 	}
 
@@ -338,12 +247,18 @@ bool parseJsonObject
 	}
 	else {
 		cerr << "Error: weigth type parameter value '"
-			 << weight_str.toStdString() << "' is not valid" << endl;
+			 << weight_str.toStdString() << "' is not valid." << endl;
 		return false;
 	}
 
 	/* parse LAMBDA */
 	conf.lambda = lambda_value.toDouble();
+
+	/* parse MU */
+	if (obj.find(QString("mu")) != obj.end()) {
+		QJsonValue mu_value = obj.value("mu");
+		mu = mu_value.toDouble();
+	}
 
 	/* parse # ITERATIONS */
 	conf.n_it = nit_value.toInt();
@@ -353,29 +268,36 @@ bool parseJsonObject
 }
 
 void TwinGLWidget::run_band_frequencies(const QJsonDocument& doc) {
-	vector<high_frequencies::smoothing_configuration> confs;
+	vector<filter_frequencies::smoothing_configuration> confs;
+	vector<float> mus;
 
 	if (doc.isObject()) {
 		QJsonObject obj = doc.object();
-		bool res = parseJsonObject(obj, confs);
+		float mu;
+		bool res = parseJsonObject(obj, confs, mu);
 		if (not res) {
 			return;
 		}
+		mus.push_back(mu);
 	}
 	else if (doc.isArray()) {
 		QJsonArray arr = doc.array();
 		for (int i = 0; i < arr.count(); ++i) {
+			float mu;
 			QJsonObject obj = arr.at(i).toObject();
-			bool res = parseJsonObject(obj, confs);
+			bool res = parseJsonObject(obj, confs, mu);
 			if (not res) {
 				return;
+			}
+			if (i < arr.count() - 1) {
+				mus.push_back(mu);
 			}
 		}
 	}
 
 	if (confs.size() <= 1) {
-		cerr << "Error: only one smoothing configuration." << endl;
-		cerr << "    Band frequencies require at least 2." << endl;
+		cerr << "Error: only one smoothing configuration.." << endl;
+		cerr << "    Band frequencies require at least 2.." << endl;
 		return;
 	}
 
@@ -383,20 +305,25 @@ void TwinGLWidget::run_band_frequencies(const QJsonDocument& doc) {
 	mesh.make_angles_area();
 
 	timing::time_point begin = timing::now();
-	high_frequencies::band_frequencies(confs, nt, mesh);
+	filter_frequencies::band_frequencies(confs, mus, nt, mesh);
 	timing::time_point end = timing::now();
 
 	mesh.make_normal_vectors();
 
 	// output execution time
-	cout << "Computed band frequencies with:" << endl;
+	cout << "Computed band frequencies with:." << endl;
 	for (size_t i = 0; i < confs.size(); ++i) {
 		cout << "    Configuration " << i + 1 << endl;
 		print_smoothing_configuration(confs[i], nt, "        ");
 	}
+	cout << "    using weights:";
+	for (size_t i = 0; i < mus.size(); ++i) {
+		cout << " " << mus[i];
+	}
+	cout << endl;
 	cout << "    in: "
 		 << timing::elapsed_seconds(begin,end)
-		 << " seconds" << endl;
+		 << " seconds." << endl;
 
 	if (current_curv_display != curv_type::none) {
 		compute_curvature();
@@ -410,7 +337,7 @@ void TwinGLWidget::run_band_frequencies(const QJsonDocument& doc) {
 		show_curvature(false, true);
 	}
 	else {
-		cout << "Remake buffers for vertices and normals" << endl;
+		cout << "Remake buffers for vertices and normals." << endl;
 		makeCurrent();
 		mesh.make_vertices_normals_buffers(program);
 		doneCurrent();

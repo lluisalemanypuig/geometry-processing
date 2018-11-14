@@ -5,7 +5,6 @@
 using namespace std;
 
 // geoproc includes
-#include <geoproc/high-frequencies/highfrequencies.hpp>
 #include <geoproc/smoothing/smoothing_defs.hpp>
 using namespace geoproc;
 
@@ -90,51 +89,6 @@ void MainWindow::set_Smooth_params() {
 
 	size_t nit = ui->Smooth_LE_Iter->text().toInt();
 	float lambda = ui->Smooth_LE_Lambda->text().toFloat();
-
-	ui->DualView_RightRenderer->set_n_iterations(nit);
-	ui->DualView_RightRenderer->set_lambda(lambda);
-}
-
-void MainWindow::set_HighFreqs_params() {
-	const QString& smooth_operator = ui->HighFreqs_CB_operators->currentText();
-	if (smooth_operator == "Laplacian") {
-		ui->DualView_RightRenderer->set_smooth_operator(
-			smoothing::smooth_operator::Laplacian
-		);
-	}
-	else if (smooth_operator == "Bilaplacian") {
-		ui->DualView_RightRenderer->set_smooth_operator(
-			smoothing::smooth_operator::BiLaplacian
-		);
-	}
-	else if (smooth_operator == "TaubinLM") {
-		ui->DualView_RightRenderer->set_smooth_operator(
-			smoothing::smooth_operator::TaubinLM
-		);
-	}
-	else {
-		cerr << "Error: value in combo box for smoothing operator '"
-			 << smooth_operator.toStdString() << "' not recognised." << endl;
-	}
-
-	const QString& weight_type = ui->HighFreqs_CB_weight_type->currentText();
-	if (weight_type == "Uniform") {
-		ui->DualView_RightRenderer->set_smooth_weight_type(
-			smoothing::smooth_weight::uniform
-		);
-	}
-	else if (weight_type == "Cotangent") {
-		ui->DualView_RightRenderer->set_smooth_weight_type(
-			smoothing::smooth_weight::cotangent
-		);
-	}
-	else {
-		cerr << "Error: value in combo box for weight type '"
-			 << weight_type.toStdString() << "' not recognised." << endl;
-	}
-
-	size_t nit = ui->HighFreqs_LE_Iter->text().toInt();
-	float lambda = ui->HighFreqs_LE_Lambda->text().toFloat();
 
 	ui->DualView_RightRenderer->set_n_iterations(nit);
 	ui->DualView_RightRenderer->set_lambda(lambda);
@@ -289,19 +243,7 @@ void MainWindow::on_PB_ResetDualView_clicked() {
 	);
 }
 
-/* High frequencies */
-
-void MainWindow::on_PB_HighFreqs_clicked() {
-	set_HighFreqs_params();
-	ui->DualView_RightRenderer->run_high_freqs_algorithm();
-}
-
-void MainWindow::on_PB_ExagHighFreqs_clicked() {
-	set_HighFreqs_params();
-	ui->DualView_RightRenderer->run_exagg_high_freqs_algorithm();
-}
-
-/* band frequencies */
+/* Band frequencies */
 
 void MainWindow::on_PB_RunBandFreqs_clicked() {
 	const QString& txt = ui->TxtEdit_BandFreqs->toPlainText();

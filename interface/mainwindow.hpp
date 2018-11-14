@@ -18,7 +18,6 @@ class MainWindow : public QMainWindow {
 		void change_curvature();
 		void change_curvature_prop_display(float p);
 		void set_Smooth_params();
-		void set_HighFreqs_params();
 
 	private slots:
 
@@ -44,12 +43,7 @@ class MainWindow : public QMainWindow {
 		void on_PB_RunSmooth_clicked();
 		void on_PB_ResetDualView_clicked();
 
-		/* High frequencies */
-
-		void on_PB_HighFreqs_clicked();
-		void on_PB_ExagHighFreqs_clicked();
-
-		/* band frequencies */
+		/* Band frequencies */
 
 		void on_PB_RunBandFreqs_clicked();
 
