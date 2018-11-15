@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
 		cout << "    iterate" << endl;
 		cout << "    curvature" << endl;
 		cout << "    local-smoothing" << endl;
-		cout << "    global-smoothing (coming soon)" << endl;
+		cout << "    global-smoothing" << endl;
 		cout << "    band-frequencies" << endl;
 		cout << "Use [-h|--help] on every option to see its usage." << endl;
 		return 0;
@@ -39,8 +39,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (strcmp(argv[1], "global-smoothing") == 0) {
-		cerr << "Not implemented yet" << endl;
-		return 1;
+		return test_geoproc::test_smoothing_global(argc, argv);
 	}
 
 	if (strcmp(argv[1], "band-frequencies") == 0) {
