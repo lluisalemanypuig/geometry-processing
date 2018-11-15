@@ -8,6 +8,8 @@
 #include <algorithm>
 #include <iostream>
 #include <cmath>
+#include <set>
+using namespace std;
 
 namespace geoproc {
 
@@ -216,7 +218,7 @@ void TriangleMesh::scale_to_unit() {
 	invalidate_areas_angles();
 }
 
-void TriangleMesh::make_neighbourhood_data() {
+void TriangleMesh::make_neighbourhood_data(bool make_missing_opposites) {
 	// compute this data only when needed
 	if (neigh_valid) {
 		return;
@@ -248,7 +250,8 @@ void TriangleMesh::make_neighbourhood_data() {
 
 	// opposite_corners is initialised with -1 because
 	// such opposite may not exist.
-	opposite_corners.resize(triangles.size(), -1);
+	const int minus_infty = -triangles.size() - 1;
+	opposite_corners.resize(triangles.size(), minus_infty);
 
 	/* build data structure so that we have pairs of edges
 	 * (an edge is a pair of vertex indices) each associated
@@ -281,52 +284,71 @@ void TriangleMesh::make_neighbourhood_data() {
 		data.push_back(e3);
 	}
 	// sort the vector so that the edge pairs are consecutive
-	sort(data.begin(), data.end());
+	std::sort(data.begin(), data.end());
+
+	set<int> boundary_vertices;
 
 	boundary.clear();
 	// For each corner edge, check that a twin exists.
-	// If so, we have found a pair of opposite corners
+	// If so, we have found a pair of opposite corners.
+	// Notice that, by construction, twins are consecutive.
 	for (size_t i = 0; i < data.size(); ++i) {
 		// take corner indices
 		int vA = data[i].vertexA;
 		int vB = data[i].vertexB;
 
-		if (data[i + 1].vertexA == vA and data[i + 1].vertexB == vB) {
-			// a twin exists
-			int o = data[i].corner;
-			int c = data[i + 1].corner;
-			opposite_corners[o] = c;
-			opposite_corners[c] = o;
+		bool has_twin = false;
+		if (i + 1 < data.size()) {
+			if (data[i + 1].vertexA == vA and data[i + 1].vertexB == vB) {
+				// a twin exists
+				int o = data[i].corner;
+				int c = data[i + 1].corner;
+				opposite_corners[o] = c;
+				opposite_corners[c] = o;
 
-			// go to the next pair.
-			++i;
+				has_twin = true;
+				// go to the next pair.
+				++i;
+			}
 		}
-		else {
+		if (not has_twin) {
 			// this single CornerEdge contains
 			// an edge of the boundary -> hard boundary
-			boundary.push_back( std::make_pair(vA, vB) );
-			std::cout << "Boundary in edge (" << vA << "," << vB << ")" << std::endl;
-			std::cout << "    "
-					  << vertices[vA].x << ","
-					  << vertices[vA].y << ","
-					  << vertices[vA].z << std::endl;
-			std::cout << "    "
-					  << vertices[vB].x << ","
-					  << vertices[vB].y << ","
-					  << vertices[vB].z << std::endl;
+
+			// obtain next and previous corners of data[i].corner
+			int corner = data[i].corner;
+			int next_corner = 3*(corner/3) + (corner + 1)%3;
+			int prev_corner = 3*(corner/3) + (corner + 2)%3;
+			boundary.push_back( std::make_pair( next_corner, prev_corner) );
+
+			boundary_vertices.insert(vA);
+			boundary_vertices.insert(vB);
+
+			if (not make_missing_opposites) {
+				std::cout << "Boundary in edge "
+						  << "(" << vA << "," << vB << ") <-> " << data[i].corner << std::endl;
+				std::cout << "    corners:"
+						  << "(" << next_corner << ", " << prev_corner << ")" << endl;
+				std::cout << "    "
+						  << vertices[vA].x << ","
+						  << vertices[vA].y << ","
+						  << vertices[vA].z << std::endl;
+				std::cout << "    "
+						  << vertices[vB].x << ","
+						  << vertices[vB].y << ","
+						  << vertices[vB].z << std::endl;
+			}
 		}
 	}
-	if (boundary.size() > 0) {
+	if (not make_missing_opposites and boundary.size() > 0) {
 		std::cerr << "Warning: this mesh contains boundary(ies)" << std::endl;
-		std::cerr << "    Computing Some curvatures may lead to"
-				  << " a crash of the application" << std::endl;
 	}
 
 	#if defined (DEBUG)
 	bool sane = true;
 	size_t i = 0;
 	while (i < opposite_corners.size() and sane) {
-		if (opposite_corners[i] != -1) {
+		if (opposite_corners[i] != minus_infty) {
 			int o = opposite_corners[i];
 			int c = opposite_corners[o];
 			/* we must have
@@ -342,6 +364,69 @@ void TriangleMesh::make_neighbourhood_data() {
 	}
 	assert( sane );
 	#endif
+
+	if (make_missing_opposites) {
+		// -- Fill in missing opposites --
+		// now that we know the boundary edges it
+		// is time to compute the missing opposites
+
+		// try to iterate in counterclockwise order and
+		// in clockwise order the one-ring neighbourhood
+		// of all boundary vertices
+
+		auto next_corner = [](int c) -> int {return 3*(c/3) + (c + 1)%3;};
+		auto prev_corner = [](int c) -> int {return 3*(c/3) + (c + 2)%3;};
+
+		// temporary vector to find opposites
+		vector<int> temp_opposite(triangles.size(), minus_infty);
+
+		for (int bv : boundary_vertices) {
+			int c = corners[bv];
+			bool terminate = false;
+
+			int last_counterclockwise;
+			int last_clockwise;
+
+			// iterate in counterclockwise order
+			int cc = c;
+			while (not terminate) {
+				int ncc = next_corner(cc);
+				int o = opposite_corners[ncc];
+				if (o == minus_infty) {
+					last_counterclockwise = ncc;
+					terminate = true;
+				}
+				else {
+					cc = next_corner(o);
+				}
+			}
+
+			// iterate in clockwise order
+			terminate = false;
+			while (not terminate) {
+				int ncc = prev_corner(cc);
+				int o = opposite_corners[ncc];
+				if (o == minus_infty) {
+					last_clockwise = ncc;
+					terminate = true;
+				}
+				else {
+					cc = prev_corner(o);
+				}
+			}
+
+			// store the opposite information before
+			// finishing the whole algorithm
+			temp_opposite[ last_counterclockwise ] = last_clockwise;
+		}
+
+		// store missing opposites
+		for (size_t i = 0; i < triangles.size(); ++i) {
+			if (temp_opposite[i] != minus_infty) {
+				opposite_corners[i] = -temp_opposite[i];
+			}
+		}
+	}
 
 	// validate neighbourhood data
 	neigh_valid = true;
@@ -433,6 +518,13 @@ int TriangleMesh::get_corner_vertex(int v) const {
 int TriangleMesh::get_triangle_corner(int c) const {
 	assert(0 <= c and c < n_corners());
 	return c/3;
+}
+
+void TriangleMesh::get_corners_triangle(int t, int& v0, int& v1, int& v2) const {
+	assert(0 <= t and t < n_triangles());
+	v0 = 3*t    ;
+	v1 = 3*t + 1;
+	v2 = 3*t + 2;
 }
 
 void TriangleMesh::get_vertices_triangle(int t, int& v0, int& v1, int& v2) const {

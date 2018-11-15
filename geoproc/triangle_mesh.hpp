@@ -67,10 +67,28 @@ class TriangleMesh {
 		 * corner. Therefore, we can access the vertex opposite
 		 * to another vertex (with respect to an edge).
 		 *
-		 * Then @ref opposite_corners[@e i] = @e j iff corner @e j
-		 * is the opposite corner of @e i.
+		 * In general, @ref opposite_corners[@e i] = @e j iff
+		 * corner @e j is the opposite corner of @e i.
+		 *
+		 * In some cases this is not true, since the "opposite"
+		 * corner is found by crossing a boundary. Such opposite
+		 * is given as:
+		 * - \f$-k\f$ if it was not computed (@ref make_neighbourhood_data
+		 * was called with a 'false' value), where \f$k\f$ is the number
+		 * of triangles minus one.
+		 * - a negative value, but less than the number of triangles
+		 * in absolute value if @ref make_neighbourhood_data was called
+		 * with a 'true' value. In this case, we need to consider
+		 * orientations: take its opposite edge and the 'right'
+		 * shared vertex (when placing the corner 'on top of' the
+		 * opposite edge), now take the other boundary edge incident
+		 * to the 'right' edge and, finally, this edge's opposite corner.
+		 * The corner found is defined to be opposite of the starting
+		 * corner. Notice that this is defined for counterclockwise
+		 * traversals on the one-ring neighbourhood of the 'right' vertex.
 		 */
 		std::vector<int> opposite_corners;
+
 		/**
 		 * @brief Corner table.
 		 *
@@ -87,9 +105,10 @@ class TriangleMesh {
 		 * The hard boundary is composed by pairs of vertices
 		 * (each identified with a vertex index).
 		 *
-		 * The hard is boundary is defined as those edges ({vi,vj})
-		 * of those triangles ({vi,vj,vk}) such that vk has no
-		 * opposite corner.
+		 * The hard is boundary is defined as those edges ({@e vi,@e vj})
+		 * of those triangles ({@e vi,@e vj,@e vk}) such that @e vk has no
+		 * opposite corner. All @e vi, @e vj, @e vk are valid corner
+		 * indices.
 		 */
 		std::vector<std::pair<int,int> > boundary;
 
@@ -247,8 +266,14 @@ class TriangleMesh {
 		 *
 		 * If this function is called when the corresponding state
 		 * is valid then this function does nothing.
+		 *
+		 * @param[in] make_missing_opposites If true, the algorithm
+		 * will do extra work to compute the opposites of those corners
+		 * whose opposite edge is a boundary edge, so that the iterators
+		 * can always complete the loop. See @ref opposite_corner for
+		 * details on the definition of such opposites.
 		 */
-		void make_neighbourhood_data();
+		void make_neighbourhood_data(bool make_missing_opposites = true);
 
 		/**
 		 * @brief Computes the angles and the areas of the triangles.
@@ -301,6 +326,18 @@ class TriangleMesh {
 		 * returned is also valid: 0 <= @e 3*f < number of triangles.
 		 */
 		int get_triangle_corner(int c) const;
+
+		/**
+		 * @brief Returns the indexes of the vertices of a triangle.
+		 *
+		 * It is guaranteed that the order of the vertices is
+		 * the same as it is given in the loaded file.
+		 * @param t A valid triangle index: 0 <= @e t < number of triangles.
+		 * @param[out] v1 The first vertex index of the face.
+		 * @param[out] v2 The second vertex index of the face.
+		 * @param[out] v3 The third vertex index of the face.
+		 */
+		void get_corners_triangle(int t, int& v0, int& v1, int& v2) const;
 
 		/**
 		 * @brief Returns the indexes of the vertices of a triangle.

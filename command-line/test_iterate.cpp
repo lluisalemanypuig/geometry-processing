@@ -72,14 +72,18 @@ namespace test_geoproc {
 
 		TriangleMesh mesh;
 		PLY_reader::read_mesh(mesh_file, mesh);
-		mesh.make_neighbourhood_data();
+		mesh.make_neighbourhood_data(true);
+
+		string current_elem = "none";
 
 		iterators::mesh_iterator *it = nullptr;
 		if (iteration_type == "vertex-vertex") {
 			it = new iterators::vertex::vertex_vertex_iterator(mesh);
+			current_elem = "vertex";
 		}
 		else if (iteration_type == "vertex-face") {
 			it = new iterators::vertex::vertex_face_iterator(mesh);
+			current_elem = "face";
 		}
 
 		int first = it->init(v_idx);
@@ -87,23 +91,21 @@ namespace test_geoproc {
 		// first element
 		int v = it->current();
 		do {
-			cout << "    " << v << endl;
-			if (iteration_type == "vertex-face") {
-				int v0,v1,v2;
-				mesh.get_vertices_triangle(it->current(), v_idx, v0,v1,v2);
+			cout << "** Current " << current_elem << ": " << v << endl;
+			if (v != -1) {
+				if (iteration_type == "vertex-face") {
+					int v0,v1,v2;
+					mesh.get_vertices_triangle(it->current(), v_idx, v0,v1,v2);
 
-				cout << "        vertices: "
-					 << v0 << "," << v1 << "," << v2 << endl;
+					cout << "        vertices: "
+						 << v0 << "," << v1 << "," << v2 << endl;
+				}
 			}
 			int k = it->next();
-			if (k == v) {
-				cout << "comand-line: infinite loop encountered" << endl;
-				cout << "    iteration will never finish" << endl;
-			}
 			v = k;
 
 			char step;
-			cout << "Do step:";
+			cout << "Enter character:";
 			cin >> step;
 		}
 		while (v != first);

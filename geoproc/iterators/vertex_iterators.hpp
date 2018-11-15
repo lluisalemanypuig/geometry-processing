@@ -21,6 +21,15 @@ class vertex_vertex_iterator : public mesh_iterator {
 		/// Current vertex index.
 		int cur_vertex;
 
+		/**
+		 * @brief Should we do only half a step?
+		 *
+		 * In this case it means that we crossed a boundary,
+		 * and retrieving the next vertex needs a slightly
+		 * different procedure.
+		 */
+		bool half_step;
+
 	public:
 		/// Default constructor.
 		vertex_vertex_iterator(const TriangleMesh& mesh);
