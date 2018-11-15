@@ -10,10 +10,6 @@ QMAKE_CXXFLAGS += -fopenmp
 QMAKE_CXXFLAGS_DEBUG += -DDEBUG
 QMAKE_CXXFLAGS_RELEASE += -DNDEBUG
 
-LIBS += -fopenmp
-
-INCLUDEPATH += ..
-
 HEADERS += \
 	ply_reader.hpp \
 	triangle_mesh.hpp \
@@ -36,3 +32,21 @@ SOURCES += \
     filter_frequencies/band_frequencies.cpp \
     smoothing/local.cpp \
     smoothing/local_private.cpp
+
+# self-includes
+INCLUDEPATH += ..
+
+# OpenMP
+LIBS += -fopenmp
+
+# Eigen library
+unix {
+    exists(/usr/include/Eigen) {
+        INCLUDEPATH += /usr/include/Eigen
+    }
+    else {
+        # modify for a custom include
+        # path to eigen library
+        INCLUDEPATH += ../../eigen/
+    }
+}

@@ -9,8 +9,6 @@ QMAKE_CXXFLAGS += -fopenmp
 QMAKE_CXXFLAGS_DEBUG += -DDEBUG
 QMAKE_CXXFLAGS_RELEASE += -DNDEBUG
 
-LIBS += -fopenmp
-
 SOURCES +=						\
     main.cpp					\
     test_curvature.cpp			\
@@ -22,6 +20,9 @@ SOURCES +=						\
 HEADERS +=						\
     test_geoproc.hpp			\
     time.hpp
+
+# OpenMP
+LIBS += -fopenmp
 
 # geoproc library
 CONFIG(debug, debug|release) {

@@ -6,8 +6,6 @@ CONFIG += c++11
 QMAKE_CXXFLAGS_DEBUG += -DDEBUG
 QMAKE_CXXFLAGS_RELEASE += -DNDEBUG
 
-LIBS += -fopenmp
-
 FORMS += mainwindow.ui
 
 HEADERS +=						\
@@ -31,6 +29,9 @@ DISTFILES +=					\
 
 RESOURCES +=					\
 	resources.qrc
+
+# OpenMP
+LIBS += -fopenmp
 
 # geoproc library
 CONFIG(debug, debug|release) {
