@@ -9,7 +9,7 @@
 
 namespace geoproc {
 namespace smoothing {
-namespace smoothing_private {
+namespace local_private {
 
 	/**
 	 * @brief Computes the sum corresponding to uniform weights.
@@ -188,6 +188,6 @@ namespace smoothing_private {
 		glm::vec3 *new_verts
 	);
 
-} // -- namespace smoothing_private
+} // -- namespace local_private
 } // -- namespace smoothing
 } // -- namespace geoproc

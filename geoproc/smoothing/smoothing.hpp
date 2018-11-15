@@ -7,5 +7,5 @@
 
 // geoproc includes
 #include <geoproc/smoothing/smoothing_defs.hpp>
-#include <geoproc/smoothing/iterative_local.hpp>
+#include <geoproc/smoothing/local.hpp>
 

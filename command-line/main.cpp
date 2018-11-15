@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (strcmp(argv[1], "local-smoothing") == 0) {
-		return test_geoproc::test_local_smoothing(argc, argv);
+		return test_geoproc::test_smoothing_local(argc, argv);
 	}
 
 	if (strcmp(argv[1], "global-smoothing") == 0) {

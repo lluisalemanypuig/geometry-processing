@@ -10,7 +10,7 @@ using namespace std;
 #include <QJsonArray>
 
 // geoproc includes
-#include <geoproc/smoothing/iterative_local.hpp>
+#include <geoproc/smoothing/local.hpp>
 #include <geoproc/filter_frequencies/band_frequencies.hpp>
 
 // OTHERS
@@ -129,13 +129,13 @@ void TwinGLWidget::run_smoothing_algorithm() {
 
 	timing::time_point begin = timing::now();
 	if (op == smoothing::smooth_operator::Laplacian) {
-		smoothing::laplacian(wt, lambda, nit, nt, mesh);
+		smoothing::local::laplacian(wt, lambda, nit, nt, mesh);
 	}
 	else if (op == smoothing::smooth_operator::BiLaplacian) {
-		smoothing::bilaplacian(wt, lambda, nit, nt, mesh);
+		smoothing::local::bilaplacian(wt, lambda, nit, nt, mesh);
 	}
 	else if (op == smoothing::smooth_operator::TaubinLM) {
-		smoothing::TaubinLM(wt, lambda, nit, nt, mesh);
+		smoothing::local::TaubinLM(wt, lambda, nit, nt, mesh);
 	}
 	timing::time_point end = timing::now();
 

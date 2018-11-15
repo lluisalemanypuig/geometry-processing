@@ -4,7 +4,7 @@
 #include <set>
 
 // geoproc includes
-#include <geoproc/smoothing/iterative_local.hpp>
+#include <geoproc/smoothing/local.hpp>
 #include <geoproc/triangle_mesh.hpp>
 #include <geoproc/ply_reader.hpp>
 using namespace geoproc;
@@ -55,7 +55,7 @@ namespace test_geoproc {
 		cout << endl;
 	}
 
-	int test_local_smoothing(int argc, char *argv[]) {
+	int test_smoothing_local(int argc, char *argv[]) {
 		const set<string> allowed_algorithms({"laplacian", "bilaplacian", "TaubinLM"});
 
 		string mesh_file = "none";
@@ -182,13 +182,13 @@ namespace test_geoproc {
 
 		timing::time_point begin = timing::now();
 		if (alg == "laplacian") {
-			smoothing::laplacian(w, lambda, it, nt, mesh);
+			smoothing::local::laplacian(w, lambda, it, nt, mesh);
 		}
 		else if (alg == "bilaplacian") {
-			smoothing::bilaplacian(w, lambda, it, nt, mesh);
+			smoothing::local::bilaplacian(w, lambda, it, nt, mesh);
 		}
 		else if (alg == "TaubinLM") {
-			smoothing::TaubinLM(w, lambda, it, nt, mesh);
+			smoothing::local::TaubinLM(w, lambda, it, nt, mesh);
 		}
 		timing::time_point end = timing::now();
 		cout << "Smoothed mesh in "

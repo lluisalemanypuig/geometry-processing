@@ -12,7 +12,7 @@ using namespace std;
 using namespace glm;
 
 // geoproc includes
-#include <geoproc/smoothing/iterative_private.hpp>
+#include <geoproc/smoothing/local_private.hpp>
 
 namespace geoproc {
 using namespace smoothing;
@@ -28,13 +28,13 @@ vec3 *apply_conf_get_verts
 )
 {
 	if (S.so == smooth_operator::Laplacian) {
-		bool res = smoothing_private::apply_once_per_it
+		bool res = local_private::apply_once_per_it
 			(S.sw, S.lambda, S.n_it, m, old_verts, new_verts);
 
 		return (res ? new_verts : old_verts);
 	}
 	if (S.so == smooth_operator::BiLaplacian) {
-		smoothing_private::apply_twice_per_it
+		local_private::apply_twice_per_it
 			(S.sw, S.lambda, -S.lambda, S.n_it, m, old_verts, new_verts);
 
 		return old_verts;
@@ -42,7 +42,7 @@ vec3 *apply_conf_get_verts
 	if (S.so == smooth_operator::TaubinLM) {
 		const float Kpb = 0.1f;
 		const float mu = 1.0f/(Kpb - 1.0f/S.lambda);
-		smoothing_private::apply_twice_per_it
+		local_private::apply_twice_per_it
 			(S.sw, S.lambda, mu, S.n_it, m, old_verts, new_verts);
 
 		return old_verts;
@@ -61,13 +61,13 @@ vec3 *apply_conf_get_verts
 )
 {
 	if (S.so == smooth_operator::Laplacian) {
-		bool res = smoothing_private::apply_once_per_it
+		bool res = local_private::apply_once_per_it
 			(S.sw, S.lambda, S.n_it, nt, m, old_verts, new_verts);
 
 		return (res ? new_verts : old_verts);
 	}
 	if (S.so == smooth_operator::BiLaplacian) {
-		smoothing_private::apply_twice_per_it
+		local_private::apply_twice_per_it
 			(S.sw, S.lambda, -S.lambda, S.n_it, nt, m, old_verts, new_verts);
 
 		return old_verts;
@@ -75,7 +75,7 @@ vec3 *apply_conf_get_verts
 	if (S.so == smooth_operator::TaubinLM) {
 		const float Kpb = 0.1f;
 		const float mu = 1.0f/(Kpb - 1.0f/S.lambda);
-		smoothing_private::apply_twice_per_it
+		local_private::apply_twice_per_it
 			(S.sw, S.lambda, mu, S.n_it, nt, m, old_verts, new_verts);
 
 		return old_verts;

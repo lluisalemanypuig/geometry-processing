@@ -1,4 +1,4 @@
-#include <geoproc/smoothing/iterative_private.hpp>
+#include <geoproc/smoothing/local_private.hpp>
 
 // C includes
 #include <omp.h>
@@ -16,7 +16,7 @@ using namespace glm;
 
 namespace geoproc {
 namespace smoothing {
-namespace smoothing_private {
+namespace local_private {
 
 	void make_uniform_weight
 	(int vi, const TriangleMesh& m, const vec3 *verts, vec3& L)
@@ -236,14 +236,14 @@ namespace smoothing_private {
 		// for every two iterations, apply two steps, in total nit steps
 		size_t it;
 		for (it = 0; it < nit; it += 2) {
-			smoothing_private::apply_local(w, l, m, old_verts, new_verts);
-			smoothing_private::apply_local(w, l, m, new_verts, old_verts);
+			local_private::apply_local(w, l, m, old_verts, new_verts);
+			local_private::apply_local(w, l, m, new_verts, old_verts);
 		}
 
 		// Do one more iteration if necessary.
 
 		if (it == nit) {
-			smoothing_private::apply_local(w, l, m, old_verts, new_verts);
+			local_private::apply_local(w, l, m, old_verts, new_verts);
 			return true;
 		}
 
@@ -271,14 +271,14 @@ namespace smoothing_private {
 		// for every two iterations, apply two steps, in total nit steps
 		size_t it;
 		for (it = 0; it < nit; it += 2) {
-			smoothing_private::apply_local(w, l, m, n_threads, old_verts, new_verts);
-			smoothing_private::apply_local(w, l, m, n_threads, new_verts, old_verts);
+			local_private::apply_local(w, l, m, n_threads, old_verts, new_verts);
+			local_private::apply_local(w, l, m, n_threads, new_verts, old_verts);
 		}
 
 		// Do one more iteration if necessary.
 
 		if (it == nit) {
-			smoothing_private::apply_local(w, l, m, n_threads, old_verts, new_verts);
+			local_private::apply_local(w, l, m, n_threads, old_verts, new_verts);
 			return true;
 		}
 
@@ -297,8 +297,8 @@ namespace smoothing_private {
 	{
 		// for each iteration of the algorithm
 		for (size_t it = 0; it < nit; ++it) {
-			smoothing_private::apply_local(w, l1, m, old_verts, new_verts);
-			smoothing_private::apply_local(w, l2, m, new_verts, old_verts);
+			local_private::apply_local(w, l1, m, old_verts, new_verts);
+			local_private::apply_local(w, l2, m, new_verts, old_verts);
 		}
 	}
 
@@ -314,11 +314,11 @@ namespace smoothing_private {
 	{
 		// for each iteration of the algorithm
 		for (size_t it = 0; it < nit; ++it) {
-			smoothing_private::apply_local(w, l1, m, n_threads, old_verts, new_verts);
-			smoothing_private::apply_local(w, l2, m, n_threads, new_verts, old_verts);
+			local_private::apply_local(w, l1, m, n_threads, old_verts, new_verts);
+			local_private::apply_local(w, l2, m, n_threads, new_verts, old_verts);
 		}
 	}
 
-} // -- namespace smoothing_private
+} // -- namespace local_private
 } // -- namespace smoothing
 } // -- namespace geoproc

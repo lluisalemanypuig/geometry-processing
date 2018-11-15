@@ -22,9 +22,9 @@ HEADERS += \
 	curvature/curvature.hpp \
 	smoothing/smoothing.hpp \
 	smoothing/smoothing_defs.hpp \
-	smoothing/iterative_local.hpp \
-	smoothing/iterative_private.hpp \
-    filter_frequencies/band_frequencies.hpp
+    filter_frequencies/band_frequencies.hpp \
+    smoothing/local.hpp \
+    smoothing/local_private.hpp
 
 SOURCES += \
 	ply_reader.cpp \
@@ -33,6 +33,6 @@ SOURCES += \
 	iterators/vertex_iterators.cpp \
 	curvature/mean.cpp \
 	curvature/Gauss.cpp \
-	smoothing/iterative_local.cpp \
-	smoothing/iterative_private.cpp \
-    filter_frequencies/band_frequencies.cpp
+    filter_frequencies/band_frequencies.cpp \
+    smoothing/local.cpp \
+    smoothing/local_private.cpp

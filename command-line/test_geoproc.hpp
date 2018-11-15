@@ -19,7 +19,7 @@ namespace test_geoproc {
 
 	int test_iterate(int argc, char *argv[]);
 	int test_curvature(int argc, char *argv[]);
-	int test_local_smoothing(int argc, char *argv[]);
+	int test_smoothing_local(int argc, char *argv[]);
 	int test_band_frequency(int argc, char *argv[]);
 
 } // -- namespace test_algorithms

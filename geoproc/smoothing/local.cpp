@@ -1,4 +1,4 @@
-#include <geoproc/smoothing/iterative_local.hpp>
+#include <geoproc/smoothing/local.hpp>
 
 // C includes
 #include <stdlib.h>
@@ -9,10 +9,11 @@
 using namespace glm;
 
 // geoproc includes
-#include <geoproc/smoothing/iterative_private.hpp>
+#include <geoproc/smoothing/local_private.hpp>
 
 namespace geoproc {
 namespace smoothing {
+namespace local {
 
 	void laplacian(const smooth_weight& w, float l, size_t nit, TriangleMesh& m) {
 		const int N = m.n_vertices();
@@ -23,7 +24,7 @@ namespace smoothing {
 		// Fill the first array (there is no need to fill the second).
 		std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
 
-		bool res = smoothing_private::apply_once_per_it(w, l, nit, m, old_verts, new_verts);
+		bool res = local_private::apply_once_per_it(w, l, nit, m, old_verts, new_verts);
 		if (res) {
 			m.set_vertices(new_verts, N);
 		}
@@ -50,7 +51,7 @@ namespace smoothing {
 		// Fill the first array (there is no need to fill the second).
 		std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
 
-		bool res = smoothing_private::apply_once_per_it(w, l, nit, nt, m, old_verts, new_verts);
+		bool res = local_private::apply_once_per_it(w, l, nit, nt, m, old_verts, new_verts);
 		if (res) {
 			m.set_vertices(new_verts, N);
 		}
@@ -72,7 +73,7 @@ namespace smoothing {
 		// Fill the first array (there is no need to fill the second).
 		std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
 
-		smoothing_private::apply_twice_per_it(w, l, -l, nit, m, old_verts, new_verts);
+		local_private::apply_twice_per_it(w, l, -l, nit, m, old_verts, new_verts);
 
 		// Replace the coordinates of the old vertices in the
 		// mesh for the vertices in 'old_verts'.
@@ -97,7 +98,7 @@ namespace smoothing {
 		// Fill the first array (there is no need to fill the second).
 		std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
 
-		smoothing_private::apply_twice_per_it(w, l, -l, nit,  nt, m, old_verts, new_verts);
+		local_private::apply_twice_per_it(w, l, -l, nit,  nt, m, old_verts, new_verts);
 
 		// Replace the coordinates of the old vertices in the
 		// mesh for the vertices in 'old_verts'.
@@ -119,7 +120,7 @@ namespace smoothing {
 		// Fill the first array (there is no need to fill the second).
 		std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
 
-		smoothing_private::apply_twice_per_it(w, l, mu, nit, m, old_verts, new_verts);
+		local_private::apply_twice_per_it(w, l, mu, nit, m, old_verts, new_verts);
 
 		// Replace the coordinates of the old vertices in the
 		// mesh for the vertices in 'old_verts'.
@@ -146,7 +147,7 @@ namespace smoothing {
 		// Fill the first array (there is no need to fill the second).
 		std::copy(m.get_vertices().begin(), m.get_vertices().end(), old_verts);
 
-		smoothing_private::apply_twice_per_it(w, l, mu, nit, nt, m, old_verts, new_verts);
+		local_private::apply_twice_per_it(w, l, mu, nit, nt, m, old_verts, new_verts);
 
 		// Replace the coordinates of the old vertices in the
 		// mesh for the vertices in 'old_verts'.
@@ -157,5 +158,6 @@ namespace smoothing {
 		free(new_verts);
 	}
 
+} // -- namespace local
 } // -- namespace smoothing
 } // -- namespace geoproc

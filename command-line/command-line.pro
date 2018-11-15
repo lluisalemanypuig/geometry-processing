@@ -16,8 +16,8 @@ SOURCES +=						\
     test_curvature.cpp			\
     test_iterate.cpp			\
     time.cpp					\
-    test_local_smoothing.cpp \
-    test_band_frequencies.cpp
+    test_band_frequencies.cpp \
+    test_smoothing_local.cpp
 
 HEADERS +=						\
     test_geoproc.hpp			\

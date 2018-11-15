@@ -6,6 +6,7 @@
 
 namespace geoproc {
 namespace smoothing {
+namespace local {
 
 	/**
 	 * @brief Laplacian operator for mesh smoothing.
@@ -122,5 +123,6 @@ namespace smoothing {
 	void TaubinLM
 	(const smooth_weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);
 
+} // -- namespace local
 } // -- namespace smoothing
 } // -- namespace geoproc
