@@ -20,7 +20,8 @@ HEADERS += \
 	smoothing/smoothing_defs.hpp \
     filter_frequencies/band_frequencies.hpp \
     smoothing/local.hpp \
-    smoothing/local_private.hpp
+    smoothing/local_private.hpp \
+    smoothing/global.hpp
 
 SOURCES += \
 	ply_reader.cpp \
@@ -31,7 +32,8 @@ SOURCES += \
 	curvature/Gauss.cpp \
     filter_frequencies/band_frequencies.cpp \
     smoothing/local.cpp \
-    smoothing/local_private.cpp
+    smoothing/local_private.cpp \
+    smoothing/global.cpp
 
 # self-includes
 INCLUDEPATH += ..

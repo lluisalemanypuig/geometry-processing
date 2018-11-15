@@ -1,6 +1,7 @@
 #include <geoproc/smoothing/local_private.hpp>
 
 // C includes
+#include <assert.h>
 #include <omp.h>
 
 // C++ includes
@@ -18,15 +19,64 @@ namespace geoproc {
 namespace smoothing {
 namespace local_private {
 
-	void make_uniform_weight
-	(int vi, const TriangleMesh& m, const vec3 *verts, vec3& L)
+#define BOUNDARY_ERROR(v) cerr << "Error: boundary found for vertex " << v << endl
+
+	/* UNIFORM */
+
+	void make_uniform_weights
+	(int vi, const TriangleMesh& m,float *pv_ws)
 	{
+		assert(pv_ws != nullptr);
+
 		iterators::vertex::vertex_vertex_iterator it(m);
 
 		int first = it.init(vi);
 		if (first == -1) {
 			// the computation of the curvature could not
 			// be completed since a boundary was found
+			BOUNDARY_ERROR(vi);
+			return;
+		}
+
+		// compute the differences v_j - v_i and store them
+
+		// neighbours of vi
+		vector<int> neighs;
+		int j = it.current();
+		do {
+			neighs.push_back(j);
+			j = it.next();
+		}
+		while (j != first and j != -1);
+
+		if (j == -1) {
+			// the computation of the curvature could not
+			// be completed since a boundary was found
+			BOUNDARY_ERROR(vi);
+			return;
+		}
+
+		// set contents of pv_ws to null
+		for (int j = 0; j < m.n_vertices(); ++j) {
+			pv_ws[j] = 0;
+		}
+		for (int j : neighs) {
+			pv_ws[j] = 1.0f/neighs.size();
+		}
+	}
+
+	void make_uniform_weight
+	(int vi, const TriangleMesh& m, const vec3 *verts, vec3& L)
+	{
+		assert(verts != nullptr);
+
+		iterators::vertex::vertex_vertex_iterator it(m);
+
+		int first = it.init(vi);
+		if (first == -1) {
+			// the computation of the curvature could not
+			// be completed since a boundary was found
+			BOUNDARY_ERROR(vi);
 			return;
 		}
 
@@ -44,6 +94,7 @@ namespace local_private {
 		if (j == -1) {
 			// the computation of the curvature could not
 			// be completed since a boundary was found
+			BOUNDARY_ERROR(vi);
 			return;
 		}
 
@@ -58,17 +109,96 @@ namespace local_private {
 		}
 	}
 
-	inline float cotan(float a) { return std::cos(a)/std::sin(a); }
+	/* COTANGENT */
 
-	void make_cotangent_weight
-	(int vi, const TriangleMesh& m, const vec3 *verts, vec3& L)
+	static inline
+	float cotan(float a) { return std::cos(a)/std::sin(a); }
+
+	void make_cotangent_weights
+	(int vi, const TriangleMesh& m, const glm::vec3 *verts, float *pv_ws)
 	{
+		assert(verts != nullptr);
+		assert(pv_ws != nullptr);
+
+		// set contents of pv_ws to null
+		for (int j = 0; j < m.n_vertices(); ++j) {
+			pv_ws[j] = 0;
+		}
+
 		iterators::vertex::vertex_face_iterator it(m);
 		const int first = it.init(vi);
 		int next1 = first;
 		int next2 = it.next();
 
 		if (next1 == -1 or next2 == -1) {
+			BOUNDARY_ERROR(vi);
+			return;
+		}
+
+		// loop over the one-ring neighbourhood of
+		// vertex vi. When a neighbour is found assign
+		// its corresponding weight.
+
+		// loop variables
+		vec3 u, v;
+		float alpha, beta;
+		do {
+			// it is guaranteed that
+			//     i1 = i
+			//     i2 = i
+			// also, faces are sorted in counterclockwise order
+			// therefore:
+			//      i1 -> j1 -> k1 -> i1
+			// (i1) i2 -> j2 -> k2 -> i2 (i1)
+			int i1,j1,k1, i2,j2,k2;
+			m.get_vertices_triangle(next1, vi, i1,j1,k1);
+			m.get_vertices_triangle(next2, vi, i2,j2,k2);
+
+			// compute the two angles (alpha and beta).
+
+			// make sure that the orientations are correct.
+			// k1 and j2 are the same vertex, and a
+			// neighbour of vi.
+			assert(k1 == j2);
+
+			// compute the two angles: alpha and beta
+			u = normalize( verts[i1] - verts[j1] );
+			v = normalize( verts[k1] - verts[j1] );
+			alpha = acos( dot(u,v) );
+			u = normalize( verts[i2] - verts[k2] );
+			v = normalize( verts[j2] - verts[k2] );
+			beta = acos( dot(u,v) );
+
+			// compute and assign weight to neighbour
+			pv_ws[k1] = cotan(alpha) + cotan(beta);
+
+			// go to next 2 faces
+			next1 = next2;
+			next2 = it.next();
+		}
+		while (next1 != first and next2 != -1);
+
+		if (next1 == -1) {
+			// the computation of the curvature could not
+			// be completed since a boundary was found
+			BOUNDARY_ERROR(vi);
+			return;
+		}
+
+	}
+
+	void make_cotangent_weight
+	(int vi, const TriangleMesh& m, const vec3 *verts, vec3& L)
+	{
+		assert(verts != nullptr);
+
+		iterators::vertex::vertex_face_iterator it(m);
+		const int first = it.init(vi);
+		int next1 = first;
+		int next2 = it.next();
+
+		if (next1 == -1 or next2 == -1) {
+			BOUNDARY_ERROR(vi);
 			return;
 		}
 
@@ -123,6 +253,7 @@ namespace local_private {
 		if (next1 == -1) {
 			// the computation of the curvature could not
 			// be completed since a boundary was found
+			BOUNDARY_ERROR(vi);
 			return;
 		}
 
@@ -131,6 +262,8 @@ namespace local_private {
 			L += (weights[i]/S)*diffs[i];
 		}
 	}
+
+	/* APPLY LOCAL ALGORITHMS */
 
 	void apply_local
 	(

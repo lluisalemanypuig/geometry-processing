@@ -11,6 +11,22 @@ namespace geoproc {
 namespace smoothing {
 namespace local_private {
 
+	/* UNIFORM */
+
+	/**
+	 * @brief Computes weights corresponding to uniform weights.
+	 *
+	 * For vertex @e vi computes \f$\frac{1}{d_i}\f$ where \f$d_i\f$ is
+	 * the valence of vertex @e vi (the number of neighbours in its one-ring).
+	 * This value is value is assigned to all its neighbours in the mesh
+	 * in the output parameter @e pv_ws. The other vertices have null weight.
+	 * @param vi Valid vertex index.
+	 * @param m Mesh to be iterated.
+	 * @param[out] pv_ws Weights per vertex.
+	 */
+	void make_uniform_weights
+	(int vi, const TriangleMesh& m, float *pv_ws);
+
 	/**
 	 * @brief Computes the sum corresponding to uniform weights.
 	 *
@@ -30,6 +46,23 @@ namespace local_private {
 	void make_uniform_weight
 	(int vi, const TriangleMesh& m, const glm::vec3 *verts, glm::vec3& L);
 
+	/* COTANGENT */
+
+	/**
+	 * @brief Computes weights corresponding to cotangent weights.
+	 *
+	 * For vertex @e vi computes \f$\frac{1}{d_i}\f$ where \f$d_i\f$ is
+	 * the valence of vertex @e vi (the number of neighbours in its one-ring).
+	 * @param vi Valid vertex index.
+	 * @param m Mesh to be iterated.
+	 * @param verts Use the coordinates of the vertices in this
+	 * vector instead of the vertices in the mesh.
+	 * @param[out] pv_ws Weights per vertex. Non-neighbours of @e vi are guaranteed
+	 * to have null weight.
+	 */
+	void make_cotangent_weights
+	(int vi, const TriangleMesh& m, const glm::vec3 *verts, float *pv_ws);
+
 	/**
 	 * @brief Computes the sum corresponding to cotangent weights.
 	 *
@@ -48,6 +81,8 @@ namespace local_private {
 	 */
 	void make_cotangent_weight
 	(int vi, const TriangleMesh& m, const glm::vec3 *verts, glm::vec3& L);
+
+	/* APPLY LOCAL ALGORITHMS */
 
 	/**
 	 * @brief Applies one iteration of a local smoothing algorithm.
