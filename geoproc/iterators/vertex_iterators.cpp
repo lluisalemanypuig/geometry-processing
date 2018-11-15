@@ -3,9 +3,6 @@
 // C includes
 #include <assert.h>
 
-#include <iostream>
-using namespace std;
-
 inline
 int next_corner(int corner) {
 	return 3*(corner/3) + (corner + 1)%3;
