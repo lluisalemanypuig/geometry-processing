@@ -19,7 +19,7 @@ namespace test_geoproc {
 		cout << endl;
 		cout << "    --load f: load a mesh stored in the .ply file f" << endl;
 		cout << endl;
-		cout << "    --print: prints to standard output the coordinates" << endl;
+		cout << "    --print : prints to standard output the coordinates" << endl;
 		cout << "        of the input mesh and of the smoothed mesh." << endl;
 		cout << "        Default: do not print." << endl;
 		cout << endl;
@@ -192,7 +192,7 @@ namespace test_geoproc {
 		end = timing::now();
 
 		cout << "Applied band frequencies in "
-			 << timing::elapsed_seconds(begin, end) << " seconds" << endl;
+			 << timing::elapsed_milliseconds(begin, end) << " ms" << endl;
 	}
 
 	int test_band_frequency(int argc, char *argv[]) {

@@ -15,10 +15,10 @@ namespace test_geoproc {
 		cout << endl;
 		cout << "    --curv K: specify the type of curvature to be evaluated" << endl;
 		cout << "        Allowed values:" << endl;
-		cout << "        Gauss: to evaluate the Gauss curvature Kg" << endl;
-		cout << "        mean: to evaluate the mean curvature Kh" << endl;
+		cout << "        Gauss : to evaluate the Gauss curvature Kg" << endl;
+		cout << "        mean  : to evaluate the mean curvature Kh" << endl;
 		cout << endl;
-		cout << "    --print: print the values of curvature" << endl;
+		cout << "    --print : print the values of curvature" << endl;
 		cout << "        Default: No" << endl;
 		cout << endl;
 		cout << "    --threads n: specify number of threads." << endl;
@@ -115,7 +115,7 @@ namespace test_geoproc {
 		cout.precision(8);
 		cout << "Curvature computed in "
 			 << timing::elapsed_milliseconds(begin,end)
-			 << " milliseconds" << endl;
+			 << " ms" << endl;
 		cout << "Minimum value of curvature: " << min << endl;
 		cout << "Maximum value of curvature: " << max << endl;
 

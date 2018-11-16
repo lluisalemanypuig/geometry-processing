@@ -17,8 +17,8 @@ namespace test_geoproc {
 		cout << "    --index v: specify vertex index around which the" << endl;
 		cout << "        program will iterate" << endl;
 		cout << endl;
-		cout << "    --vertex-vertex: use vertex-vertex iteration" << endl;
-		cout << "    --vertex-face:   use vertex-face iteration" << endl;
+		cout << "    --vertex-vertex : use vertex-vertex iteration" << endl;
+		cout << "    --vertex-face   : use vertex-face iteration" << endl;
 		cout << endl;
 	}
 
@@ -72,7 +72,7 @@ namespace test_geoproc {
 
 		TriangleMesh mesh;
 		PLY_reader::read_mesh(mesh_file, mesh);
-		mesh.make_neighbourhood_data(true);
+		mesh.make_neighbourhood_data();
 
 		string current_elem = "none";
 

@@ -16,14 +16,14 @@ namespace test_geoproc {
 		cout << endl;
 		cout << "    --load f: load a mesh stored in the .ply file f" << endl;
 		cout << endl;
-		cout << "    --print: prints to standard output the coordinates" << endl;
+		cout << "    --print : prints to standard output the coordinates" << endl;
 		cout << "        of the input mesh and of the smoothed mesh." << endl;
 		cout << "        Default: do not print." << endl;
 		cout << endl;
 		cout << "    --threads n: specify number of threads." << endl;
 		cout << "        Default: 1" << endl;
 		cout << endl;
-		cout << "    --algorithm: choose the algorithm to evaluate" << endl;
+		cout << "    --algorithm : choose the algorithm to evaluate" << endl;
 		cout << "        Allowed values:" << endl;
 		cout << "        * laplacian" << endl;
 		cout << "        * bilaplacian" << endl;
@@ -31,23 +31,23 @@ namespace test_geoproc {
 		cout << endl;
 		cout << "        Parameters of each algorithm." << endl;
 		cout << "        Unless stated otherwise, all of them are mandatory" << endl;
-		cout << "        * laplacian:" << endl;
-		cout << "            --lambda" << endl;
-		cout << "            --it: number of iterations" << endl;
+		cout << "        * laplacian :" << endl;
+		cout << "            --lambda : weight for each difference" << endl;
+		cout << "            --it : number of iterations" << endl;
 		cout << "            --weight-type" << endl;
 		cout << "                Allowed values:" << endl;
 		cout << "                * uniform" << endl;
 		cout << "                * cotangent" << endl;
-		cout << "        * bilaplacian:" << endl;
-		cout << "            --lambda" << endl;
-		cout << "            --it: number of iterations" << endl;
+		cout << "        * bilaplacian :" << endl;
+		cout << "            --lambda : weight for each difference" << endl;
+		cout << "            --it : number of iterations" << endl;
 		cout << "            --weight-type" << endl;
 		cout << "                Allowed values:" << endl;
 		cout << "                * uniform" << endl;
 		cout << "                * cotangent" << endl;
-		cout << "        * TaubinLM:" << endl;
-		cout << "            --lambda" << endl;
-		cout << "            --it: number of iterations" << endl;
+		cout << "        * TaubinLM :" << endl;
+		cout << "            --lambda : weight for each difference" << endl;
+		cout << "            --it : number of iterations" << endl;
 		cout << "            --weight-type" << endl;
 		cout << "                Allowed values:" << endl;
 		cout << "                * uniform" << endl;
@@ -193,7 +193,7 @@ namespace test_geoproc {
 		timing::time_point end = timing::now();
 		cout << "Smoothed mesh in "
 			 << timing::elapsed_milliseconds(begin,end)
-			 << " milliseconds" << endl;
+			 << " ms" << endl;
 
 		if (_print) {
 			cout << "Smoothed mesh:" << endl;

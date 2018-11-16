@@ -16,11 +16,11 @@ namespace test_geoproc {
 		cout << endl;
 		cout << "    --load f: load a mesh stored in the .ply file f" << endl;
 		cout << endl;
-		cout << "    --print: prints to standard output the coordinates" << endl;
+		cout << "    --print : prints to standard output the coordinates" << endl;
 		cout << "        of the input mesh and of the smoothed mesh." << endl;
 		cout << "        Default: do not print." << endl;
 		cout << endl;
-		cout << "    --algorithm: choose the algorithm to evaluate" << endl;
+		cout << "    --algorithm : choose the algorithm to evaluate" << endl;
 		cout << "        Allowed values:" << endl;
 		cout << "        * laplacian" << endl;
 		cout << "        * bilaplacian" << endl;
@@ -28,17 +28,17 @@ namespace test_geoproc {
 		cout << endl;
 		cout << "        Parameters of each algorithm." << endl;
 		cout << "        Unless stated otherwise, all of them are mandatory" << endl;
-		cout << "        * laplacian:" << endl;
+		cout << "        * laplacian :" << endl;
 		cout << "            --weight-type" << endl;
 		cout << "                Allowed values:" << endl;
 		cout << "                * uniform" << endl;
 		cout << "                * cotangent" << endl;
-		cout << "        * bilaplacian:" << endl;
+		cout << "        * bilaplacian :" << endl;
 		cout << "            --weight-type" << endl;
 		cout << "                Allowed values:" << endl;
 		cout << "                * uniform" << endl;
 		cout << "                * cotangent" << endl;
-		cout << "        * TaubinLM:" << endl;
+		cout << "        * TaubinLM :" << endl;
 		cout << "            --weight-type" << endl;
 		cout << "                Allowed values:" << endl;
 		cout << "                * uniform" << endl;
@@ -159,7 +159,7 @@ namespace test_geoproc {
 
 		cout << "Smoothed mesh globally in "
 			 << timing::elapsed_milliseconds(begin,end)
-			 << " milliseconds" << endl;
+			 << " ms" << endl;
 
 		if (_print) {
 			cout << "Smoothed mesh:" << endl;
