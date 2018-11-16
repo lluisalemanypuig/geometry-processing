@@ -24,7 +24,6 @@ namespace test_geoproc {
 		cout << "        Allowed values:" << endl;
 		cout << "        * laplacian" << endl;
 		cout << "        * bilaplacian" << endl;
-		cout << "        * TaubinLM" << endl;
 		cout << endl;
 		cout << "        Parameters of each algorithm." << endl;
 		cout << "        Unless stated otherwise, all of them are mandatory" << endl;
@@ -38,16 +37,11 @@ namespace test_geoproc {
 		cout << "                Allowed values:" << endl;
 		cout << "                * uniform" << endl;
 		cout << "                * cotangent" << endl;
-		cout << "        * TaubinLM :" << endl;
-		cout << "            --weight-type" << endl;
-		cout << "                Allowed values:" << endl;
-		cout << "                * uniform" << endl;
-		cout << "                * cotangent" << endl;
 		cout << endl;
 	}
 
 	int test_smoothing_global(int argc, char *argv[]) {
-		const set<string> allowed_algorithms({"laplacian", "bilaplacian", "TaubinLM"});
+		const set<string> allowed_algorithms({"laplacian", "bilaplacian"});
 
 		string mesh_file = "none";
 		string alg = "none";
@@ -105,7 +99,7 @@ namespace test_geoproc {
 			return 1;
 		}
 
-		if (alg == "laplacian" or alg == "bilaplacian" or alg == "TaubinLM") {
+		if (alg == "laplacian" or alg == "TaubinLM") {
 			if (weight_type == "none") {
 				cerr << "Error: weight type parameter missing" << endl;
 				cerr << "    Use ./command-line smoothing --help to see the usage" << endl;
@@ -124,9 +118,6 @@ namespace test_geoproc {
 		}
 		else if (alg == "bilaplacian") {
 			o = smoothing::smooth_operator::BiLaplacian;
-		}
-		else if (alg == "TaubinLM") {
-			o = smoothing::smooth_operator::TaubinLM;
 		}
 
 		smoothing::smooth_weight w;

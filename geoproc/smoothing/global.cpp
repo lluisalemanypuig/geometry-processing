@@ -54,7 +54,7 @@ namespace global {
 			return;
 		}
 		if (op == smooth_operator::TaubinLM) {
-			cerr << "Error: global smoothing not implemented for 'TaubinLM' operator"
+			cerr << "Error: invalid value of smoothing operator 'TaubinLM'"
 				 << endl;
 			return;
 		}
