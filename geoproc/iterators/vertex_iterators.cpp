@@ -45,10 +45,6 @@ int vertex_vertex_iterator::current() const {
 }
 
 int vertex_vertex_iterator::next() {
-	if (cur_corner == -1) {
-		return -1;
-	}
-
 	if (half_step) {
 		int nc = next_corner(cur_corner);
 		int nc2 = next_corner(nc);
@@ -109,10 +105,6 @@ int vertex_face_iterator::current() const {
 }
 
 int vertex_face_iterator::next() {
-	if (cur_corner == -1) {
-		return -1;
-	}
-
 	// retrieve face index
 	cur_face = mesh.get_triangle_corner(cur_corner);
 

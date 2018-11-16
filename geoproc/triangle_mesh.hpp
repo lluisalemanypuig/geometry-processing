@@ -72,14 +72,10 @@ class TriangleMesh {
 		 *
 		 * In some cases this is not true, since the "opposite"
 		 * corner is found by crossing a boundary. Such opposite
-		 * is given as:
-		 * - \f$-k\f$ if it was not computed (@ref make_neighbourhood_data
-		 * was called with a 'false' value), where \f$k\f$ is the number
-		 * of triangles minus one.
-		 * - a negative value, but less than the number of triangles
-		 * in absolute value if @ref make_neighbourhood_data was called
-		 * with a 'true' value. In this case, we need to consider
-		 * orientations: take its opposite edge and the 'right'
+		 * is given as a negative value, but less than the number of
+		 * triangles in absolute value if @ref make_neighbourhood_data
+		 * was called with a 'true' value. In this case, we need to
+		 * consider orientations: take its opposite edge and the 'right'
 		 * shared vertex (when placing the corner 'on top of' the
 		 * opposite edge), now take the other boundary edge incident
 		 * to the 'right' edge and, finally, this edge's opposite corner.
@@ -266,14 +262,8 @@ class TriangleMesh {
 		 *
 		 * If this function is called when the corresponding state
 		 * is valid then this function does nothing.
-		 *
-		 * @param[in] make_missing_opposites If true, the algorithm
-		 * will do extra work to compute the opposites of those corners
-		 * whose opposite edge is a boundary edge, so that the iterators
-		 * can always complete the loop. See @ref opposite_corner for
-		 * details on the definition of such opposites.
 		 */
-		void make_neighbourhood_data(bool make_missing_opposites = true);
+		void make_neighbourhood_data();
 
 		/**
 		 * @brief Computes the angles and the areas of the triangles.

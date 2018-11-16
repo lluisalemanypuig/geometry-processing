@@ -32,10 +32,6 @@ namespace curvature {
 		int next1 = first;
 		int next2 = it.next();
 
-		if (next1 == -1 or next2 == -1) {
-			return 0.0f;
-		}
-
 		// Voronoi area around 'i'
 		float vor_area = 0.0f;
 		// curvature vector
@@ -87,13 +83,7 @@ namespace curvature {
 			next1 = next2;
 			next2 = it.next();
 		}
-		while (next1 != first and next2 != -1);
-
-		if (next1 == -1) {
-			// the computation of the curvature could not
-			// be completed since a boundary was found
-			return 0.0;
-		}
+		while (next1 != first);
 
 		// finish computation of voronoi area
 		vor_area /= 3.0f;

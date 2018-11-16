@@ -5,8 +5,7 @@
 #include <omp.h>
 
 // C++ includes
-#include <iostream>
-using namespace std;
+#include <vector>
 
 // glm includes
 using namespace glm;
@@ -19,8 +18,6 @@ namespace geoproc {
 namespace smoothing {
 namespace local_private {
 
-#define BOUNDARY_ERROR(v) cerr << "Error: boundary found for vertex " << v << endl
-
 	/* UNIFORM */
 
 	void make_uniform_weights
@@ -31,30 +28,15 @@ namespace local_private {
 		iterators::vertex::vertex_vertex_iterator it(m);
 
 		int first = it.init(vi);
-		if (first == -1) {
-			// the computation of the curvature could not
-			// be completed since a boundary was found
-			BOUNDARY_ERROR(vi);
-			return;
-		}
-
-		// compute the differences v_j - v_i and store them
 
 		// neighbours of vi
-		vector<int> neighs;
+		std::vector<int> neighs;
 		int j = it.current();
 		do {
 			neighs.push_back(j);
 			j = it.next();
 		}
-		while (j != first and j != -1);
-
-		if (j == -1) {
-			// the computation of the curvature could not
-			// be completed since a boundary was found
-			BOUNDARY_ERROR(vi);
-			return;
-		}
+		while (j != first);
 
 		// set contents of pv_ws to null
 		for (int j = 0; j < m.n_vertices(); ++j) {
@@ -73,30 +55,15 @@ namespace local_private {
 		iterators::vertex::vertex_vertex_iterator it(m);
 
 		int first = it.init(vi);
-		if (first == -1) {
-			// the computation of the curvature could not
-			// be completed since a boundary was found
-			BOUNDARY_ERROR(vi);
-			return;
-		}
-
-		// compute the differences v_j - v_i and store them
 
 		// differences vector
-		vector<vec3> diffs;
+		std::vector<vec3> diffs;
 		int j = it.current();
 		do {
 			diffs.push_back( verts[j] - verts[vi] );
 			j = it.next();
 		}
-		while (j != first and j != -1);
-
-		if (j == -1) {
-			// the computation of the curvature could not
-			// be completed since a boundary was found
-			BOUNDARY_ERROR(vi);
-			return;
-		}
+		while (j != first);
 
 		// now we can compute the weights, which in
 		// this case are uniform so only one value
@@ -129,11 +96,6 @@ namespace local_private {
 		const int first = it.init(vi);
 		int next1 = first;
 		int next2 = it.next();
-
-		if (next1 == -1 or next2 == -1) {
-			BOUNDARY_ERROR(vi);
-			return;
-		}
 
 		// loop over the one-ring neighbourhood of
 		// vertex vi. When a neighbour is found assign
@@ -176,14 +138,7 @@ namespace local_private {
 			next1 = next2;
 			next2 = it.next();
 		}
-		while (next1 != first and next2 != -1);
-
-		if (next1 == -1) {
-			// the computation of the curvature could not
-			// be completed since a boundary was found
-			BOUNDARY_ERROR(vi);
-			return;
-		}
+		while (next1 != first);
 
 	}
 
@@ -197,15 +152,10 @@ namespace local_private {
 		int next1 = first;
 		int next2 = it.next();
 
-		if (next1 == -1 or next2 == -1) {
-			BOUNDARY_ERROR(vi);
-			return;
-		}
-
 		// differences vector
-		vector<vec3> diffs;
+		std::vector<vec3> diffs;
 		// sum of cotangents vector
-		vector<float> weights;
+		std::vector<float> weights;
 		// sum of all weights
 		float S = 0.0f;
 
@@ -224,12 +174,10 @@ namespace local_private {
 			m.get_vertices_triangle(next1, vi, i1,j1,k1);
 			m.get_vertices_triangle(next2, vi, i2,j2,k2);
 
-			// Compute the two angles (alpha and beta).
-
 			// make sure that the orientations are correct
 			assert(k1 == j2);
 
-			// compute the two angles: alpha and beta
+			// Compute the two angles (alpha and beta).
 			u = normalize( verts[i1] - verts[j1] );
 			v = normalize( verts[k1] - verts[j1] );
 			alpha = acos( dot(u,v) );
@@ -248,14 +196,7 @@ namespace local_private {
 			next1 = next2;
 			next2 = it.next();
 		}
-		while (next1 != first and next2 != -1);
-
-		if (next1 == -1) {
-			// the computation of the curvature could not
-			// be completed since a boundary was found
-			BOUNDARY_ERROR(vi);
-			return;
-		}
+		while (next1 != first);
 
 		// calculate vector
 		for (size_t i = 0; i < weights.size(); ++i) {
@@ -296,10 +237,6 @@ namespace local_private {
 					to[i] = from[i] + l*L;
 				}
 				break;
-
-			default:
-				cerr << "Warning (in algorithms::smoothing::laplacian)" << endl;
-				cerr << "    Value for smoothing weight not recognised" << endl;
 		}
 
 	}
@@ -340,10 +277,6 @@ namespace local_private {
 					to[i] = from[i] + l*L;
 				}
 				break;
-
-			default:
-				cerr << "Warning (in algorithms::smoothing::laplacian)" << endl;
-				cerr << "    Value for smoothing weight not recognised" << endl;
 		}
 
 	}

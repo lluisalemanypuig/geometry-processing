@@ -70,9 +70,7 @@ class vertex_vertex_iterator : public mesh_iterator {
 		 *
 		 * @pre This method must be called after initialising the
 		 * iteratior with @ref init.
-		 * @return Returns a valid vertex index, except for those
-		 * cases in which there is no next vertex (the case
-		 * of a boundary). In such case, -1 is returned.
+		 * @return Returns a valid vertex index.
 		 */
 		int next();
 };
@@ -131,9 +129,7 @@ class vertex_face_iterator : public mesh_iterator {
 		 *
 		 * @pre This method must be called after initialising the
 		 * iteratior with @ref init.
-		 * @return Returns a valid face index, except for those
-		 * cases in which there is no next face (the case
-		 * of a boundary). In such case, -1 is returned.
+		 * @return Returns a valid face index.
 		 */
 		int next();
 };

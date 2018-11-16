@@ -115,11 +115,6 @@ namespace curvature {
 		iterators::vertex::vertex_face_iterator it(m);
 
 		int first = it.init(v);
-		if (first == -1) {
-			// the computation of the curvature could not
-			// be completed since a boundary was found
-			return 0.0;
-		}
 
 		int f = it.current();
 		do {
@@ -143,13 +138,7 @@ namespace curvature {
 
 			f = it.next();
 		}
-		while (f != first and f != -1);
-
-		if (f == -1) {
-			// the computation of the curvature could not
-			// be completed since a boundary was found
-			return 0.0;
-		}
+		while (f != first);
 
 		// finish computation of voronoi area
 		vor_area /= 3.0f;

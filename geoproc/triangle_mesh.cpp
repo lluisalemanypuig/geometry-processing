@@ -218,7 +218,7 @@ void TriangleMesh::scale_to_unit() {
 	invalidate_areas_angles();
 }
 
-void TriangleMesh::make_neighbourhood_data(bool make_missing_opposites) {
+void TriangleMesh::make_neighbourhood_data() {
 	// compute this data only when needed
 	if (neigh_valid) {
 		return;
@@ -250,8 +250,7 @@ void TriangleMesh::make_neighbourhood_data(bool make_missing_opposites) {
 
 	// opposite_corners is initialised with -1 because
 	// such opposite may not exist.
-	const int minus_infty = -triangles.size() - 1;
-	opposite_corners.resize(triangles.size(), minus_infty);
+	opposite_corners.resize(triangles.size(), -1);
 
 	/* build data structure so that we have pairs of edges
 	 * (an edge is a pair of vertex indices) each associated
@@ -323,32 +322,14 @@ void TriangleMesh::make_neighbourhood_data(bool make_missing_opposites) {
 
 			boundary_vertices.insert(vA);
 			boundary_vertices.insert(vB);
-
-			if (not make_missing_opposites) {
-				std::cout << "Boundary in edge "
-						  << "(" << vA << "," << vB << ") <-> " << data[i].corner << std::endl;
-				std::cout << "    corners:"
-						  << "(" << next_corner << ", " << prev_corner << ")" << endl;
-				std::cout << "    "
-						  << vertices[vA].x << ","
-						  << vertices[vA].y << ","
-						  << vertices[vA].z << std::endl;
-				std::cout << "    "
-						  << vertices[vB].x << ","
-						  << vertices[vB].y << ","
-						  << vertices[vB].z << std::endl;
-			}
 		}
-	}
-	if (not make_missing_opposites and boundary.size() > 0) {
-		std::cerr << "Warning: this mesh contains boundary(ies)" << std::endl;
 	}
 
 	#if defined (DEBUG)
 	bool sane = true;
 	size_t i = 0;
 	while (i < opposite_corners.size() and sane) {
-		if (opposite_corners[i] != minus_infty) {
+		if (opposite_corners[i] != -1) {
 			int o = opposite_corners[i];
 			int c = opposite_corners[o];
 			/* we must have
@@ -365,66 +346,64 @@ void TriangleMesh::make_neighbourhood_data(bool make_missing_opposites) {
 	assert( sane );
 	#endif
 
-	if (make_missing_opposites) {
-		// -- Fill in missing opposites --
-		// now that we know the boundary edges it
-		// is time to compute the missing opposites
+	// -- Fill in missing opposites --
+	// now that we know the boundary edges it
+	// is time to compute the missing opposites
 
-		// try to iterate in counterclockwise order and
-		// in clockwise order the one-ring neighbourhood
-		// of all boundary vertices
+	// try to iterate in counterclockwise order and
+	// in clockwise order the one-ring neighbourhood
+	// of all boundary vertices
 
-		auto next_corner = [](int c) -> int {return 3*(c/3) + (c + 1)%3;};
-		auto prev_corner = [](int c) -> int {return 3*(c/3) + (c + 2)%3;};
+	auto next_corner = [](int c) -> int {return 3*(c/3) + (c + 1)%3;};
+	auto prev_corner = [](int c) -> int {return 3*(c/3) + (c + 2)%3;};
 
-		// temporary vector to find opposites
-		vector<int> temp_opposite(triangles.size(), minus_infty);
+	// temporary vector to find opposites
+	vector<int> temp_opposite(triangles.size(), -1);
 
-		for (int bv : boundary_vertices) {
-			int c = corners[bv];
-			bool terminate = false;
+	for (int bv : boundary_vertices) {
+		int c = corners[bv];
+		bool terminate = false;
 
-			int last_counterclockwise;
-			int last_clockwise;
+		int last_counterclockwise;
+		int last_clockwise;
 
-			// iterate in counterclockwise order
-			int cc = c;
-			while (not terminate) {
-				int ncc = next_corner(cc);
-				int o = opposite_corners[ncc];
-				if (o == minus_infty) {
-					last_counterclockwise = ncc;
-					terminate = true;
-				}
-				else {
-					cc = next_corner(o);
-				}
+		// iterate in counterclockwise order
+		int cc = c;
+		while (not terminate) {
+			int ncc = next_corner(cc);
+			int o = opposite_corners[ncc];
+			if (o == -1) {
+				last_counterclockwise = ncc;
+				terminate = true;
 			}
-
-			// iterate in clockwise order
-			terminate = false;
-			while (not terminate) {
-				int ncc = prev_corner(cc);
-				int o = opposite_corners[ncc];
-				if (o == minus_infty) {
-					last_clockwise = ncc;
-					terminate = true;
-				}
-				else {
-					cc = prev_corner(o);
-				}
+			else {
+				cc = next_corner(o);
 			}
-
-			// store the opposite information before
-			// finishing the whole algorithm
-			temp_opposite[ last_counterclockwise ] = last_clockwise;
 		}
 
-		// store missing opposites
-		for (size_t i = 0; i < triangles.size(); ++i) {
-			if (temp_opposite[i] != minus_infty) {
-				opposite_corners[i] = -temp_opposite[i];
+		// iterate in clockwise order
+		terminate = false;
+		while (not terminate) {
+			int ncc = prev_corner(cc);
+			int o = opposite_corners[ncc];
+			if (o == -1) {
+				last_clockwise = ncc;
+				terminate = true;
 			}
+			else {
+				cc = prev_corner(o);
+			}
+		}
+
+		// store the opposite information before
+		// finishing the whole algorithm
+		temp_opposite[ last_counterclockwise ] = last_clockwise;
+	}
+
+	// store missing opposites
+	for (size_t i = 0; i < triangles.size(); ++i) {
+		if (temp_opposite[i] != -1) {
+			opposite_corners[i] = -temp_opposite[i];
 		}
 	}
 
