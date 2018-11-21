@@ -2,6 +2,7 @@
 
 // C++ includes
 #include <iostream>
+#include <numeric>
 using namespace std;
 
 // Qt includes
@@ -11,6 +12,7 @@ using namespace std;
 
 // geoproc includes
 #include <geoproc/smoothing/local.hpp>
+#include <geoproc/smoothing/global.hpp>
 #include <geoproc/filter_frequencies/band_frequencies.hpp>
 
 // OTHERS
@@ -64,7 +66,14 @@ void TwinGLWidget::mouseMoveEvent(QMouseEvent *event) {
 
 TwinGLWidget::TwinGLWidget(QWidget *parent) : GLWidget(parent) {
 	op = smoothing::smooth_operator::Laplacian;
+	wt = smoothing::smooth_weight::uniform;
 	twin = nullptr;
+
+	nit = 0;
+	lambda = 0.0f;
+	mu = 0.0f;
+
+	perc_fix_vertices = 0.0f;
 }
 
 TwinGLWidget::~TwinGLWidget() {
@@ -97,6 +106,10 @@ void TwinGLWidget::set_lambda(float l) {
 	mu = 1.0f/(0.1f - 1.0f/lambda);
 }
 
+void TwinGLWidget::set_perc_fixed_vertices(float p) {
+	perc_fix_vertices = p;
+}
+
 void TwinGLWidget::set_smooth_operator(const smoothing::smooth_operator& o) {
 	op = o;
 }
@@ -107,11 +120,11 @@ void TwinGLWidget::set_smooth_weight_type(const smoothing::smooth_weight& w) {
 
 // OTHERS
 
-void TwinGLWidget::run_smoothing_algorithm() {
+void TwinGLWidget::run_local_smoothing_algorithm() {
 	mesh.make_neighbourhood_data();
 	mesh.make_angles_area();
 
-	cout << "Smooth with:." << endl;
+	cout << "Local smooth with:" << endl;
 	cout << "    operator ";
 	if (op == smoothing::smooth_operator::Laplacian) {
 		cout << "'Laplacian'";
@@ -121,6 +134,14 @@ void TwinGLWidget::run_smoothing_algorithm() {
 	}
 	else if (op == smoothing::smooth_operator::TaubinLM) {
 		cout << "'Taubin'";
+	}
+	cout << endl;
+	cout << "    weight type ";
+	if (wt == smoothing::smooth_weight::uniform) {
+		cout << "'uniform'";
+	}
+	else if (wt == smoothing::smooth_weight::cotangent) {
+		cout << "'cotangent'";
 	}
 	cout << endl;
 	cout << "    lambda: " << lambda << endl;
@@ -137,6 +158,80 @@ void TwinGLWidget::run_smoothing_algorithm() {
 	else if (op == smoothing::smooth_operator::TaubinLM) {
 		smoothing::local::TaubinLM(wt, lambda, nit, nt, mesh);
 	}
+	timing::time_point end = timing::now();
+
+	mesh.make_normal_vectors();
+
+	// output execution time
+	cout << "    in "
+		 << timing::elapsed_seconds(begin,end)
+		 << " seconds." << endl;
+
+	if (current_curv_display != curv_type::none) {
+		compute_curvature();
+	}
+
+	// update mesh
+	if (current_curv_display != curv_type::none) {
+
+		// show curvature already has
+		// makeCurrent() .. doneCurrent()
+		show_curvature(false, true);
+	}
+	else {
+		makeCurrent();
+		mesh.make_vertices_normals_buffers(program);
+		doneCurrent();
+	}
+	update();
+}
+
+void TwinGLWidget::run_global_smoothing_algorithm() {
+	mesh.make_neighbourhood_data();
+	mesh.make_angles_area();
+
+	cout << "Global smooth with:" << endl;
+	cout << "    operator ";
+	if (op == smoothing::smooth_operator::Laplacian) {
+		cout << "'Laplacian'";
+	}
+	else if (op == smoothing::smooth_operator::BiLaplacian) {
+		cout << "'biLaplacian'";
+	}
+	else if (op == smoothing::smooth_operator::TaubinLM) {
+		cout << "'Taubin'";
+	}
+	cout << endl;
+	cout << "    weight type ";
+	if (wt == smoothing::smooth_weight::uniform) {
+		cout << "'uniform'";
+	}
+	else if (wt == smoothing::smooth_weight::cotangent) {
+		cout << "'cotangent'";
+	}
+	cout << endl;
+	cout << "    percentage: " << perc_fix_vertices << endl;
+
+	int N = mesh.n_vertices();
+	vector<int> indices(N);
+	iota(indices.begin(), indices.end(), 0);
+	int max_idx = N - 1;
+
+	cout << "    Fixing vertices..." << endl;
+
+	vector<bool> constant(N, false);
+	while ((100.0f*(N - max_idx - 1))/N < perc_fix_vertices) {
+		int i = rand()%(max_idx + 1);
+		constant[i] = true;
+
+		swap( indices[i], indices[max_idx] );
+		--max_idx;
+	}
+
+	cout << "    Run global smooth algorithm..." << endl;
+
+	timing::time_point begin = timing::now();
+	smoothing::global::partial_smooth(op, wt, constant, mesh);
 	timing::time_point end = timing::now();
 
 	mesh.make_normal_vectors();

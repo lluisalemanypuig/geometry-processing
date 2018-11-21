@@ -17,7 +17,9 @@ class MainWindow : public QMainWindow {
 		void change_poly_mode();
 		void change_curvature();
 		void change_curvature_prop_display(float p);
-		void set_Smooth_params();
+
+		void set_local_smooth_params();
+		void set_global_smooth_params();
 
 	private slots:
 
@@ -40,7 +42,8 @@ class MainWindow : public QMainWindow {
 		void on_RBNoCurvature_toggled(bool checked);
 
 		/* Smoothing */
-		void on_PB_RunSmooth_clicked();
+		void on_PB_RunLocalSmooth_clicked();
+		void on_PB_RunGlobalSmooth_clicked();
 		void on_PB_ResetDualView_clicked();
 
 		/* Band frequencies */

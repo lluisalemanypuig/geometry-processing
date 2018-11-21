@@ -21,6 +21,8 @@ class TwinGLWidget : public GLWidget {
 		float lambda;
 		float mu;
 
+		float perc_fix_vertices;
+
 		void mousePressEvent(QMouseEvent *event);
 		void mouseMoveEvent(QMouseEvent *event);
 
@@ -37,11 +39,13 @@ class TwinGLWidget : public GLWidget {
 
 		void set_n_iterations(size_t n);
 		void set_lambda(float l);
+		void set_perc_fixed_vertices(float p);
 		void set_smooth_operator(const smoothing::smooth_operator& o);
 		void set_smooth_weight_type(const smoothing::smooth_weight& w);
 
 		// OTHERS
 
-		void run_smoothing_algorithm();
+		void run_local_smoothing_algorithm();
+		void run_global_smoothing_algorithm();
 		void run_band_frequencies(const QJsonDocument& doc);
 };

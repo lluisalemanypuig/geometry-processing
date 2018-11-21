@@ -49,8 +49,8 @@ void MainWindow::change_curvature_prop_display(float p) {
 	}
 }
 
-void MainWindow::set_Smooth_params() {
-	const QString& smooth_operator = ui->smooth_CB_operators->currentText();
+void MainWindow::set_local_smooth_params() {
+	const QString& smooth_operator = ui->local_smooth_CB_operators->currentText();
 	if (smooth_operator == "Laplacian") {
 		ui->DualView_RightRenderer->set_smooth_operator(
 			smoothing::smooth_operator::Laplacian
@@ -71,7 +71,7 @@ void MainWindow::set_Smooth_params() {
 			 << smooth_operator.toStdString() << "' not recognised." << endl;
 	}
 
-	const QString& weight_type = ui->smooth_CB_weight_type->currentText();
+	const QString& weight_type = ui->local_smooth_CB_weight_type->currentText();
 	if (weight_type == "Uniform") {
 		ui->DualView_RightRenderer->set_smooth_weight_type(
 			smoothing::smooth_weight::uniform
@@ -87,11 +87,44 @@ void MainWindow::set_Smooth_params() {
 			 << weight_type.toStdString() << "' not recognised." << endl;
 	}
 
-	size_t nit = ui->Smooth_LE_Iter->text().toInt();
-	float lambda = ui->Smooth_LE_Lambda->text().toFloat();
+	size_t nit = ui->local_smooth_LE_Iter->text().toInt();
+	float lambda = ui->local_smooth_LE_Lambda->text().toFloat();
 
 	ui->DualView_RightRenderer->set_n_iterations(nit);
 	ui->DualView_RightRenderer->set_lambda(lambda);
+}
+
+void MainWindow::set_global_smooth_params() {
+	const QString& smooth_operator = ui->global_smooth_CB_operators->currentText();
+	if (smooth_operator == "Laplacian") {
+		ui->DualView_RightRenderer->set_smooth_operator(
+			smoothing::smooth_operator::Laplacian
+		);
+	}
+	else {
+		cerr << "Error: value in combo box for smoothing operator '"
+			 << smooth_operator.toStdString() << "' not recognised." << endl;
+	}
+
+	const QString& weight_type = ui->local_smooth_CB_weight_type->currentText();
+	if (weight_type == "Uniform") {
+		ui->DualView_RightRenderer->set_smooth_weight_type(
+			smoothing::smooth_weight::uniform
+		);
+	}
+	else if (weight_type == "Cotangent") {
+		ui->DualView_RightRenderer->set_smooth_weight_type(
+			smoothing::smooth_weight::cotangent
+		);
+	}
+	else {
+		cerr << "Error: value in combo box for weight type '"
+			 << weight_type.toStdString() << "' not recognised." << endl;
+	}
+
+	float v = ui->global_smooth_slider->value();
+	float p = 100.0f*v/ui->global_smooth_slider->maximum();
+	ui->DualView_RightRenderer->set_perc_fixed_vertices(p);
 }
 
 /* Menu buttons */
@@ -232,9 +265,14 @@ void MainWindow::on_RBNoCurvature_toggled(bool checked) {
 
 /* Smoothing radio buttons */
 
-void MainWindow::on_PB_RunSmooth_clicked() {
-	set_Smooth_params();
-	ui->DualView_RightRenderer->run_smoothing_algorithm();
+void MainWindow::on_PB_RunLocalSmooth_clicked() {
+	set_local_smooth_params();
+	ui->DualView_RightRenderer->run_local_smoothing_algorithm();
+}
+
+void MainWindow::on_PB_RunGlobalSmooth_clicked() {
+	set_global_smooth_params();
+	ui->DualView_RightRenderer->run_global_smoothing_algorithm();
 }
 
 void MainWindow::on_PB_ResetDualView_clicked() {

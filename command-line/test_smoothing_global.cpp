@@ -1,6 +1,7 @@
 #include "test_geoproc.hpp"
 
 // C++ includes
+#include <numeric>
 #include <set>
 
 // geoproc includes
@@ -20,32 +21,44 @@ namespace test_geoproc {
 		cout << "        of the input mesh and of the smoothed mesh." << endl;
 		cout << "        Default: do not print." << endl;
 		cout << endl;
-		cout << "    --algorithm : choose the algorithm to evaluate" << endl;
+		cout << "    --algorithm : type of global smoothing algorithm." << endl;
+		cout << "        Allowed values:" << endl;
+		cout << "        * full" << endl;
+		cout << "        * partial" << endl;
+		cout << endl;
+		cout << "        The partial algorithm needs an extra parameter:" << endl;
+		cout << "        --percentage p : percentage of the mesh's vertices to be fixed" << endl;
+		cout << "            Default 50.0" << endl;
+		cout << endl;
+		cout << "    --operator : choose the smoothing operator" << endl;
 		cout << "        Allowed values:" << endl;
 		cout << "        * laplacian" << endl;
 		cout << "        * bilaplacian" << endl;
 		cout << endl;
-		cout << "        Parameters of each algorithm." << endl;
+		cout << "        Parameters of each operator." << endl;
 		cout << "        Unless stated otherwise, all of them are mandatory" << endl;
 		cout << "        * laplacian :" << endl;
 		cout << "            --weight-type" << endl;
 		cout << "                Allowed values:" << endl;
 		cout << "                * uniform" << endl;
 		cout << "                * cotangent" << endl;
-		cout << "        * bilaplacian :" << endl;
+		/*cout << "        * bilaplacian :" << endl;
 		cout << "            --weight-type" << endl;
 		cout << "                Allowed values:" << endl;
 		cout << "                * uniform" << endl;
-		cout << "                * cotangent" << endl;
+		cout << "                * cotangent" << endl;*/
 		cout << endl;
 	}
 
 	int test_smoothing_global(int argc, char *argv[]) {
-		const set<string> allowed_algorithms({"laplacian", "bilaplacian"});
+		const set<string> allowed_operators({"laplacian"});
+		const set<string> allowed_algorithm({"laplacian"});
 
 		string mesh_file = "none";
+		string opt = "none";
 		string alg = "none";
 		string weight_type = "none";
+		float perc = 50.0f;
 
 		bool _print = false;
 
@@ -66,8 +79,16 @@ namespace test_geoproc {
 			else if (strcmp(argv[i], "--print") == 0) {
 				_print = true;
 			}
+			else if (strcmp(argv[i], "--operator") == 0) {
+				opt = string(argv[i + 1]);
+				++i;
+			}
 			else if (strcmp(argv[i], "--algorithm") == 0) {
 				alg = string(argv[i + 1]);
+				++i;
+			}
+			else if (strcmp(argv[i], "--percentage") == 0) {
+				perc = atof(argv[i + 1]);
 				++i;
 			}
 			else if (strcmp(argv[i], "--weight-type") == 0) {
@@ -92,32 +113,34 @@ namespace test_geoproc {
 			cerr << "to see the usage" << endl;
 			return 1;
 		}
-		if (allowed_algorithms.find(alg) == allowed_algorithms.end()) {
+		if (opt == "none") {
+			cerr << "Error: operator not specified" << endl;
+			cerr << "    Use ./command-line smoothing --help" << endl;
+			cerr << "to see the usage" << endl;
+			return 1;
+		}
+		if (weight_type == "none") {
+			cerr << "Error: weight type not specified" << endl;
+			cerr << "    Use ./command-line smoothing --help" << endl;
+			cerr << "to see the usage" << endl;
+			return 1;
+		}
+		if (allowed_operators.find(opt) == allowed_operators.end()) {
+			cerr << "Error: value '" << opt << "' for operator parameter not valid" << endl;
+			cerr << "    Use ./command-line smoothing --help" << endl;
+			cerr << "to see the usage" << endl;
+			return 1;
+		}
+		if (allowed_algorithm.find(opt) == allowed_algorithm.end()) {
 			cerr << "Error: value '" << alg << "' for algorithm parameter not valid" << endl;
 			cerr << "    Use ./command-line smoothing --help" << endl;
 			cerr << "to see the usage" << endl;
 			return 1;
 		}
 
-		if (alg == "laplacian" or alg == "TaubinLM") {
-			if (weight_type == "none") {
-				cerr << "Error: weight type parameter missing" << endl;
-				cerr << "    Use ./command-line smoothing --help to see the usage" << endl;
-				return 1;
-			}
-			if (weight_type != "uniform" and weight_type != "cotangent") {
-				cerr << "Error: value '" << weight_type << "' for weight type not allowed" << endl;
-				cerr << "    Use ./command-line smoothing --help to see the usage" << endl;
-				return 1;
-			}
-		}
-
 		smoothing::smooth_operator o;
-		if (alg == "laplacian") {
+		if (opt == "laplacian") {
 			o = smoothing::smooth_operator::Laplacian;
-		}
-		else if (alg == "bilaplacian") {
-			o = smoothing::smooth_operator::BiLaplacian;
 		}
 
 		smoothing::smooth_weight w;
@@ -144,9 +167,33 @@ namespace test_geoproc {
 			}
 		}
 
-		timing::time_point begin = timing::now();
-		smoothing::global::full_smooth(o, w, mesh);
-		timing::time_point end = timing::now();
+		timing::time_point begin, end;
+
+		if (alg == "full") {
+			begin = timing::now();
+			smoothing::global::full_smooth(o, w, mesh);
+			end = timing::now();
+		}
+		else if (alg == "partial") {
+
+			int N = mesh.n_vertices();
+			vector<int> indices(N);
+			iota(indices.begin(), indices.end(), 0);
+			int max_idx = N - 1;
+
+			vector<bool> constant(N, false);
+			while ((100.0f*(N - max_idx - 1))/N < perc) {
+				int i = rand()%(max_idx + 1);
+				constant[i] = true;
+
+				swap( indices[i], indices[max_idx] );
+				--max_idx;
+			}
+
+			begin = timing::now();
+			smoothing::global::partial_smooth(o, w, constant, mesh);
+			end = timing::now();
+		}
 
 		cout << "Smoothed mesh globally in "
 			 << timing::elapsed_milliseconds(begin,end)
