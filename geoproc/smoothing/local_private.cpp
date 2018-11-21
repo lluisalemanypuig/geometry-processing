@@ -21,7 +21,7 @@ namespace local_private {
 	/* UNIFORM */
 
 	void make_uniform_weights
-	(int vi, const TriangleMesh& m,float *pv_ws)
+	(int vi, const TriangleMesh& m, float *pv_ws)
 	{
 		assert(pv_ws != nullptr);
 
@@ -82,15 +82,11 @@ namespace local_private {
 	float cotan(float a) { return std::cos(a)/std::sin(a); }
 
 	void make_cotangent_weights
-	(int vi, const TriangleMesh& m, const glm::vec3 *verts, float *pv_ws)
+	(int vi, const TriangleMesh& m, float *pv_ws)
 	{
-		assert(verts != nullptr);
 		assert(pv_ws != nullptr);
 
-		// set contents of pv_ws to null
-		for (int j = 0; j < m.n_vertices(); ++j) {
-			pv_ws[j] = 0;
-		}
+		const glm::vec3 *verts = &m.get_vertices()[0];
 
 		iterators::vertex::vertex_face_iterator it(m);
 		const int first = it.init(vi);

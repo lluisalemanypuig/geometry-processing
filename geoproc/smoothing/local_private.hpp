@@ -55,13 +55,11 @@ namespace local_private {
 	 * the valence of vertex @e vi (the number of neighbours in its one-ring).
 	 * @param vi Valid vertex index.
 	 * @param m Mesh to be iterated.
-	 * @param verts Use the coordinates of the vertices in this
-	 * vector instead of the vertices in the mesh.
 	 * @param[out] pv_ws Weights per vertex. Non-neighbours of @e vi are guaranteed
 	 * to have null weight.
 	 */
 	void make_cotangent_weights
-	(int vi, const TriangleMesh& m, const glm::vec3 *verts, float *pv_ws);
+	(int vi, const TriangleMesh& m, float *pv_ws);
 
 	/**
 	 * @brief Computes the sum corresponding to cotangent weights.

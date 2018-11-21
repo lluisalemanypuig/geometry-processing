@@ -39,7 +39,8 @@ namespace curvature {
 
 		// loop variables
 		vec3 diff;
-		float alpha, beta;
+		float alpha = 0.0f;
+		float beta = 0.0f;
 		do {
 			int i1,j1,k1, i2,j2,k2;
 			m.get_vertices_triangle(next1, i1,j1,k1);
@@ -142,7 +143,8 @@ namespace curvature {
 		const int N = mesh.n_vertices();
 		Kh.resize(N);
 
-		float mm, MM;
+		float mm = std::numeric_limits<float>::max();
+		float MM = -mm;
 
 		#pragma omp parallel for num_threads(nt) reduction(min:mm) reduction(max:MM)
 		for (int i = 0; i < N; ++i) {

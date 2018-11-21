@@ -172,7 +172,8 @@ namespace curvature {
 		const int N = mesh.n_vertices();
 		Kg = vector<float>(N, 0.0f);
 
-		float mm, MM;
+		float mm = std::numeric_limits<float>::max();
+		float MM = -mm;
 
 		#pragma omp parallel for num_threads(nt) reduction(min:mm) reduction(max:MM)
 		for (int i = 0; i < N; ++i) {
