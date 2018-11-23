@@ -72,14 +72,14 @@ namespace global {
 				A.coeffRef(3*i + 2, 3*i + 2) = -1.0f;
 			}
 		}
-		A.makeCompressed();
+		//A.makeCompressed();
 
 		/* build independent term vector */
 		SparseMatrixf b(3*N, 1);
 		for (int i = 0; i < 3*N; ++i) {
 			b.insert(i, 0) = 0.0f;
 		}
-		b.makeCompressed();
+		//b.makeCompressed();
 
 		/* solve system of linear equations */
 		Eigen::SimplicialLDLT<SparseMatrixf> SimpChol;
@@ -147,6 +147,10 @@ namespace global {
 		const int variable = N - n_constant;
 
 		cout << "    Building system matrix..." << endl;
+		cout << "        # mesh vertices: " << N << endl;
+		cout << "        # constant vertices: " << n_constant << endl;
+		cout << "        # variable vertices: " << variable << endl;
+		cout << "        dimensions: " << 3*variable << "x" << 3*variable << endl;
 
 		/* build system matrix */
 		SparseMatrixf A(3*variable, 3*variable);
@@ -171,6 +175,7 @@ namespace global {
 
 			++row_it;
 		}
+		cout << "        Compress matrix..." << endl;
 		A.makeCompressed();
 
 		cout << "    Building independent term vector..." << endl;
@@ -195,7 +200,7 @@ namespace global {
 
 			++row_it;
 		}
-		b.makeCompressed();
+		//b.makeCompressed();
 
 		cout << "    Solving system..." << endl;
 

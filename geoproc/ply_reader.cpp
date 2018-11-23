@@ -48,9 +48,11 @@ namespace PLY_reader {
 			return false;
 		}
 
+		#if defined(DEBUG)
 		cout << "        PLY_reader: triangle mesh has:" << endl;
 		cout << "            Vertices = " << n_verts << endl;
 		cout << "            Faces = " << n_faces << endl;
+		#endif
 		return true;
 	}
 
@@ -163,7 +165,10 @@ namespace PLY_reader {
 		ifstream fin;
 		int n_verts, n_faces;
 
+		#if defined(DEBUG)
 		cout << "    PLY_reader: opening file '" << filename << "'..." << endl;
+		#endif
+
 		fin.open(filename.c_str(), ios_base::in | ios_base::binary);
 		if (not fin.is_open()) {
 			cerr << "    PLY_reader::read_mesh - Error:" << endl;
@@ -171,7 +176,10 @@ namespace PLY_reader {
 			return false;
 		}
 
+		#if defined(DEBUG)
 		cout << "    PLY_reader: reading header..." << endl;
+		#endif
+
 		string format;
 		bool header_read = __load_header(fin, n_verts, n_faces, format);
 		if (not header_read) {
@@ -187,25 +195,45 @@ namespace PLY_reader {
 		// Load the vertices and the faces from the ply file.
 		// Call the appropriate functions depending on the format.
 		if (format == "binary_little_endian 1.0") {
+			#if defined(DEBUG)
 			cout << "    PLY_reader: loading vertices..." << endl;
+			#endif
+
 			__load_vertices_binary_le_1_0(fin, n_verts, plyVertices);
+
+			#if defined(DEBUG)
 			cout << "    PLY_reader: loading faces..." << endl;
+			#endif
+
 			__load_faces_binary_le_1_0(fin, n_faces, plyTriangles);
 		}
 		else if (format == "ascii 1.0") {
+			#if defined(DEBUG)
 			cout << "    PLY_reader: loading vertices..." << endl;
+			#endif
+
 			__load_vertices_ascii_1_0(fin, n_verts, plyVertices);
+
+			#if defined(DEBUG)
 			cout << "    PLY_reader: loading faces..." << endl;
+			#endif
+
 			__load_faces_ascii_1_0(fin, n_faces, plyTriangles);
 		}
 
 		fin.close();
 
 		// build the TriangleMesh object
+		#if defined(DEBUG)
 		cout << "    PLY_reader: building triangle mesh..." << endl;
+		#endif
+
 		__add_model_to_mesh(plyVertices, plyTriangles, mesh);
 
+		#if defined(DEBUG)
 		cout << "    PLY_reader: triangle mesh built succesfully." << endl;
+		#endif
+
 		return true;
 	}
 

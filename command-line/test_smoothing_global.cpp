@@ -138,19 +138,29 @@ namespace test_geoproc {
 			return 1;
 		}
 
+		cout << "Smooth globally (" << alg << "):" << endl;
+		cout << "    with operator: ";
+
 		smoothing::smooth_operator o;
 		if (opt == "laplacian") {
 			o = smoothing::smooth_operator::Laplacian;
+			cout << "Laplacian";
 		}
+		cout << endl;
 
+		cout << "    with ";
 		smoothing::smooth_weight w;
-		if (weight_type != "none") {
-			if (weight_type == "uniform") {
-				w = smoothing::smooth_weight::uniform;
-			}
-			else if (weight_type == "cotangent") {
-				w = smoothing::smooth_weight::cotangent;
-			}
+		if (weight_type == "uniform") {
+			w = smoothing::smooth_weight::uniform;
+			cout << "uniform";
+		}
+		else if (weight_type == "cotangent") {
+			w = smoothing::smooth_weight::cotangent;
+			cout << "cotangent";
+		}
+		cout << " weights" << endl;
+		if (alg == "partial") {
+			cout << "    percentage of fixed vertices: " << perc << "%" << endl;
 		}
 
 		TriangleMesh mesh;
@@ -184,7 +194,7 @@ namespace test_geoproc {
 			vector<bool> constant(N, false);
 			while ((100.0f*(N - max_idx - 1))/N < perc) {
 				int i = rand()%(max_idx + 1);
-				constant[i] = true;
+				constant[indices[i]] = true;
 
 				swap( indices[i], indices[max_idx] );
 				--max_idx;
