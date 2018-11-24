@@ -148,8 +148,7 @@ namespace min_max {
 		// and minimum values
 
 		size_t nbins;
-		if (dmax - dmin <= 10.0f)			{ nbins = 1; }
-		else if (dmax - dmin <= 100.0f)		{ nbins = 10; }
+		if (dmax - dmin <= 100.0f)			{ nbins = 100; }
 		else if (dmax - dmin <= 1000.0f)	{ nbins = 100; }
 		else if (dmax - dmin <= 10000.0f)	{ nbins = 1000; }
 		else if (dmax - dmin <= 100000.0f)	{ nbins = 10000; }
@@ -168,6 +167,8 @@ namespace min_max {
 		// allocate and initialise memory for bins
 		int *bins = static_cast<int *>(malloc((nbins + 1)*sizeof(int)));
 
+		int left, right;
+
 		int count;
 		size_t num_steps = 0;
 		float current_prop, err;
@@ -181,7 +182,6 @@ namespace min_max {
 
 			// find the left and right bins so that the collection
 			// of values between them
-			int left, right;
 			count = find_left_right
 				(bins, inbins, ndata, prop, start_at, left, right);
 
