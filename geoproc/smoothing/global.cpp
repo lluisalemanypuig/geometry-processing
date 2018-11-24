@@ -68,6 +68,15 @@ namespace global {
 
 		const int variable = N - n_constant;
 
+		#if defined (DEBUG)
+		cout << "    Global smoothing info:" << endl;
+		cout << "    -> Total vertices: " << N << endl;
+		cout << "    -> Constant vertices: " << n_constant << endl;
+		cout << "    -> Variable vertices: " << variable << endl;
+		cout << endl;
+		cout << "    Building system matrix" << endl;
+		#endif
+
 		/* build system matrix */
 		MatrixXf A(variable, variable);
 		int row_it = 0;
@@ -89,6 +98,10 @@ namespace global {
 
 			++row_it;
 		}
+
+		#if defined (DEBUG)
+		cout << "    Building vectors" << endl;
+		#endif
 
 		/* build independent term vector */
 		VectorXf bX(variable);
@@ -114,24 +127,46 @@ namespace global {
 			++row_it;
 		}
 
+		#if defined (DEBUG)
+		cout << "    Transpose of system matrix" << endl;
+		#endif
+
 		MatrixXf At = A.transpose();
+
+		#if defined (DEBUG)
+		cout << "    LDLT decomposition of system matrix" << endl;
+		#endif
+
 		auto ldlt = (At*A).ldlt();
+
+		#if defined (DEBUG)
+		cout << "    Solving for:" << endl;
+		cout << "        x" << endl;
+		#endif
+
 		VectorXf X = ldlt.solve(At*bX);
+
+		#if defined (DEBUG)
+		cout << "        y" << endl;
+		#endif
+
 		VectorXf Y = ldlt.solve(At*bY);
+
+		#if defined (DEBUG)
+		cout << "        z" << endl;
+		#endif
+
 		VectorXf Z = ldlt.solve(At*bZ);
 
-		vector<float> coords(3*N, 0.0f);
+		#if defined (DEBUG)
+		cout << "    Building vertices" << endl;
+		#endif
+
+		vector<glm::vec3> coords = m.get_vertices();
 		int fixed_it = 0;
 		for (int i = 0; i < N; ++i) {
-			if (constant[i]) {
-				coords[3*i    ] = m.get_vertex(i).x;
-				coords[3*i + 1] = m.get_vertex(i).y;
-				coords[3*i + 2] = m.get_vertex(i).z;
-			}
-			else {
-				coords[3*i    ] = X(fixed_it);
-				coords[3*i + 1] = Y(fixed_it);
-				coords[3*i + 2] = Z(fixed_it);
+			if (not constant[i]) {
+				coords[i] = glm::vec3( X(fixed_it), Y(fixed_it), Z(fixed_it) );
 				++fixed_it;
 			}
 		}
