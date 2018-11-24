@@ -214,7 +214,7 @@ void TwinGLWidget::run_global_smoothing_algorithm() {
 
 	int N = mesh.n_vertices();
 	vector<int> indices(N);
-	iota(indices.begin(), indices.end(), 0);
+	std::iota(indices.begin(), indices.end(), 0);
 	int max_idx = N - 1;
 
 	cout << "    Fixing vertices..." << endl;
@@ -222,9 +222,9 @@ void TwinGLWidget::run_global_smoothing_algorithm() {
 	vector<bool> constant(N, false);
 	while ((100.0f*(N - max_idx - 1))/N < perc_fix_vertices) {
 		int i = rand()%(max_idx + 1);
-		constant[i] = true;
+		constant[indices[i]] = true;
 
-		swap( indices[i], indices[max_idx] );
+		std::swap( indices[i], indices[max_idx] );
 		--max_idx;
 	}
 
