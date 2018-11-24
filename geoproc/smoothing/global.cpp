@@ -72,17 +72,17 @@ namespace global {
 		MatrixXf A(variable, variable);
 		int row_it = 0;
 
-		for (int _i = 0; _i < N; ++_i) {
+		for (int i = 0; i < N; ++i) {
 			// skip constant vertices
-			if (constant[_i]) { continue; }
+			if (constant[i]) { continue; }
 
 			int col_it = 0;
-			for (int _j = 0; _j < N; ++_j) {
+			for (int j = 0; j < N; ++j) {
 				// skip constant vertices
-				if (constant[_j]) { continue; }
+				if (constant[j]) { continue; }
 
 				// assign weight of non-constant vertices
-				A(row_it, col_it) = ws[_i][_j];
+				A(row_it, col_it) = ws[i][j];
 
 				++col_it;
 			}
@@ -96,31 +96,29 @@ namespace global {
 		VectorXf bZ(variable);
 		row_it = 0;
 		for (int i = 0; i < N; ++i) {
-			// skip constant vertices
+			// skip rows of constant vertices
 			if (constant[i]) { continue; }
 
-			float sum = 0.0f;
+			glm::vec3 sums(0.0f,0.0f,0.0f);
 			for (int j = 0; j < N; ++j) {
+				// if the vertex at the j-th column is constant
+				// we need to accumulate the sum
 				if (constant[j]) {
-					sum -= ws[i][j];
+					sums += ws[i][j]*m.get_vertex(j);
 				}
 			}
 
-			bX(row_it) = sum*m.get_vertex(row_it).x;
-			bY(row_it) = sum*m.get_vertex(row_it).y;
-			bZ(row_it) = sum*m.get_vertex(row_it).z;
-
+			bX(row_it) = -sums.x;
+			bY(row_it) = -sums.y;
+			bZ(row_it) = -sums.z;
 			++row_it;
 		}
 
-		auto ldlt = (A.transpose()*A).ldlt();
-		auto x = ldlt.solve(A.transpose()*bX);
-		auto y = ldlt.solve(A.transpose()*bY);
-		auto z = ldlt.solve(A.transpose()*bZ);
-
-		VectorXf X = x;
-		VectorXf Y = y;
-		VectorXf Z = z;
+		MatrixXf At = A.transpose();
+		auto ldlt = (At*A).ldlt();
+		VectorXf X = ldlt.solve(At*bX);
+		VectorXf Y = ldlt.solve(At*bY);
+		VectorXf Z = ldlt.solve(At*bZ);
 
 		vector<float> coords(3*N, 0.0f);
 		int fixed_it = 0;
