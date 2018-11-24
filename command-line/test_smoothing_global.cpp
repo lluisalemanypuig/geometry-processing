@@ -21,19 +21,14 @@ namespace test_geoproc {
 		cout << "        of the input mesh and of the smoothed mesh." << endl;
 		cout << "        Default: do not print." << endl;
 		cout << endl;
-		cout << "    --algorithm : type of global smoothing algorithm." << endl;
-		cout << "        Allowed values:" << endl;
-		cout << "        * full" << endl;
-		cout << "        * partial" << endl;
-		cout << endl;
-		cout << "        The partial algorithm needs an extra parameter:" << endl;
-		cout << "        --percentage p : percentage of the mesh's vertices to be fixed" << endl;
-		cout << "            Default 50.0" << endl;
+		cout << "    --percentage p : percentage of the mesh's vertices to be fixed" << endl;
+		cout << "        Default 50.0" << endl;
+		cout << "        Optional" << endl;
 		cout << endl;
 		cout << "    --operator : choose the smoothing operator" << endl;
 		cout << "        Allowed values:" << endl;
 		cout << "        * laplacian" << endl;
-		cout << "        * bilaplacian" << endl;
+		//cout << "        * bilaplacian" << endl;
 		cout << endl;
 		cout << "        Parameters of each operator." << endl;
 		cout << "        Unless stated otherwise, all of them are mandatory" << endl;
@@ -52,11 +47,9 @@ namespace test_geoproc {
 
 	int test_smoothing_global(int argc, char *argv[]) {
 		const set<string> allowed_operators({"laplacian"});
-		const set<string> allowed_algorithm({"laplacian"});
 
 		string mesh_file = "none";
 		string opt = "none";
-		string alg = "none";
 		string weight_type = "none";
 		float perc = 50.0f;
 
@@ -83,10 +76,6 @@ namespace test_geoproc {
 				opt = string(argv[i + 1]);
 				++i;
 			}
-			else if (strcmp(argv[i], "--algorithm") == 0) {
-				alg = string(argv[i + 1]);
-				++i;
-			}
 			else if (strcmp(argv[i], "--percentage") == 0) {
 				perc = atof(argv[i + 1]);
 				++i;
@@ -103,12 +92,6 @@ namespace test_geoproc {
 
 		if (mesh_file == "none") {
 			cerr << "Error: mesh file not specified" << endl;
-			cerr << "    Use ./command-line smoothing --help" << endl;
-			cerr << "to see the usage" << endl;
-			return 1;
-		}
-		if (alg == "none") {
-			cerr << "Error: algorithm not specified" << endl;
 			cerr << "    Use ./command-line smoothing --help" << endl;
 			cerr << "to see the usage" << endl;
 			return 1;
@@ -131,14 +114,8 @@ namespace test_geoproc {
 			cerr << "to see the usage" << endl;
 			return 1;
 		}
-		if (allowed_algorithm.find(opt) == allowed_algorithm.end()) {
-			cerr << "Error: value '" << alg << "' for algorithm parameter not valid" << endl;
-			cerr << "    Use ./command-line smoothing --help" << endl;
-			cerr << "to see the usage" << endl;
-			return 1;
-		}
 
-		cout << "Smooth globally (" << alg << "):" << endl;
+		cout << "Smooth globally:" << endl;
 		cout << "    with operator: ";
 
 		smoothing::smooth_operator o;
@@ -159,9 +136,7 @@ namespace test_geoproc {
 			cout << "cotangent";
 		}
 		cout << " weights" << endl;
-		if (alg == "partial") {
-			cout << "    percentage of fixed vertices: " << perc << "%" << endl;
-		}
+		cout << "    percentage of fixed vertices: " << perc << "%" << endl;
 
 		TriangleMesh mesh;
 		PLY_reader::read_mesh(mesh_file, mesh);
@@ -179,35 +154,27 @@ namespace test_geoproc {
 
 		timing::time_point begin, end;
 
-		if (alg == "full") {
-			begin = timing::now();
-			smoothing::global::full_smooth(o, w, mesh);
-			end = timing::now();
+		int N = mesh.n_vertices();
+		vector<int> indices(N);
+		iota(indices.begin(), indices.end(), 0);
+		int max_idx = N - 1;
+
+		vector<bool> constant(N, false);
+		while ((100.0f*(N - max_idx - 1))/N < perc) {
+			int i = rand()%(max_idx + 1);
+			constant[indices[i]] = true;
+
+			swap( indices[i], indices[max_idx] );
+			--max_idx;
 		}
-		else if (alg == "partial") {
 
-			int N = mesh.n_vertices();
-			vector<int> indices(N);
-			iota(indices.begin(), indices.end(), 0);
-			int max_idx = N - 1;
-
-			vector<bool> constant(N, false);
-			while ((100.0f*(N - max_idx - 1))/N < perc) {
-				int i = rand()%(max_idx + 1);
-				constant[indices[i]] = true;
-
-				swap( indices[i], indices[max_idx] );
-				--max_idx;
-			}
-
-			begin = timing::now();
-			smoothing::global::partial_smooth(o, w, constant, mesh);
-			end = timing::now();
-		}
+		begin = timing::now();
+		smoothing::global::smooth(o, w, constant, mesh);
+		end = timing::now();
 
 		cout << "Smoothed mesh globally in "
-			 << timing::elapsed_milliseconds(begin,end)
-			 << " ms" << endl;
+			 << timing::elapsed_seconds(begin,end)
+			 << " s" << endl;
 
 		if (_print) {
 			cout << "Smoothed mesh:" << endl;

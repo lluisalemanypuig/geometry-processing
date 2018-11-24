@@ -263,7 +263,24 @@ void MainWindow::on_RBNoCurvature_toggled(bool checked) {
 	}
 }
 
-/* Smoothing radio buttons */
+/* Smoothing */
+
+void MainWindow::on_global_smooth_slider_valueChanged(int value) {
+	float p = 100.0f*float(value)/ui->global_smooth_slider->maximum();
+	p = (int(p*100))/100.0f;
+	string ps = std::to_string(p);
+	if (ps.find('.') == 1) {
+		ps = "0" + ps;
+		ps = ps.substr(0,5);
+	}
+	else if (ps.find('.') == 2) {
+		ps = ps.substr(0,5);
+	}
+	else {
+		ps = ps.substr(0,6);
+	}
+	ui->gS_Label->setText(QString::fromStdString(ps));
+}
 
 void MainWindow::on_PB_RunLocalSmooth_clicked() {
 	set_local_smooth_params();

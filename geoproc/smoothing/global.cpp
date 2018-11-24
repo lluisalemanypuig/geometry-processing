@@ -18,90 +18,14 @@ using namespace glm;
 // Eigen includes
 #include <Eigen/SparseCholesky>
 #include <Eigen/Sparse>
+#include <Eigen/Dense>
+using namespace Eigen;
 
 namespace geoproc {
 namespace smoothing {
 namespace global {
 
-	typedef Eigen::SparseMatrix<float> SparseMatrixf;
-
-	bool full_smooth
-	(const smooth_operator& op, const smooth_weight& w, TriangleMesh& m)
-	{
-
-		if (op == smooth_operator::BiLaplacian) {
-			cerr << "Error: global smoothing not implemented for 'BiLaplacian' operator"
-				 << endl;
-			return false;
-		}
-		if (op == smooth_operator::TaubinLM) {
-			cerr << "Error: invalid value of smoothing operator 'TaubinLM'"
-				 << endl;
-			return false;
-		}
-
-		const int N = m.n_vertices();
-
-		/* build system matrix */
-		SparseMatrixf A(3*N, 3*N);
-		if (w == smooth_weight::uniform) {
-			for (int i = 0; i < N; ++i) {
-				vector<float> row(N, 0.0f);
-				local_private::make_uniform_weights(i, m, &row[0]);
-				for (int j = 0; j < N; ++j) {
-					A.insert(3*i    , 3*j    ) = row[j];
-					A.insert(3*i + 1, 3*j + 1) = row[j];
-					A.insert(3*i + 2, 3*j + 2) = row[j];
-				}
-				A.coeffRef(3*i    , 3*i    ) = -1.0f;
-				A.coeffRef(3*i + 1, 3*i + 1) = -1.0f;
-				A.coeffRef(3*i + 2, 3*i + 2) = -1.0f;
-			}
-		}
-		else if (w == smooth_weight::cotangent) {
-			for (int i = 0; i < N; ++i) {
-				vector<float> row(N, 0.0f);
-				local_private::make_cotangent_weights(i, m, &row[0]);
-				for (int j = 0; j < N; ++j) {
-					A.insert(3*i    , 3*j    ) = row[j];
-					A.insert(3*i + 1, 3*j + 1) = row[j];
-					A.insert(3*i + 2, 3*j + 2) = row[j];
-				}
-				A.coeffRef(3*i    , 3*i    ) = -1.0f;
-				A.coeffRef(3*i + 1, 3*i + 1) = -1.0f;
-				A.coeffRef(3*i + 2, 3*i + 2) = -1.0f;
-			}
-		}
-		//A.makeCompressed();
-
-		/* build independent term vector */
-		SparseMatrixf b(3*N, 1);
-		for (int i = 0; i < 3*N; ++i) {
-			b.insert(i, 0) = 0.0f;
-		}
-		//b.makeCompressed();
-
-		/* solve system of linear equations */
-		Eigen::SimplicialLDLT<SparseMatrixf> SimpChol;
-		SimpChol.compute(A);
-		SparseMatrixf x = SimpChol.solve(b);
-
-		/* check existence of solution and store */
-		if (SimpChol.info() != Eigen::Success) {
-			cerr << "No solution was found." << endl;
-			return false;
-		}
-
-		vector<float> coords(3*N, 0.0f);
-		for (int i = 0; i < 3*N; ++i) {
-			coords[i] = x.coeff(i, 0);
-		}
-		m.set_vertices(coords);
-
-		return true;
-	}
-
-	bool partial_smooth
+	bool smooth
 	(
 		const smooth_operator& op, const smooth_weight& w,
 		const std::vector<bool>& constant, TriangleMesh& m
@@ -122,8 +46,6 @@ namespace global {
 
 		// amount of constant vertices
 		int n_constant = 0;
-
-		cout << "    Computing weights..." << endl;
 
 		// weights for system's matrix
 		vector<vector<float> > ws(N, vector<float>(N, 0.0f));
@@ -146,14 +68,8 @@ namespace global {
 
 		const int variable = N - n_constant;
 
-		cout << "    Building system matrix..." << endl;
-		cout << "        # mesh vertices: " << N << endl;
-		cout << "        # constant vertices: " << n_constant << endl;
-		cout << "        # variable vertices: " << variable << endl;
-		cout << "        dimensions: " << 3*variable << "x" << 3*variable << endl;
-
 		/* build system matrix */
-		SparseMatrixf A(3*variable, 3*variable);
+		MatrixXf A(variable, variable);
 		int row_it = 0;
 
 		for (int _i = 0; _i < N; ++_i) {
@@ -166,22 +82,18 @@ namespace global {
 				if (constant[_j]) { continue; }
 
 				// assign weight of non-constant vertices
-				A.insert(3*row_it    , 3*col_it    ) = ws[_i][_j];
-				A.insert(3*row_it + 1, 3*col_it + 1) = ws[_i][_j];
-				A.insert(3*row_it + 2, 3*col_it + 2) = ws[_i][_j];
+				A(row_it, col_it) = ws[_i][_j];
 
 				++col_it;
 			}
 
 			++row_it;
 		}
-		cout << "        Compress matrix..." << endl;
-		A.makeCompressed();
-
-		cout << "    Building independent term vector..." << endl;
 
 		/* build independent term vector */
-		SparseMatrixf b(3*variable, 1);
+		VectorXf bX(variable);
+		VectorXf bY(variable);
+		VectorXf bZ(variable);
 		row_it = 0;
 		for (int i = 0; i < N; ++i) {
 			// skip constant vertices
@@ -194,43 +106,35 @@ namespace global {
 				}
 			}
 
-			b.insert(3*row_it    , 0) = sum*m.get_vertex(row_it).x;
-			b.insert(3*row_it + 1, 0) = sum*m.get_vertex(row_it).y;
-			b.insert(3*row_it + 2, 0) = sum*m.get_vertex(row_it).z;
+			bX(row_it) = sum*m.get_vertex(row_it).x;
+			bY(row_it) = sum*m.get_vertex(row_it).y;
+			bZ(row_it) = sum*m.get_vertex(row_it).z;
 
 			++row_it;
 		}
-		//b.makeCompressed();
 
-		cout << "    Solving system..." << endl;
+		auto ldlt = (A.transpose()*A).ldlt();
+		auto x = ldlt.solve(A.transpose()*bX);
+		auto y = ldlt.solve(A.transpose()*bY);
+		auto z = ldlt.solve(A.transpose()*bZ);
 
-		/* solve system of linear equations */
-		Eigen::SimplicialLDLT<SparseMatrixf> SimpChol;
-		SimpChol.compute(A);
-		SparseMatrixf x = SimpChol.solve(b);
-
-		/* check existence of solution and store */
-		if (SimpChol.info() != Eigen::Success) {
-			cerr << "No solution was found." << endl;
-			return false;
-		}
-
-		cout << "    Setting result..." << endl;
+		VectorXf X = x;
+		VectorXf Y = y;
+		VectorXf Z = z;
 
 		vector<float> coords(3*N, 0.0f);
-		int coord_it = 0;
-		int sol_it = 0;
-		for (int i = 0; i < N; ++i, coord_it += 3) {
+		int fixed_it = 0;
+		for (int i = 0; i < N; ++i) {
 			if (constant[i]) {
-				coords[coord_it    ] = m.get_vertex(i).x;
-				coords[coord_it + 1] = m.get_vertex(i).y;
-				coords[coord_it + 2] = m.get_vertex(i).z;
+				coords[3*i    ] = m.get_vertex(i).x;
+				coords[3*i + 1] = m.get_vertex(i).y;
+				coords[3*i + 2] = m.get_vertex(i).z;
 			}
 			else {
-				coords[coord_it    ] = x.coeff(sol_it    , 0);
-				coords[coord_it + 1] = x.coeff(sol_it + 1, 0);
-				coords[coord_it + 2] = x.coeff(sol_it + 2, 0);
-				sol_it += 3;
+				coords[3*i    ] = X(fixed_it);
+				coords[3*i + 1] = Y(fixed_it);
+				coords[3*i + 2] = Z(fixed_it);
+				++fixed_it;
 			}
 		}
 		m.set_vertices(coords);

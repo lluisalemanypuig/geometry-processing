@@ -42,6 +42,7 @@ class MainWindow : public QMainWindow {
 		void on_RBNoCurvature_toggled(bool checked);
 
 		/* Smoothing */
+		void on_global_smooth_slider_valueChanged(int value);
 		void on_PB_RunLocalSmooth_clicked();
 		void on_PB_RunGlobalSmooth_clicked();
 		void on_PB_ResetDualView_clicked();
@@ -57,7 +58,7 @@ class MainWindow : public QMainWindow {
 		/* Tab widget stuff */
 		void on_TW_View_currentChanged(int index);
 
-public:
+	public:
 		explicit MainWindow(QWidget *parent = nullptr);
 		~MainWindow();
 };

@@ -231,7 +231,7 @@ void TwinGLWidget::run_global_smoothing_algorithm() {
 	cout << "    Run global smooth algorithm..." << endl;
 
 	timing::time_point begin = timing::now();
-	smoothing::global::partial_smooth(op, wt, constant, mesh);
+	smoothing::global::smooth(op, wt, constant, mesh);
 	timing::time_point end = timing::now();
 
 	mesh.make_normal_vectors();
