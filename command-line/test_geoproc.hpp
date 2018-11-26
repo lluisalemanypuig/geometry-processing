@@ -18,6 +18,7 @@ using namespace glm;
 namespace test_geoproc {
 
 	int test_iterate(int argc, char *argv[]);
+	int test_boundaries(int argc, char *argv[]);
 	int test_curvature(int argc, char *argv[]);
 	int test_smoothing_local(int argc, char *argv[]);
 	int test_smoothing_global(int argc, char *argv[]);

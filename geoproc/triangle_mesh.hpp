@@ -8,6 +8,9 @@
 
 namespace geoproc {
 
+/// Shorthand for a pair of vertex indices.
+typedef std::pair<int,int> mesh_edge;
+
 class TriangleMesh {
 	protected:
 		/// The set of vertices of the mesh.
@@ -96,7 +99,7 @@ class TriangleMesh {
 		 */
 		std::vector<int> corners;
 		/**
-		 * @brief Hard boundary of the mesh.
+		 * @brief Boundaries of the mesh.
 		 *
 		 * The hard boundary is composed by pairs of vertices
 		 * (each identified with a vertex index).
@@ -105,8 +108,24 @@ class TriangleMesh {
 		 * of those triangles ({@e vi,@e vj,@e vk}) such that @e vk has no
 		 * opposite corner. All @e vi, @e vj, @e vk are valid corner
 		 * indices.
+		 *
+		 * Boundary vertices are collected into this container when the
+		 * neighbourhood data is made (see @ref make_neighbourhood_data).
+		 * In order to make all boundary lists call @ref make_boundaries,
+		 * which will fill the member @ref boundaries.
 		 */
-		std::vector<std::pair<int,int> > boundary;
+		std::vector<mesh_edge> boundary_edges;
+
+		/**
+		 * @brief Boundaries of this mesh.
+		 *
+		 * Call method @ref make_boundaries to have this container filled
+		 * with the appropriate data.
+		 *
+		 * This container contains as many lists of corner indices
+		 * as boundaries are in the mesh.
+		 */
+		std::vector<std::vector<int> > boundaries;
 
 		/// Minimum value of x-,y-, and z-coordinates.
 		glm::vec3 min_coord;
@@ -122,12 +141,16 @@ class TriangleMesh {
 		 * and @ref boundary valid?
 		 */
 		bool neigh_valid;
+		/// Are the boundaries of the mesh valid?
+		bool boundaries_valid;
 
 	protected:
-		/// Sets to false the attributes @ref angles_area_valid.
+		/// Sets to false the attribute @ref angles_area_valid.
 		void invalidate_areas_angles();
-		/// Sets to false the attributes @ref neigh_valid.
+		/// Sets to false the attribute @ref neigh_valid.
 		void invalidate_neighbourhood();
+		/// Sets to false the attribute @ref boundaries_valid.
+		void invalidate_boundaries();
 
 		/**
 		 * @brief Invalidates the whole state of the mesh.
@@ -142,13 +165,12 @@ class TriangleMesh {
 		 * @brief Copies mesh @e m contents into this one.
 		 *
 		 * This mesh is previously freed.
-		 * @param m
+		 * @param m Mesh to be copied.
 		 */
 		void copy_mesh(const TriangleMesh& m);
 
 		/**
 		 * @brief Assuming the vertices make a triangle, return its area.
-		 *
 		 * @param i A valid vertex index.
 		 * @param j A valid vertex index.
 		 * @param k A valid vertex index.
@@ -254,8 +276,10 @@ class TriangleMesh {
 		 * the one-ring of a vertex, ....
 		 *
 		 * Builds @ref corners and @ref opposite_corner tables.
-		 * Also, just for the sake of completeness, it computes
-		 * the boundary of the mesh in @ref boundary.
+		 * It also collects all boundary edges and stores them
+		 * in the same "boundary list" in @ref boundaries. If one
+		 * wants all boundaries as edge lists, call function
+		 * @ref make_boundaries after this one.
 		 *
 		 * This function should be called only after all
 		 * vertices and triangles have been added.
@@ -271,6 +295,15 @@ class TriangleMesh {
 		 * Fills the containers @ref angles, @ref areas
 		 */
 		void make_angles_area();
+
+		/**
+		 * @brief Computes the boundaries of this mesh.
+		 *
+		 * Fills container @ref boundaries.
+		 * @pre Neighbourhood data must have been made (see
+		 * @ref make_neighbourhood_data).
+		 */
+		void make_boundaries();
 
 		/**
 		 * @brief Frees all the memoery occupied by the mesh.
@@ -392,13 +425,29 @@ class TriangleMesh {
 		/// Returns the area of each triangle.
 		const std::vector<float>& get_areas() const;
 
-		/// Returns the angles on each triangle.
+		/**
+		 * @brief Returns the angles on each triangle.
+		 * @pre Angles and area data must be valid
+		 */
 		const std::vector<glm::vec3>& get_angles() const;
 
 		/// Is neighbourhood data valid?
 		bool are_angles_area_valid() const;
 		/// Is neighbourhood data valid?
 		bool is_neighbourhood_valid() const;
+		/// Are the boundaries valid?
+		bool are_boundaries_valid() const;
+
+		/// Returns the number of boundary edges.
+		size_t n_boundary_edges() const;
+
+		/// Returns the number of boundaries in this mesh.
+		size_t n_boundaries() const;
+
+		/// Returns the boundary edges in this mesh.
+		const std::vector<mesh_edge>& get_boundary_edges() const;
+		/// Returns the boundaries in this mesh.
+		const std::vector<std::vector<int> >& get_boundaries() const;
 
 		/**
 		 * @brief Returns the minimum and maximum coordinates.

@@ -16,7 +16,8 @@ SOURCES +=						\
     time.cpp					\
     test_band_frequencies.cpp \
     test_smoothing_local.cpp \
-    test_smoothing_global.cpp
+    test_smoothing_global.cpp \
+    test_boundaries.cpp
 
 HEADERS +=						\
     test_geoproc.hpp			\

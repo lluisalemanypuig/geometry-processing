@@ -18,6 +18,7 @@ int main(int argc, char *argv[]) {
 	if (strcmp(argv[1], "--help") == 0 or strcmp(argv[1], "-h") == 0) {
 		cout << "List of tests:" << endl;
 		cout << "    iterate" << endl;
+		cout << "    boundaries" << endl;
 		cout << "    curvature" << endl;
 		cout << "    local-smoothing" << endl;
 		cout << "    global-smoothing" << endl;
@@ -28,6 +29,10 @@ int main(int argc, char *argv[]) {
 
 	if (strcmp(argv[1], "iterate") == 0) {
 		return test_geoproc::test_iterate(argc, argv);
+	}
+
+	if (strcmp(argv[1], "boundaries") == 0) {
+		return test_geoproc::test_boundaries(argc, argv);
 	}
 
 	if (strcmp(argv[1], "curvature") == 0) {

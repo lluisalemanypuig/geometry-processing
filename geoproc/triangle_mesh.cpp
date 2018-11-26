@@ -51,7 +51,12 @@ void TriangleMesh::invalidate_neighbourhood() {
 	neigh_valid = false;
 	opposite_corners.clear();
 	corners.clear();
-	boundary.clear();
+	boundary_edges.clear();
+}
+
+void TriangleMesh::invalidate_boundaries() {
+	boundaries_valid = false;
+	boundaries.clear();
 }
 
 void TriangleMesh::invalidate_state() {
@@ -69,7 +74,7 @@ void TriangleMesh::copy_mesh(const TriangleMesh& m) {
 	normal_vectors = m.normal_vectors;
 	opposite_corners = m.opposite_corners;
 	corners = m.corners;
-	boundary = m.boundary;
+	boundaries = m.boundaries;
 
 	min_coord = m.min_coord;
 	max_coord = m.max_coord;
@@ -287,7 +292,8 @@ void TriangleMesh::make_neighbourhood_data() {
 
 	set<int> boundary_vertices;
 
-	boundary.clear();
+	boundary_edges.clear();
+
 	// For each corner edge, check that a twin exists.
 	// If so, we have found a pair of opposite corners.
 	// Notice that, by construction, twins are consecutive.
@@ -318,7 +324,7 @@ void TriangleMesh::make_neighbourhood_data() {
 			int corner = data[i].corner;
 			int next_corner = 3*(corner/3) + (corner + 1)%3;
 			int prev_corner = 3*(corner/3) + (corner + 2)%3;
-			boundary.push_back( std::make_pair( next_corner, prev_corner) );
+			boundary_edges.push_back( std::make_pair( next_corner, prev_corner) );
 
 			boundary_vertices.insert(vA);
 			boundary_vertices.insert(vB);
@@ -409,6 +415,8 @@ void TriangleMesh::make_neighbourhood_data() {
 
 	// validate neighbourhood data
 	neigh_valid = true;
+	// boundaries are not valid
+	invalidate_boundaries();
 }
 
 void TriangleMesh::make_angles_area() {
@@ -457,12 +465,105 @@ void TriangleMesh::make_angles_area() {
 	angles_area_valid = true;
 }
 
+#define edge_vertices(ev, cp)				\
+	ev.first = get_vertex_corner(cp.first);	\
+	ev.second = get_vertex_corner(cp.second)
+
+void TriangleMesh::make_boundaries() {
+	assert(neigh_valid);
+
+	if (boundaries_valid) {
+		return;
+	}
+
+	// vector to avoid redundant computations
+	vector<bool> visited(boundary_edges.size(), false);
+	// for each boundary edge in the mesh...
+	for (size_t i = 0; i < boundary_edges.size(); ++i) {
+		if (visited[i]) { continue; }
+
+		// corner and vertex pair
+		const mesh_edge& ci = boundary_edges[i];
+		mesh_edge vi;
+		edge_vertices(vi,ci);
+
+		// find the boundary starting at i-th edge
+		visited[i] = true;
+		boundaries.push_back(vector<int>());
+		boundaries.back().push_back(vi.first);
+
+		size_t j;
+		int next_corner = ci.second;
+		int next_vertex = vi.second;
+		do {
+			// find a boundary edge that shares
+			// a vertex with i-th edge. Let i-th
+			// edge be (u,v)
+
+			// add_corner is the corner that is not shared
+			// with i-th edge: if j-th edge is (u,x) then
+			//		add_corner = corner of x
+
+			int add_corner = -1;
+			bool found = false;
+			j = i + 1;
+			while (not found and j < boundary_edges.size()) {
+				if (visited[j]) { ++j; continue; }
+
+				// corner and vertex pair
+				const mesh_edge& cj = boundary_edges[j];
+				mesh_edge vj;
+				edge_vertices(vj,cj);
+
+				if (vj.first == next_vertex) {
+					add_corner = next_corner;
+					next_corner = cj.second;
+					next_vertex = vj.second;
+					visited[j] = true;
+					found = true;
+				}
+				else if (vj.second == next_vertex) {
+					add_corner = next_corner;
+					next_corner = cj.first;
+					next_vertex = vj.first;
+					visited[j] = true;
+					found = true;
+				}
+				++j;
+			}
+
+			if (add_corner == -1) {
+				if (vi.first == next_vertex) {
+					add_corner = next_corner;
+					next_corner = ci.second;
+					next_vertex = vi.second;
+				}
+				else if (vi.second == next_vertex) {
+					add_corner = next_corner;
+					next_corner = ci.first;
+					next_vertex = vi.first;
+				}
+			}
+
+			// if add_vertex is -1 then it means that we
+			// could not find another edge to continue the
+			// boundary. Therefore, we can't close it.
+			assert(add_corner != -1);
+
+			boundaries.back().push_back(add_corner);
+		}
+		while (next_vertex != vi.first);
+	}
+
+	boundaries_valid = true;
+}
+
 void TriangleMesh::destroy() {
 	vertices.clear();
 	triangles.clear();
 	opposite_corners.clear();
 	corners.clear();
-	boundary.clear();
+	boundaries.clear();
 	angles.clear();
 	areas.clear();
 
@@ -569,6 +670,26 @@ bool TriangleMesh::are_angles_area_valid() const {
 
 bool TriangleMesh::is_neighbourhood_valid() const {
 	return neigh_valid;
+}
+
+bool TriangleMesh::are_boundaries_valid() const {
+	return boundaries_valid;
+}
+
+size_t TriangleMesh::n_boundary_edges() const {
+	return boundary_edges.size();
+}
+
+size_t TriangleMesh::n_boundaries() const {
+	return boundaries.size();
+}
+
+const std::vector<mesh_edge>& TriangleMesh::get_boundary_edges() const {
+	return boundary_edges;
+}
+
+const std::vector<std::vector<int> >& TriangleMesh::get_boundaries() const {
+	return boundaries;
 }
 
 void TriangleMesh::get_min_max_coordinates(glm::vec3& m, glm::vec3& M) const {
