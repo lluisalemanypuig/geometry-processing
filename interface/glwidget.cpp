@@ -186,7 +186,10 @@ void GLWidget::paintGL() {
 
 	program->bind();
 	if (pm == polymode::wireframe) {
-		//program->setUniformValue("wireframe", true);
+		/* Note to self: setting the uniforms here is necessary
+		 * for a correct display of curvature values, wireframe
+		 * mode, ...
+		 */
 
 		// 'fill' the triangles with white
 		program->setUniformValue("curvature", false);
@@ -205,20 +208,7 @@ void GLWidget::paintGL() {
 		mesh.render(*this);
 	}
 	else if (pm == polymode::solid) {
-		//program->setUniformValue("wireframe", false);
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-		if (current_curv_display == curv_type::none) {
-			// display with a flat color since there
-			// is no curvature to be displayed
-			//program->setUniformValue("color", QVector4D(0.75f, 0.8f, 0.9f, 1.0f));
-			mesh.render(*this);
-		}
-		else {
-			// display with curvature color
-			//program->setUniformValue("curvature", true);
-			mesh.render(*this);
-		}
+		mesh.render(*this);
 	}
 	else if (pm == polymode::reflection_lines) {
 		mesh.render(*this);
