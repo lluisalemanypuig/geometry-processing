@@ -21,7 +21,8 @@ HEADERS += \
     filter_frequencies/band_frequencies.hpp \
     smoothing/local.hpp \
     smoothing/local_private.hpp \
-    smoothing/global.hpp
+    smoothing/global.hpp \
+    parametrisation/parametrisation.hpp
 
 SOURCES += \
 	ply_reader.cpp \
@@ -33,7 +34,8 @@ SOURCES += \
     filter_frequencies/band_frequencies.cpp \
     smoothing/local.cpp \
     smoothing/local_private.cpp \
-    smoothing/global.cpp
+    smoothing/global.cpp \
+    parametrisation/parametrisation.cpp
 
 # self-includes
 INCLUDEPATH += ..
