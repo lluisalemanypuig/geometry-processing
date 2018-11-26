@@ -50,18 +50,26 @@ void MainWindow::change_curvature_prop_display(float p) {
 	}
 }
 
-void MainWindow::enable_curvature_slider() {
+void MainWindow::enable_curvature() {
 	polymode pm = ui->SingleView_Renderer->get_polygon_mode();
 	curv_type ct = ui->SingleView_Renderer->get_curvature_display();
 
 	if (pm == polymode::reflection_lines) {
 		ui->VE_PropCurvValues->setEnabled(false);
-	}
-	else if (ct == curv_type::none) {
-		ui->VE_PropCurvValues->setEnabled(false);
+		ui->RBCurvatureG->setEnabled(false);
+		ui->RBCurvatureH->setEnabled(false);
+		ui->RBNoCurvature->setEnabled(false);
 	}
 	else {
-		ui->VE_PropCurvValues->setEnabled(true);
+		if (ct == curv_type::none) {
+			ui->VE_PropCurvValues->setEnabled(false);
+		}
+		else {
+			ui->VE_PropCurvValues->setEnabled(true);
+		}
+		ui->RBCurvatureG->setEnabled(true);
+		ui->RBCurvatureH->setEnabled(true);
+		ui->RBNoCurvature->setEnabled(true);
 	}
 }
 
@@ -177,7 +185,7 @@ void MainWindow::on_CBSolid_toggled(bool toggled) {
 		change_poly_mode();
 
 		// we may need to enable/disable things
-		enable_curvature_slider();
+		enable_curvature();
 	}
 }
 
@@ -189,7 +197,7 @@ void MainWindow::on_CBWireframe_toggled(bool toggled) {
 		change_poly_mode();
 
 		// we may need to enable/disable things
-		enable_curvature_slider();
+		enable_curvature();
 	}
 }
 
@@ -201,7 +209,7 @@ void MainWindow::on_CBRefLines_toggled(bool toggled) {
 		change_poly_mode();
 
 		// we may need to enable/disable things
-		enable_curvature_slider();
+		enable_curvature();
 	}
 }
 
@@ -268,7 +276,7 @@ void MainWindow::on_RBCurvatureG_toggled(bool checked) {
 		change_curvature();
 
 		// we may need to enable/disable things
-		enable_curvature_slider();
+		enable_curvature();
 	}
 }
 
@@ -281,7 +289,7 @@ void MainWindow::on_RBCurvatureH_toggled(bool checked) {
 		change_curvature();
 
 		// we may need to enable/disable things
-		enable_curvature_slider();
+		enable_curvature();
 	}
 }
 
@@ -293,7 +301,7 @@ void MainWindow::on_RBNoCurvature_toggled(bool checked) {
 		change_curvature();
 
 		// we may need to enable/disable things
-		enable_curvature_slider();
+		enable_curvature();
 	}
 }
 
