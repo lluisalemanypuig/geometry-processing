@@ -17,6 +17,7 @@ class MainWindow : public QMainWindow {
 		void change_poly_mode();
 		void change_curvature();
 		void change_curvature_prop_display(float p);
+		void enable_curvature_slider();
 
 		void set_local_smooth_params();
 		void set_global_smooth_params();

@@ -156,6 +156,7 @@ void GLWidget::initializeGL() {
 	load_shader();
 
 	program->bind();
+	program->setUniformValue("color", QVector4D(0.75f, 0.8f, 0.9f, 1.0f));
 	mesh.build_cube();
 	mesh.scale_to_unit();
 	mesh.make_neighbourhood_data();
@@ -185,7 +186,7 @@ void GLWidget::paintGL() {
 
 	program->bind();
 	if (pm == polymode::wireframe) {
-		program->setUniformValue("wireframe", true);
+		//program->setUniformValue("wireframe", true);
 
 		// 'fill' the triangles with white
 		program->setUniformValue("curvature", false);
@@ -199,33 +200,28 @@ void GLWidget::paintGL() {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glDisable(GL_POLYGON_OFFSET_FILL);
 		program->setUniformValue("color", QVector4D(0.05f, 0.05f, 0.15f, 1.0f));
-		if (curvature_values.size() == 0) {
-			program->setUniformValue("curvature", false);
-		}
-		else {
-			program->setUniformValue("curvature", true);
-		}
+		program->setUniformValue("curvature", curvature_values.size() > 0);
 
 		mesh.render(*this);
 	}
 	else if (pm == polymode::solid) {
-		program->setUniformValue("wireframe", false);
+		//program->setUniformValue("wireframe", false);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		if (current_curv_display == curv_type::none) {
 			// display with a flat color since there
 			// is no curvature to be displayed
-			program->setUniformValue("color", QVector4D(0.75f, 0.8f, 0.9f, 1.0f));
+			//program->setUniformValue("color", QVector4D(0.75f, 0.8f, 0.9f, 1.0f));
 			mesh.render(*this);
-			program->release();
-			return;
 		}
-
-		// display with curvature color
-		program->setUniformValue("curvature", true);
-		mesh.render(*this);
+		else {
+			// display with curvature color
+			//program->setUniformValue("curvature", true);
+			mesh.render(*this);
+		}
 	}
 	else if (pm == polymode::reflection_lines) {
-
+		mesh.render(*this);
 	}
 	else {
 		// no polygon mode
@@ -320,19 +316,48 @@ void GLWidget::set_polygon_mode(const polymode& pmode) {
 
 void GLWidget::change_polygon_mode() {
 	makeCurrent();
-	switch (pm) {
-		case polymode::solid:
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-			program->setUniformValue("wireframe", false);
-			break;
-		case polymode::wireframe:
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			program->setUniformValue("wireframe", true);
-			break;
-		default:
-			cerr << "GLWidget::set_polygon_mode - Warning:" << endl;
-			cerr << "    Unhandled selected polymode: expect undefined behaviour" << endl;
+	program->bind();
+	if (pm == polymode::solid) {
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		program->setUniformValue("wireframe", false);
+		if (current_curv_display == curv_type::none) {
+			program->setUniformValue(
+				"color", QVector4D(0.75f, 0.8f, 0.9f, 1.0f)
+			);
+		}
 	}
+	else if (pm == polymode::wireframe) {
+		program->setUniformValue("wireframe", true);
+	}
+	else if (pm == polymode::reflection_lines) {
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+		program->setUniformValue("wireframe", false);
+		program->setUniformValue("curvature", false);
+		program->setUniformValue("reflection_lines", true);
+		curvature_values.clear();
+	}
+	else {
+		cerr << "GLWidget::set_polygon_mode (" << __LINE__ << ") - Warning:" << endl;
+		cerr << "    Unhandled selected polymode: expect undefined behaviour" << endl;
+	}
+
+	if (pm == polymode::solid or pm == polymode::wireframe) {
+		program->setUniformValue("reflection_lines", false);
+
+		// we may need to display curvatures
+		if (current_curv_display == curv_type::none) {
+			// don't display curvature colours
+			program->setUniformValue("curvature", false);
+		}
+		else {
+			program->setUniformValue("curvature", true);
+			// values may need to be recomputed
+			change_curvature_display();
+		}
+	}
+
+	program->release();
 	doneCurrent();
 	update();
 }
@@ -342,45 +367,82 @@ void GLWidget::set_curvature_display(const curv_type& cd) {
 }
 
 void GLWidget::change_curvature_display() {
-	// make all buffers only if the colour buffer
-	// was not made before
+	// if we don't curvature colours anymore...
+	if (to_curv_display == curv_type::none) {
+		/* One of the followng:		none -> none
+		 *							Gauss -> none
+		 *							Mean -> none
+		 * (current_curv_display -> to_curv_display)
+		 */
+
+		current_curv_display = curv_type::none;
+		curvature_values.clear();
+		program->bind();
+		program->setUniformValue("curvature", false);
+		program->release();
+		return;
+	}
+
+	/* at this point we want to display curvature values,
+	 * namely, the value 'to_curv_display' is different from
+	 * 'curv_type::none'
+	 */
+
+	// make all buffers only if the colour buffer was not made
+	// before: if the current curvature mode is "deactivated"
 	bool make_all_buffers = false;
 	if (current_curv_display == curv_type::none) {
 		make_all_buffers = true;
 	}
 
-	if (to_curv_display == curv_type::none) {
-		current_curv_display = curv_type::none;
-
+	if (current_curv_display != to_curv_display) {
+		/* One of the followng:		none -> Gauss,Mean
+		 *							Gauss -> Mean
+		 *							Mean -> Gauss
+		 * (current_curv_display -> to_curv_display)
+		 */
 		curvature_values.clear();
-		// free only the colour buffer
-		mesh.free_buffers();
-
-		makeCurrent();
-		load_shader();
-		set_projection();
-		set_modelview();
-		mesh.init(program);
-		doneCurrent();
-		update();
-
-		return;
 	}
+
+	/* compute curvature values... */
+	bool comp_curv = false;
 
 	if (current_curv_display == to_curv_display) {
-		// do not recompute...
+		/* One of the followng:		Gauss -> Gauss
+		 *							Mean -> Mean
+		 * (current_curv_display -> to_curv_display)
+		 */
 
-		// ... but maybe remake colours
-		if (to_prop != prop) {
-			to_prop = prop;
-			show_curvature(make_all_buffers);
+		// we may not need to recompute the values
+		if (curvature_values.size() == 0) {
+			// we do (maybe because the reflection lines
+			// thing cleared them)
+			comp_curv = true;
+			make_all_buffers = true;
 		}
-		return;
+		else {
+			// make only buffer colours
+			make_all_buffers = false;
+		}
+	}
+	else {
+		/* One of the followng:		None -> Gauss,Mean
+		 *							Gauss -> Mean
+		 *							Mean -> Gauss
+		 * (current_curv_display -> to_curv_display)
+		 */
+		comp_curv = true;
 	}
 
-	current_curv_display = to_curv_display;
+	if (comp_curv) {
+		current_curv_display = to_curv_display;
+		compute_curvature();
+	}
 
-	compute_curvature();
+	// since there are already curvature values computed ...
+	// make the colours
+
+	to_prop = prop;
 	show_curvature(make_all_buffers);
 }
 
@@ -404,4 +466,11 @@ void GLWidget::set_num_threads(size_t _nt) {
 
 const RenderTriangleMesh& GLWidget::get_mesh() const {
 	return mesh;
+}
+
+const polymode& GLWidget::get_polygon_mode() const {
+	return pm;
+}
+const curv_type& GLWidget::get_curvature_display() const {
+	return current_curv_display;
 }

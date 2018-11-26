@@ -254,7 +254,15 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>&
 	vector<unsigned int> perFaceTriangles;
 	make_VBO_data(colors, vert_info, cols, normals, perFaceTriangles);
 
-	/* ------------------ */
+	/* --------------- */
+	/* destroy buffers */
+	vao.destroy();
+	vbo_vertices.destroy();
+	vbo_normals.destroy();
+	vbo_colors.destroy();
+	vbo_triangles.destroy();
+
+	/* --------------------------------------- */
 	/* Create the vertex array/buffer objects. */
 	bool program_bind = program->bind();
 	if (not program_bind) {
@@ -263,7 +271,6 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>&
 	}
 
 	/* ----- VAO create ----- */
-	vao.destroy();
 	vao.create();
 	if (vao.isCreated()) {
 		vao.bind();
@@ -275,7 +282,6 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>&
 	}
 
 	/* ----- VBO VERTICES create ----- */
-	vbo_vertices.destroy();
 	vbo_vertices.create();
 	if (vbo_vertices.isCreated()) {
 		if (not vbo_vertices.bind()) {
@@ -293,7 +299,6 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>&
 	program->setAttributeBuffer(0, GL_FLOAT, 0, 3, 0);
 
 	/* ----- VBO NORMALS create ----- */
-	vbo_normals.destroy();
 	vbo_normals.create();
 	if (vbo_normals.isCreated()) {
 		if (not vbo_normals.bind()) {
@@ -311,7 +316,6 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>&
 	program->setAttributeBuffer(1, GL_FLOAT, 0, 3, 0);
 
 	/* ----- VBO COLORS create ----- */
-	vbo_colors.destroy();
 	vbo_colors.create();
 	if (vbo_colors.isCreated()) {
 		if (not vbo_colors.bind()) {
@@ -329,7 +333,6 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>&
 	program->setAttributeBuffer(2, GL_FLOAT, 0, 3, 0);
 
 	/* ----- VBO TRIANGLES create ----- */
-	vbo_triangles.destroy();
 	vbo_triangles.create();
 	if (vbo_triangles.isCreated()) {
 		if (not vbo_triangles.bind()) {

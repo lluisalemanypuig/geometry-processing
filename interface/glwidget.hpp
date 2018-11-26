@@ -116,5 +116,8 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 
 		/// Returns a constant reference to the mesh in this widget.
 		const RenderTriangleMesh& get_mesh() const;
+
+		const polymode& get_polygon_mode() const;
+		const curv_type& get_curvature_display() const;
 };
 

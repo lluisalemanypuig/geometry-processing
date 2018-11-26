@@ -50,6 +50,21 @@ void MainWindow::change_curvature_prop_display(float p) {
 	}
 }
 
+void MainWindow::enable_curvature_slider() {
+	polymode pm = ui->SingleView_Renderer->get_polygon_mode();
+	curv_type ct = ui->SingleView_Renderer->get_curvature_display();
+
+	if (pm == polymode::reflection_lines) {
+		ui->VE_PropCurvValues->setEnabled(false);
+	}
+	else if (ct == curv_type::none) {
+		ui->VE_PropCurvValues->setEnabled(false);
+	}
+	else {
+		ui->VE_PropCurvValues->setEnabled(true);
+	}
+}
+
 void MainWindow::set_local_smooth_params() {
 	const QString& smooth_operator = ui->local_smooth_CB_operators->currentText();
 	if (smooth_operator == "Laplacian") {
@@ -159,8 +174,11 @@ void MainWindow::on_CBSolid_toggled(bool toggled) {
 		ui->SingleView_Renderer->set_polygon_mode(polymode::solid);
 		ui->DualView_LeftRenderer->set_polygon_mode(polymode::solid);
 		ui->DualView_RightRenderer->set_polygon_mode(polymode::solid);
+		change_poly_mode();
+
+		// we may need to enable/disable things
+		enable_curvature_slider();
 	}
-	change_poly_mode();
 }
 
 void MainWindow::on_CBWireframe_toggled(bool toggled) {
@@ -168,8 +186,11 @@ void MainWindow::on_CBWireframe_toggled(bool toggled) {
 		ui->SingleView_Renderer->set_polygon_mode(polymode::wireframe);
 		ui->DualView_LeftRenderer->set_polygon_mode(polymode::wireframe);
 		ui->DualView_RightRenderer->set_polygon_mode(polymode::wireframe);
+		change_poly_mode();
+
+		// we may need to enable/disable things
+		enable_curvature_slider();
 	}
-	change_poly_mode();
 }
 
 void MainWindow::on_CBRefLines_toggled(bool toggled) {
@@ -177,8 +198,11 @@ void MainWindow::on_CBRefLines_toggled(bool toggled) {
 		ui->SingleView_Renderer->set_polygon_mode(polymode::reflection_lines);
 		ui->DualView_LeftRenderer->set_polygon_mode(polymode::reflection_lines);
 		ui->DualView_RightRenderer->set_polygon_mode(polymode::reflection_lines);
+		change_poly_mode();
+
+		// we may need to enable/disable things
+		enable_curvature_slider();
 	}
-	change_poly_mode();
 }
 
 /* Curvature radio buttons */
@@ -242,6 +266,9 @@ void MainWindow::on_RBCurvatureG_toggled(bool checked) {
 		ui->DualView_LeftRenderer->set_curvature_display(curv_type::Gauss);
 		ui->DualView_RightRenderer->set_curvature_display(curv_type::Gauss);
 		change_curvature();
+
+		// we may need to enable/disable things
+		enable_curvature_slider();
 	}
 }
 
@@ -252,6 +279,9 @@ void MainWindow::on_RBCurvatureH_toggled(bool checked) {
 		ui->DualView_LeftRenderer->set_curvature_display(curv_type::Mean);
 		ui->DualView_RightRenderer->set_curvature_display(curv_type::Mean);
 		change_curvature();
+
+		// we may need to enable/disable things
+		enable_curvature_slider();
 	}
 }
 
@@ -261,6 +291,9 @@ void MainWindow::on_RBNoCurvature_toggled(bool checked) {
 		ui->DualView_LeftRenderer->set_curvature_display(curv_type::none);
 		ui->DualView_RightRenderer->set_curvature_display(curv_type::none);
 		change_curvature();
+
+		// we may need to enable/disable things
+		enable_curvature_slider();
 	}
 }
 
