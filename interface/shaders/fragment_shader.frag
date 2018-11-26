@@ -9,6 +9,25 @@ in vec3 vert_col;
 in vec3 frag_normal;
 out vec4 frag_color;
 
+vec4 reflection_line(vec3 a, vec3 v) {
+	vec3 n = frag_normal;
+
+	float lv = length(v);
+	vec3 r = (2/(lv*lv))*(dot(n, v)*n - v);
+	vec3 d = r - dot(r,a)*a;
+	vec3 av_star = v - dot(v,a)*a;
+	vec3 av = normalize(av_star);
+	vec3 a_perp = cross(a, av);
+
+	float theta = atan(dot(r,a_perp), dot(r, av));
+	if (theta < 0) {
+		return vec4(vec3(0), 1);
+	}
+	else {
+		return vec4(1);
+	}
+}
+
 void main() {
 	if (wireframe && curvature || curvature) {
 		frag_color = vec4(vert_col, 1);
@@ -19,28 +38,10 @@ void main() {
 		frag_color = color;
 	}
 	else if (reflection_lines) {
-		vec3 v = vec3(0,0,-100);
-		vec3 a = vec3(100,0,0);
+		vec3 v = vec3(0,0,-1);
+		vec3 a = vec3(1,0,0);
 
-		float lv = length(v);
-		vec3 r = (2/(lv*lv))*(dot(frag_normal, v)*frag_normal - v);
-		vec3 d = r - dot(r,a)*a;
-		vec3 va_star = v - dot(v,a)*a;
-		vec3 va = normalize(va_star);
-		vec3 a_perp = cross(a, va);
-
-		float theta = atan(dot(r,a_perp), dot(r, va));
-
-		if (theta < 0) {
-			frag_color = vec4(vec3(0), 1);
-		}
-		else {
-			frag_color = vec4(1);
-		}
-
-		//float theta_norm = theta/(2*3.141592);
-		//frag_color = vec4(vec3(theta_norm), 1);
-		//frag_color = frag_color*normalize(frag_normal).z;
+		frag_color = reflection_line(a, -vec3(gl_FragCoord));
 	}
     else {
 		// when displaying the whole triangle,
