@@ -24,8 +24,8 @@ SOURCES +=						\
 	utils.cpp
 
 DISTFILES +=					\
-    shaders/simple.vert			\
-    shaders/simple.frag
+    shaders/vertex_shader.vert \
+    shaders/fragment_shader.frag
 
 RESOURCES +=					\
 	resources.qrc

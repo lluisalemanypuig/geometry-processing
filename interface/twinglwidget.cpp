@@ -176,7 +176,7 @@ void TwinGLWidget::run_local_smoothing_algorithm() {
 
 		// show curvature already has
 		// makeCurrent() .. doneCurrent()
-		show_curvature(false, true);
+		show_curvature(true);
 	}
 	else {
 		makeCurrent();
@@ -250,7 +250,7 @@ void TwinGLWidget::run_global_smoothing_algorithm() {
 
 		// show curvature already has
 		// makeCurrent() .. doneCurrent()
-		show_curvature(false, true);
+		show_curvature(true);
 	}
 	else {
 		makeCurrent();
@@ -429,7 +429,7 @@ void TwinGLWidget::run_band_frequencies(const QJsonDocument& doc) {
 
 		// show curvature already has
 		// makeCurrent() .. doneCurrent()
-		show_curvature(false, true);
+		show_curvature(true);
 	}
 	else {
 		cout << "Remake buffers for vertices and normals." << endl;

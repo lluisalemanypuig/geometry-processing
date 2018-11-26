@@ -54,11 +54,11 @@ void GLWidget::delete_program() {
 	}
 }
 
-void GLWidget::load_simple_shader() {
+void GLWidget::load_shader() {
 	delete_program();
 	program = new QOpenGLShaderProgram();
-	program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/simple.vert");
-	program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/simple.frag");
+	program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/vertex_shader.vert");
+	program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/fragment_shader.frag");
 	program->link();
 	if (not program->isLinked()) {
 		cerr << "GLWidget::initializeGL - Error:" << endl;
@@ -94,21 +94,9 @@ void GLWidget::compute_curvature() {
 		 << " seconds" << endl;
 }
 
-void GLWidget::show_curvature(bool should_load, bool make_all_buffers) {
-	cout << "GLWidget::show_curvature - should the shader be loaded? "
-		 << (should_load ? "Yes" : "No") << endl;
+void GLWidget::show_curvature(bool make_all_buffers) {
 	cout << "GLWidget::show_curvature - should all buffers be made? "
 		 << (make_all_buffers ? "Yes" : "No") << endl;
-
-	if (should_load) {
-		cout << "GLWidget::show_curvature - load curvature shader" << endl;
-
-		makeCurrent();
-		load_simple_shader();
-		set_projection();
-		set_modelview();
-		doneCurrent();
-	}
 
 	cout << "GLWidget::show_curvature - make colours with curvature" << endl;
 
@@ -156,7 +144,7 @@ void GLWidget::init_mesh(bool make_all_buffers) {
 		cout << "    computing curvature..." << endl;
 		compute_curvature();
 		cout << "    displaying curvature..." << endl;
-		show_curvature(false, make_all_buffers);
+		show_curvature(make_all_buffers);
 	}
 
 	cout << "GLWidget::init_mesh - initialised succesfully!" << endl;
@@ -165,7 +153,7 @@ void GLWidget::init_mesh(bool make_all_buffers) {
 void GLWidget::initializeGL() {
 	initializeOpenGLFunctions();
 
-	load_simple_shader();
+	load_shader();
 
 	program->bind();
 	mesh.build_cube();
@@ -174,7 +162,7 @@ void GLWidget::initializeGL() {
 	mesh.make_angles_area();
 	bool init = mesh.init(program);
 	if (not init) {
-		cerr << "GLWidget::initializeGL - Error:" << endl;
+		cerr << "GLWidget::initializeGL (" << __LINE__ << ") - Error:" << endl;
 		cerr << "    Could not initialise mesh cube." << endl;
 		QApplication::quit();
 	}
@@ -219,11 +207,8 @@ void GLWidget::paintGL() {
 		}
 
 		mesh.render(*this);
-		program->release();
-		return;
 	}
-
-	if (pm == polymode::solid) {
+	else if (pm == polymode::solid) {
 		program->setUniformValue("wireframe", false);
 
 		if (current_curv_display == curv_type::none) {
@@ -238,11 +223,18 @@ void GLWidget::paintGL() {
 		// display with curvature color
 		program->setUniformValue("curvature", true);
 		mesh.render(*this);
-		program->release();
-		return;
+	}
+	else if (pm == polymode::reflection_lines) {
+
+	}
+	else {
+		// no polygon mode
+		cerr << "GLWidget::paintGL (" << __LINE__ << ") - Warning:" << endl;
+		cerr << "    no polygon mode selected" << endl;
 	}
 
-	cerr << "Error! nothing is displayed!" << endl;
+	program->release();
+	return;
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event) {
@@ -365,7 +357,7 @@ void GLWidget::change_curvature_display() {
 		mesh.free_buffers();
 
 		makeCurrent();
-		load_simple_shader();
+		load_shader();
 		set_projection();
 		set_modelview();
 		mesh.init(program);
@@ -381,7 +373,7 @@ void GLWidget::change_curvature_display() {
 		// ... but maybe remake colours
 		if (to_prop != prop) {
 			to_prop = prop;
-			show_curvature(false, make_all_buffers);
+			show_curvature(make_all_buffers);
 		}
 		return;
 	}
@@ -389,7 +381,7 @@ void GLWidget::change_curvature_display() {
 	current_curv_display = to_curv_display;
 
 	compute_curvature();
-	show_curvature(false, make_all_buffers);
+	show_curvature(make_all_buffers);
 }
 
 void GLWidget::change_display_curvature_proportion(float p) {
@@ -399,7 +391,7 @@ void GLWidget::change_display_curvature_proportion(float p) {
 	if (current_curv_display == curv_type::none) {
 		return;
 	}
-	show_curvature(false, false);
+	show_curvature(false);
 }
 
 void GLWidget::change_curvature_proportion(float p) {

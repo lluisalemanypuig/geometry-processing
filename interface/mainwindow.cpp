@@ -34,6 +34,7 @@ void MainWindow::change_curvature() {
 		ui->DualView_LeftRenderer->change_curvature_display();
 		ui->DualView_RightRenderer->change_curvature_display();
 	}
+	change_poly_mode();
 }
 
 void MainWindow::change_curvature_prop_display(float p) {
