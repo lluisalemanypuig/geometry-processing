@@ -43,6 +43,9 @@ namespace local {
 	 * @param lambda Smoothing parameter.
 	 * @param n_iter Number of iterations of the algorithm.
 	 * @param[out] m Mesh to be smoothed.
+	 * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
 	 */
 	void laplacian
 	(const smooth_weight& w, float lambda, size_t n_iter, TriangleMesh& m);
@@ -56,6 +59,9 @@ namespace local {
 	 * @param n_iter Number of iterations of the algorithm.
 	 * @param nthreads Number of threads.
 	 * @param[out] m Mesh to be smoothed.
+	 * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
 	 */
 	void laplacian
 	(const smooth_weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);
@@ -70,6 +76,9 @@ namespace local {
 	 * @param lambda Smoothing parameter.
 	 * @param n_iter Number of iterations of the algorithm.
 	 * @param[out] m Mesh to be smoothed.
+	 * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
 	 */
 	void bilaplacian
 	(const smooth_weight& w, float lambda, size_t n_iter, TriangleMesh& m);
@@ -83,6 +92,9 @@ namespace local {
 	 * @param n_iter Number of iterations of the algorithm.
 	 * @param nt Number of threads.
 	 * @param[out] m Mesh to be smoothed.
+	 * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
 	 */
 	void bilaplacian
 	(const smooth_weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);
@@ -106,6 +118,9 @@ namespace local {
 	 * @param lambda Smoothing parameter.
 	 * @param n_iter Number of iterations of the algorithm.
 	 * @param[out] m Mesh to be smoothed.
+	 * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
 	 */
 	void bilaplacian
 	(const smooth_weight& w, float lambda, size_t n_iter, TriangleMesh& m);
@@ -119,6 +134,9 @@ namespace local {
 	 * @param n_iter Number of iterations of the algorithm.
 	 * @param nt Number of threads.
 	 * @param[out] m Mesh to be smoothed.
+	 * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
 	 */
 	void TaubinLM
 	(const smooth_weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);

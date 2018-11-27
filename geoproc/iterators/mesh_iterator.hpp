@@ -28,7 +28,12 @@ class mesh_iterator {
 		const TriangleMesh& mesh;
 
 	public:
-		/// Constructor.
+		/**
+		 * @brief Default constructor.
+		 * @param m Constant reference to the iterated mesh.
+		 * @pre The mesh requires:
+		 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+		 */
 		mesh_iterator(const TriangleMesh& m);
 		/// Destructor.
 		virtual ~mesh_iterator();

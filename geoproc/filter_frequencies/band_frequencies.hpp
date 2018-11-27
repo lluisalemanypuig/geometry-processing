@@ -66,6 +66,9 @@ namespace filter_frequencies {
 	 * @param confs The \f$ n + 1\f$ configurations to be applied.
 	 * @param mus The weights \f$\mu_1,\cdots,\mu_n\f$ for each band frequency.
 	 * @param[out] m The mesh resulting of applying the operations described above.
+	 * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
 	 */
 	void band_frequencies
 	(const std::vector<smoothing_configuration>& confs,
@@ -94,6 +97,9 @@ namespace filter_frequencies {
 	 * @param mus The weights \f$\mu_1,\cdots,\mu_n\f$ for each band frequency.
 	 * @param nt Number of threads.
 	 * @param[out] m The mesh resulting of applying the operations described above.
+	 * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
 	 */
 	void band_frequencies
 	(const std::vector<smoothing_configuration>& confs,

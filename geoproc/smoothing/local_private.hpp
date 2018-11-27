@@ -23,6 +23,8 @@ namespace local_private {
 	 * @param vi Valid vertex index.
 	 * @param m Mesh to be iterated.
 	 * @param[out] pv_ws Weights per vertex.
+	 * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
 	 */
 	void make_uniform_weights
 	(int vi, const TriangleMesh& m, float *pv_ws);
@@ -42,6 +44,8 @@ namespace local_private {
 	 * @param verts Use the coordinates of the vertices in this
 	 * vector instead of the vertices in the mesh.
 	 * @param[out] L Result of the sum.
+	 * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
 	 */
 	void make_uniform_weight
 	(int vi, const TriangleMesh& m, const glm::vec3 *verts, glm::vec3& L);
@@ -57,6 +61,9 @@ namespace local_private {
 	 * @param m Mesh to be iterated.
 	 * @param[out] pv_ws Weights per vertex. Non-neighbours of @e vi are guaranteed
 	 * to have null weight.
+	 * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
 	 */
 	void make_cotangent_weights
 	(int vi, const TriangleMesh& m, float *pv_ws);
@@ -76,6 +83,9 @@ namespace local_private {
 	 * @param verts Use the coordinates of the vertices in this
 	 * vector instead of the vertices in the mesh.
 	 * @param[out] L Result of the sum.
+	 * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
 	 */
 	void make_cotangent_weight
 	(int vi, const TriangleMesh& m, const glm::vec3 *verts, glm::vec3& L);
@@ -92,6 +102,9 @@ namespace local_private {
 	 * @param old_verts Coordinates of the vertices to be smoothed, whose
 	 * neighbourhood relationship is encoded in the mesh @e m.
 	 * @param[out] new_verts The coordinates of the smoothed vertices.
+	 * @pre The mesh requires the data necessary data to compute the weights:
+	 * - for a @ref smoothing_weight::uniform see @ref make_uniform_weight.
+	 * - for a @ref smoothing_weight::cotangent see @ref make_cotangent_weight.
 	 */
 	void apply_local
 	(
@@ -111,6 +124,9 @@ namespace local_private {
 	 * @param old_verts Coordinates of the vertices to be smoothed, whose
 	 * neighbourhood relationship is encoded in the mesh @e m.
 	 * @param[out] new_verts The coordinates of the smoothed vertices.
+	 * @pre The mesh requires the data necessary data to compute the weights:
+	 * - for a @ref smoothing_weight::uniform see @ref make_uniform_weight.
+	 * - for a @ref smoothing_weight::cotangent see @ref make_cotangent_weight.
 	 */
 	void apply_local
 	(
@@ -134,6 +150,9 @@ namespace local_private {
 	 * mesh depending on the returned value.
 	 * @param[out] new_verts At the end of algorithm they may contain the final
 	 * coordinates of the vertices of the mesh depending on the returned value.
+	 * @pre The mesh requires the data necessary data to compute the weights:
+	 * - for a @ref smoothing_weight::uniform see @ref make_uniform_weight.
+	 * - for a @ref smoothing_weight::cotangent see @ref make_cotangent_weight.
 	 * @return Returns true if the final coordinates of the vertices are in
 	 * new_verts. Returns false if otherwise.
 	 */
@@ -159,6 +178,9 @@ namespace local_private {
 	 * mesh depending on the returned value.
 	 * @param[out] new_verts At the end of algorithm they may contain the final
 	 * coordinates of the vertices of the mesh depending on the returned value.
+	 * @pre The mesh requires the data necessary data to compute the weights:
+	 * - for a @ref smoothing_weight::uniform see @ref make_uniform_weight.
+	 * - for a @ref smoothing_weight::cotangent see @ref make_cotangent_weight.
 	 * @return Returns true if the final coordinates of the vertices are in
 	 * new_verts. Returns false if otherwise.
 	 */
@@ -185,6 +207,9 @@ namespace local_private {
 	 * @param[in] old_verts Initially, the vertices of the mesh.
 	 * @param[out] new_verts At the end of algorithm they contain the final
 	 * coordinates of the vertices of the mesh.
+	 * @pre The mesh requires the data necessary data to compute the weights:
+	 * - for a @ref smoothing_weight::uniform see @ref make_uniform_weight.
+	 * - for a @ref smoothing_weight::cotangent see @ref make_cotangent_weight.
 	 */
 	void apply_twice_per_it
 	(
@@ -210,6 +235,9 @@ namespace local_private {
 	 * @param[in] old_verts Initially, the vertices of the mesh.
 	 * @param[out] new_verts At the end of algorithm they contain the final
 	 * coordinates of the vertices of the mesh.
+	 * @pre The mesh requires the data necessary data to compute the weights:
+	 * - for a @ref smoothing_weight::uniform see @ref make_uniform_weight.
+	 * - for a @ref smoothing_weight::cotangent see @ref make_cotangent_weight.
 	 */
 	void apply_twice_per_it
 	(

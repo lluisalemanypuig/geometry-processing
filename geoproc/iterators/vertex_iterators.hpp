@@ -31,7 +31,12 @@ class vertex_vertex_iterator : public mesh_iterator {
 		bool half_step;
 
 	public:
-		/// Default constructor.
+		/**
+		 * @brief Default constructor.
+		 * @param m Constant reference to the iterated mesh.
+		 * @pre The mesh requires:
+		 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+		 */
 		vertex_vertex_iterator(const TriangleMesh& mesh);
 		/// Destructor.
 		~vertex_vertex_iterator();
@@ -90,7 +95,12 @@ class vertex_face_iterator : public mesh_iterator {
 		int cur_face;
 
 	public:
-		/// Default constructor.
+		/**
+		 * @brief Default constructor.
+		 * @param m Constant reference to the iterated mesh.
+		 * @pre The mesh requires:
+		 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+		 */
 		vertex_face_iterator(const TriangleMesh& mesh);
 		/// Destructor.
 		~vertex_face_iterator();

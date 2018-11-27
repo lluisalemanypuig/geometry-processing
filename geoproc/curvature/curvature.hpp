@@ -24,6 +24,9 @@ namespace curvature {
 	 * @param[out] Kg An approximation of the Gauss curvature per vertex.
 	 * @param[out] min Minimum curvature value.
 	 * @param[out] max Maximum curvature value.
+	 * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
 	 */
 	void Gauss
 	(
@@ -45,6 +48,9 @@ namespace curvature {
 	 * @param mesh Input mesh.
 	 * @param[out] Kg An approximation of the Gauss curvature per vertex.
 	 * @param n_threads Number of threads.
+	 * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
 	 */
 	void Gauss(const TriangleMesh& mesh, std::vector<float>& Kg, size_t n_threads);
 	/**
@@ -63,6 +69,9 @@ namespace curvature {
 	 * @param[out] Kg An approximation of the Gauss curvature per vertex.
 	 * @param[out] min Minimum curvature value.
 	 * @param[out] max Maximum curvature value.
+	 * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
 	 */
 	void Gauss
 	(
@@ -82,6 +91,9 @@ namespace curvature {
 	 * @param[out] Kh An approximation of the mean curvature per vertex.
 	 * @param[out] min Minimum curvature value.
 	 * @param[out] max Maximum curvature value.
+	 * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
 	 */
 	void mean
 	(
@@ -102,6 +114,9 @@ namespace curvature {
 	 * @param mesh Input mesh.
 	 * @param[out] Kh An approximation of the mean curvature per vertex.
 	 * @param n_threads Number of threads.
+	 * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
 	 */
 	void mean(const TriangleMesh& mesh, std::vector<float>& Kh, size_t n_threads);
 	/**
@@ -120,6 +135,9 @@ namespace curvature {
 	 * @param[out] Kh An approximation of the mean curvature per vertex.
 	 * @param[out] min Minimum curvature value.
 	 * @param[out] max Maximum curvature value.
+	 * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
 	 */
 	void mean
 	(

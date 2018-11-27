@@ -29,6 +29,9 @@ namespace global {
 	 * This algorithm is implemented for the following weight types:
 	 * - @ref smooth_weight::uniform
 	 * - @ref smooth_weight::cotangent
+	 * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
 	 */
 	bool smooth
 	(const smooth_operator& op, const smooth_weight& w,

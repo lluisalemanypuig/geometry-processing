@@ -38,7 +38,7 @@ namespace PLY_reader {
 	/**
 	 * @brief Loads a triangular mesh stored in @e filename.
 	 * @param filename File with the mesh in .ply format.
-	 * @param[out] mesh YUUY
+	 * @param[out] mesh Mesh loaded from file.
 	 * @return Returns false on error.
 	 */
 	bool read_mesh(const std::string& filename, TriangleMesh& mesh);
