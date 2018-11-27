@@ -27,7 +27,7 @@ namespace curvature {
 	// Use a different algorithm from the one used for
 	// the parallel computation of the curvature
 	void Gauss
-	(const TriangleMesh& mesh, vector<float>& Kg, float *m, float *M)
+	(const TriangleMesh& mesh, std::vector<float>& Kg, float *m, float *M)
 	{
 		// mesh info
 		const int nT = mesh.n_triangles();
@@ -146,7 +146,7 @@ namespace curvature {
 		return (1.0f/vor_area)*(2.0f*M_PI - angle_sum);
 	}
 
-	void Gauss(const TriangleMesh& m, vector<float>& Kg, size_t nt) {
+	void Gauss(const TriangleMesh& m, std::vector<float>& Kg, size_t nt) {
 		if (nt == 1) {
 			Gauss(m, Kg);
 			return;
@@ -162,7 +162,7 @@ namespace curvature {
 	}
 
 	void Gauss
-	(const TriangleMesh& mesh, vector<float>& Kg, size_t nt, float *m, float *M)
+	(const TriangleMesh& mesh, std::vector<float>& Kg, size_t nt, float *m, float *M)
 	{
 		if (nt == 1) {
 			Gauss(mesh, Kg, m, M);

@@ -1,5 +1,6 @@
 #pragma once
 
+// C++ includes
 #include <cstdint>
 
 namespace geoproc {
@@ -8,16 +9,28 @@ namespace smoothing {
 	/**
 	 * @brief The different types of operators available.
 	 *
-	 * - Laplacian: see @ref Laplacian.
-	 * - Bi-Laplacian: see @ref BiLaplacian.
-	 * - TaubinLM: see @ref TaubinLM.
+	 * - Laplacian: see @ref smooth_operator::Laplacian.
+	 * - Bi-Laplacian: see @ref smooth_operator::BiLaplacian.
+	 * - TaubinLM: see @ref smooth_operator::TaubinLM.
 	 */
 	enum class smooth_operator : int8_t {
-		/// Detailed in documentation of function @ref smoothing::laplacian.
+		/**
+		 * Detailed in the documentation of functions:
+		 * - @ref local::laplacian(const smooth_weight&, float, size_t, TriangleMesh&)
+		 * - @ref local::laplacian(const smooth_weight&, float, size_t, size_t, TriangleMesh&)
+		 */
 		Laplacian,
-		/// Detailed in documentation of function @ref smoothing::bilaplacian.
+		/**
+		 * Detailed in the documentation of functions:
+		 * - @ref local::bilaplacian(const smooth_weight&, float, size_t, TriangleMesh&)
+		 * - @ref local::bilaplacian(const smooth_weight&, float, size_t, size_t, TriangleMesh&)
+		 */
 		BiLaplacian,
-		/// Detailed in documentation of function @ref smoothing::TaubinLM.
+		/**
+		 * Detailed in the documentation of functions:
+		 * - @ref local::TaubinLM(const smooth_weight&, float, size_t, TriangleMesh&)
+		 * - @ref local::TaubinLM(const smooth_weight&, float, size_t, size_t, TriangleMesh&)
+		 */
 		TaubinLM
 	};
 
@@ -52,7 +65,7 @@ namespace smoothing {
 		 * \f$ \beta = \langle v_i,v_l,v_j \rangle \f$ are the two aforementioned
 		 * angles, then the weight \f$ \omega_{ij} \f$ is defined as:
 		 *
-		 * \f$ \omega_{ij} = \cotan(\alpha) + \cotan(\beta) \f$
+		 * \f$ \omega_{ij} = \cot(\alpha) + \cot(\beta) \f$
 		 */
 		cotangent
 	};

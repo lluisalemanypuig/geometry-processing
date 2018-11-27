@@ -13,7 +13,7 @@ namespace geoproc {
  * @brief Read a mesh in .ply format
  *
  * In order to load a mesh in ply format call only function
- * @ref read_mesh.
+ * @ref read_mesh(const std::string&, TriangleMesh&).
  * 
  * This reader only supports those files that do not contain
  * anything else than vertex coordinates and the description

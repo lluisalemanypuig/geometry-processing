@@ -57,7 +57,7 @@ namespace local {
 	 * @param w The type of weight used.
 	 * @param lambda Smoothing parameter.
 	 * @param n_iter Number of iterations of the algorithm.
-	 * @param nthreads Number of threads.
+	 * @param nt Number of threads.
 	 * @param[out] m Mesh to be smoothed.
 	 * @pre The mesh requires:
 	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
@@ -100,7 +100,7 @@ namespace local {
 	(const smooth_weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);
 
 	/**
-	 * @brief Taubin $\f\lambda-\mu\f$ operator for mesh smoothing.
+	 * @brief Taubin \f$\lambda-\mu\f$ operator for mesh smoothing.
 	 *
 	 * Applies the Laplacian operator once with \f$\lambda\f$ and
 	 * then with \f$\mu\f$ for every iteration.
@@ -108,11 +108,10 @@ namespace local {
 	 * The value \f$\mu\f$ is determined isolating it from the
 	 * following formula:
 	 *
-	 * \f$K_{PB} = \frac{1}{\lambda} + \frac{1}{\mu} \RightArrow\f$
+	 * \f$K_{PB} = \frac{1}{\lambda} + \frac{1}{\mu} \Rightarrow
+	 * \mu = \left( K_{PB} - \frac{1}{\lambda} \right)^{-1}\f$
 	 *
-	 * \f$\Rightarrow \mu = \left( K_{PB} - \frac{1}{\lambda} \right)^{-1} \RightArrow\f$
-	 *
-	 * The value of $\K_{PB}\f$ has been set to $\K_{PB}=0.1\f$.
+	 * The value of \f$K_{PB}\f$ has been set to \f$K_{PB}=0.1\f$.
 	 *
 	 * @param w The type of weight used.
 	 * @param lambda Smoothing parameter.
@@ -122,10 +121,10 @@ namespace local {
 	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
 	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
 	 */
-	void bilaplacian
+	void TaubinLM
 	(const smooth_weight& w, float lambda, size_t n_iter, TriangleMesh& m);
 	/**
-	 * @brief Parallel Taubin $\f\lambda-\mu\f$ operator for mesh smoothing.
+	 * @brief Parallel Taubin \f$\lambda-\mu\f$ operator for mesh smoothing.
 	 *
 	 * See @ref TaubinLM(const smooth_weight&, float, size_t, TriangleMesh&)
 	 * for details.

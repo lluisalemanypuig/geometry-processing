@@ -34,7 +34,7 @@ namespace local_private {
 	 *
 	 * Computes the sum
 	 *
-	 * \f$L(v_i) = \sum_{j} w_{ij}\cdot(v_j - v_i)\f$
+	 * \f$\sum_{j} w_{ij}\cdot(v_j - v_i)\f$
 	 *
 	 * where \f$w_{ij}\f$ correpond to uniform weights. See
 	 * @ref smooth_weight::uniform. Recall that \f$j\f$ iterates
@@ -73,7 +73,7 @@ namespace local_private {
 	 *
 	 * Computes the sum
 	 *
-	 * \f$L(v_i) = \sum_{j} w_{ij}\cdot(v_j - v_i)\f$
+	 * \f$\sum_{j} w_{ij}\cdot(v_j - v_i)\f$
 	 *
 	 * where \f$w_{ij}\f$ correpond to cotangent weights. See
 	 * @ref smooth_weight::cotangent. Recall that \f$j\f$ iterates
@@ -103,8 +103,10 @@ namespace local_private {
 	 * neighbourhood relationship is encoded in the mesh @e m.
 	 * @param[out] new_verts The coordinates of the smoothed vertices.
 	 * @pre The mesh requires the data necessary data to compute the weights:
-	 * - for a @ref smoothing_weight::uniform see @ref make_uniform_weight.
-	 * - for a @ref smoothing_weight::cotangent see @ref make_cotangent_weight.
+	 * - for a @ref smoothing_weight::uniform see precondition of
+	 * @ref make_uniform_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&)
+	 * - for a @ref smoothing_weight::cotangent see precondition of
+	 * @ref make_cotangent_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&).
 	 */
 	void apply_local
 	(
@@ -125,8 +127,10 @@ namespace local_private {
 	 * neighbourhood relationship is encoded in the mesh @e m.
 	 * @param[out] new_verts The coordinates of the smoothed vertices.
 	 * @pre The mesh requires the data necessary data to compute the weights:
-	 * - for a @ref smoothing_weight::uniform see @ref make_uniform_weight.
-	 * - for a @ref smoothing_weight::cotangent see @ref make_cotangent_weight.
+	 * - for a @ref smoothing_weight::uniform see precondition of
+	 * @ref make_uniform_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&)
+	 * - for a @ref smoothing_weight::cotangent see precondition of
+	 * @ref make_cotangent_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&).
 	 */
 	void apply_local
 	(
@@ -151,8 +155,10 @@ namespace local_private {
 	 * @param[out] new_verts At the end of algorithm they may contain the final
 	 * coordinates of the vertices of the mesh depending on the returned value.
 	 * @pre The mesh requires the data necessary data to compute the weights:
-	 * - for a @ref smoothing_weight::uniform see @ref make_uniform_weight.
-	 * - for a @ref smoothing_weight::cotangent see @ref make_cotangent_weight.
+	 * - for a @ref smoothing_weight::uniform see precondition of
+	 * @ref make_uniform_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&)
+	 * - for a @ref smoothing_weight::cotangent see precondition of
+	 * @ref make_cotangent_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&).
 	 * @return Returns true if the final coordinates of the vertices are in
 	 * new_verts. Returns false if otherwise.
 	 */
@@ -179,8 +185,10 @@ namespace local_private {
 	 * @param[out] new_verts At the end of algorithm they may contain the final
 	 * coordinates of the vertices of the mesh depending on the returned value.
 	 * @pre The mesh requires the data necessary data to compute the weights:
-	 * - for a @ref smoothing_weight::uniform see @ref make_uniform_weight.
-	 * - for a @ref smoothing_weight::cotangent see @ref make_cotangent_weight.
+	 * - for a @ref smoothing_weight::uniform see precondition of
+	 * @ref make_uniform_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&)
+	 * - for a @ref smoothing_weight::cotangent see precondition of
+	 * @ref make_cotangent_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&).
 	 * @return Returns true if the final coordinates of the vertices are in
 	 * new_verts. Returns false if otherwise.
 	 */
@@ -208,8 +216,10 @@ namespace local_private {
 	 * @param[out] new_verts At the end of algorithm they contain the final
 	 * coordinates of the vertices of the mesh.
 	 * @pre The mesh requires the data necessary data to compute the weights:
-	 * - for a @ref smoothing_weight::uniform see @ref make_uniform_weight.
-	 * - for a @ref smoothing_weight::cotangent see @ref make_cotangent_weight.
+	 * - for a @ref smoothing_weight::uniform see precondition of
+	 * @ref make_uniform_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&)
+	 * - for a @ref smoothing_weight::cotangent see precondition of
+	 * @ref make_cotangent_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&).
 	 */
 	void apply_twice_per_it
 	(
@@ -236,8 +246,10 @@ namespace local_private {
 	 * @param[out] new_verts At the end of algorithm they contain the final
 	 * coordinates of the vertices of the mesh.
 	 * @pre The mesh requires the data necessary data to compute the weights:
-	 * - for a @ref smoothing_weight::uniform see @ref make_uniform_weight.
-	 * - for a @ref smoothing_weight::cotangent see @ref make_cotangent_weight.
+	 * - for a @ref smoothing_weight::uniform see precondition of
+	 * @ref make_uniform_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&)
+	 * - for a @ref smoothing_weight::cotangent see precondition of
+	 * @ref make_cotangent_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&).
 	 */
 	void apply_twice_per_it
 	(

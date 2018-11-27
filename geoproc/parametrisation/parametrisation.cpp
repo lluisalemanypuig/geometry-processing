@@ -4,13 +4,17 @@
 #include <iostream>
 using namespace std;
 
+// geoproc includes
+#include <geoproc/smoothing/local_private.hpp>
+
 namespace geoproc {
+using namespace smoothing;
 namespace parametrisation {
 
 	bool harmonic_maps
 	(
-		const TriangleMesh& m, const boundary_shape& s,
-		vector<glm::vec2>& uvs
+		const TriangleMesh& m, const smooth_weight& w,
+		const boundary_shape& s, vector<glm::vec2>& uvs
 	)
 	{
 		const vector<vector<int> >& bounds = m.get_boundaries();
@@ -28,6 +32,8 @@ namespace parametrisation {
 		const int N = m.n_vertices();
 		uvs = vector<glm::vec2>(N, glm::vec2(0.0f,0.0f));
 
+		// constant vertices
+		vector<bool> constant(N, false);
 		// boundary contains corner indices
 		const vector<int>& boundary = bounds[0];
 
@@ -40,6 +46,7 @@ namespace parametrisation {
 			float alpha = 0.0f;
 			for (size_t i = 0; i < boundary.size(); ++i, alpha += inc) {
 				int v_idx = m.get_vertex_corner(boundary[i]);
+				constant[v_idx] = true;
 				uvs[v_idx].x = std::cos(alpha);
 				uvs[v_idx].y = std::sin(alpha);
 			}
@@ -57,26 +64,46 @@ namespace parametrisation {
 			size_t bound_it = 0;
 			for (int i = 0; i < n_side1; ++i, ++bound_it) {
 				int v_idx = m.get_vertex_corner(boundary[bound_it]);
+				constant[v_idx] = true;
 				uvs[v_idx].x = 1.0f;
 				uvs[v_idx].y = -1.0f + i*(2.0f/n_side1);
 			}
 			for (int i = 0; i < n_side2; ++i, ++bound_it) {
 				int v_idx = m.get_vertex_corner(boundary[bound_it]);
+				constant[v_idx] = true;
 				uvs[v_idx].x = 1.0f - i*(2.0f/n_side2);
 				uvs[v_idx].y = 1.0f;
 			}
 			for (int i = 0; i < n_side3; ++i, ++bound_it) {
 				int v_idx = m.get_vertex_corner(boundary[bound_it]);
+				constant[v_idx] = true;
 				uvs[v_idx].x = -1.0f;
 				uvs[v_idx].y = 1.0f - i*(2.0f/n_side3);
 			}
 			for (int i = 0; i < n_side4; ++i, ++bound_it) {
 				int v_idx = m.get_vertex_corner(boundary[bound_it]);
+				constant[v_idx] = true;
 				uvs[v_idx].x = -1.0f + i*(2.0f/n_side4);
 				uvs[v_idx].y = -1.0f;
 			}
 		}
 
+		int n_constant = boundary.size();
+
+		// weights for system's matrix
+		vector<vector<float> > ws(N, vector<float>(N, 0.0f));
+		if (w == smooth_weight::uniform) {
+			for (int i = 0; i < N; ++i) {
+				local_private::make_uniform_weights(i, m, &ws[i][0]);
+				ws[i][i] = -1.0f;
+			}
+		}
+		else if (w == smooth_weight::cotangent) {
+			for (int i = 0; i < N; ++i) {
+				local_private::make_cotangent_weights(i, m, &ws[i][0]);
+				ws[i][i] = -1.0f;
+			}
+		}
 
 
 

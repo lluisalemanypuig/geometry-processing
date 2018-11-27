@@ -11,6 +11,20 @@ namespace geoproc {
 /// Shorthand for a pair of vertex indices.
 typedef std::pair<int,int> mesh_edge;
 
+/**
+ * @brief Implementation of a triangular mesh.
+ *
+ * It contains the vertices of a triangular mesh (@ref vertices) which
+ * are related using indices (@ref triangles), hence following the usual
+ * implementation.
+ *
+ * It also stores normal vectors per triangle (@ref normal_vectors), angles
+ * and area of each triangle (@ref angles, @ref areas), and implements the
+ * corner table data structure (see @ref corners, @ref opposite_corners).
+ *
+ * Finally, it holds other interesting information about the structure of the
+ * mesh, like boundaries (see @ref boundary_edges, @ref boundaries).
+ */
 class TriangleMesh {
 	protected:
 		/// The set of vertices of the mesh.
@@ -99,7 +113,7 @@ class TriangleMesh {
 		 */
 		std::vector<int> corners;
 		/**
-		 * @brief Boundaries of the mesh.
+		 * @brief Boundary edges of the mesh.
 		 *
 		 * The hard boundary is composed by pairs of vertices
 		 * (each identified with a vertex index).
@@ -138,10 +152,14 @@ class TriangleMesh {
 		 * @brief Is the neighbourhood data valid?
 		 *
 		 * Is the data in @ref corners, @ref opposite_corners
-		 * and @ref boundary valid?
+		 * and @ref boundary_edges valid?
 		 */
 		bool neigh_valid;
-		/// Are the boundaries of the mesh valid?
+		/**
+		 * @brief Are the boundaries of the mesh valid?
+		 *
+		 * Is the data in @ref boundaries valid?
+		 */
 		bool boundaries_valid;
 
 	protected:
@@ -275,7 +293,7 @@ class TriangleMesh {
 		 * @brief Builds the necessary tables to iterate through
 		 * the one-ring of a vertex, ....
 		 *
-		 * Builds @ref corners and @ref opposite_corner tables.
+		 * Builds @ref corners and @ref opposite_corners tables.
 		 * It also collects all boundary edges and stores them
 		 * in the same "boundary list" in @ref boundaries. If one
 		 * wants all boundaries as edge lists, call function
@@ -292,7 +310,7 @@ class TriangleMesh {
 		/**
 		 * @brief Computes the angles and the areas of the triangles.
 		 *
-		 * Fills the containers @ref angles, @ref areas
+		 * Fills the containers @ref angles, @ref areas.
 		 */
 		void make_angles_area();
 
@@ -308,8 +326,16 @@ class TriangleMesh {
 		/**
 		 * @brief Frees all the memoery occupied by the mesh.
 		 *
-		 * Clears the contents of @ref vertices, @ref triangles,
-		 * @ref opposite_corners, @ref corners and @ref boundary.
+		 * Clears the contents of:
+		 * - @ref vertices,
+		 * - @ref triangles,
+		 * - @ref normal_vectors,
+		 * - @ref angles,
+		 * - @ref areas,
+		 * - @ref opposite_corners,
+		 * - @ref corners,
+		 * - @ref boundary_edges,
+		 * - @ref boundaries
 		 */
 		void destroy();
 
@@ -356,9 +382,9 @@ class TriangleMesh {
 		 * It is guaranteed that the order of the vertices is
 		 * the same as it is given in the loaded file.
 		 * @param t A valid triangle index: 0 <= @e t < number of triangles.
-		 * @param[out] v1 The first vertex index of the face.
-		 * @param[out] v2 The second vertex index of the face.
-		 * @param[out] v3 The third vertex index of the face.
+		 * @param[out] v0 The first vertex index of the face.
+		 * @param[out] v1 The second vertex index of the face.
+		 * @param[out] v2 The third vertex index of the face.
 		 */
 		void get_corners_triangle(int t, int& v0, int& v1, int& v2) const;
 
@@ -368,26 +394,24 @@ class TriangleMesh {
 		 * It is guaranteed that the order of the vertices is
 		 * the same as it is given in the loaded file.
 		 * @param t A valid triangle index: 0 <= @e t < number of triangles.
-		 * @param[out] v1 The first vertex index of the face.
-		 * @param[out] v2 The second vertex index of the face.
-		 * @param[out] v3 The third vertex index of the face.
+		 * @param[out] v0 The first vertex index of the face.
+		 * @param[out] v1 The second vertex index of the face.
+		 * @param[out] v2 The third vertex index of the face.
 		 */
 		void get_vertices_triangle(int t, int& v0, int& v1, int& v2) const;
 
 		/**
 		 * @brief Returns the sorted indexes of the vertices of a face.
 		 *
-		 * It is guaranteed that the order of the vertices is
-		 * the same as it is given in the loaded file.
-		 *
 		 * The vertices are sorted so that the first is equal to vertex
-		 * index @e v
+		 * index @e v.
 		 * @param t A valid triangle index: 0 <= @e t < number of triangles.
-		 * @param[out] v1 The first vertex index of the face.
-		 * @param[out] v2 The second vertex index of the face.
-		 * @param[out] v3 The third vertex index of the face.
+		 * @param v A vertex of the triangle @e t.
+		 * @param[out] v0 The first vertex index of the face.
+		 * @param[out] v1 The second vertex index of the face.
+		 * @param[out] v2 The third vertex index of the face.
 		 */
-		void get_vertices_triangle(int t, int v, int& v1, int& v2, int& v3) const;
+		void get_vertices_triangle(int t, int v, int& v0, int& v1, int& v2) const;
 
 		/**
 		 * @brief Returns the corner opposite to corner c.
@@ -416,7 +440,7 @@ class TriangleMesh {
 		 * @brief Returns the area of face @e f.
 		 *
 		 * First, retrieves the vertices of the face with
-		 * @ref get_vertices_face and then calls
+		 * @ref get_vertices_triangle and then calls
 		 * @ref get_triangle_area(int,int,int)const.
 		 * @param t A valid triangle index: 0 <= @e t < number of triangles.
 		 */

@@ -15,7 +15,9 @@ namespace geoproc {
 namespace smoothing {
 namespace local {
 
-	void laplacian(const smooth_weight& w, float l, size_t nit, TriangleMesh& m) {
+	void laplacian
+	(const smooth_weight& w, float l, size_t nit, TriangleMesh& m)
+	{
 		const int N = m.n_vertices();
 
 		// Allocate memory for two arrays of vertices.
@@ -37,7 +39,9 @@ namespace local {
 		free(new_verts);
 	}
 
-	void laplacian(const smooth_weight& w, float l, size_t nit, size_t nt, TriangleMesh& m) {
+	void laplacian
+	(const smooth_weight& w, float l, size_t nit, size_t nt, TriangleMesh& m)
+	{
 		if (nt == 1) {
 			laplacian(w,l,nit, m);
 			return;
@@ -64,7 +68,9 @@ namespace local {
 		free(new_verts);
 	}
 
-	void bilaplacian(const smooth_weight& w, float l, size_t nit, TriangleMesh& m) {
+	void bilaplacian
+	(const smooth_weight& w, float l, size_t nit, TriangleMesh& m)
+	{
 		const int N = m.n_vertices();
 
 		// Allocate memory for two arrays of vertices.
@@ -84,7 +90,9 @@ namespace local {
 		free(new_verts);
 	}
 
-	void bilaplacian(const smooth_weight& w, float l, size_t nit, size_t nt, TriangleMesh& m) {
+	void bilaplacian
+	(const smooth_weight& w, float l, size_t nit, size_t nt, TriangleMesh& m)
+	{
 		if (nt == 1) {
 			bilaplacian(w,l,nit, m);
 			return;
@@ -109,7 +117,9 @@ namespace local {
 		free(new_verts);
 	}
 
-	void TaubinLM(const smooth_weight& w, float l, size_t nit, TriangleMesh& m) {
+	void TaubinLM
+	(const smooth_weight& w, float l, size_t nit, TriangleMesh& m)
+	{
 		const int N = m.n_vertices();
 		const float Kpb = 0.1f;
 		const float mu = 1.0f/(Kpb - 1.0f/l);
@@ -131,7 +141,9 @@ namespace local {
 		free(new_verts);
 	}
 
-	void TaubinLM(const smooth_weight& w, float l, size_t nit, size_t nt, TriangleMesh& m) {
+	void TaubinLM
+	(const smooth_weight& w, float l, size_t nit, size_t nt, TriangleMesh& m)
+	{
 		if (nt == 1) {
 			TaubinLM(w,l,nit, m);
 			return;

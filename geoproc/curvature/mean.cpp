@@ -95,7 +95,7 @@ namespace curvature {
 	}
 
 	void mean
-	(const TriangleMesh& mesh, vector<float>& Kh, float *m, float *M) {
+	(const TriangleMesh& mesh, std::vector<float>& Kh, float *m, float *M) {
 		const int N = mesh.n_vertices();
 		Kh.resize(N);
 
@@ -117,7 +117,7 @@ namespace curvature {
 		}
 	}
 
-	void mean(const TriangleMesh& mesh, vector<float>& Kh, size_t nt) {
+	void mean(const TriangleMesh& mesh, std::vector<float>& Kh, size_t nt) {
 		if (nt == 1) {
 			mean(mesh, Kh);
 			return;
@@ -133,7 +133,7 @@ namespace curvature {
 	}
 
 	void mean
-	(const TriangleMesh& mesh, vector<float>& Kh, size_t nt, float *m, float *M)
+	(const TriangleMesh& mesh, std::vector<float>& Kh, size_t nt, float *m, float *M)
 	{
 		if (nt == 1) {
 			mean(mesh, Kh, m, M);

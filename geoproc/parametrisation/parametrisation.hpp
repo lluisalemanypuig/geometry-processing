@@ -8,6 +8,7 @@
 
 // geoproc includes
 #include <geoproc/triangle_mesh.hpp>
+#include <geoproc/smoothing/smoothing_defs.hpp>
 
 namespace geoproc {
 namespace parametrisation {
@@ -29,8 +30,9 @@ namespace parametrisation {
 
 	/**
 	 * @brief Calculates the texture coordinates using Harmonic Maps
-	 * @param[in] m Input mesh. It must have one single boundary.
-	 * @param[in] s Shape of the boundary vertices on the texture.
+	 * @param m Input mesh. It must have one single boundary.
+	 * @param w Type of weights to use to compute the parametrisation.
+	 * @param s Shape of the boundary vertices on the texture.
 	 * @param[out] uvs Texture coordinates of the vertices of @e m.
 	 * @pre The mesh requires:
 	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
@@ -40,7 +42,8 @@ namespace parametrisation {
 	 * are no boundaries on the mesh or there are more than one.
 	 */
 	bool harmonic_maps
-	(const TriangleMesh& m, const boundary_shape& s, std::vector<glm::vec2>& uvs);
+	(const TriangleMesh& m, const smoothing::smooth_weight& w,
+	 const boundary_shape& s, std::vector<glm::vec2>& uvs);
 
 } // -- namespace parametrisation
 } // -- namespace geoproc

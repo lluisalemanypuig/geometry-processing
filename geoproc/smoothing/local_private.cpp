@@ -48,7 +48,7 @@ namespace local_private {
 	}
 
 	void make_uniform_weight
-	(int vi, const TriangleMesh& m, const vec3 *verts, vec3& L)
+	(int vi, const TriangleMesh& m, const glm::vec3 *verts, glm::vec3& L)
 	{
 		assert(verts != nullptr);
 
@@ -139,7 +139,7 @@ namespace local_private {
 	}
 
 	void make_cotangent_weight
-	(int vi, const TriangleMesh& m, const vec3 *verts, vec3& L)
+	(int vi, const TriangleMesh& m, const glm::vec3 *verts, glm::vec3& L)
 	{
 		assert(verts != nullptr);
 
@@ -206,7 +206,7 @@ namespace local_private {
 	(
 		const smooth_weight& w, float l,
 		const TriangleMesh& m,
-		const vec3 *from, vec3 *to
+		const glm::vec3 *from, glm::vec3 *to
 	)
 	{
 		assert(from != nullptr);
@@ -242,7 +242,7 @@ namespace local_private {
 		const smooth_weight& w, float l,
 		const TriangleMesh& m,
 		size_t nt,
-		const vec3 *from, vec3 *to
+		const glm::vec3 *from, glm::vec3 *to
 	)
 	{
 		assert(from != nullptr);
@@ -282,8 +282,8 @@ namespace local_private {
 		const smooth_weight& w, float l,
 		size_t nit,
 		const TriangleMesh& m,
-		vec3 *old_verts,
-		vec3 *new_verts
+		glm::vec3 *old_verts,
+		glm::vec3 *new_verts
 	)
 	{
 		assert(old_verts != nullptr);
@@ -317,8 +317,8 @@ namespace local_private {
 		const smooth_weight& w, float l,
 		size_t nit, size_t n_threads,
 		const TriangleMesh& m,
-		vec3 *old_verts,
-		vec3 *new_verts
+		glm::vec3 *old_verts,
+		glm::vec3 *new_verts
 	)
 	{
 		assert(old_verts != nullptr);
@@ -353,8 +353,8 @@ namespace local_private {
 		float l1, float l2,
 		size_t nit,
 		const TriangleMesh& m,
-		vec3 *old_verts,
-		vec3 *new_verts
+		glm::vec3 *old_verts,
+		glm::vec3 *new_verts
 	)
 	{
 		// for each iteration of the algorithm
@@ -370,8 +370,8 @@ namespace local_private {
 		float l1, float l2,
 		size_t nit, size_t n_threads,
 		const TriangleMesh& m,
-		vec3 *old_verts,
-		vec3 *new_verts
+		glm::vec3 *old_verts,
+		glm::vec3 *new_verts
 	)
 	{
 		// for each iteration of the algorithm

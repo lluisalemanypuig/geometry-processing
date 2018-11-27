@@ -561,11 +561,13 @@ void TriangleMesh::make_boundaries() {
 void TriangleMesh::destroy() {
 	vertices.clear();
 	triangles.clear();
-	opposite_corners.clear();
-	corners.clear();
-	boundaries.clear();
+	normal_vectors.clear();
 	angles.clear();
 	areas.clear();
+	opposite_corners.clear();
+	corners.clear();
+	boundary_edges.clear();
+	boundaries.clear();
 
 	invalidate_state();
 }
