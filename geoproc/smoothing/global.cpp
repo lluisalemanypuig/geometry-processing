@@ -16,9 +16,7 @@ using namespace glm;
 #include <geoproc/smoothing/local_private.hpp>
 
 // Eigen includes
-#include <Eigen/SparseCholesky>
 #include <Eigen/Sparse>
-#include <Eigen/Dense>
 
 namespace geoproc {
 namespace smoothing {

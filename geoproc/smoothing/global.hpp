@@ -17,6 +17,9 @@ namespace global {
 	 * @param op Smoothing operator.
 	 * @param w Weight type.
 	 * @param[out] m Smoothed mesh.
+	 * * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
 	 * @returns Returns true on success: parameters were correct and the system
 	 * was solved succesfully.
 	 * @pre This algorithm is implemented for the following smoothing
