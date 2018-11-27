@@ -116,19 +116,19 @@ namespace test_geoproc {
 
 		if (mesh_file == "none") {
 			cerr << "Error: mesh file not specified" << endl;
-			cerr << "    Use ./command-line smoothing --help" << endl;
+			cerr << "    Use ./command-line local-smoothing --help" << endl;
 			cerr << "to see the usage" << endl;
 			return 1;
 		}
 		if (alg == "none") {
 			cerr << "Error: algorithm not specified" << endl;
-			cerr << "    Use ./command-line smoothing --help" << endl;
+			cerr << "    Use ./command-line local-smoothing --help" << endl;
 			cerr << "to see the usage" << endl;
 			return 1;
 		}
 		if (allowed_algorithms.find(alg) == allowed_algorithms.end()) {
 			cerr << "Error: value '" << alg << "' for algorithm parameter not valid" << endl;
-			cerr << "    Use ./command-line smoothing --help" << endl;
+			cerr << "    Use ./command-line local-smoothing --help" << endl;
 			cerr << "to see the usage" << endl;
 			return 1;
 		}
@@ -136,22 +136,26 @@ namespace test_geoproc {
 		if (alg == "laplacian" or alg == "bilaplacian" or alg == "TaubinLM") {
 			if (not _lambda) {
 				cerr << "Error: lambda parameter missing" << endl;
-				cerr << "    Use ./command-line smoothing --help to see the usage" << endl;
+				cerr << "    Use ./command-line local-smoothing --help" << endl;
+				cerr << "to see the usage" << endl;
 				return 1;
 			}
 			if (not _it) {
 				cerr << "Error: amount of iterations parameter missing" << endl;
-				cerr << "    Use ./command-line smoothing --help to see the usage" << endl;
+				cerr << "    Use ./command-line local-smoothing --help" << endl;
+				cerr << "to see the usage" << endl;
 				return 1;
 			}
 			if (weight_type == "none") {
 				cerr << "Error: weight type parameter missing" << endl;
-				cerr << "    Use ./command-line smoothing --help to see the usage" << endl;
+				cerr << "    Use ./command-line local-smoothing --help" << endl;
+				cerr << "to see the usage" << endl;
 				return 1;
 			}
 			if (weight_type != "uniform" and weight_type != "cotangent") {
 				cerr << "Error: value '" << weight_type << "' for weight type not allowed" << endl;
-				cerr << "    Use ./command-line smoothing --help to see the usage" << endl;
+				cerr << "    Use ./command-line local-smoothing --help" << endl;
+				cerr << "to see the usage" << endl;
 				return 1;
 			}
 		}

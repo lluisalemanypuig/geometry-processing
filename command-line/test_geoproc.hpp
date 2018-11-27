@@ -23,5 +23,6 @@ namespace test_geoproc {
 	int test_smoothing_local(int argc, char *argv[]);
 	int test_smoothing_global(int argc, char *argv[]);
 	int test_band_frequency(int argc, char *argv[]);
+	int test_harmonic_maps(int argc, char *argv[]);
 
 } // -- namespace test_algorithms

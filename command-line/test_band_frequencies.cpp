@@ -231,7 +231,7 @@ namespace test_geoproc {
 
 		if (mesh_file == "none") {
 			cerr << "Error: mesh file not specified" << endl;
-			cerr << "    Use ./command-line high-frequency --help" << endl;
+			cerr << "    Use ./command-line band-frequencies --help" << endl;
 			cerr << "to see the usage" << endl;
 			return 1;
 		}

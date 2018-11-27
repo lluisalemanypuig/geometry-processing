@@ -11,6 +11,8 @@ namespace test_geoproc {
 
 	void boundaries_usage() {
 		cout << "Boundary computation" << endl;
+		cout << "Output the corners that make up a mesh. Then," << endl;
+		cout << "output the vertex indices." << endl;
 		cout << endl;
 		cout << "    --load f: load a mesh stored in the .ply file f" << endl;
 		cout << endl;
@@ -41,7 +43,7 @@ namespace test_geoproc {
 
 		if (mesh_file == "none") {
 			cerr << "Error: mesh file not specified" << endl;
-			cerr << "    Use ./command-line iterate --help" << endl;
+			cerr << "    Use ./command-line boundaries --help" << endl;
 			cerr << "to see the usage" << endl;
 			return 1;
 		}
@@ -60,11 +62,20 @@ namespace test_geoproc {
 			 << timing::elapsed_milliseconds(begin,end) << " ms" << endl;
 
 		const vector<vector<int> >& bounds = mesh.get_boundaries();
-		cout << "This mesh has " << bounds.size() << " boundaries:" << endl;
+		cout << "This mesh has " << bounds.size() << " boundaries." << endl;
+		cout << "Corner indices:" << endl;
 		for (size_t i = 0; i < bounds.size(); ++i) {
 			cout << "    " << i << ":";
 			for (size_t j = 0; j < bounds[i].size(); ++j) {
 				cout << " " << bounds[i][j];
+			}
+			cout << endl;
+		}
+		cout << "Vertex indices:" << endl;
+		for (size_t i = 0; i < bounds.size(); ++i) {
+			cout << "    " << i << ":";
+			for (size_t j = 0; j < bounds[i].size(); ++j) {
+				cout << " " << mesh.get_vertex_corner(bounds[i][j]);
 			}
 			cout << endl;
 		}

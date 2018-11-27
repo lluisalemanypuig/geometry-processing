@@ -23,6 +23,7 @@ int main(int argc, char *argv[]) {
 		cout << "    local-smoothing" << endl;
 		cout << "    global-smoothing" << endl;
 		cout << "    band-frequencies" << endl;
+		cout << "    harmonic-maps" << endl;
 		cout << "Use [-h|--help] on every option to see its usage." << endl;
 		return 0;
 	}
@@ -49,6 +50,10 @@ int main(int argc, char *argv[]) {
 
 	if (strcmp(argv[1], "band-frequencies") == 0) {
 		return test_geoproc::test_band_frequency(argc, argv);
+	}
+
+	if (strcmp(argv[1], "harmonic-maps") == 0) {
+		return test_geoproc::test_harmonic_maps(argc, argv);
 	}
 
 	cerr << "Error: algorithm '" << string(argv[1]) << "' not recognised" << endl;

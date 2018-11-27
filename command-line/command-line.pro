@@ -17,7 +17,8 @@ SOURCES +=						\
     test_band_frequencies.cpp \
     test_smoothing_local.cpp \
     test_smoothing_global.cpp \
-    test_boundaries.cpp
+    test_boundaries.cpp \
+    test_harmonic_maps.cpp
 
 HEADERS +=						\
     test_geoproc.hpp			\

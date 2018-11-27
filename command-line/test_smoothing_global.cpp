@@ -92,25 +92,25 @@ namespace test_geoproc {
 
 		if (mesh_file == "none") {
 			cerr << "Error: mesh file not specified" << endl;
-			cerr << "    Use ./command-line smoothing --help" << endl;
+			cerr << "    Use ./command-line global-smoothing --help" << endl;
 			cerr << "to see the usage" << endl;
 			return 1;
 		}
 		if (opt == "none") {
 			cerr << "Error: operator not specified" << endl;
-			cerr << "    Use ./command-line smoothing --help" << endl;
+			cerr << "    Use ./command-line global-smoothing --help" << endl;
 			cerr << "to see the usage" << endl;
 			return 1;
 		}
 		if (weight_type == "none") {
 			cerr << "Error: weight type not specified" << endl;
-			cerr << "    Use ./command-line smoothing --help" << endl;
+			cerr << "    Use ./command-line global-smoothing --help" << endl;
 			cerr << "to see the usage" << endl;
 			return 1;
 		}
 		if (allowed_operators.find(opt) == allowed_operators.end()) {
 			cerr << "Error: value '" << opt << "' for operator parameter not valid" << endl;
-			cerr << "    Use ./command-line smoothing --help" << endl;
+			cerr << "    Use ./command-line global-smoothing --help" << endl;
 			cerr << "to see the usage" << endl;
 			return 1;
 		}
