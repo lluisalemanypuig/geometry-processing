@@ -32,8 +32,14 @@ namespace parametrisation {
 	 * @param[in] m Input mesh. It must have one single boundary.
 	 * @param[in] s Shape of the boundary vertices on the texture.
 	 * @param[out] uvs Texture coordinates of the vertices of @e m.
+	 * @pre The mesh requires:
+	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+	 * - Boundaries (see @ref TriangleMesh::make_boundaries)
+	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
+	 * @return Returns true on success. The procedure might fail if there
+	 * are no boundaries on the mesh or there are more than one.
 	 */
-	void harmonic_map
+	bool harmonic_maps
 	(const TriangleMesh& m, const boundary_shape& s, std::vector<glm::vec2>& uvs);
 
 } // -- namespace parametrisation
