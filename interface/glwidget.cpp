@@ -187,7 +187,7 @@ void GLWidget::paintGL() {
 	program->bind();
 	if (pm == polymode::wireframe) {
 		/* Note to self: setting the uniforms here is necessary
-		 * for a correct display of curvature values, wireframe
+		 * for a correct display of curvature values in wireframe
 		 * mode, ...
 		 */
 
