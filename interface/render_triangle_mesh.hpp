@@ -32,6 +32,10 @@ class RenderTriangleMesh : public TriangleMesh {
 		QOpenGLBuffer vbo_triangles;
 
 	private:
+
+		/// Make the buffer objects
+		bool make_buffers(QOpenGLShaderProgram *program, bool with_colours);
+
 		/**
 		 * @brief Builds the necessary information for the vertex array/buffer objects.
 		 *

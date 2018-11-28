@@ -12,6 +12,93 @@
 
 // PRIVATE
 
+bool RenderTriangleMesh::make_buffers(QOpenGLShaderProgram *program, bool with_colours) {
+	/* ----- VAO create ----- */
+	vao.create();
+	if (vao.isCreated()) {
+		vao.bind();
+	}
+	else {
+		cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
+		cerr << "    Vertex array object 'vao' not created." << endl;
+		return false;
+	}
+
+	/* ----- VBO VERTICES create ----- */
+	vbo_vertices.create();
+	if (vbo_vertices.isCreated()) {
+		if (not vbo_vertices.bind()) {
+			cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
+			cerr << "    Vertex buffer object not bound" << endl;
+			return false;
+		}
+	}
+	else {
+		cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
+		cerr << "    Vertex buffer object 'vboVertices' not created." << endl;
+		return false;
+	}
+	vbo_vertices.setUsagePattern(QOpenGLBuffer::DynamicDraw);
+	program->enableAttributeArray(0);
+	program->setAttributeBuffer(0, GL_FLOAT, 0, 3, 0);
+
+	/* ----- VBO NORMALS create ----- */
+	vbo_normals.create();
+	if (vbo_normals.isCreated()) {
+		if (not vbo_normals.bind()) {
+			cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
+			cerr << "    Normals buffer object not bound" << endl;
+			return false;
+		}
+	}
+	else {
+		cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
+		cerr << "    Vertex buffer object 'vboNormals' not created." << endl;
+		return false;
+	}
+	vbo_normals.setUsagePattern(QOpenGLBuffer::StaticDraw);
+	program->enableAttributeArray(1);
+	program->setAttributeBuffer(1, GL_FLOAT, 0, 3, 0);
+
+	/* ----- VBO COLORS create ----- */
+	if (with_colours) {
+		vbo_colors.create();
+		if (vbo_colors.isCreated()) {
+			if (not vbo_colors.bind()) {
+				cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
+				cerr << "    Colours buffer object not bound" << endl;
+				return false;
+			}
+		}
+		else {
+			cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
+			cerr << "    Vertex buffer object 'vbo_colors' not created." << endl;
+			return false;
+		}
+		vbo_colors.setUsagePattern(QOpenGLBuffer::DynamicDraw);
+		program->enableAttributeArray(2);
+		program->setAttributeBuffer(2, GL_FLOAT, 0, 3, 0);
+	}
+
+	/* ----- VBO TRIANGLES create ----- */
+	vbo_triangles.create();
+	if (vbo_triangles.isCreated()) {
+		if (not vbo_triangles.bind()) {
+			cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
+			cerr << "    Triangles buffer object not bound" << endl;
+			return false;
+		}
+	}
+	else {
+		cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
+		cerr << "    Vertex buffer object 'vboTriangles' not created." << endl;
+		return false;
+	}
+	vbo_triangles.setUsagePattern(QOpenGLBuffer::StaticDraw);
+
+	return true;
+}
+
 void RenderTriangleMesh::make_VBO_data
 (
 	vector<vec3>& copied_vertices,
@@ -131,15 +218,6 @@ void RenderTriangleMesh::build_cube() {
 	set_triangles( vector<int>(&faces[0], &faces[36]) );
 	make_normal_vectors();
 
-	/*
-	for (int i = 0; i < 8; ++i) {
-		add_vertex(0.5f * vec3(vertices[3*i], vertices[3*i+1], vertices[3*i+2]));
-	}
-	for (int i = 0; i < 12; ++i) {
-		add_triangle(faces[3*i], faces[3*i+1], faces[3*i+2]);
-	}
-	*/
-
 	make_neighbourhood_data();
 }
 
@@ -161,72 +239,7 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program) {
 		return false;
 	}
 
-	/* ----- VAO create ----- */
-	vao.destroy();
-	vao.create();
-	if (vao.isCreated()) {
-		vao.bind();
-	}
-	else {
-		cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
-		cerr << "    Vertex array object 'vao' not created." << endl;
-		return false;
-	}
-
-	/* ----- VBO VERTICES create ----- */
-	vbo_vertices.destroy();
-	vbo_vertices.create();
-	if (vbo_vertices.isCreated()) {
-		if (not vbo_vertices.bind()) {
-			cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
-			cerr << "    Vertex buffer object not bound" << endl;
-			return false;
-		}
-	}
-	else {
-		cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
-		cerr << "    Vertex buffer object 'vboVertices' not created." << endl;
-		return false;
-	}
-	vbo_vertices.setUsagePattern(QOpenGLBuffer::DynamicDraw);
-	program->enableAttributeArray(0);
-	program->setAttributeBuffer(0, GL_FLOAT, 0, 3, 0);
-
-	/* ----- VBO NORMALS create ----- */
-	vbo_normals.destroy();
-	vbo_normals.create();
-	if (vbo_normals.isCreated()) {
-		if (not vbo_normals.bind()) {
-			cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
-			cerr << "    Normals buffer object not bound" << endl;
-			return false;
-		}
-	}
-	else {
-		cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
-		cerr << "    Vertex buffer object 'vboNormals' not created." << endl;
-		return false;
-	}
-	vbo_normals.setUsagePattern(QOpenGLBuffer::StaticDraw);
-	program->enableAttributeArray(1);
-	program->setAttributeBuffer(1, GL_FLOAT, 0, 3, 0);
-
-	/* ----- VBO TRIANGLES create ----- */
-	vbo_triangles.destroy();
-	vbo_triangles.create();
-	if (vbo_triangles.isCreated()) {
-		if (not vbo_triangles.bind()) {
-			cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
-			cerr << "    Triangles buffer object not bound" << endl;
-			return false;
-		}
-	}
-	else {
-		cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
-		cerr << "    Vertex buffer object 'vboTriangles' not created." << endl;
-		return false;
-	}
-	vbo_triangles.setUsagePattern(QOpenGLBuffer::StaticDraw);
+	make_buffers(program, false);
 
 	/* ------------------------------------- */
 	/* Fill the vertex array/buffer objects. */
@@ -285,86 +298,7 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program, const vector<vec3>&
 		return false;
 	}
 
-	/* ----- VAO create ----- */
-	vao.create();
-	if (vao.isCreated()) {
-		vao.bind();
-	}
-	else {
-		cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
-		cerr << "    Vertex array object 'vao' not created." << endl;
-		return false;
-	}
-
-	/* ----- VBO VERTICES create ----- */
-	vbo_vertices.create();
-	if (vbo_vertices.isCreated()) {
-		if (not vbo_vertices.bind()) {
-			cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
-			cerr << "    Vertex buffer object not bound" << endl;
-			return false;
-		}
-	}
-	else {
-		cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
-		cerr << "    Vertex buffer object 'vbo_vertices' not created." << endl;
-		return false;
-	}
-	vbo_vertices.setUsagePattern(QOpenGLBuffer::DynamicDraw);
-	program->enableAttributeArray(0);
-	program->setAttributeBuffer(0, GL_FLOAT, 0, 3, 0);
-
-	/* ----- VBO NORMALS create ----- */
-	vbo_normals.create();
-	if (vbo_normals.isCreated()) {
-		if (not vbo_normals.bind()) {
-			cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
-			cerr << "    Normals buffer object not bound" << endl;
-			return false;
-		}
-	}
-	else {
-		cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
-		cerr << "    Vertex buffer object 'vbo_normals' not created." << endl;
-		return false;
-	}
-	vbo_normals.setUsagePattern(QOpenGLBuffer::StaticDraw);
-	program->enableAttributeArray(1);
-	program->setAttributeBuffer(1, GL_FLOAT, 0, 3, 0);
-
-	/* ----- VBO COLORS create ----- */
-	vbo_colors.create();
-	if (vbo_colors.isCreated()) {
-		if (not vbo_colors.bind()) {
-			cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
-			cerr << "    Colours buffer object not bound" << endl;
-			return false;
-		}
-	}
-	else {
-		cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
-		cerr << "    Vertex buffer object 'vbo_colors' not created." << endl;
-		return false;
-	}
-	vbo_colors.setUsagePattern(QOpenGLBuffer::DynamicDraw);
-	program->enableAttributeArray(2);
-	program->setAttributeBuffer(2, GL_FLOAT, 0, 3, 0);
-
-	/* ----- VBO TRIANGLES create ----- */
-	vbo_triangles.create();
-	if (vbo_triangles.isCreated()) {
-		if (not vbo_triangles.bind()) {
-			cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
-			cerr << "    Triangles buffer object not bound" << endl;
-			return false;
-		}
-	}
-	else {
-		cerr << "TriangleMesh::init - Error (" << __LINE__ << "):" << endl;
-		cerr << "    Vertex buffer object 'vbo_triangles' not created." << endl;
-		return false;
-	}
-	vbo_triangles.setUsagePattern(QOpenGLBuffer::StaticDraw);
+	make_buffers(program, true);
 
 	/* ------------------------------------- */
 	/* Fill the vertex array/buffer objects. */
@@ -456,7 +390,9 @@ bool RenderTriangleMesh::make_vertices_buffers(QOpenGLShaderProgram *program) {
 	return true;
 }
 
-bool RenderTriangleMesh::make_vertices_normals_buffers(QOpenGLShaderProgram *program) {
+bool RenderTriangleMesh::make_vertices_normals_buffers
+(QOpenGLShaderProgram *program)
+{
 	// make vertex information
 	vector<vec3> vert_info, normal_info;
 	vert_info.resize(triangles.size());
@@ -513,7 +449,9 @@ bool RenderTriangleMesh::make_vertices_normals_buffers(QOpenGLShaderProgram *pro
 	return true;
 }
 
-bool RenderTriangleMesh::make_colours_buffer(QOpenGLShaderProgram *program, const vector<vec3>& colors) {
+bool RenderTriangleMesh::make_colours_buffer
+(QOpenGLShaderProgram *program, const vector<vec3>& colors)
+{
 	// make colours information
 	vector<vec3> cols(triangles.size());
 	for (unsigned int i = 0; i < triangles.size(); i += 3) {
