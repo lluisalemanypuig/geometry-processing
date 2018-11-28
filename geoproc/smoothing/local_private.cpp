@@ -86,6 +86,11 @@ namespace local_private {
 	{
 		assert(pv_ws != nullptr);
 
+		// set contents of pv_ws to null
+		for (int j = 0; j < m.n_vertices(); ++j) {
+			pv_ws[j] = 0;
+		}
+
 		const glm::vec3 *verts = &m.get_vertices()[0];
 
 		iterators::vertex::vertex_face_iterator it(m);
