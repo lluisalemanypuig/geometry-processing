@@ -64,25 +64,25 @@ void MainWindow::enable_curvature() {
 	}
 
 	if (pm == polymode::reflection_lines or pm == polymode::harmonic_maps) {
-		ui->VS_PropCurvValues->setEnabled(false);
-		ui->LE_PropCurvValues->setEnabled(false);
-		ui->RBCurvatureG->setEnabled(false);
-		ui->RBCurvatureH->setEnabled(false);
-		ui->RBNoCurvature->setEnabled(false);
+		ui->VS_Curvature_Proportion->setEnabled(false);
+		ui->LE_Curvature_Proportion->setEnabled(false);
+		ui->RB_Curvature_Gauss->setEnabled(false);
+		ui->RB_Curvature_Mean->setEnabled(false);
+		ui->RB_Curvature_No->setEnabled(false);
 	}
 	else {
 		// solid or wireframe polygon mode
-		ui->VS_PropCurvValues->setEnabled(ct != curv_type::none);
-		ui->LE_PropCurvValues->setEnabled(ct != curv_type::none);
+		ui->VS_Curvature_Proportion->setEnabled(ct != curv_type::none);
+		ui->LE_Curvature_Proportion->setEnabled(ct != curv_type::none);
 
-		ui->RBCurvatureG->setEnabled(true);
-		ui->RBCurvatureH->setEnabled(true);
-		ui->RBNoCurvature->setEnabled(true);
+		ui->RB_Curvature_Gauss->setEnabled(true);
+		ui->RB_Curvature_Mean->setEnabled(true);
+		ui->RB_Curvature_No->setEnabled(true);
 	}
 }
 
 void MainWindow::set_local_smooth_params() {
-	const QString& smooth_operator = ui->local_smooth_CB_operators->currentText();
+	const QString& smooth_operator = ui->CB_Smooth_Local_Operators->currentText();
 	if (smooth_operator == "Laplacian") {
 		ui->DualView_RightRenderer->set_smooth_operator(
 			smoothing::smooth_operator::Laplacian
@@ -103,7 +103,7 @@ void MainWindow::set_local_smooth_params() {
 			 << smooth_operator.toStdString() << "' not recognised." << endl;
 	}
 
-	const QString& weight_type = ui->local_smooth_CB_weight_type->currentText();
+	const QString& weight_type = ui->CB_Smooth_Local_WeightType->currentText();
 	if (weight_type == "Uniform") {
 		ui->DualView_RightRenderer->set_smooth_weight_type(
 			smoothing::smooth_weight::uniform
@@ -119,15 +119,15 @@ void MainWindow::set_local_smooth_params() {
 			 << weight_type.toStdString() << "' not recognised." << endl;
 	}
 
-	size_t nit = ui->local_smooth_LE_Iter->text().toInt();
-	float lambda = ui->local_smooth_LE_Lambda->text().toFloat();
+	size_t nit = ui->LE_Smooth_Local_NumIter->text().toInt();
+	float lambda = ui->LE_Smooth_Local_Lambda->text().toFloat();
 
 	ui->DualView_RightRenderer->set_n_iterations(nit);
 	ui->DualView_RightRenderer->set_lambda(lambda);
 }
 
 void MainWindow::set_global_smooth_params() {
-	const QString& smooth_operator = ui->global_smooth_CB_operators->currentText();
+	const QString& smooth_operator = ui->CB_Smooth_Global_Operators->currentText();
 	if (smooth_operator == "Laplacian") {
 		ui->DualView_RightRenderer->set_smooth_operator(
 			smoothing::smooth_operator::Laplacian
@@ -138,7 +138,7 @@ void MainWindow::set_global_smooth_params() {
 			 << smooth_operator.toStdString() << "' not recognised." << endl;
 	}
 
-	const QString& weight_type = ui->local_smooth_CB_weight_type->currentText();
+	const QString& weight_type = ui->CB_Smooth_Global_WeightType->currentText();
 	if (weight_type == "Uniform") {
 		ui->DualView_RightRenderer->set_smooth_weight_type(
 			smoothing::smooth_weight::uniform
@@ -154,8 +154,8 @@ void MainWindow::set_global_smooth_params() {
 			 << weight_type.toStdString() << "' not recognised." << endl;
 	}
 
-	float v = ui->global_smooth_slider->value();
-	float p = 100.0f*v/ui->global_smooth_slider->maximum();
+	float v = ui->HS_Smooth_Global_Percentage->value();
+	float p = 100.0f*v/ui->HS_Smooth_Global_Percentage->maximum();
 	ui->DualView_RightRenderer->set_perc_fixed_vertices(p);
 }
 
@@ -183,9 +183,11 @@ void MainWindow::on_action_Quit_triggered() {
 	 QApplication::quit();
 }
 
-/* Render radio buttons */
+/* Render */
 
-void MainWindow::on_CBSolid_toggled(bool toggled) {
+// ------ Solid
+
+void MainWindow::on_RB_Render_Solid_toggled(bool toggled) {
 	if (toggled) {
 		ui->SingleView_Renderer->set_polygon_mode(polymode::solid);
 		ui->DualView_LeftRenderer->set_polygon_mode(polymode::solid);
@@ -197,7 +199,9 @@ void MainWindow::on_CBSolid_toggled(bool toggled) {
 	}
 }
 
-void MainWindow::on_CBWireframe_toggled(bool toggled) {
+// ------ Wireframe
+
+void MainWindow::on_RB_Render_Wireframe_toggled(bool toggled) {
 	if (toggled) {
 		ui->SingleView_Renderer->set_polygon_mode(polymode::wireframe);
 		ui->DualView_LeftRenderer->set_polygon_mode(polymode::wireframe);
@@ -209,7 +213,9 @@ void MainWindow::on_CBWireframe_toggled(bool toggled) {
 	}
 }
 
-void MainWindow::on_CBRefLines_toggled(bool toggled) {
+// ------ Reflection lines
+
+void MainWindow::on_RB_Render_RefLines_toggled(bool toggled) {
 	if (toggled) {
 		ui->SingleView_Renderer->set_polygon_mode(polymode::reflection_lines);
 		ui->DualView_LeftRenderer->set_polygon_mode(polymode::reflection_lines);
@@ -221,13 +227,59 @@ void MainWindow::on_CBRefLines_toggled(bool toggled) {
 	}
 }
 
+// ------ Harmonic Maps
+
+void MainWindow::on_RB_Render_HarmonicMaps_toggled(bool checked) {
+	ui->RB_Render_HarmonicMaps_Circle->setEnabled(checked);
+	ui->RB_Render_HarmonicMaps_Square->setEnabled(checked);
+	ui->CB_Render_HarmonicMaps_Wireframe->setEnabled(checked);
+
+	// set polygon mode
+	ui->SingleView_Renderer->set_polygon_mode(polymode::harmonic_maps);
+	ui->DualView_LeftRenderer->set_polygon_mode(polymode::harmonic_maps);
+	ui->DualView_RightRenderer->set_polygon_mode(polymode::harmonic_maps);
+
+	// we may need to enable/disable things
+	enable_curvature();
+
+	change_poly_mode();
+}
+
+void MainWindow::on_RB_Render_HarmonicMaps_Circle_toggled(bool checked) {
+	if (checked) {
+		if (current_tab == 0) {
+			ui->SingleView_Renderer->set_harmonic_map(polymode::harmonic_maps_Circle);
+		}
+		else if (current_tab == 1) {
+			ui->DualView_LeftRenderer->set_harmonic_map(polymode::harmonic_maps_Circle);
+			ui->DualView_RightRenderer->set_harmonic_map(polymode::harmonic_maps_Circle);
+		}
+	}
+}
+
+void MainWindow::on_RB_Render_HarmonicMaps_Square_toggled(bool checked) {
+	if (checked) {
+		if (current_tab == 0) {
+			ui->SingleView_Renderer->set_harmonic_map(polymode::harmonic_maps_Square);
+		}
+		else if (current_tab == 1) {
+			ui->DualView_LeftRenderer->set_harmonic_map(polymode::harmonic_maps_Square);
+			ui->DualView_RightRenderer->set_harmonic_map(polymode::harmonic_maps_Square);
+		}
+	}
+}
+
+void MainWindow::on_CB_Render_HarmonicMaps_Wireframe_toggled(bool checked) {
+
+}
+
 /* Curvature radio buttons */
 
 bool MainWindow::get_prop_curvature_values(float& p) {
 	bool ok = true;
-	p = ui->LE_PropCurvValues->text().toFloat(&ok);
+	p = ui->LE_Curvature_Proportion->text().toFloat(&ok);
 	if (not ok) {
-		cerr << "MainWindow::on_LE_PropCurvValues_returnPressed - error:" << endl;
+		cerr << "MainWindow::on_LE_Curvature_Proportion_returnPressed - error:" << endl;
 		cerr << "    value entered in text box is not valid" << endl;
 	}
 	return ok;
@@ -242,23 +294,23 @@ void MainWindow::set_prop_values_to_all() {
 	}
 }
 
-void MainWindow::on_LE_PropCurvValues_returnPressed() {
+void MainWindow::on_LE_Curvature_Proportion_returnPressed() {
 	float p;
 	if (get_prop_curvature_values(p)) {
 		change_curvature_prop_display(p);
 		if (p < 85.0f) {
-			ui->VS_PropCurvValues->setValue(1);
+			ui->VS_Curvature_Proportion->setValue(1);
 		}
 		else if (p > 99.0f) {
-			ui->VS_PropCurvValues->setValue(10000);
+			ui->VS_Curvature_Proportion->setValue(10000);
 		}
 		else {
-			ui->VS_PropCurvValues->setValue(int((p - 85.0f)*10000.0f/14.0f));
+			ui->VS_Curvature_Proportion->setValue(int((p - 85.0f)*10000.0f/14.0f));
 		}
 	}
 }
 
-void MainWindow::on_VS_PropCurvValues_sliderMoved(int value) {
+void MainWindow::on_VS_Curvature_Proportion_sliderMoved(int value) {
 	float p = value*14.0f/10000.0f + 85.0f;
 	change_curvature_prop_display(p);
 	int v = int(p*100);
@@ -272,10 +324,10 @@ void MainWindow::on_VS_PropCurvValues_sliderMoved(int value) {
 	else if (s.length() == 4) {
 		s = s.substr(0,2) + "." + s.substr(2,2);
 	}
-	ui->LE_PropCurvValues->setText(QString::fromStdString(s));
+	ui->LE_Curvature_Proportion->setText(QString::fromStdString(s));
 }
 
-void MainWindow::on_RBCurvatureG_toggled(bool checked) {
+void MainWindow::on_RB_Curvature_Gauss_toggled(bool checked) {
 	if (checked) {
 		set_prop_values_to_all();
 		ui->SingleView_Renderer->set_curvature_display(curv_type::Gauss);
@@ -288,7 +340,7 @@ void MainWindow::on_RBCurvatureG_toggled(bool checked) {
 	}
 }
 
-void MainWindow::on_RBCurvatureH_toggled(bool checked) {
+void MainWindow::on_RB_Curvature_Mean_toggled(bool checked) {
 	if (checked) {
 		set_prop_values_to_all();
 		ui->SingleView_Renderer->set_curvature_display(curv_type::Mean);
@@ -301,7 +353,7 @@ void MainWindow::on_RBCurvatureH_toggled(bool checked) {
 	}
 }
 
-void MainWindow::on_RBNoCurvature_toggled(bool checked) {
+void MainWindow::on_RB_Curvature_No_toggled(bool checked) {
 	if (checked) {
 		ui->SingleView_Renderer->set_curvature_display(curv_type::none);
 		ui->DualView_LeftRenderer->set_curvature_display(curv_type::none);
@@ -315,8 +367,8 @@ void MainWindow::on_RBNoCurvature_toggled(bool checked) {
 
 /* Smoothing */
 
-void MainWindow::on_global_smooth_slider_valueChanged(int value) {
-	float p = 100.0f*float(value)/ui->global_smooth_slider->maximum();
+void MainWindow::on_HS_Smooth_Global_Percentage_valueChanged(int value) {
+	float p = 100.0f*float(value)/ui->HS_Smooth_Global_Percentage->maximum();
 	p = (int(p*100))/100.0f;
 	string ps = std::to_string(p);
 	if (ps.find('.') == 1) {
@@ -329,20 +381,20 @@ void MainWindow::on_global_smooth_slider_valueChanged(int value) {
 	else {
 		ps = ps.substr(0,6);
 	}
-	ui->gS_Label->setText(QString::fromStdString(ps));
+	ui->LABEL_Smooth_Global_Percentage->setText(QString::fromStdString(ps));
 }
 
-void MainWindow::on_PB_RunLocalSmooth_clicked() {
+void MainWindow::on_PB_Smooth_Local_Run_clicked() {
 	set_local_smooth_params();
 	ui->DualView_RightRenderer->run_local_smoothing_algorithm();
 }
 
-void MainWindow::on_PB_RunGlobalSmooth_clicked() {
+void MainWindow::on_PB_Smooth_Global_Run_clicked() {
 	set_global_smooth_params();
 	ui->DualView_RightRenderer->run_global_smoothing_algorithm();
 }
 
-void MainWindow::on_PB_ResetDualView_clicked() {
+void MainWindow::on_PB_DualView_Reset_clicked() {
 	ui->DualView_RightRenderer->set_mesh(
 		ui->DualView_LeftRenderer->get_mesh()
 	);
@@ -350,8 +402,8 @@ void MainWindow::on_PB_ResetDualView_clicked() {
 
 /* Band frequencies */
 
-void MainWindow::on_PB_RunBandFreqs_clicked() {
-	const QString& txt = ui->TxtEdit_BandFreqs->toPlainText();
+void MainWindow::on_PB_BandFreqs_Run_clicked() {
+	const QString& txt = ui->TxtEdit_BandFreqs_Program->toPlainText();
 	QJsonDocument doc = QJsonDocument::fromJson(txt.toUtf8());
 
 	if (doc.isNull()) {
@@ -364,57 +416,16 @@ void MainWindow::on_PB_RunBandFreqs_clicked() {
 	ui->DualView_RightRenderer->run_band_frequencies(doc);
 }
 
-/* Harmonic Maps */
-
-void MainWindow::on_RB_HarmonicMaps_toggled(bool checked) {
-	ui->RB_HarmonicMaps_Circle->setEnabled(checked);
-	ui->RB_HarmonicMaps_Square->setEnabled(checked);
-
-	// set polygon mode
-	ui->SingleView_Renderer->set_polygon_mode(polymode::harmonic_maps);
-	ui->DualView_LeftRenderer->set_polygon_mode(polymode::harmonic_maps);
-	ui->DualView_RightRenderer->set_polygon_mode(polymode::harmonic_maps);
-
-	// we may need to enable/disable things
-	enable_curvature();
-
-	change_poly_mode();
-}
-
-void MainWindow::on_RB_HarmonicMaps_Circle_toggled(bool checked) {
-	if (checked) {
-		if (current_tab == 0) {
-			ui->SingleView_Renderer->set_harmonic_map(polymode::harmonic_maps_Circle);
-		}
-		else if (current_tab == 1) {
-			ui->DualView_LeftRenderer->set_harmonic_map(polymode::harmonic_maps_Circle);
-			ui->DualView_RightRenderer->set_harmonic_map(polymode::harmonic_maps_Circle);
-		}
-	}
-}
-
-void MainWindow::on_RB_HarmonicMaps_Square_toggled(bool checked) {
-	if (checked) {
-		if (current_tab == 0) {
-			ui->SingleView_Renderer->set_harmonic_map(polymode::harmonic_maps_Square);
-		}
-		else if (current_tab == 1) {
-			ui->DualView_LeftRenderer->set_harmonic_map(polymode::harmonic_maps_Square);
-			ui->DualView_RightRenderer->set_harmonic_map(polymode::harmonic_maps_Square);
-		}
-	}
-}
-
 /* Performance options */
 
-void MainWindow::on_SBThreads_valueChanged(int val) {
+void MainWindow::on_SB_Settings_NumThreads_valueChanged(int val) {
 	size_t n_threads = static_cast<size_t>(val);
 	ui->SingleView_Renderer->set_num_threads(n_threads);
 	ui->DualView_LeftRenderer->set_num_threads(n_threads);
 	ui->DualView_RightRenderer->set_num_threads(n_threads);
 }
 
-void MainWindow::on_PB_ClearMesh_clicked() {
+void MainWindow::on_PB_Settings_ClearMesh_clicked() {
 	if (current_tab == 0) {
 		ui->SingleView_Renderer->clear_mesh();
 	}
@@ -449,4 +460,3 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow() {
 	delete ui;
 }
-

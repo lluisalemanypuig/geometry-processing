@@ -79,7 +79,7 @@
              </size>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="tab_3">
              <attribute name="title">
@@ -133,7 +133,7 @@
                     </spacer>
                    </item>
                    <item>
-                    <widget class="QComboBox" name="local_smooth_CB_operators">
+                    <widget class="QComboBox" name="CB_Smooth_Local_Operators">
                      <property name="minimumSize">
                       <size>
                        <width>100</width>
@@ -194,7 +194,7 @@
                     </spacer>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="local_smooth_LE_Lambda">
+                    <widget class="QLineEdit" name="LE_Smooth_Local_Lambda">
                      <property name="maximumSize">
                       <size>
                        <width>52</width>
@@ -240,7 +240,7 @@
                     </spacer>
                    </item>
                    <item>
-                    <widget class="QLineEdit" name="local_smooth_LE_Iter">
+                    <widget class="QLineEdit" name="LE_Smooth_Local_NumIter">
                      <property name="maximumSize">
                       <size>
                        <width>46</width>
@@ -286,7 +286,7 @@
                     </spacer>
                    </item>
                    <item>
-                    <widget class="QComboBox" name="local_smooth_CB_weight_type">
+                    <widget class="QComboBox" name="CB_Smooth_Local_WeightType">
                      <property name="minimumSize">
                       <size>
                        <width>95</width>
@@ -314,7 +314,7 @@
                   </layout>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="PB_RunLocalSmooth">
+                  <widget class="QPushButton" name="PB_Smooth_Local_Run">
                    <property name="maximumSize">
                     <size>
                      <width>218</width>
@@ -364,7 +364,7 @@
                     </spacer>
                    </item>
                    <item>
-                    <widget class="QComboBox" name="global_smooth_CB_operators">
+                    <widget class="QComboBox" name="CB_Smooth_Global_Operators">
                      <property name="minimumSize">
                       <size>
                        <width>100</width>
@@ -425,7 +425,7 @@
                     </spacer>
                    </item>
                    <item>
-                    <widget class="QComboBox" name="global_mooth_CB_weight_type">
+                    <widget class="QComboBox" name="CB_Smooth_Global_WeightType">
                      <property name="minimumSize">
                       <size>
                        <width>95</width>
@@ -477,7 +477,7 @@
                       </spacer>
                      </item>
                      <item>
-                      <widget class="QSlider" name="global_smooth_slider">
+                      <widget class="QSlider" name="HS_Smooth_Global_Percentage">
                        <property name="minimumSize">
                         <size>
                          <width>150</width>
@@ -513,7 +513,7 @@
                       </spacer>
                      </item>
                      <item>
-                      <widget class="QLabel" name="gS_Label">
+                      <widget class="QLabel" name="LABEL_Smooth_Global_Percentage">
                        <property name="minimumSize">
                         <size>
                          <width>71</width>
@@ -533,7 +533,7 @@
                   </layout>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="PB_RunGlobalSmooth">
+                  <widget class="QPushButton" name="PB_Smooth_Global_Run">
                    <property name="maximumSize">
                     <size>
                      <width>218</width>
@@ -600,7 +600,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QTextEdit" name="TxtEdit_BandFreqs">
+                  <widget class="QTextEdit" name="TxtEdit_BandFreqs_Program">
                    <property name="maximumSize">
                     <size>
                      <width>220</width>
@@ -626,7 +626,7 @@ p, li { white-space: pre-wrap; }
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="PB_RunBandFreqs">
+                  <widget class="QPushButton" name="PB_BandFreqs_Run">
                    <property name="maximumSize">
                     <size>
                      <width>220</width>
@@ -646,7 +646,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="PB_ResetDualView">
+           <widget class="QPushButton" name="PB_DualView_Reset">
             <property name="maximumSize">
              <size>
               <width>260</width>
@@ -699,7 +699,7 @@ p, li { white-space: pre-wrap; }
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_8">
            <item>
-            <widget class="QRadioButton" name="CBSolid">
+            <widget class="QRadioButton" name="RB_Render_Solid">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -721,7 +721,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="CBWireframe">
+            <widget class="QRadioButton" name="RB_Render_Wireframe">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -743,7 +743,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="CBRefLines">
+            <widget class="QRadioButton" name="RB_Render_RefLines">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -765,7 +765,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="RB_HarmonicMaps">
+            <widget class="QRadioButton" name="RB_Render_HarmonicMaps">
              <property name="text">
               <string>Harmonic maps</string>
              </property>
@@ -778,7 +778,7 @@ p, li { white-space: pre-wrap; }
              </property>
              <layout class="QVBoxLayout" name="verticalLayout">
               <item>
-               <widget class="QRadioButton" name="RB_HarmonicMaps_Circle">
+               <widget class="QRadioButton" name="RB_Render_HarmonicMaps_Circle">
                 <property name="enabled">
                  <bool>false</bool>
                 </property>
@@ -791,7 +791,7 @@ p, li { white-space: pre-wrap; }
                </widget>
               </item>
               <item>
-               <widget class="QRadioButton" name="RB_HarmonicMaps_Square">
+               <widget class="QRadioButton" name="RB_Render_HarmonicMaps_Square">
                 <property name="enabled">
                  <bool>false</bool>
                 </property>
@@ -800,6 +800,16 @@ p, li { white-space: pre-wrap; }
                 </property>
                 <property name="checked">
                  <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="CB_Render_HarmonicMaps_Wireframe">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Wireframe</string>
                 </property>
                </widget>
               </item>
@@ -820,21 +830,21 @@ p, li { white-space: pre-wrap; }
              <item>
               <layout class="QVBoxLayout" name="verticalLayout_3">
                <item>
-                <widget class="QRadioButton" name="RBCurvatureG">
+                <widget class="QRadioButton" name="RB_Curvature_Gauss">
                  <property name="text">
                   <string>&amp;Gauss</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="RBCurvatureH">
+                <widget class="QRadioButton" name="RB_Curvature_Mean">
                  <property name="text">
                   <string>Mean</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QRadioButton" name="RBNoCurvature">
+                <widget class="QRadioButton" name="RB_Curvature_No">
                  <property name="text">
                   <string>&amp;none</string>
                  </property>
@@ -925,7 +935,7 @@ p, li { white-space: pre-wrap; }
                   </spacer>
                  </item>
                  <item>
-                  <widget class="QSlider" name="VS_PropCurvValues">
+                  <widget class="QSlider" name="VS_Curvature_Proportion">
                    <property name="enabled">
                     <bool>false</bool>
                    </property>
@@ -1045,7 +1055,7 @@ p, li { white-space: pre-wrap; }
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="LE_PropCurvValues">
+                <widget class="QLineEdit" name="LE_Curvature_Proportion">
                  <property name="enabled">
                   <bool>false</bool>
                  </property>
@@ -1103,7 +1113,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item>
-           <widget class="QSpinBox" name="SBThreads">
+           <widget class="QSpinBox" name="SB_Settings_NumThreads">
             <property name="maximumSize">
              <size>
               <width>45</width>
@@ -1121,7 +1131,7 @@ p, li { white-space: pre-wrap; }
          </layout>
         </item>
         <item>
-         <widget class="QPushButton" name="PB_ClearMesh">
+         <widget class="QPushButton" name="PB_Settings_ClearMesh">
           <property name="text">
            <string>Clear Mesh</string>
           </property>
