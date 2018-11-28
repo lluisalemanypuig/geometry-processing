@@ -79,9 +79,7 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		void load_shader();
 
 		void compute_curvature();
-		void show_curvature(
-			bool make_all_buffers = true
-		);
+		void show_curvature(bool make_all_buffers = true);
 
 		/**
 		 * @brief Initialises a mesh.
@@ -112,6 +110,8 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		void load_mesh(const QString& filename);
 		/// Clears the mesh.
 		void clear_mesh();
+
+		void set_light_sources_refl_lines(int v);
 
 		/// Sets the polygon display mode. See @ref pm.
 		void set_polygon_mode(const polymode& pm);

@@ -35,6 +35,7 @@ class MainWindow : public QMainWindow {
 		void on_RB_Render_Wireframe_toggled(bool checked);
 		// reflection lines
 		void on_RB_Render_RefLines_toggled(bool checked);
+		void on_SB_Render_RefLines_NumSources_valueChanged(int v);
 		// harmonic maps
 		void on_RB_Render_HarmonicMaps_toggled(bool checked);
 		void on_RB_Render_HarmonicMaps_Circle_toggled(bool checked);
@@ -66,7 +67,7 @@ class MainWindow : public QMainWindow {
 		/* Tab widget stuff */
 		void on_TW_View_currentChanged(int index);
 
-	public:
+public:
 		explicit MainWindow(QWidget *parent = nullptr);
 		~MainWindow();
 };

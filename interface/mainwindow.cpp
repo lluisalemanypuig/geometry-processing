@@ -63,6 +63,13 @@ void MainWindow::enable_curvature() {
 		ct = ui->DualView_RightRenderer->get_curvature_display();
 	}
 
+	if (pm == polymode::reflection_lines) {
+		ui->SB_Render_RefLines_NumSources->setEnabled(true);
+	}
+	else {
+		ui->SB_Render_RefLines_NumSources->setEnabled(false);
+	}
+
 	if (pm == polymode::reflection_lines or pm == polymode::harmonic_maps) {
 		ui->VS_Curvature_Proportion->setEnabled(false);
 		ui->LE_Curvature_Proportion->setEnabled(false);
@@ -224,6 +231,16 @@ void MainWindow::on_RB_Render_RefLines_toggled(bool toggled) {
 
 		// we may need to enable/disable things
 		enable_curvature();
+	}
+}
+
+void MainWindow::on_SB_Render_RefLines_NumSources_valueChanged(int v) {
+	if (current_tab == 0) {
+		ui->SingleView_Renderer->set_light_sources_refl_lines(v);
+	}
+	else if (current_tab == 1) {
+		ui->DualView_LeftRenderer->set_light_sources_refl_lines(v);
+		ui->DualView_RightRenderer->set_light_sources_refl_lines(v);
 	}
 }
 
@@ -441,6 +458,17 @@ void MainWindow::on_TW_View_currentChanged(int index) {
 	current_tab = index;
 	change_poly_mode();
 	change_curvature();
+
+	if (ui->SB_Render_RefLines_NumSources->isEnabled()) {
+		int v = ui->SB_Render_RefLines_NumSources->value();
+		if (current_tab == 0) {
+			ui->SingleView_Renderer->set_light_sources_refl_lines(v);
+		}
+		else if (current_tab == 1) {
+			ui->DualView_LeftRenderer->set_light_sources_refl_lines(v);
+			ui->DualView_RightRenderer->set_light_sources_refl_lines(v);
+		}
+	}
 }
 
 // PUBLIC

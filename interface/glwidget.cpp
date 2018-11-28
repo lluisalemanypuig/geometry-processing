@@ -36,15 +36,18 @@ void GLWidget::set_projection() {
 }
 
 void GLWidget::set_modelview() {
-	QMatrix4x4 modelviewMatrix;
+	QMatrix4x4 modelview, modelview_inverse;
 
-	modelviewMatrix.translate(0.0f, 0.0f, -distance);
-	modelviewMatrix.rotate(angleX, 1.0f, 0.0f, 0.0f);
-	modelviewMatrix.rotate(angleY, 0.0f, 1.0f, 0.0f);
+	modelview.translate(0.0f, 0.0f, -distance);
+	modelview.rotate(angleX, 1.0f, 0.0f, 0.0f);
+	modelview.rotate(angleY, 0.0f, 1.0f, 0.0f);
+	modelview_inverse = modelview.inverted();
 
 	program->bind();
-	program->setUniformValue("modelview", modelviewMatrix);
-	program->setUniformValue("normal_matrix", modelviewMatrix.normalMatrix());
+	program->setUniformValue("modelview", modelview);
+	program->setUniformValue("modelview_inverse", modelview_inverse);
+	program->setUniformValue("normal_matrix", modelview.normalMatrix());
+	program->setUniformValue("viewer_pos", modelview_inverse*QVector4D(0,0,0,1));
 	program->release();
 }
 
@@ -305,6 +308,15 @@ void GLWidget::clear_mesh() {
 	update();
 }
 
+void GLWidget::set_light_sources_refl_lines(int v) {
+	makeCurrent();
+	program->bind();
+	program->setUniformValue("num_sources", v);
+	program->release();
+	doneCurrent();
+	update();
+}
+
 void GLWidget::set_polygon_mode(const polymode& pmode) {
 	pm = pmode;
 }
@@ -317,7 +329,7 @@ void GLWidget::change_polygon_mode() {
 
 		program->setUniformValue("wireframe", false);
 		program->setUniformValue("reflection_lines", false);
-		program->setUniformValue("use_tex_coord", false);
+		program->setUniformValue("harmonic_maps", false);
 
 		if (current_curv_display == curv_type::none) {
 			program->setUniformValue(
@@ -331,7 +343,7 @@ void GLWidget::change_polygon_mode() {
 
 		program->setUniformValue("wireframe", true);
 		program->setUniformValue("reflection_lines", false);
-		program->setUniformValue("use_tex_coord", false);
+		program->setUniformValue("harmonic_maps", false);
 	}
 	else if (pm == polymode::reflection_lines) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -339,7 +351,7 @@ void GLWidget::change_polygon_mode() {
 		program->setUniformValue("curvature", false);
 		program->setUniformValue("wireframe", false);
 		program->setUniformValue("reflection_lines", true);
-		program->setUniformValue("use_tex_coord", false);
+		program->setUniformValue("harmonic_maps", false);
 
 		curvature_values.clear();
 	}
@@ -349,7 +361,7 @@ void GLWidget::change_polygon_mode() {
 		program->setUniformValue("curvature", false);
 		program->setUniformValue("wireframe", false);
 		program->setUniformValue("reflection_lines", false);
-		program->setUniformValue("use_tex_coord", true);
+		program->setUniformValue("harmonic_maps", true);
 	}
 	else {
 		cerr << "GLWidget::set_polygon_mode (" << __LINE__ << ") - Warning:" << endl;
