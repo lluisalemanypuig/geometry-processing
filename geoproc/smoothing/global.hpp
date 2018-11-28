@@ -20,37 +20,34 @@ namespace global {
 	 *
 	 * The values \f$w_{ij}\f$ are the weights for vertex \f$v_i\f$, and their
 	 * values depend on parameter @e w. Matrix \f$A\f$ has dimensions
-	 * \f$3N \times 3N\f$, where \f$N\f$ is the number of vertices of the mesh.
-	 *
-	 * For each vertex there is a \f$3 \times 3\f$ submatrix in \f$A\f$: the
-	 * values corresponding to vertex \f$v_i\f$ are found in the submatrix
-	 * \f$A_{[3i,3i+3), [3i,3i+3)}\f$, and the notation \f$A_{ij}=k\f$ actually
-	 * means:
-	 *
-	 *	\f$ A_{[3i,3i+3), [3j,3j+3)} =
-			\left( {\begin{array}{ccc}
-				k & 0 & 0 \\
-				0 & k & 0 \\
-				0 & 0 & k \\
-			\end{array} } \right)
-		\f$
+	 * \f$N \times N\f$, where \f$N\f$ is the number of vertices of the mesh.
+	 * (keep reading to know how fixed vertices are considered...).
 	 *
 	 * The new coordinates of the vertices of the mesh is the solution \f$x\f$
 	 * of the equation:
 	 *
-	 * \f$Ax = b\f$
+	 * \f$Ax_x = b_x\f$, \f$Ax_y = b_y\f$, \f$Ax_z = b_z\f$
 	 *
-	 * where \f$b\f$ contains some values. For no fixed vertices, this vector will
-	 * be the zero vector. However, this makes the vertices collapse to the point
-	 * (0,0,0). Therefore, this algorithm needs some vertices to be set constant
-	 * (parameter @e constant).
+	 * where \f$b_x,b_y,b_z\f$ contain some values. When parameter @e constant
+	 * contains no fixed vertices, these vectors will be the zero vector. However,
+	 * this makes the vertices collapse to the point (0,0,0). Therefore, this
+	 * algorithm needs some vertices to be set constant (parameter @e constant).
 	 *
 	 * The vertices defined as constant are moved to the right hand-side of the
 	 * equation and the matrix of the system becomes \f$A'\f$ and has dimensions
-	 * \f$3v \times 3v\f$ where \f$v\f$ is the number of variable vertices.
+	 * \f$v \times v\f$ where \f$v\f$ is the number of variable vertices:
 	 *
-	 * The system is solved using the Simplicial Cholesky method from library
-	 * Eigen.
+	 * \f$v = N - v^*\f$, where \f$v^*\f$ is the amount of fixed vertices in
+	 * @e constant.
+	 *
+	 * The systems are solved using the Simplicial Cholesky method from library
+	 * Eigen in a least square sense:
+	 *
+	 * \f$ A^TAx_x = A^Tb_x\f$, \f$A^TAx_y = A^Tb_y\f$, \f$A^TAx_z = A^Tb_z\f$
+	 *
+	 * In order to save time, the decomposition needed for the Cholesky
+	 * method is computed only once and reused to solve the three systems
+	 * defined above.
 	 * @param op Smoothing operator.
 	 * @param w Weight type.
 	 * @param constant @e constant[i] is true if, and only if, @e i-th vertex

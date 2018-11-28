@@ -86,7 +86,7 @@ namespace global {
 		vector<T> triplet_list;
 
 		/* reserve independent term vector */
-		Eigen::VectorXf b(3*variable);
+		Eigen::VectorXf bX(variable), bY(variable), bZ(variable);
 
 		/* fill independent term vector
 		   and compute triplets for system matrix */
@@ -108,19 +108,16 @@ namespace global {
 					// if it is not constant we have a
 					// triplet of the system matrix
 					if (ws[i][j] != 0.0f) {
-						// save some time by not inserting null entries
-						triplet_list.push_back(T(row_it    , col_it    , ws[i][j]));
-						triplet_list.push_back(T(row_it + 1, col_it + 1, ws[i][j]));
-						triplet_list.push_back(T(row_it + 2, col_it + 2, ws[i][j]));
+						triplet_list.push_back(T(row_it, col_it, ws[i][j]));
 					}
-					col_it += 3;
+					++col_it;
 				}
 			}
 
-			b(row_it    ) = -sums.x;
-			b(row_it + 1) = -sums.y;
-			b(row_it + 2) = -sums.z;
-			row_it += 3;
+			bX(row_it) = -sums.x;
+			bY(row_it) = -sums.y;
+			bZ(row_it) = -sums.z;
+			++row_it;
 		}
 
 		#if defined (DEBUG)
@@ -128,8 +125,9 @@ namespace global {
 		#endif
 
 		/* build system matrix */
-		SparseMatrixf A(3*variable, 3*variable);
+		SparseMatrixf A(variable, variable);
 		A.setFromTriplets(triplet_list.begin(), triplet_list.end());
+		triplet_list.clear();
 
 		#if defined (DEBUG)
 		cout << "    Transpose of system matrix..." << endl;
@@ -145,9 +143,22 @@ namespace global {
 
 		#if defined (DEBUG)
 		cout << "    Solving..." << endl;
+		cout << "        x" << endl;
 		#endif
 
-		Vectorf sol = solver.solve(At*b);
+		Vectorf solX = solver.solve(At*bX);
+
+		#if defined (DEBUG)
+		cout << "        y" << endl;
+		#endif
+
+		Vectorf solY = solver.solve(At*bY);
+
+		#if defined (DEBUG)
+		cout << "        z" << endl;
+		#endif
+
+		Vectorf solZ = solver.solve(At*bZ);
 
 		#if defined (DEBUG)
 		cout << "    Building vertices..." << endl;
@@ -157,10 +168,10 @@ namespace global {
 		int fixed_it = 0;
 		for (int i = 0; i < N; ++i) {
 			if (not constant[i]) {
-				coords[i].x = sol(fixed_it    );
-				coords[i].y = sol(fixed_it + 1);
-				coords[i].z = sol(fixed_it + 2);
-				fixed_it += 3;
+				coords[i].x = solX(fixed_it);
+				coords[i].y = solY(fixed_it);
+				coords[i].z = solZ(fixed_it);
+				++fixed_it;
 			}
 		}
 		m.set_vertices(coords);
