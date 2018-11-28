@@ -3,10 +3,12 @@
 uniform bool curvature;
 uniform bool wireframe;
 uniform bool reflection_lines;
+uniform bool use_tex_coord;
 uniform vec4 color;
 
 in vec3 vert_col;
 in vec3 frag_normal;
+in vec2 tex_coord;
 out vec4 frag_color;
 
 vec4 reflection_line(vec3 a, vec3 v) {
@@ -42,6 +44,10 @@ void main() {
 		vec3 a = vec3(1,0,0);
 
 		frag_color = reflection_line(a, -vec3(gl_FragCoord));
+	}
+	else if (use_tex_coord) {
+		// render a regular square grid
+		// black and white
 	}
     else {
 		// when displaying the whole triangle,

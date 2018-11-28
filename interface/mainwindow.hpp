@@ -49,8 +49,10 @@ class MainWindow : public QMainWindow {
 		void on_PB_ResetDualView_clicked();
 
 		/* Band frequencies */
-
 		void on_PB_RunBandFreqs_clicked();
+
+		/* Harmonic Maps */
+		void on_RB_HarmonicMaps_toggled(bool checked);
 
 		/* Performance options */
 		void on_SBThreads_valueChanged(int arg1);
@@ -59,7 +61,7 @@ class MainWindow : public QMainWindow {
 		/* Tab widget stuff */
 		void on_TW_View_currentChanged(int index);
 
-	public:
+public:
 		explicit MainWindow(QWidget *parent = nullptr);
 		~MainWindow();
 };

@@ -213,6 +213,9 @@ void GLWidget::paintGL() {
 	else if (pm == polymode::reflection_lines) {
 		mesh.render(*this);
 	}
+	else if (pm == polymode::harmonic_maps) {
+		mesh.render(*this);
+	}
 	else {
 		// no polygon mode
 		cerr << "GLWidget::paintGL (" << __LINE__ << ") - Warning:" << endl;
@@ -309,7 +312,11 @@ void GLWidget::change_polygon_mode() {
 	program->bind();
 	if (pm == polymode::solid) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 		program->setUniformValue("wireframe", false);
+		program->setUniformValue("reflection_lines", false);
+		program->setUniformValue("use_tex_coord", false);
+
 		if (current_curv_display == curv_type::none) {
 			program->setUniformValue(
 				"color", QVector4D(0.75f, 0.8f, 0.9f, 1.0f)
@@ -317,15 +324,30 @@ void GLWidget::change_polygon_mode() {
 		}
 	}
 	else if (pm == polymode::wireframe) {
+		// do not set glPolygonMode because we need two different
+		// modes and they are set in the paintGL function.
+
 		program->setUniformValue("wireframe", true);
+		program->setUniformValue("reflection_lines", false);
+		program->setUniformValue("use_tex_coord", false);
 	}
 	else if (pm == polymode::reflection_lines) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-		program->setUniformValue("wireframe", false);
 		program->setUniformValue("curvature", false);
+		program->setUniformValue("wireframe", false);
 		program->setUniformValue("reflection_lines", true);
+		program->setUniformValue("use_tex_coord", false);
+
 		curvature_values.clear();
+	}
+	else if (pm == polymode::harmonic_maps) {
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+		program->setUniformValue("curvature", false);
+		program->setUniformValue("wireframe", false);
+		program->setUniformValue("reflection_lines", false);
+		program->setUniformValue("use_tex_coord", true);
 	}
 	else {
 		cerr << "GLWidget::set_polygon_mode (" << __LINE__ << ") - Warning:" << endl;
@@ -333,7 +355,6 @@ void GLWidget::change_polygon_mode() {
 	}
 
 	if (pm == polymode::solid or pm == polymode::wireframe) {
-		program->setUniformValue("reflection_lines", false);
 
 		// we may need to display curvatures
 		if (current_curv_display == curv_type::none) {

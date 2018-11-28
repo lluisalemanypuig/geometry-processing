@@ -54,7 +54,7 @@ void MainWindow::enable_curvature() {
 	polymode pm = ui->SingleView_Renderer->get_polygon_mode();
 	curv_type ct = ui->SingleView_Renderer->get_curvature_display();
 
-	if (pm == polymode::reflection_lines) {
+	if (pm == polymode::reflection_lines or pm == polymode::harmonic_maps) {
 		ui->VE_PropCurvValues->setEnabled(false);
 		ui->RBCurvatureG->setEnabled(false);
 		ui->RBCurvatureH->setEnabled(false);
@@ -354,6 +354,23 @@ void MainWindow::on_PB_RunBandFreqs_clicked() {
 	}
 
 	ui->DualView_RightRenderer->run_band_frequencies(doc);
+}
+
+/* Harmonic Maps */
+
+void MainWindow::on_RB_HarmonicMaps_toggled(bool checked) {
+	ui->RB_HarmonicMaps_Circle->setEnabled(checked);
+	ui->RB_HarmonicMaps_Square->setEnabled(checked);
+
+	// set polygon mode
+	ui->SingleView_Renderer->set_polygon_mode(polymode::harmonic_maps);
+	ui->DualView_LeftRenderer->set_polygon_mode(polymode::harmonic_maps);
+	ui->DualView_RightRenderer->set_polygon_mode(polymode::harmonic_maps);
+
+	// we may need to enable/disable things
+	enable_curvature();
+
+	change_poly_mode();
 }
 
 /* Performance options */
