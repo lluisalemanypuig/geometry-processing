@@ -49,7 +49,7 @@ void main() {
 		// render a regular square grid
 		// black and white
 	}
-    else {
+	else {
 		// when displaying the whole triangle,
 		// use the z component of the normal
 		// for basic lighting
