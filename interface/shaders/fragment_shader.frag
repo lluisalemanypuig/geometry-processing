@@ -4,6 +4,7 @@ uniform bool curvature;
 uniform bool wireframe;
 uniform bool reflection_lines;
 uniform bool use_tex_coord;
+uniform bool remeshing;
 uniform vec4 color;
 
 in vec3 vert_col;
