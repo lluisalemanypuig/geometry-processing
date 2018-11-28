@@ -153,7 +153,6 @@ void GLWidget::init_mesh(bool make_all_buffers) {
 
 void GLWidget::initializeGL() {
 	initializeOpenGLFunctions();
-
 	load_shader();
 
 	program->bind();
@@ -163,6 +162,7 @@ void GLWidget::initializeGL() {
 	mesh.make_neighbourhood_data();
 	mesh.make_angles_area();
 	bool init = mesh.init(program);
+
 	if (not init) {
 		cerr << "GLWidget::initializeGL (" << __LINE__ << ") - Error:" << endl;
 		cerr << "    Could not initialise mesh cube." << endl;
@@ -184,9 +184,12 @@ void GLWidget::resizeGL(int w, int h) {
 
 void GLWidget::paintGL() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	program->bind();
-	if (pm == polymode::wireframe) {
+
+	if (pm == polymode::solid) {
+		mesh.render(*this);
+	}
+	else if (pm == polymode::wireframe) {
 		/* Note to self: setting the uniforms here is necessary
 		 * for a correct display of curvature values in wireframe
 		 * mode, ...
@@ -208,9 +211,6 @@ void GLWidget::paintGL() {
 
 		mesh.render(*this);
 	}
-	else if (pm == polymode::solid) {
-		mesh.render(*this);
-	}
 	else if (pm == polymode::reflection_lines) {
 		mesh.render(*this);
 	}
@@ -224,6 +224,7 @@ void GLWidget::paintGL() {
 	}
 
 	program->release();
+
 	return;
 }
 
@@ -397,6 +398,14 @@ void GLWidget::set_harmonic_map(const polymode& pmode) {
 	mesh.make_neighbourhood_data();
 	mesh.make_boundaries();
 
+	if (mesh.get_boundaries().size() != 1) {
+		cerr << "GLWidget::set_harmonic_map - Warning (" << __LINE__ << "):" << endl;
+		cerr << "    No boundaries in the mesh." << endl;
+		cerr << "    Prevent the application from terminating by not calling" << endl;
+		cerr << "    the algorithm." << endl;
+		return;
+	}
+
 	vector<vec2> uvs;
 
 	timing::time_point begin = timing::now();
@@ -423,7 +432,7 @@ void GLWidget::set_harmonic_map(const polymode& pmode) {
 	cout << "    computed in " << timing::elapsed_milliseconds(begin,end)
 		 << " ms" << endl;
 
-
+	//mesh.make_tex_coord_buffer(program, uvs);
 
 }
 
