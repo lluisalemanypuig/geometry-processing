@@ -121,7 +121,7 @@ namespace test_geoproc {
 		vector<glm::vec2> uvs;
 
 		timing::time_point begin = timing::now();
-		harmonic_maps(mesh, shape, uvs);
+		harmonic_maps(mesh, w, shape, uvs);
 		timing::time_point end = timing::now();
 
 		cout << "Texture coordinates:" << endl;
