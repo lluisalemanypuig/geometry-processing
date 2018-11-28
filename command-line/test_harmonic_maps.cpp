@@ -29,6 +29,9 @@ namespace test_geoproc {
 		cout << endl;
 	}
 
+#define out_float(x) ((std::abs(x) <= 1e-4 ? 0.0 : x))
+#define geogebra_out(v) "Point({" << out_float(v.x) << "," << out_float(v.y) << "})"
+
 	int test_harmonic_maps(int argc, char *argv[]) {
 		string mesh_file = "none";
 		string shape_name = "none";
@@ -121,14 +124,25 @@ namespace test_geoproc {
 		vector<glm::vec2> uvs;
 
 		timing::time_point begin = timing::now();
-		harmonic_maps(mesh, w, shape, uvs);
+		bool r = harmonic_maps(mesh, w, shape, uvs);
 		timing::time_point end = timing::now();
 
-		cout << "Texture coordinates:" << endl;
-		for (size_t i = 0;  i < uvs.size(); ++i) {
-			cout << "    " << i << ": (" << uvs[i].x << "," << uvs[i].y << ")" << endl;
+		if (not r) {
+			cerr << "Error: some error occured in the harmonic_map function" << endl;
+			return 1;
 		}
+
+		cout << "Texture coordinates:" << endl;
+		cout << "{" << geogebra_out(uvs[0]);
+		for (size_t i = 1;  i < uvs.size(); ++i) {
+			cout << "," << geogebra_out(uvs[i]);
+		}
+		cout << "}" << endl;
 		cout << "Computed in: " << timing::elapsed_seconds(begin, end) << " s" << endl;
+
+		for (size_t i = 0;  i < uvs.size(); ++i) {
+			cout << "    " << i << ": " << uvs[i].x << "," << uvs[i].y << endl;
+		}
 
 		return 0;
 	}
