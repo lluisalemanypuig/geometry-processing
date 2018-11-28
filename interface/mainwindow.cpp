@@ -51,22 +51,30 @@ void MainWindow::change_curvature_prop_display(float p) {
 }
 
 void MainWindow::enable_curvature() {
-	polymode pm = ui->SingleView_Renderer->get_polygon_mode();
-	curv_type ct = ui->SingleView_Renderer->get_curvature_display();
+	polymode pm;
+	curv_type ct;
+
+	if (current_tab == 0) {
+		pm = ui->SingleView_Renderer->get_polygon_mode();
+		ct = ui->SingleView_Renderer->get_curvature_display();
+	}
+	else {
+		pm = ui->DualView_RightRenderer->get_polygon_mode();
+		ct = ui->DualView_RightRenderer->get_curvature_display();
+	}
 
 	if (pm == polymode::reflection_lines or pm == polymode::harmonic_maps) {
-		ui->VE_PropCurvValues->setEnabled(false);
+		ui->VS_PropCurvValues->setEnabled(false);
+		ui->LE_PropCurvValues->setEnabled(false);
 		ui->RBCurvatureG->setEnabled(false);
 		ui->RBCurvatureH->setEnabled(false);
 		ui->RBNoCurvature->setEnabled(false);
 	}
 	else {
-		if (ct == curv_type::none) {
-			ui->VE_PropCurvValues->setEnabled(false);
-		}
-		else {
-			ui->VE_PropCurvValues->setEnabled(true);
-		}
+		// solid or wireframe polygon mode
+		ui->VS_PropCurvValues->setEnabled(ct != curv_type::none);
+		ui->LE_PropCurvValues->setEnabled(ct != curv_type::none);
+
 		ui->RBCurvatureG->setEnabled(true);
 		ui->RBCurvatureH->setEnabled(true);
 		ui->RBNoCurvature->setEnabled(true);
@@ -239,18 +247,18 @@ void MainWindow::on_LE_PropCurvValues_returnPressed() {
 	if (get_prop_curvature_values(p)) {
 		change_curvature_prop_display(p);
 		if (p < 85.0f) {
-			ui->VE_PropCurvValues->setValue(1);
+			ui->VS_PropCurvValues->setValue(1);
 		}
 		else if (p > 99.0f) {
-			ui->VE_PropCurvValues->setValue(10000);
+			ui->VS_PropCurvValues->setValue(10000);
 		}
 		else {
-			ui->VE_PropCurvValues->setValue(int((p - 85.0f)*10000.0f/14.0f));
+			ui->VS_PropCurvValues->setValue(int((p - 85.0f)*10000.0f/14.0f));
 		}
 	}
 }
 
-void MainWindow::on_VE_PropCurvValues_sliderMoved(int value) {
+void MainWindow::on_VS_PropCurvValues_sliderMoved(int value) {
 	float p = value*14.0f/10000.0f + 85.0f;
 	change_curvature_prop_display(p);
 	int v = int(p*100);
@@ -371,6 +379,30 @@ void MainWindow::on_RB_HarmonicMaps_toggled(bool checked) {
 	enable_curvature();
 
 	change_poly_mode();
+}
+
+void MainWindow::on_RB_HarmonicMaps_Circle_toggled(bool checked) {
+	if (checked) {
+		if (current_tab == 0) {
+			ui->SingleView_Renderer->set_harmonic_map(polymode::harmonic_maps_Circle);
+		}
+		else if (current_tab == 1) {
+			ui->DualView_LeftRenderer->set_harmonic_map(polymode::harmonic_maps_Circle);
+			ui->DualView_RightRenderer->set_harmonic_map(polymode::harmonic_maps_Circle);
+		}
+	}
+}
+
+void MainWindow::on_RB_HarmonicMaps_Square_toggled(bool checked) {
+	if (checked) {
+		if (current_tab == 0) {
+			ui->SingleView_Renderer->set_harmonic_map(polymode::harmonic_maps_Square);
+		}
+		else if (current_tab == 1) {
+			ui->DualView_LeftRenderer->set_harmonic_map(polymode::harmonic_maps_Square);
+			ui->DualView_RightRenderer->set_harmonic_map(polymode::harmonic_maps_Square);
+		}
+	}
 }
 
 /* Performance options */

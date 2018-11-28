@@ -11,6 +11,7 @@ using namespace std;
 
 // geoproc includes
 #include <geoproc/curvature/curvature.hpp>
+#include <geoproc/parametrisation/parametrisation.hpp>
 #include <geoproc/ply_reader.hpp>
 
 // custom includes
@@ -371,6 +372,59 @@ void GLWidget::change_polygon_mode() {
 	program->release();
 	doneCurrent();
 	update();
+}
+
+void GLWidget::set_harmonic_map(const polymode& pmode) {
+	assert(pm == polymode::harmonic_maps);
+	assert(pmode == polymode::harmonic_maps_Circle or
+		   pmode == polymode::harmonic_maps_Square);
+
+	if (pmode == pm) {
+		// nothing to do
+		return;
+	}
+
+	smoothing::smooth_weight w = smoothing::smooth_weight::uniform;
+	parametrisation::boundary_shape s;
+
+	if (pmode == polymode::harmonic_maps_Circle) {
+		s = parametrisation::boundary_shape::Circle;
+	}
+	else if (pmode == polymode::harmonic_maps_Square) {
+		s = parametrisation::boundary_shape::Square;
+	}
+
+	mesh.make_neighbourhood_data();
+	mesh.make_boundaries();
+
+	vector<vec2> uvs;
+
+	timing::time_point begin = timing::now();
+	parametrisation::harmonic_maps(mesh, w, s, uvs);
+	timing::time_point end = timing::now();
+
+	cout << "Harmonic maps" << endl;
+	cout << "    with shape: ";
+	if (s == parametrisation::boundary_shape::Circle) {
+		cout << "circle";
+	}
+	else if (s == parametrisation::boundary_shape::Square) {
+		cout << "square";
+	}
+	cout << endl;
+	cout << "    weight type: ";
+	if (w == smoothing::smooth_weight::uniform) {
+		cout << "uniform";
+	}
+	else if (w == smoothing::smooth_weight::cotangent) {
+		cout << "cotangent";
+	}
+	cout << endl;
+	cout << "    computed in " << timing::elapsed_milliseconds(begin,end)
+		 << " ms" << endl;
+
+
+
 }
 
 void GLWidget::set_curvature_display(const curv_type& cd) {

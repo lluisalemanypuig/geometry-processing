@@ -37,7 +37,7 @@ class MainWindow : public QMainWindow {
 		bool get_prop_curvature_values(float& p);
 		void set_prop_values_to_all();
 		void on_LE_PropCurvValues_returnPressed();
-		void on_VE_PropCurvValues_sliderMoved(int value);
+		void on_VS_PropCurvValues_sliderMoved(int value);
 		void on_RBCurvatureH_toggled(bool checked);
 		void on_RBCurvatureG_toggled(bool checked);
 		void on_RBNoCurvature_toggled(bool checked);
@@ -53,6 +53,8 @@ class MainWindow : public QMainWindow {
 
 		/* Harmonic Maps */
 		void on_RB_HarmonicMaps_toggled(bool checked);
+		void on_RB_HarmonicMaps_Circle_toggled(bool checked);
+		void on_RB_HarmonicMaps_Square_toggled(bool checked);
 
 		/* Performance options */
 		void on_SBThreads_valueChanged(int arg1);
