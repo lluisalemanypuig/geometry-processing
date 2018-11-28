@@ -48,6 +48,12 @@ namespace global {
 	 * In order to save time, the decomposition needed for the Cholesky
 	 * method is computed only once and reused to solve the three systems
 	 * defined above.
+	 *
+	 * Now, the Laplacian operator defines the linear equation for vertex \f$v_i\f$
+	 * as:
+	 *
+	 * \f$L(v_i) = \left(\sum_{j \in N(i)} w_{ij}*v_j\right) - v_i\f$
+	 *
 	 * @param op Smoothing operator.
 	 * @param w Weight type.
 	 * @param constant @e constant[i] is true if, and only if, @e i-th vertex
