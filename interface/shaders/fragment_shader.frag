@@ -2,13 +2,19 @@
 
 uniform bool curvature;
 uniform bool wireframe;
+
 uniform bool reflection_lines;
-uniform bool use_tex_coord;
+uniform int num_sources;
+uniform vec3 viewer_pos;
+
+uniform bool harmonic_maps;
 uniform bool remeshing;
+
 uniform vec4 color;
 
 in vec3 vert_col;
 in vec3 frag_normal;
+varying vec3 frag_pos_world;
 in vec2 tex_coord;
 out vec4 frag_color;
 
@@ -23,7 +29,9 @@ vec4 reflection_line(vec3 a, vec3 v) {
 	vec3 a_perp = cross(a, av);
 
 	float theta = atan(dot(r,a_perp), dot(r, av));
-	if (theta < 0) {
+	theta /= (2*3.141592);
+	theta *= (2*num_sources);
+	if (int(theta)%2 == 0) {
 		return vec4(vec3(0), 1);
 	}
 	else {
@@ -41,12 +49,12 @@ void main() {
 		frag_color = color;
 	}
 	else if (reflection_lines) {
-		vec3 v = vec3(0,0,-1);
+		vec3 v = viewer_pos - frag_pos_world;
 		vec3 a = vec3(1,0,0);
 
-		frag_color = reflection_line(a, -vec3(gl_FragCoord));
+		frag_color = reflection_line(a, v);
 	}
-	else if (use_tex_coord) {
+	else if (harmonic_maps) {
 		// render a regular square grid
 		// black and white
 	}
