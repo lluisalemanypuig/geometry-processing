@@ -102,11 +102,9 @@ namespace test_geoproc {
 		smoothing::smooth_weight w;
 		if (weight_type == "uniform") {
 			w = smoothing::smooth_weight::uniform;
-			cout << "uniform";
 		}
 		else if (weight_type == "cotangent") {
 			w = smoothing::smooth_weight::cotangent;
-			cout << "cotangent";
 		}
 		else {
 			cerr << "Error: value for weight type '" << weight_type << "' not valid." << endl;
