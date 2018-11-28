@@ -19,6 +19,131 @@ namespace parametrisation {
 	typedef Eigen::VectorXf Vectorf;
 	typedef Eigen::SparseMatrix<float> SparseMatrixf;
 
+	inline void harmonic_maps_laplacian
+	(
+		const TriangleMesh& m,
+		int N, int variable,
+		const smooth_weight& w,
+		const std::vector<bool>& constant,
+		vector<glm::vec2>& uvs
+	)
+	{
+		/* This code was engineered to avoid high memory
+		 * consumption (on a system with 8GB the old code
+		 * would take up to 44% of the total memory: ~4GB).
+		 */
+
+		// system's matrix
+		SparseMatrixf A(variable, variable);
+		// independent term vectors
+		Vectorf bX(variable), bY(variable);
+
+		// weights for system's matrix (per row)
+		float *ws = (float *)malloc(N*sizeof(float));
+		// list of triplets for system's matrix
+		vector<T> triplet_list;
+
+		#if defined (DEBUG)
+		cout << "Laplacian Global Smoothing:" << endl;
+		cout << "    Computing weights and triplets..." << endl;
+		#endif
+
+		int row_it = 0;
+		for (int i = 0; i < N; ++i) {
+			if (constant[i]) { continue; }
+
+			// compute weights
+			if (w == smooth_weight::uniform) {
+				local_private::make_uniform_weights(i, m, ws);
+			}
+			else if (w == smooth_weight::cotangent) {
+				local_private::make_cotangent_weights(i, m, ws);
+			}
+
+			ws[i] = -1.0f;
+
+			// compute the right handside of the equation
+			// (vectors bX,bY,bZ) using this row
+			int col_it = 0;
+
+			glm::vec2 sums(0.0f,0.0f);
+			for (int j = 0; j < N; ++j) {
+				if (constant[j]) {
+					// if the vertex at the j-th column is constant
+					// we need to accumulate the sum
+					sums += ws[j]*uvs[j];
+				}
+				else {
+					// if it is not constant we have a
+					// triplet of the system matrix
+					if (ws[j] != 0.0f) {
+						triplet_list.push_back(T(row_it, col_it, ws[j]));
+					}
+					++col_it;
+				}
+			}
+
+			bX(row_it) = -sums.x;
+			bY(row_it) = -sums.y;
+			++row_it;
+		}
+
+		// free memory
+		free(ws);
+
+		#if defined (DEBUG)
+		cout << "    Building system matrix..." << endl;
+		#endif
+
+		A.setFromTriplets(triplet_list.begin(), triplet_list.end());
+		// free more memory
+		triplet_list.clear();
+		// improve memory consumption
+		A.makeCompressed();
+
+		#if defined (DEBUG)
+		cout << "    Transpose of system matrix..." << endl;
+		#endif
+
+		SparseMatrixf At = A.transpose();
+
+		#if defined (DEBUG)
+		cout << "    Initialise solver..." << endl;
+		#endif
+
+		Eigen::SimplicialCholesky<SparseMatrixf> solver(At*A);
+
+		#if defined (DEBUG)
+		cout << "    Solving..." << endl;
+		cout << "        x" << endl;
+		#endif
+
+		Vectorf solX = solver.solve(At*bX);
+
+		#if defined (DEBUG)
+		cout << "        y" << endl;
+		#endif
+
+		Vectorf solY = solver.solve(At*bY);
+
+		#if defined (DEBUG)
+		cout << "    Setting coordinates" << endl;
+		#endif
+
+		int fixed_it = 0;
+		for (int i = 0; i < N; ++i) {
+			if (not constant[i]) {
+				uvs[i].x = solX(fixed_it);
+				uvs[i].y = solY(fixed_it);
+				++fixed_it;
+			}
+		}
+
+		#if defined (DEBUG)
+		cout << "    Done" << endl;
+		#endif
+	}
+
 	bool harmonic_maps
 	(
 		const TriangleMesh& m, const smooth_weight& w,
@@ -99,102 +224,7 @@ namespace parametrisation {
 		const int n_constant = boundary.size();
 		const int variable = N - n_constant;
 
-		// weights for system's matrix
-		vector<vector<float> > ws(N, vector<float>(N, 0.0f));
-		if (w == smooth_weight::uniform) {
-			for (int i = 0; i < N; ++i) {
-				local_private::make_uniform_weights(i, m, &ws[i][0]);
-				ws[i][i] = -1.0f;
-			}
-		}
-		else if (w == smooth_weight::cotangent) {
-			for (int i = 0; i < N; ++i) {
-				local_private::make_cotangent_weights(i, m, &ws[i][0]);
-				ws[i][i] = -1.0f;
-			}
-		}
-
-		vector<T> triplet_list;
-
-		/* reserve independent term vector */
-		Eigen::VectorXf bX(variable), bY(variable);
-
-		/* fill independent term vector
-		   and compute triplets for system matrix */
-
-		int row_it = 0;
-		for (int i = 0; i < N; ++i) {
-			// skip rows of constant vertices
-			if (constant[i]) { continue; }
-
-			int col_it = 0;
-			glm::vec2 sums(0.0f,0.0f);
-			for (int j = 0; j < N; ++j) {
-				if (constant[j]) {
-					// if the vertex at the j-th column is constant
-					// we need to accumulate the sum
-					sums += ws[i][j]*uvs[j];
-				}
-				else {
-					// if it is not constant we have a
-					// triplet of the system matrix
-					if (ws[i][j] != 0.0f) {
-						triplet_list.push_back(T(row_it, col_it, ws[i][j]));
-					}
-					++col_it;
-				}
-			}
-
-			bX(row_it) = -sums.x;
-			bY(row_it) = -sums.y;
-			++row_it;
-		}
-
-		ws.clear();
-
-		#if defined (DEBUG)
-		cout << "    Building system matrix..." << endl;
-		#endif
-
-		/* build system matrix */
-		SparseMatrixf A(variable, variable);
-		A.setFromTriplets(triplet_list.begin(), triplet_list.end());
-		triplet_list.clear();
-		A.makeCompressed();
-
-		#if defined (DEBUG)
-		cout << "    Transpose of system matrix..." << endl;
-		#endif
-
-		SparseMatrixf At = A.transpose();
-
-		#if defined (DEBUG)
-		cout << "    Initialise solver..." << endl;
-		#endif
-
-		Eigen::SimplicialCholesky<SparseMatrixf> solver(At*A);
-
-		#if defined (DEBUG)
-		cout << "    Solving..." << endl;
-		cout << "        x" << endl;
-		#endif
-
-		Vectorf solX = solver.solve(At*bX);
-
-		#if defined (DEBUG)
-		cout << "        y" << endl;
-		#endif
-
-		Vectorf solY = solver.solve(At*bY);
-
-		int fixed_it = 0;
-		for (int i = 0; i < N; ++i) {
-			if (not constant[i]) {
-				uvs[i].x = solX(fixed_it);
-				uvs[i].y = solY(fixed_it);
-				++fixed_it;
-			}
-		}
+		harmonic_maps_laplacian(m, N, variable, w, constant, uvs);
 
 		return true;
 	}
