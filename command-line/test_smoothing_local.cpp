@@ -23,7 +23,7 @@ namespace test_geoproc {
 		cout << "    --threads n: specify number of threads." << endl;
 		cout << "        Default: 1" << endl;
 		cout << endl;
-		cout << "    --algorithm : choose the algorithm to evaluate" << endl;
+		cout << "    --operator : choose the operator to apply" << endl;
 		cout << "        Allowed values:" << endl;
 		cout << "        * laplacian" << endl;
 		cout << "        * bilaplacian" << endl;
@@ -56,10 +56,8 @@ namespace test_geoproc {
 	}
 
 	int test_smoothing_local(int argc, char *argv[]) {
-		const set<string> allowed_algorithms({"laplacian", "bilaplacian", "TaubinLM"});
-
 		string mesh_file = "none";
-		string alg = "none";
+		string opt = "none";
 		string weight_type = "none";
 		float lambda;
 		size_t nt = 1;
@@ -87,7 +85,7 @@ namespace test_geoproc {
 				_print = true;
 			}
 			else if (strcmp(argv[i], "--algorithm") == 0) {
-				alg = string(argv[i + 1]);
+				opt = string(argv[i + 1]);
 				++i;
 			}
 			else if (strcmp(argv[i], "--lambda") == 0) {
@@ -120,20 +118,20 @@ namespace test_geoproc {
 			cerr << "to see the usage" << endl;
 			return 1;
 		}
-		if (alg == "none") {
-			cerr << "Error: algorithm not specified" << endl;
+		if (opt == "none") {
+			cerr << "Error: operator not specified" << endl;
 			cerr << "    Use ./command-line local-smoothing --help" << endl;
 			cerr << "to see the usage" << endl;
 			return 1;
 		}
-		if (allowed_algorithms.find(alg) == allowed_algorithms.end()) {
-			cerr << "Error: value '" << alg << "' for algorithm parameter not valid" << endl;
+		if (weight_type == "none") {
+			cerr << "Error: weight type not specified" << endl;
 			cerr << "    Use ./command-line local-smoothing --help" << endl;
 			cerr << "to see the usage" << endl;
 			return 1;
 		}
 
-		if (alg == "laplacian" or alg == "bilaplacian" or alg == "TaubinLM") {
+		if (opt == "laplacian" or opt == "bilaplacian" or opt == "TaubinLM") {
 			if (not _lambda) {
 				cerr << "Error: lambda parameter missing" << endl;
 				cerr << "    Use ./command-line local-smoothing --help" << endl;
@@ -159,15 +157,25 @@ namespace test_geoproc {
 				return 1;
 			}
 		}
+		else {
+			cerr << "Error: value for operator '" << opt << "' not valid." << endl;
+			cerr << "    Use ./command-line global-smoothing --help" << endl;
+			cerr << "to see the usage" << endl;
+			return 1;
+		}
 
 		smoothing::smooth_weight w;
-		if (weight_type != "none") {
-			if (weight_type == "uniform") {
-				w = smoothing::smooth_weight::uniform;
-			}
-			else if (weight_type == "cotangent") {
-				w = smoothing::smooth_weight::cotangent;
-			}
+		if (weight_type == "uniform") {
+			w = smoothing::smooth_weight::uniform;
+		}
+		else if (weight_type == "cotangent") {
+			w = smoothing::smooth_weight::cotangent;
+		}
+		else {
+			cerr << "Error: value for weight type '" << weight_type << "' not valid" << endl;
+			cerr << "    Use ./command-line local-smoothing --help" << endl;
+			cerr << "to see the usage" << endl;
+			return 1;
 		}
 
 		TriangleMesh mesh;
@@ -185,13 +193,13 @@ namespace test_geoproc {
 		}
 
 		timing::time_point begin = timing::now();
-		if (alg == "laplacian") {
+		if (opt == "laplacian") {
 			smoothing::local::laplacian(w, lambda, it, nt, mesh);
 		}
-		else if (alg == "bilaplacian") {
+		else if (opt == "bilaplacian") {
 			smoothing::local::bilaplacian(w, lambda, it, nt, mesh);
 		}
-		else if (alg == "TaubinLM") {
+		else if (opt == "TaubinLM") {
 			smoothing::local::TaubinLM(w, lambda, it, nt, mesh);
 		}
 		timing::time_point end = timing::now();

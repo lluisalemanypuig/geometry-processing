@@ -109,6 +109,12 @@ namespace test_geoproc {
 		else if (curvature == "mean") {
 			curvature::mean(mesh, curv, nt, &min, &max);
 		}
+		else {
+			cerr << "Error: value for curvature type '" << curvature << "' not valid." << endl;
+			cerr << "    Use ./command-line curvature --help" << endl;
+			cerr << "to see the usage" << endl;
+			return 1;
+		}
 		end = timing::now();
 
 		cout.setf(ios::fixed);

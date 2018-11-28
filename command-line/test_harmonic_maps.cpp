@@ -22,12 +22,17 @@ namespace test_geoproc {
 		cout << "        Allowed values:" << endl;
 		cout << "        * circle" << endl;
 		cout << "        * square" << endl;
+		cout << "    --weight-type" << endl;
+		cout << "        Allowed values:" << endl;
+		cout << "        * uniform" << endl;
+		cout << "        * cotangent" << endl;
 		cout << endl;
 	}
 
 	int test_harmonic_maps(int argc, char *argv[]) {
 		string mesh_file = "none";
 		string shape_name = "none";
+		string weight_type = "none";
 
 		if (argc == 2) {
 			harmonic_maps_usage();
@@ -45,6 +50,10 @@ namespace test_geoproc {
 			}
 			else if (strcmp(argv[i], "--shape") == 0) {
 				shape_name = string(argv[i + 1]);
+				++i;
+			}
+			else if (strcmp(argv[i], "--weight-type") == 0) {
+				weight_type = string(argv[i + 1]);
 				++i;
 			}
 			else {
@@ -65,6 +74,12 @@ namespace test_geoproc {
 			cerr << "to see the usage" << endl;
 			return 1;
 		}
+		if (weight_type == "none") {
+			cerr << "Error: weight type not specified" << endl;
+			cerr << "    Use ./command-line harmonic-maps --help" << endl;
+			cerr << "to see the usage" << endl;
+			return 1;
+		}
 
 		boundary_shape shape;
 		if (shape_name == "circle") {
@@ -76,6 +91,22 @@ namespace test_geoproc {
 		else {
 			cerr << "Error: value for shape of boundary vertices '"
 				 << shape_name << "' not valid." << endl;
+			cerr << "    Use ./command-line harmonic-maps --help" << endl;
+			cerr << "to see the usage" << endl;
+			return 1;
+		}
+
+		smoothing::smooth_weight w;
+		if (weight_type == "uniform") {
+			w = smoothing::smooth_weight::uniform;
+			cout << "uniform";
+		}
+		else if (weight_type == "cotangent") {
+			w = smoothing::smooth_weight::cotangent;
+			cout << "cotangent";
+		}
+		else {
+			cerr << "Error: value for weight type '" << weight_type << "' not valid." << endl;
 			cerr << "    Use ./command-line harmonic-maps --help" << endl;
 			cerr << "to see the usage" << endl;
 			return 1;

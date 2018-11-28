@@ -108,12 +108,6 @@ namespace test_geoproc {
 			cerr << "to see the usage" << endl;
 			return 1;
 		}
-		if (allowed_operators.find(opt) == allowed_operators.end()) {
-			cerr << "Error: value '" << opt << "' for operator parameter not valid" << endl;
-			cerr << "    Use ./command-line global-smoothing --help" << endl;
-			cerr << "to see the usage" << endl;
-			return 1;
-		}
 
 		cout << "Smooth globally:" << endl;
 		cout << "    with operator: ";
@@ -122,6 +116,12 @@ namespace test_geoproc {
 		if (opt == "laplacian") {
 			o = smoothing::smooth_operator::Laplacian;
 			cout << "Laplacian";
+		}
+		else {
+			cerr << "Error: value for operator '" << opt << "' not valid." << endl;
+			cerr << "    Use ./command-line global-smoothing --help" << endl;
+			cerr << "to see the usage" << endl;
+			return 1;
 		}
 		cout << endl;
 
@@ -134,6 +134,12 @@ namespace test_geoproc {
 		else if (weight_type == "cotangent") {
 			w = smoothing::smooth_weight::cotangent;
 			cout << "cotangent";
+		}
+		else {
+			cerr << "Error: value for weight type '" << weight_type << "' not valid." << endl;
+			cerr << "    Use ./command-line global-smoothing --help" << endl;
+			cerr << "to see the usage" << endl;
+			return 1;
 		}
 		cout << " weights" << endl;
 		cout << "    percentage of fixed vertices: " << perc << "%" << endl;
