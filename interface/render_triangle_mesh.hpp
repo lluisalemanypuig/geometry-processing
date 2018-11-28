@@ -22,19 +22,25 @@ class RenderTriangleMesh : public TriangleMesh {
 	private:
 		/// Vertex array object for ...??
 		QOpenGLVertexArrayObject vao;
-		/// Vertex buffer object for the vertices.
+		/// Buffer object for the vertices.
 		QOpenGLBuffer vbo_vertices;
-		/// Vertex buffer object for the normals.
+		/// Buffer object for the normals.
 		QOpenGLBuffer vbo_normals;
-		/// Vertex buffer object for the colors.
+		/// Buffer object for the colors.
 		QOpenGLBuffer vbo_colors;
-		/// Vertex buffer object for the triangles.
+		/// Buffer object for the texture coordinates.
+		QOpenGLBuffer vbo_tex_coord;
+		/// Buffer object for the triangles.
 		QOpenGLBuffer vbo_triangles;
 
 	private:
 
 		/// Make the buffer objects
-		bool make_buffers(QOpenGLShaderProgram *program, bool with_colours);
+		bool make_buffers(
+			QOpenGLShaderProgram *program,
+			bool with_colours = false,
+			bool with_tex = false
+		);
 
 		/**
 		 * @brief Builds the necessary information for the vertex array/buffer objects.
@@ -60,10 +66,14 @@ class RenderTriangleMesh : public TriangleMesh {
 		 *
 		 * This is used to rearrange the vertices so that the first vertex
 		 * of the first triangle is at the first position of the vector.
+		 * @param[in] colors Color per vertex.
 		 * @param[out] copy_verts A copy of the vector @ref vertices.\n
 		 * This parameter will contain the same vertices as @ref vertices but
 		 * in the same order they appear in the vector @ref triangles.\n
 		 * This vector will be as large as @ref vertices.
+		 * @param[out] cols The colors of each vertex of in the mesh.\n
+		 * For each triangle, the colour is repeated three times, so the
+		 * final size of this vector is three times the number of triangles.
 		 * @param[out] normals The normals of each of the triangles in the mesh.\n
 		 * For each triangle, the normal is repeated three times, so the
 		 * final size of this vector is three times the number of triangles.
@@ -73,6 +83,31 @@ class RenderTriangleMesh : public TriangleMesh {
 			const vector<vec3>& colors,
 			vector<vec3>& copied_vertices,
 			vector<vec3>& cols,
+			vector<vec3>& normals,
+			vector<unsigned int>& perFaceTriangles
+		);
+		/**
+		 * @brief Builds the necessary information for the vertex array/buffer objects.
+		 *
+		 * This is used to rearrange the vertices so that the first vertex
+		 * of the first triangle is at the first position of the vector.
+		 * @param[in] tex_coords Texture coordinates per vertex.
+		 * @param[out] copy_verts A copy of the vector @ref vertices.\n
+		 * This parameter will contain the same vertices as @ref vertices but
+		 * in the same order they appear in the vector @ref triangles.\n
+		 * This vector will be as large as @ref vertices.
+		 * @param[out] texs The texture coordinate of each vertex of in the mesh.\n
+		 * For each triangle, the coordaintes are repeated three times, so the
+		 * final size of this vector is three times the number of triangles.
+		 * @param[out] normals The normals of each of the triangles in the mesh.\n
+		 * For each triangle, the normal is repeated three times, so the
+		 * final size of this vector is three times the number of triangles.
+		 * @param[out] perFaceTriangles I DO NOT KNOW!!! (YET)
+		 */
+		void make_VBO_data(
+			const vector<vec2>& tex_coord,
+			vector<vec3>& copied_vertices,
+			vector<vec2>& texs,
 			vector<vec3>& normals,
 			vector<unsigned int>& perFaceTriangles
 		);
@@ -119,6 +154,16 @@ class RenderTriangleMesh : public TriangleMesh {
 		 * @return Returns false on error.
 		 */
 		bool init(QOpenGLShaderProgram *program, const vector<vec3>& colors);
+		/**
+		 * @brief Initialises the mesh with the shader @e program associated.
+		 *
+		 * Makes the data necessary to build the vertex buffer objects,
+		 * loads the shader program (bind, ...).
+		 * @param program An GLSL shader program.
+		 * @param tex_coord Specify texture coordinates per vertex.
+		 * @return Returns false on error.
+		 */
+		bool init(QOpenGLShaderProgram *program, const vector<vec2>& tex_coord);
 
 		/**
 		 * @brief Remakes the vertex buffer object.
@@ -143,6 +188,14 @@ class RenderTriangleMesh : public TriangleMesh {
 		bool make_colours_buffer(QOpenGLShaderProgram *program, const vector<vec3>& colors);
 
 		/**
+		 * @brief Remakes the texture coordinate buffer object.
+		 *
+		 * If the buffer was not made then everything is remade.
+		 * @return Returns false on error.
+		 */
+		bool make_tex_coord_buffer(QOpenGLShaderProgram *program, const vector<vec2>& texs);
+
+		/**
 		 * @brief Frees all the memoery occupied by the mesh.
 		 *
 		 * Clears the contents of @ref vertices, @ref triangles,
@@ -155,6 +208,8 @@ class RenderTriangleMesh : public TriangleMesh {
 
 		/// Free the colour buffer.
 		void free_colour_buffer();
+		/// Free the colour buffer.
+		void free_tex_coord_buffer();
 
 		// OTHERS
 

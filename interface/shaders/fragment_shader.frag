@@ -12,9 +12,9 @@ uniform bool remeshing;
 
 uniform vec4 color;
 
-in vec3 vert_col;
 in vec3 frag_normal;
-varying vec3 frag_pos_world;
+in vec3 frag_pos_world;
+in vec3 vert_col;
 in vec2 tex_coord;
 out vec4 frag_color;
 
@@ -40,7 +40,7 @@ vec4 reflection_line(vec3 a, vec3 v) {
 }
 
 void main() {
-	if (wireframe && curvature || curvature) {
+	if (curvature && wireframe || curvature) {
 		frag_color = vec4(vert_col, 1);
 	}
 	else if (wireframe) {
@@ -57,6 +57,10 @@ void main() {
 	else if (harmonic_maps) {
 		// render a regular square grid
 		// black and white
+
+		vec2 tx = tex_coord + vec2(1);
+		float d = sqrt(dot(tx,tx))/sqrt(8.0);
+		frag_color = vec4(d, d, d, 1);
 	}
 	else {
 		// when displaying the whole triangle,

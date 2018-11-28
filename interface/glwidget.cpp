@@ -441,11 +441,19 @@ void GLWidget::set_harmonic_map(const polymode& pmode) {
 		cout << "cotangent";
 	}
 	cout << endl;
-	cout << "    computed in " << timing::elapsed_milliseconds(begin,end)
-		 << " ms" << endl;
+	cout << "    computed in " << timing::elapsed_seconds(begin,end)
+		 << " s" << endl;
 
-	//mesh.make_tex_coord_buffer(program, uvs);
+	cout << "Texture coordintes:" << endl;
+	for (size_t i = 0; i < uvs.size(); ++i) {
+		cout << "    " << i << ": " << uvs[i].x << "," << uvs[i].y << endl;
+		cout << "        " << uvs[i].x + 1 << "," << uvs[i].y + 1 << endl;
+	}
 
+	makeCurrent();
+	mesh.make_tex_coord_buffer(program, uvs);
+	doneCurrent();
+	update();
 }
 
 void GLWidget::set_curvature_display(const curv_type& cd) {
