@@ -44,7 +44,7 @@ namespace parametrisation {
 		vector<T> triplet_list;
 
 		#if defined (DEBUG)
-		cout << "Laplacian Global Smoothing:" << endl;
+		cout << "Harmonic Parametrisation:" << endl;
 		cout << "    Computing weights and triplets..." << endl;
 		#endif
 
