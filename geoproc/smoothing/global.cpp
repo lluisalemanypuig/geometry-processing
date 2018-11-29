@@ -2,13 +2,11 @@
 
 // C++ includes
 #include <iostream>
-#include <iomanip>
 #include <vector>
 using namespace std;
 
 // glm includes
 #include <glm/vec3.hpp>
-using namespace glm;
 
 // geoproc includes
 #include <geoproc/triangle_mesh.hpp>
@@ -31,7 +29,7 @@ namespace global {
 	(
 		int N, int variable,
 		const smooth_weight& w,
-		const std::vector<bool>& constant, TriangleMesh& m
+		const vector<bool>& constant, TriangleMesh& m
 	)
 	{
 		/* This code was engineered to avoid high memory
@@ -48,11 +46,6 @@ namespace global {
 		float *ws = (float *)malloc(N*sizeof(float));
 		// list of triplets for system's matrix
 		vector<T> triplet_list;
-
-		#if defined (DEBUG)
-		cout << "Laplacian Global Smoothing:" << endl;
-		cout << "    Computing weights and triplets..." << endl;
-		#endif
 
 		int row_it = 0;
 		for (int i = 0; i < N; ++i) {
@@ -98,50 +91,18 @@ namespace global {
 		// free memory
 		free(ws);
 
-		#if defined (DEBUG)
-		cout << "    Building system matrix..." << endl;
-		#endif
-
 		A.setFromTriplets(triplet_list.begin(), triplet_list.end());
 		// free more memory
 		triplet_list.clear();
 		// improve memory consumption
 		A.makeCompressed();
 
-		#if defined (DEBUG)
-		cout << "    Transpose of system matrix..." << endl;
-		#endif
-
 		SparseMatrixf At = A.transpose();
 
-		#if defined (DEBUG)
-		cout << "    Initialise solver..." << endl;
-		#endif
-
 		Eigen::SimplicialCholesky<SparseMatrixf> solver(At*A);
-
-		#if defined (DEBUG)
-		cout << "    Solving..." << endl;
-		cout << "        x" << endl;
-		#endif
-
 		Vectorf solX = solver.solve(At*bX);
-
-		#if defined (DEBUG)
-		cout << "        y" << endl;
-		#endif
-
 		Vectorf solY = solver.solve(At*bY);
-
-		#if defined (DEBUG)
-		cout << "        z" << endl;
-		#endif
-
 		Vectorf solZ = solver.solve(At*bZ);
-
-		#if defined (DEBUG)
-		cout << "    Building vertices..." << endl;
-		#endif
 
 		vector<glm::vec3> coords = m.get_vertices();
 		int fixed_it = 0;
@@ -154,16 +115,12 @@ namespace global {
 			}
 		}
 		m.set_vertices(coords);
-
-		#if defined (DEBUG)
-		cout << "    Done" << endl;
-		#endif
 	}
 
 	bool smooth
 	(
 		const smooth_operator& op, const smooth_weight& w,
-		const std::vector<bool>& constant, TriangleMesh& m
+		const vector<bool>& constant, TriangleMesh& m
 	)
 	{
 		const int N = m.n_vertices();
@@ -182,14 +139,14 @@ namespace global {
 		}
 
 		if (op == smooth_operator::BiLaplacian) {
-			cerr << "Error: global smoothing not implemented for operator" << endl
-				 << "    Bi-Laplacian" << endl;
+			cerr << "Error: global smoothing not implemented for operator"
+				 << endl << "    Bi-Laplacian" << endl;
 			return false;
 		}
 
 		if (op == smooth_operator::TaubinLM) {
-			cerr << "Error: invalid value of smoothing operator 'TaubinLM'" << endl
-				 << "    for a global smoothing operation" << endl;
+			cerr << "Error: invalid value of smoothing operator 'TaubinLM'"
+				 << endl << "    for a global smoothing operation" << endl;
 			return false;
 		}
 

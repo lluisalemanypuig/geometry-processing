@@ -117,11 +117,9 @@ namespace local_private {
 			m.get_vertices_triangle(next1, vi, i1,j1,k1);
 			m.get_vertices_triangle(next2, vi, i2,j2,k2);
 
-			// compute the two angles (alpha and beta).
-
 			// make sure that the orientations are correct.
-			// k1 and j2 are the same vertex, and a
-			// neighbour of vi.
+			// k1 and j2 are the same vertex, and a neighbour of vi.
+			assert(i1 == i2);
 			assert(k1 == j2);
 
 			// compute the two angles: alpha and beta
@@ -175,13 +173,16 @@ namespace local_private {
 			m.get_vertices_triangle(next1, vi, i1,j1,k1);
 			m.get_vertices_triangle(next2, vi, i2,j2,k2);
 
-			// make sure that the orientations are correct
+			// make sure that the orientations are correct.
+			// k1 and j2 are the same vertex, and a neighbour of vi.
+			assert(i1 == i2);
 			assert(k1 == j2);
 
 			// Compute the two angles (alpha and beta).
 			u = normalize( verts[i1] - verts[j1] );
 			v = normalize( verts[k1] - verts[j1] );
 			alpha = acos( dot(u,v) );
+
 			u = normalize( verts[i2] - verts[k2] );
 			v = normalize( verts[j2] - verts[k2] );
 			beta = acos( dot(u,v) );
@@ -189,6 +190,7 @@ namespace local_private {
 			// compute weight
 			float W = cotan(alpha) + cotan(beta);
 			S += W;
+
 			weights.push_back(W);
 			// accumulate curvature vector
 			diffs.push_back(verts[i1] - verts[k1]);
@@ -296,20 +298,16 @@ namespace local_private {
 
 		// if the number of iterations is odd, the for
 		// loop below will apply one extra iteration
-		if (nit%2 == 1) {
-			--nit;
-		}
 
 		// for every two iterations, apply two steps, in total nit steps
 		size_t it;
-		for (it = 0; it < nit; it += 2) {
+		for (it = 0; it < nit - (nit%2 == 1); it += 2) {
 			local_private::apply_local(w, l, m, old_verts, new_verts);
 			local_private::apply_local(w, l, m, new_verts, old_verts);
 		}
 
-		// Do one more iteration if necessary.
-
-		if (it == nit) {
+		// do one more iteration if necessary.
+		if (nit%2 == 1) {
 			local_private::apply_local(w, l, m, old_verts, new_verts);
 			return true;
 		}
@@ -331,20 +329,16 @@ namespace local_private {
 
 		// if the number of iterations is odd, the for
 		// loop below will apply one extra iteration
-		if (nit%2 == 1) {
-			--nit;
-		}
 
 		// for every two iterations, apply two steps, in total nit steps
 		size_t it;
-		for (it = 0; it < nit; it += 2) {
+		for (it = 0; it < nit - (nit%2 == 1); it += 2) {
 			local_private::apply_local(w, l, m, n_threads, old_verts, new_verts);
 			local_private::apply_local(w, l, m, n_threads, new_verts, old_verts);
 		}
 
-		// Do one more iteration if necessary.
-
-		if (it == nit) {
+		// do one more iteration if necessary.
+		if (nit%2 == 1) {
 			local_private::apply_local(w, l, m, n_threads, old_verts, new_verts);
 			return true;
 		}

@@ -46,6 +46,9 @@ namespace local {
 	 * @pre The mesh requires:
 	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
 	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
+	 * @pre The mesh can't have boundaries if the @ref smooth_weight::contangent
+	 * is applied. However, this is not checked since the mesh may not have
+	 * its boundaries computed.
 	 */
 	void laplacian
 	(const smooth_weight& w, float lambda, size_t n_iter, TriangleMesh& m);
@@ -62,6 +65,9 @@ namespace local {
 	 * @pre The mesh requires:
 	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
 	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
+	 * @pre The mesh can't have boundaries if the @ref smooth_weight::contangent
+	 * is applied. However, this is not checked since the mesh may not have
+	 * its boundaries computed.
 	 */
 	void laplacian
 	(const smooth_weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);
@@ -79,6 +85,9 @@ namespace local {
 	 * @pre The mesh requires:
 	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
 	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
+	 * @pre The mesh can't have boundaries if the @ref smooth_weight::contangent
+	 * is applied. However, this is not checked since the mesh may not have
+	 * its boundaries computed.
 	 */
 	void bilaplacian
 	(const smooth_weight& w, float lambda, size_t n_iter, TriangleMesh& m);
@@ -95,6 +104,9 @@ namespace local {
 	 * @pre The mesh requires:
 	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
 	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
+	 * @pre The mesh can't have boundaries if the @ref smooth_weight::contangent
+	 * is applied. However, this is not checked since the mesh may not have
+	 * its boundaries computed.
 	 */
 	void bilaplacian
 	(const smooth_weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);
@@ -120,6 +132,9 @@ namespace local {
 	 * @pre The mesh requires:
 	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
 	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
+	 * @pre The mesh can't have boundaries if the @ref smooth_weight::contangent
+	 * is applied. However, this is not checked since the mesh may not have
+	 * its boundaries computed.
 	 */
 	void TaubinLM
 	(const smooth_weight& w, float lambda, size_t n_iter, TriangleMesh& m);
@@ -136,6 +151,9 @@ namespace local {
 	 * @pre The mesh requires:
 	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
 	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
+	 * @pre The mesh can't have boundaries if the @ref smooth_weight::contangent
+	 * is applied. However, this is not checked since the mesh may not have
+	 * its boundaries computed.
 	 */
 	void TaubinLM
 	(const smooth_weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);
