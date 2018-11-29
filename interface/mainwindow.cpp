@@ -14,6 +14,8 @@ using namespace geoproc;
 #include <QFileDialog>
 #include "ui_mainwindow.h"
 
+#define line "(" << __LINE__ << ")"
+
 // PRIVATE
 
 void MainWindow::change_poly_mode() {
@@ -34,7 +36,7 @@ void MainWindow::change_curvature() {
 		ui->DualView_LeftRenderer->change_curvature_display();
 		ui->DualView_RightRenderer->change_curvature_display();
 	}
-	change_poly_mode();
+	//change_poly_mode();
 }
 
 void MainWindow::change_curvature_prop_display(float p) {
@@ -345,6 +347,7 @@ void MainWindow::on_VS_Curvature_Proportion_sliderMoved(int value) {
 }
 
 void MainWindow::on_RB_Curvature_Gauss_toggled(bool checked) {
+	cout << "MainWindow::on_RB_Curvature_Gauss_toggled " << line << endl;
 	if (checked) {
 		set_prop_values_to_all();
 		ui->SingleView_Renderer->set_curvature_display(curv_type::Gauss);
@@ -358,6 +361,7 @@ void MainWindow::on_RB_Curvature_Gauss_toggled(bool checked) {
 }
 
 void MainWindow::on_RB_Curvature_Mean_toggled(bool checked) {
+	cout << "MainWindow::on_RB_Curvature_Mean_toggled " << line << endl;
 	if (checked) {
 		set_prop_values_to_all();
 		ui->SingleView_Renderer->set_curvature_display(curv_type::Mean);
@@ -483,6 +487,10 @@ MainWindow::MainWindow(QWidget *parent)
 	ui->SingleView_Renderer->set_num_threads(1);
 	ui->DualView_LeftRenderer->set_twin( ui->DualView_RightRenderer );
 	ui->DualView_RightRenderer->set_twin( ui->DualView_LeftRenderer );
+
+	ui->SingleView_Renderer->set_name("single view widget");
+	ui->DualView_LeftRenderer->set_name("dual view - left widget");
+	ui->DualView_RightRenderer->set_name("dual view - right widget");
 }
 
 MainWindow::~MainWindow() {

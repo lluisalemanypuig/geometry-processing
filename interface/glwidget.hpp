@@ -48,8 +48,12 @@ enum class curv_type : int8_t {
 
 class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 	protected:
+		/// Name of the widget. For debugging.
+		string name;
+
 		/// Display the mesh in a certain polygon mode. See @ref polymode.
-		polymode pm;
+		polymode to_polymode;
+		polymode current_polymode;
 		/// Type of curvature to be displayed. See @ref curvature_display.
 		curv_type current_curv_display;
 		curv_type to_curv_display;
@@ -112,13 +116,14 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		void clear_mesh();
 
 		void set_light_sources_refl_lines(int v);
+		void set_name(const string& s);
 
 		/// Sets the polygon display mode. See @ref pm.
-		void set_polygon_mode(const polymode& pm);
+		void set_polygon_mode(const polymode& current_polymode);
 		/// Changes the polygon mode to the current.
 		void change_polygon_mode();
 		/// Set the type of harmonic map generated.
-		void set_harmonic_map(const polymode& pm);
+		void set_harmonic_map(const polymode& current_polymode);
 		/// Sets the type of curvature to be displayed. See @ref curvature_display.
 		void set_curvature_display(const curv_type& current_curv_display);
 		/**

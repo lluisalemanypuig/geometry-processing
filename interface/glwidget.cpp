@@ -22,6 +22,10 @@ const float maxRotationCamera = 75.0f;
 const float minDistanceCamera = 0.25f;
 const float maxDistanceCamera = 3.0f;
 
+#define line "[" << name << "] (" << __LINE__ << ")"
+#define ERR "[" << name << "] Error (" << __LINE__ << "):"
+#define WAR "[" << name << "] Warning (" << __LINE__ << "):"
+
 // PRIVATE
 
 void GLWidget::set_projection() {
@@ -65,7 +69,7 @@ void GLWidget::load_shader() {
 	program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/fragment_shader.frag");
 	program->link();
 	if (not program->isLinked()) {
-		cerr << "GLWidget::initializeGL - Error:" << endl;
+		cerr << "GLWidget::initializeGL " << line << " - Error:" << endl;
 		cerr << "Shader program 'simple' has not linked" << endl;
 		cerr << endl;
 		cerr << "Log: " << endl;
@@ -76,6 +80,9 @@ void GLWidget::load_shader() {
 }
 
 void GLWidget::compute_curvature() {
+	cout << "GLWidget::compute_curvature " << line << " - computing curvature"
+		 << endl;
+
 	mesh.make_neighbourhood_data();
 	mesh.make_angles_area();
 
@@ -99,10 +106,10 @@ void GLWidget::compute_curvature() {
 }
 
 void GLWidget::show_curvature(bool make_all_buffers) {
-	cout << "GLWidget::show_curvature - should all buffers be made? "
+	cout << "GLWidget::show_curvature " << line << " - should all buffers be made? "
 		 << (make_all_buffers ? "Yes" : "No") << endl;
 
-	cout << "GLWidget::show_curvature - make colours with curvature" << endl;
+	cout << "GLWidget::show_curvature " << line << " - make colours with curvature" << endl;
 
 	vector<vec3> cols;
 	float min, max;
@@ -118,19 +125,24 @@ void GLWidget::show_curvature(bool make_all_buffers) {
 
 	makeCurrent();
 	if (make_all_buffers) {
-		cout << "    GLWidget::show_curvature - make ALL buffers" << endl;
+		cout << "    GLWidget::show_curvature " << line << " - make ALL buffers" << endl;
 		mesh.init(program, cols);
 	}
 	else {
-		cout << "    GLWidget::show_curvature - make only buffer colour" << endl;
+		cout << "    GLWidget::show_curvature " << line << " - make only buffer colour" << endl;
 		mesh.make_colours_buffer(program, cols);
 	}
+	program->bind();
+	program->setUniformValue("curvature", true);
+	program->release();
 	doneCurrent();
 	update();
+
+	cout << "GLWidget::show_curvature " << line << " - curvature should be displayed" << endl;
 }
 
 void GLWidget::init_mesh(bool make_all_buffers) {
-	cout << "GLWidget::init_mesh - initialising mesh..." << endl;
+	cout << "GLWidget::init_mesh " << line << " - initialising mesh..." << endl;
 
 	makeCurrent();
 	if (not mesh.init(program)) {
@@ -141,17 +153,17 @@ void GLWidget::init_mesh(bool make_all_buffers) {
 	doneCurrent();
 	update();
 
-	cout << "GLWidget::init_mesh - corner edge data..." << endl;
+	cout << "GLWidget::init_mesh " << line << " - corner edge data..." << endl;
 
 	if (current_curv_display != curv_type::none) {
-		cout << "GLWidget::init_mesh - displaying curvature" << endl;
+		cout << "GLWidget::init_mesh " << line << ": displaying curvature" << endl;
 		cout << "    computing curvature..." << endl;
 		compute_curvature();
 		cout << "    displaying curvature..." << endl;
 		show_curvature(make_all_buffers);
 	}
 
-	cout << "GLWidget::init_mesh - initialised succesfully!" << endl;
+	cout << "GLWidget::init_mesh " << line << " - initialised succesfully!" << endl;
 }
 
 void GLWidget::initializeGL() {
@@ -167,7 +179,7 @@ void GLWidget::initializeGL() {
 	bool init = mesh.init(program);
 
 	if (not init) {
-		cerr << "GLWidget::initializeGL (" << __LINE__ << ") - Error:" << endl;
+		cerr << "GLWidget::initializeGL - " << ERR << endl;
 		cerr << "    Could not initialise mesh cube." << endl;
 		QApplication::quit();
 	}
@@ -189,10 +201,10 @@ void GLWidget::paintGL() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	program->bind();
 
-	if (pm == polymode::solid) {
+	if (current_polymode == polymode::solid) {
 		mesh.render(*this);
 	}
-	else if (pm == polymode::wireframe) {
+	else if (current_polymode == polymode::wireframe) {
 		/* Note to self: setting the uniforms here is necessary
 		 * for a correct display of curvature values in wireframe
 		 * mode, ...
@@ -214,15 +226,15 @@ void GLWidget::paintGL() {
 
 		mesh.render(*this);
 	}
-	else if (pm == polymode::reflection_lines) {
+	else if (current_polymode == polymode::reflection_lines) {
 		mesh.render(*this);
 	}
-	else if (pm == polymode::harmonic_maps) {
+	else if (current_polymode == polymode::harmonic_maps) {
 		mesh.render(*this);
 	}
 	else {
 		// no polygon mode
-		cerr << "GLWidget::paintGL (" << __LINE__ << ") - Warning:" << endl;
+		cerr << "GLWidget::paintGL - " << WAR << endl;
 		cerr << "    no polygon mode selected" << endl;
 	}
 
@@ -261,7 +273,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
 GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
 	program = nullptr;
 
-	pm = polymode::solid;
+	current_polymode = polymode::solid;
 	to_curv_display = curv_type::none;
 	current_curv_display = curv_type::none;
 
@@ -291,13 +303,13 @@ void GLWidget::load_mesh(const QString& filename) {
 	mesh.free_buffers();
 	mesh.destroy();
 
-	cout << "GLWidget::load_mesh - reading mesh..." << endl;
+	cout << "GLWidget::load_mesh " << line << " - reading mesh..." << endl;
 
 	geoproc::PLY_reader::read_mesh(filename.toStdString(), mesh);
 	mesh.make_normal_vectors();
 	mesh.scale_to_unit();
 
-	cout << "GLWidget::load_mesh - initialising mesh..." << endl;
+	cout << "GLWidget::load_mesh " << line << " - initialising mesh..." << endl;
 
 	init_mesh(true);
 }
@@ -317,14 +329,20 @@ void GLWidget::set_light_sources_refl_lines(int v) {
 	update();
 }
 
+void GLWidget::set_name(const string& s) {
+	name = s;
+}
+
 void GLWidget::set_polygon_mode(const polymode& pmode) {
-	pm = pmode;
+	to_polymode = pmode;
 }
 
 void GLWidget::change_polygon_mode() {
+	cout << "GLWidget::change_polygon_mode " << line << endl;
+
 	makeCurrent();
 	program->bind();
-	if (pm == polymode::solid) {
+	if (to_polymode == polymode::solid) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		program->setUniformValue("wireframe", false);
@@ -337,7 +355,7 @@ void GLWidget::change_polygon_mode() {
 			);
 		}
 	}
-	else if (pm == polymode::wireframe) {
+	else if (to_polymode == polymode::wireframe) {
 		// do not set glPolygonMode because we need two different
 		// modes and they are set in the paintGL function.
 
@@ -345,7 +363,7 @@ void GLWidget::change_polygon_mode() {
 		program->setUniformValue("reflection_lines", false);
 		program->setUniformValue("harmonic_maps", false);
 	}
-	else if (pm == polymode::reflection_lines) {
+	else if (to_polymode == polymode::reflection_lines) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		program->setUniformValue("curvature", false);
@@ -355,7 +373,7 @@ void GLWidget::change_polygon_mode() {
 
 		curvature_values.clear();
 	}
-	else if (pm == polymode::harmonic_maps) {
+	else if (to_polymode == polymode::harmonic_maps) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		program->setUniformValue("curvature", false);
@@ -364,11 +382,11 @@ void GLWidget::change_polygon_mode() {
 		program->setUniformValue("harmonic_maps", true);
 	}
 	else {
-		cerr << "GLWidget::set_polygon_mode (" << __LINE__ << ") - Warning:" << endl;
+		cerr << "GLWidget::set_polygon_mode - " << WAR << endl;
 		cerr << "    Unhandled selected polymode: expect undefined behaviour" << endl;
 	}
 
-	if (pm == polymode::solid or pm == polymode::wireframe) {
+	if (to_polymode == polymode::solid or to_polymode == polymode::wireframe) {
 
 		// we may need to display curvatures
 		if (current_curv_display == curv_type::none) {
@@ -382,17 +400,19 @@ void GLWidget::change_polygon_mode() {
 		}
 	}
 
+	current_polymode = to_polymode;
+
 	program->release();
 	doneCurrent();
 	update();
 }
 
 void GLWidget::set_harmonic_map(const polymode& pmode) {
-	assert(pm == polymode::harmonic_maps);
+	assert(current_polymode == polymode::harmonic_maps);
 	assert(pmode == polymode::harmonic_maps_Circle or
 		   pmode == polymode::harmonic_maps_Square);
 
-	if (pmode == pm) {
+	if (pmode == current_polymode) {
 		// nothing to do
 		return;
 	}
@@ -411,7 +431,7 @@ void GLWidget::set_harmonic_map(const polymode& pmode) {
 	mesh.make_boundaries();
 
 	if (mesh.get_boundaries().size() != 1) {
-		cerr << "GLWidget::set_harmonic_map - Warning (" << __LINE__ << "):" << endl;
+		cerr << "GLWidget::set_harmonic_map - " << WAR << endl;
 		cerr << "    No boundaries in the mesh." << endl;
 		cerr << "    Prevent the application from terminating by not calling" << endl;
 		cerr << "    the algorithm." << endl;
@@ -461,6 +481,9 @@ void GLWidget::set_curvature_display(const curv_type& cd) {
 }
 
 void GLWidget::change_curvature_display() {
+	cout << "GLWidget::change_curvature_display " << line
+		 << " - changing curvature display" << endl;
+
 	// if we don't curvature colours anymore...
 	if (to_curv_display == curv_type::none) {
 		/* One of the followng:		none -> none
@@ -469,11 +492,20 @@ void GLWidget::change_curvature_display() {
 		 * (current_curv_display -> to_curv_display)
 		 */
 
+		cout << "GLWidget::change_curvature_display " << line
+			 << " - no curvature to show" << endl;
+
 		current_curv_display = curv_type::none;
 		curvature_values.clear();
+		makeCurrent();
 		program->bind();
 		program->setUniformValue("curvature", false);
+		program->setUniformValue(
+			"color", QVector4D(0.75f, 0.8f, 0.9f, 1.0f)
+		);
 		program->release();
+		doneCurrent();
+		update();
 		return;
 	}
 
@@ -482,11 +514,17 @@ void GLWidget::change_curvature_display() {
 	 * 'curv_type::none'
 	 */
 
+	cout << "GLWidget::change_curvature_display " << line
+		 << " - some curvature is to be displayed" << endl;
+
 	// make all buffers only if the colour buffer was not made
 	// before: if the current curvature mode is "deactivated"
 	bool make_all_buffers = false;
 	if (current_curv_display == curv_type::none) {
 		make_all_buffers = true;
+
+		cout << "GLWidget::change_curvature_display " << line
+			 << " -     all bufferss will be made" << endl;
 	}
 
 	if (current_curv_display != to_curv_display) {
@@ -495,6 +533,9 @@ void GLWidget::change_curvature_display() {
 		 *							Mean -> Gauss
 		 * (current_curv_display -> to_curv_display)
 		 */
+
+		cout << "GLWidget::change_curvature_display " << line
+			 << " - clear the current curvature values" << endl;
 		curvature_values.clear();
 	}
 
@@ -509,14 +550,20 @@ void GLWidget::change_curvature_display() {
 
 		// we may not need to recompute the values
 		if (curvature_values.size() == 0) {
-			// we do (maybe because the reflection lines
-			// thing cleared them)
+			// we do (maybe because the reflection
+			// lines thing cleared them)
 			comp_curv = true;
 			make_all_buffers = true;
+
+			cout << "GLWidget::change_curvature_display " << line
+				 << " - recompute all the curvature and buffers" << endl;
 		}
 		else {
 			// make only buffer colours
 			make_all_buffers = false;
+
+			cout << "GLWidget::change_curvature_display " << line
+				 << " - do not make all buffers again" << endl;
 		}
 	}
 	else {
@@ -529,12 +576,18 @@ void GLWidget::change_curvature_display() {
 	}
 
 	if (comp_curv) {
+		cout << "GLWidget::change_curvature_display " << line
+			 << " - compute curvature..." << endl;
+
 		current_curv_display = to_curv_display;
 		compute_curvature();
 	}
 
 	// since there are already curvature values computed ...
 	// make the colours
+
+	cout << "GLWidget::change_curvature_display " << line
+		 << " - show curvature" << endl;
 
 	to_prop = prop;
 	show_curvature(make_all_buffers);
@@ -563,7 +616,7 @@ const RenderTriangleMesh& GLWidget::get_mesh() const {
 }
 
 const polymode& GLWidget::get_polygon_mode() const {
-	return pm;
+	return current_polymode;
 }
 const curv_type& GLWidget::get_curvature_display() const {
 	return current_curv_display;
