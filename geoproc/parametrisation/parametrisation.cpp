@@ -43,11 +43,6 @@ namespace parametrisation {
 		// list of triplets for system's matrix
 		vector<T> triplet_list;
 
-		#if defined (DEBUG)
-		cout << "Harmonic Parametrisation:" << endl;
-		cout << "    Computing weights and triplets..." << endl;
-		#endif
-
 		int row_it = 0;
 		for (int i = 0; i < N; ++i) {
 			if (constant[i]) { continue; }
@@ -91,44 +86,16 @@ namespace parametrisation {
 		// free memory
 		free(ws);
 
-		#if defined (DEBUG)
-		cout << "    Building system matrix..." << endl;
-		#endif
-
 		A.setFromTriplets(triplet_list.begin(), triplet_list.end());
 		// free more memory
 		triplet_list.clear();
 		// improve memory consumption
 		A.makeCompressed();
 
-		#if defined (DEBUG)
-		cout << "    Transpose of system matrix..." << endl;
-		#endif
-
 		SparseMatrixf At = A.transpose();
-
-		#if defined (DEBUG)
-		cout << "    Initialise solver..." << endl;
-		#endif
-
 		Eigen::SimplicialCholesky<SparseMatrixf> solver(At*A);
-
-		#if defined (DEBUG)
-		cout << "    Solving..." << endl;
-		cout << "        x" << endl;
-		#endif
-
 		Vectorf solX = solver.solve(At*bX);
-
-		#if defined (DEBUG)
-		cout << "        y" << endl;
-		#endif
-
 		Vectorf solY = solver.solve(At*bY);
-
-		#if defined (DEBUG)
-		cout << "    Setting coordinates" << endl;
-		#endif
 
 		int fixed_it = 0;
 		for (int i = 0; i < N; ++i) {
@@ -138,10 +105,6 @@ namespace parametrisation {
 				++fixed_it;
 			}
 		}
-
-		#if defined (DEBUG)
-		cout << "    Done" << endl;
-		#endif
 	}
 
 	bool harmonic_maps
