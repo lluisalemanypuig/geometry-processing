@@ -231,6 +231,9 @@ void MainWindow::on_RB_Render_RefLines_toggled(bool toggled) {
 		ui->DualView_RightRenderer->set_polygon_mode(polymode::reflection_lines);
 		change_poly_mode();
 
+		on_SB_Render_RefLines_NumSources_valueChanged(
+			ui->SB_Render_RefLines_NumSources->value()
+		);
 		// we may need to enable/disable things
 		enable_curvature();
 	}
