@@ -84,7 +84,7 @@ namespace test_geoproc {
 			else if (strcmp(argv[i], "--print") == 0) {
 				_print = true;
 			}
-			else if (strcmp(argv[i], "--algorithm") == 0) {
+			else if (strcmp(argv[i], "--operator") == 0) {
 				opt = string(argv[i + 1]);
 				++i;
 			}
