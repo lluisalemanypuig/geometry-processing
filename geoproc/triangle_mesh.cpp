@@ -490,7 +490,7 @@ void TriangleMesh::make_boundaries() {
 		// find the boundary starting at i-th edge
 		visited[i] = true;
 		boundaries.push_back(vector<int>());
-		boundaries.back().push_back(vi.first);
+		boundaries.back().push_back(ci.first);
 
 		size_t j;
 		int next_corner = ci.second;
