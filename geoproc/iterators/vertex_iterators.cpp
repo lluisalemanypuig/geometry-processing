@@ -32,11 +32,15 @@ vertex_vertex_iterator::vertex_vertex_iterator(const TriangleMesh& m)
 
 vertex_vertex_iterator::~vertex_vertex_iterator() {}
 
-int vertex_vertex_iterator::init(int c) {
-	assert(c != -1);
+int vertex_vertex_iterator::init(int v) {
+	assert(v >= 0);
+
+	cur_corner = -1;
+	cur_vertex = -1;
+	half_step = false;
 
 	// copy initialiser corner and find current element
-	cur_corner = mesh.get_corner_vertex(c);
+	cur_corner = mesh.get_corner_vertex(v);
 	return next();
 }
 
@@ -92,11 +96,14 @@ vertex_face_iterator::vertex_face_iterator(const TriangleMesh& m)
 
 vertex_face_iterator::~vertex_face_iterator() {}
 
-int vertex_face_iterator::init(int c) {
-	assert(c != -1);
+int vertex_face_iterator::init(int v) {
+	assert(v >= 0);
+
+	cur_corner = -1;
+	cur_face = -1;
 
 	// copy initialiser corner and find current element
-	cur_corner = mesh.get_corner_vertex(c);
+	cur_corner = mesh.get_corner_vertex(v);
 	return next();
 }
 
