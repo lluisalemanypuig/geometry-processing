@@ -5,6 +5,7 @@
 
 // geoproc includes
 #include <geoproc/parametrisation/parametrisation.hpp>
+#include <geoproc/iterators/vertex_iterators.hpp>
 #include <geoproc/triangle_mesh.hpp>
 #include <geoproc/ply_reader.hpp>
 using namespace geoproc;
@@ -31,6 +32,29 @@ namespace test_geoproc {
 
 #define out_float(x) ((std::abs(x) <= 1e-4 ? 0.0 : x))
 #define geogebra_out(v) "Point({" << out_float(v.x) << "," << out_float(v.y) << "})"
+
+	void print_segments(const TriangleMesh& mesh, const vector<vec2>& uvs) {
+		cout << "{";
+
+		iterators::vertex::vertex_vertex_iterator it(mesh);
+		const int N = mesh.n_vertices();
+		for (int i = 0; i < N; ++i) {
+			it.init(i);
+
+			int first = it.current();
+			int j = it.current();
+			do {
+				cout << "Segment("
+					 << geogebra_out(uvs[i]) << ","
+					 << geogebra_out(uvs[j])
+					 << "),";
+
+				j = it.next();
+			}
+			while (j != first);
+		}
+		cout << "}" << endl;
+	}
 
 	int test_harmonic_maps(int argc, char *argv[]) {
 		string mesh_file = "none";
@@ -136,10 +160,13 @@ namespace test_geoproc {
 			cout << "," << geogebra_out(uvs[i]);
 		}
 		cout << "}" << endl;
+		print_segments(mesh, uvs);
 		cout << "Computed in: " << timing::elapsed_seconds(begin, end) << " s" << endl;
 
-		for (size_t i = 0;  i < uvs.size(); ++i) {
-			cout << "    " << i << ": " << uvs[i].x << "," << uvs[i].y << endl;
+		if (uvs.size() < 50) {
+			for (size_t i = 0;  i < uvs.size(); ++i) {
+				cout << "    " << i << ": " << uvs[i].x << "," << uvs[i].y << endl;
+			}
 		}
 
 		return 0;

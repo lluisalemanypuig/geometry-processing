@@ -18,6 +18,13 @@ namespace test_geoproc {
 		cout << endl;
 	}
 
+#define vertex_id(c) mesh.get_vertex_corner(c)
+#define edge_corner_out(e)					\
+	"(" << e.first << "," << e.second << ")"
+#define edge_vertex_out(e)					\
+	"(" << vertex_id(e.first)				\
+	<< "," << vertex_id(e.second) << ")"
+
 	int test_boundaries(int argc, char *argv[]) {
 		string mesh_file = "none";
 
@@ -54,6 +61,19 @@ namespace test_geoproc {
 
 		cout << "This mesh has " << mesh.get_boundary_edges().size()
 			 << " boundary edges" << endl;
+		const vector<mesh_edge>& boundary_edges = mesh.get_boundary_edges();
+		cout << "Boundary edges (corners):" << endl;
+		cout << "    : [" << edge_corner_out(boundary_edges[0]);
+		for (size_t i = 1; i < boundary_edges.size(); ++i) {
+			cout << "," << edge_corner_out(boundary_edges[i]);
+		}
+		cout << "]" << endl;
+		cout << "Boundary edges (vertices):" << endl;
+		cout << "    : [" << edge_vertex_out(boundary_edges[0]);
+		for (size_t i = 1; i < boundary_edges.size(); ++i) {
+			cout << "," << edge_vertex_out(boundary_edges[i]);
+		}
+		cout << "]" << endl;
 
 		timing::time_point begin = timing::now();
 		mesh.make_boundaries();
@@ -65,19 +85,19 @@ namespace test_geoproc {
 		cout << "This mesh has " << bounds.size() << " boundaries." << endl;
 		cout << "Corner indices:" << endl;
 		for (size_t i = 0; i < bounds.size(); ++i) {
-			cout << "    " << i << ":";
-			for (size_t j = 0; j < bounds[i].size(); ++j) {
-				cout << " " << bounds[i][j];
+			cout << "    " << i << ": [" << bounds[i][0];
+			for (size_t j = 1; j < bounds[i].size(); ++j) {
+				cout << ", " << bounds[i][j];
 			}
-			cout << endl;
+			cout << "]" << endl;
 		}
 		cout << "Vertex indices:" << endl;
 		for (size_t i = 0; i < bounds.size(); ++i) {
-			cout << "    " << i << ":";
-			for (size_t j = 0; j < bounds[i].size(); ++j) {
-				cout << " " << mesh.get_vertex_corner(bounds[i][j]);
+			cout << "    " << i << ": [" << vertex_id(bounds[i][0]);
+			for (size_t j = 1; j < bounds[i].size(); ++j) {
+				cout << ", " << vertex_id(bounds[i][j]);
 			}
-			cout << endl;
+			cout << "]" << endl;
 		}
 
 		return 0;
