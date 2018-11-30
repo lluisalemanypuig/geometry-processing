@@ -66,6 +66,7 @@ void GLWidget::load_shader() {
 	delete_program();
 	program = new QOpenGLShaderProgram();
 	program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/vertex_shader.vert");
+	//program->addShaderFromSourceFile(QOpenGLShader::Geometry, ":/shaders/geometry_shader.geom");
 	program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/fragment_shader.frag");
 	program->link();
 	if (not program->isLinked()) {

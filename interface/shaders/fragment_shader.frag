@@ -50,19 +50,17 @@ void HM_remeshing() {
 // render a checkered board using the
 // texture coordinates
 void HM_checkered() {
-	ivec2 size = ivec2(10,10);
-	float total =
-		floor(tex_coord.x*float(size.x)) +
-		floor(tex_coord.y*float(size.y));
+	float total =	floor(tex_coord.x*10) +
+					floor(tex_coord.y*10);
 
 	bool is_even = mod(total, 2.0) == 0.0;
-	vec4 col1 = vec4(0.0,0.0,0.0,1.0);
-	vec4 col2 = vec4(1.0,1.0,1.0,1.0);
 	if (is_even) {
-		frag_color = col1;
+		// black
+		frag_color = vec4(0.0,0.0,0.0,1.0);
 	}
 	else {
-		frag_color = col2;
+		// white
+		frag_color = vec4(1.0,1.0,1.0,1.0);
 	}
 }
 

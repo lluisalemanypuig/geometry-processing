@@ -169,11 +169,6 @@ void TwinGLWidget::run_local_smoothing_algorithm() {
 
 	if (current_curv_display != curv_type::none) {
 		compute_curvature();
-	}
-
-	// update mesh
-	if (current_curv_display != curv_type::none) {
-
 		// show curvature already has
 		// makeCurrent() .. doneCurrent()
 		show_curvature(true);
