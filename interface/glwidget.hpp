@@ -54,6 +54,7 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		/// Display the mesh in a certain polygon mode. See @ref polymode.
 		polymode to_polymode;
 		polymode current_polymode;
+		polymode harmonic_maps_mode;
 		/// Type of curvature to be displayed. See @ref curvature_display.
 		curv_type current_curv_display;
 		curv_type to_curv_display;
@@ -84,6 +85,8 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 
 		void compute_curvature();
 		void show_curvature(bool make_all_buffers = true);
+
+		void compute_harmonic_maps();
 
 		/**
 		 * @brief Initialises a mesh.

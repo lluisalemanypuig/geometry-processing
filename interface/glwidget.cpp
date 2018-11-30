@@ -141,6 +141,62 @@ void GLWidget::show_curvature(bool make_all_buffers) {
 	cout << "GLWidget::show_curvature " << line << " - curvature should be displayed" << endl;
 }
 
+void GLWidget::compute_harmonic_maps() {
+	smoothing::smooth_weight w = smoothing::smooth_weight::uniform;
+	parametrisation::boundary_shape s;
+
+	if (harmonic_maps_mode == polymode::harmonic_maps_Circle) {
+		s = parametrisation::boundary_shape::Circle;
+	}
+	else if (harmonic_maps_mode == polymode::harmonic_maps_Square) {
+		s = parametrisation::boundary_shape::Square;
+	}
+
+	mesh.make_neighbourhood_data();
+	mesh.make_boundaries();
+
+	if (mesh.get_boundaries().size() != 1) {
+		cerr << "GLWidget::set_harmonic_map - " << WAR << endl;
+		cerr << "    No boundaries in the mesh." << endl;
+		cerr << "    Prevent the application from terminating by not calling" << endl;
+		cerr << "    the algorithm." << endl;
+		return;
+	}
+
+	cout << "GLWidget::set_harmonic_map " << line
+		 << " - Harmonic maps" << endl;
+	cout << "    with shape: ";
+	if (s == parametrisation::boundary_shape::Circle) {
+		cout << "circle";
+	}
+	else if (s == parametrisation::boundary_shape::Square) {
+		cout << "square";
+	}
+	cout << endl;
+	cout << "    weight type: ";
+	if (w == smoothing::smooth_weight::uniform) {
+		cout << "uniform";
+	}
+	else if (w == smoothing::smooth_weight::cotangent) {
+		cout << "cotangent";
+	}
+	cout << endl;
+
+	vector<vec2> uvs;
+
+	timing::time_point begin = timing::now();
+	parametrisation::harmonic_maps(mesh, w, s, uvs);
+	timing::time_point end = timing::now();
+
+	cout << "    computed in " << timing::elapsed_seconds(begin,end)
+		 << " s" << endl;
+
+	makeCurrent();
+	mesh.make_tex_coord_buffer(program, uvs);
+	doneCurrent();
+	update();
+}
+
 void GLWidget::init_mesh(bool make_all_buffers) {
 	cout << "GLWidget::init_mesh " << line << " - initialising mesh..." << endl;
 
@@ -153,14 +209,19 @@ void GLWidget::init_mesh(bool make_all_buffers) {
 	doneCurrent();
 	update();
 
-	cout << "GLWidget::init_mesh " << line << " - corner edge data..." << endl;
+	cout << "GLWidget::init_mesh " << line
+		 << " - computing data for render:" << endl;
 
 	if (current_curv_display != curv_type::none) {
-		cout << "GLWidget::init_mesh " << line << ": displaying curvature" << endl;
+		cout << "GLWidget::init_mesh " << line << " - need curvature" << endl;
 		cout << "    computing curvature..." << endl;
 		compute_curvature();
 		cout << "    displaying curvature..." << endl;
 		show_curvature(make_all_buffers);
+	}
+	else if (current_polymode == polymode::harmonic_maps) {
+		cout << "GLWidget::init_mesh " << line << " - need harmonic maps" << endl;
+		compute_harmonic_maps();
 	}
 
 	cout << "GLWidget::init_mesh " << line << " - initialised succesfully!" << endl;
@@ -274,6 +335,7 @@ GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
 	program = nullptr;
 
 	current_polymode = polymode::solid;
+	harmonic_maps_mode = polymode::none;
 	to_curv_display = curv_type::none;
 	current_curv_display = curv_type::none;
 
@@ -309,7 +371,7 @@ void GLWidget::load_mesh(const QString& filename) {
 	mesh.make_normal_vectors();
 	mesh.scale_to_unit();
 
-	cout << "GLWidget::load_mesh " << line << " - initialising mesh..." << endl;
+	cout << "GLWidget::load_mesh " << line << " - going to initialise mesh now" << endl;
 
 	init_mesh(true);
 }
@@ -386,8 +448,15 @@ void GLWidget::change_polygon_mode() {
 		cerr << "    Unhandled selected polymode: expect undefined behaviour" << endl;
 	}
 
-	if (to_polymode == polymode::solid or to_polymode == polymode::wireframe) {
+	if (to_polymode != polymode::harmonic_maps) {
+		harmonic_maps_mode = polymode::none;
+	}
 
+	if (
+		to_polymode == polymode::solid or
+		to_polymode == polymode::wireframe
+	)
+	{
 		// we may need to display curvatures
 		if (current_curv_display == curv_type::none) {
 			// don't display curvature colours
@@ -412,68 +481,14 @@ void GLWidget::set_harmonic_map(const polymode& pmode) {
 	assert(pmode == polymode::harmonic_maps_Circle or
 		   pmode == polymode::harmonic_maps_Square);
 
-	if (pmode == current_polymode) {
+	if (pmode == harmonic_maps_mode) {
 		// nothing to do
 		return;
 	}
 
-	smoothing::smooth_weight w = smoothing::smooth_weight::uniform;
-	parametrisation::boundary_shape s;
+	harmonic_maps_mode = pmode;
 
-	if (pmode == polymode::harmonic_maps_Circle) {
-		s = parametrisation::boundary_shape::Circle;
-	}
-	else if (pmode == polymode::harmonic_maps_Square) {
-		s = parametrisation::boundary_shape::Square;
-	}
-
-	mesh.make_neighbourhood_data();
-	mesh.make_boundaries();
-
-	if (mesh.get_boundaries().size() != 1) {
-		cerr << "GLWidget::set_harmonic_map - " << WAR << endl;
-		cerr << "    No boundaries in the mesh." << endl;
-		cerr << "    Prevent the application from terminating by not calling" << endl;
-		cerr << "    the algorithm." << endl;
-		return;
-	}
-
-	vector<vec2> uvs;
-
-	timing::time_point begin = timing::now();
-	parametrisation::harmonic_maps(mesh, w, s, uvs);
-	timing::time_point end = timing::now();
-
-	cout << "Harmonic maps" << endl;
-	cout << "    with shape: ";
-	if (s == parametrisation::boundary_shape::Circle) {
-		cout << "circle";
-	}
-	else if (s == parametrisation::boundary_shape::Square) {
-		cout << "square";
-	}
-	cout << endl;
-	cout << "    weight type: ";
-	if (w == smoothing::smooth_weight::uniform) {
-		cout << "uniform";
-	}
-	else if (w == smoothing::smooth_weight::cotangent) {
-		cout << "cotangent";
-	}
-	cout << endl;
-	cout << "    computed in " << timing::elapsed_seconds(begin,end)
-		 << " s" << endl;
-
-	cout << "Texture coordintes:" << endl;
-	for (size_t i = 0; i < uvs.size(); ++i) {
-		cout << "    " << i << ": " << uvs[i].x << "," << uvs[i].y << endl;
-		cout << "        " << uvs[i].x + 1 << "," << uvs[i].y + 1 << endl;
-	}
-
-	makeCurrent();
-	mesh.make_tex_coord_buffer(program, uvs);
-	doneCurrent();
-	update();
+	compute_harmonic_maps();
 }
 
 void GLWidget::set_curvature_display(const curv_type& cd) {

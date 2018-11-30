@@ -18,7 +18,8 @@ in vec3 vert_col;
 in vec2 tex_coord;
 out vec4 frag_color;
 
-vec4 reflection_line(vec3 a, vec3 v) {
+// Reflection Lines
+vec4 RL(vec3 a, vec3 v) {
 	vec3 n = frag_normal;
 
 	float lv = length(v);
@@ -39,6 +40,32 @@ vec4 reflection_line(vec3 a, vec3 v) {
 	}
 }
 
+// Harmonic Maps Remeshing
+// do not render 'interior' fragments
+void HM_remeshing() {
+
+}
+
+// Harmonic Maps Checkered
+// render a checkered board using the
+// texture coordinates
+void HM_checkered() {
+	ivec2 size = ivec2(10,10);
+	float total =
+		floor(tex_coord.x*float(size.x)) +
+		floor(tex_coord.y*float(size.y));
+
+	bool is_even = mod(total, 2.0) == 0.0;
+	vec4 col1 = vec4(0.0,0.0,0.0,1.0);
+	vec4 col2 = vec4(1.0,1.0,1.0,1.0);
+	if (is_even) {
+		frag_color = col1;
+	}
+	else {
+		frag_color = col2;
+	}
+}
+
 void main() {
 	if (curvature && wireframe || curvature) {
 		frag_color = vec4(vert_col, 1);
@@ -51,16 +78,18 @@ void main() {
 	else if (reflection_lines) {
 		vec3 v = viewer_pos - frag_pos_world;
 		vec3 a = vec3(1,0,0);
-
-		frag_color = reflection_line(a, v);
+		frag_color = RL(a, v);
 	}
 	else if (harmonic_maps) {
-		// render a regular square grid
-		// black and white
-
-		vec2 tx = tex_coord + vec2(1);
-		float d = sqrt(dot(tx,tx))/sqrt(8.0);
-		frag_color = vec4(d, d, d, 1);
+		if (remeshing) {
+			// do not render 'interior' fragments
+			HM_remeshing();
+		}
+		else {
+			// render a regular square grid
+			// black and white
+			HM_checkered();
+		}
 	}
 	else {
 		// when displaying the whole triangle,

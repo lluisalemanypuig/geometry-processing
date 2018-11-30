@@ -172,7 +172,8 @@ void MainWindow::set_global_smooth_params() {
 
 void MainWindow::on_action_Open_triggered() {
 
-	QString filename = QFileDialog::getOpenFileName(this, tr("Open PLY"), ".", tr("*.ply"));
+	QString filename =
+		QFileDialog::getOpenFileName(this, tr("Open PLY"), ".", tr("*.ply"));
 	if (filename == "") {
 		return;
 	}
@@ -256,25 +257,40 @@ void MainWindow::on_RB_Render_HarmonicMaps_toggled(bool checked) {
 	ui->RB_Render_HarmonicMaps_Square->setEnabled(checked);
 	ui->CB_Render_HarmonicMaps_Wireframe->setEnabled(checked);
 
-	// set polygon mode
-	ui->SingleView_Renderer->set_polygon_mode(polymode::harmonic_maps);
-	ui->DualView_LeftRenderer->set_polygon_mode(polymode::harmonic_maps);
-	ui->DualView_RightRenderer->set_polygon_mode(polymode::harmonic_maps);
+	if (checked) {
+		// set polygon mode
+		ui->SingleView_Renderer->set_polygon_mode(polymode::harmonic_maps);
+		ui->DualView_LeftRenderer->set_polygon_mode(polymode::harmonic_maps);
+		ui->DualView_RightRenderer->set_polygon_mode(polymode::harmonic_maps);
 
-	// we may need to enable/disable things
-	enable_curvature();
+		// we may need to enable/disable things
+		enable_curvature();
 
-	change_poly_mode();
+		change_poly_mode();
+
+		if (ui->RB_Render_HarmonicMaps_Circle->isChecked()) {
+			on_RB_Render_HarmonicMaps_Circle_toggled(true);
+		}
+		else if (ui->RB_Render_HarmonicMaps_Square->isChecked()) {
+			on_RB_Render_HarmonicMaps_Square_toggled(true);
+		}
+	}
 }
 
 void MainWindow::on_RB_Render_HarmonicMaps_Circle_toggled(bool checked) {
 	if (checked) {
 		if (current_tab == 0) {
-			ui->SingleView_Renderer->set_harmonic_map(polymode::harmonic_maps_Circle);
+			ui->SingleView_Renderer->set_harmonic_map(
+				polymode::harmonic_maps_Circle
+			);
 		}
 		else if (current_tab == 1) {
-			ui->DualView_LeftRenderer->set_harmonic_map(polymode::harmonic_maps_Circle);
-			ui->DualView_RightRenderer->set_harmonic_map(polymode::harmonic_maps_Circle);
+			ui->DualView_LeftRenderer->set_harmonic_map(
+				polymode::harmonic_maps_Circle
+			);
+			ui->DualView_RightRenderer->set_harmonic_map(
+				polymode::harmonic_maps_Circle
+			);
 		}
 	}
 }
@@ -282,11 +298,17 @@ void MainWindow::on_RB_Render_HarmonicMaps_Circle_toggled(bool checked) {
 void MainWindow::on_RB_Render_HarmonicMaps_Square_toggled(bool checked) {
 	if (checked) {
 		if (current_tab == 0) {
-			ui->SingleView_Renderer->set_harmonic_map(polymode::harmonic_maps_Square);
+			ui->SingleView_Renderer->set_harmonic_map(
+				polymode::harmonic_maps_Square
+			);
 		}
 		else if (current_tab == 1) {
-			ui->DualView_LeftRenderer->set_harmonic_map(polymode::harmonic_maps_Square);
-			ui->DualView_RightRenderer->set_harmonic_map(polymode::harmonic_maps_Square);
+			ui->DualView_LeftRenderer->set_harmonic_map(
+				polymode::harmonic_maps_Square
+			);
+			ui->DualView_RightRenderer->set_harmonic_map(
+				polymode::harmonic_maps_Square
+			);
 		}
 	}
 }
@@ -301,7 +323,8 @@ bool MainWindow::get_prop_curvature_values(float& p) {
 	bool ok = true;
 	p = ui->LE_Curvature_Proportion->text().toFloat(&ok);
 	if (not ok) {
-		cerr << "MainWindow::on_LE_Curvature_Proportion_returnPressed - error:" << endl;
+		cerr << "MainWindow::on_LE_Curvature_Proportion_returnPressed - Error:"
+			 << endl;
 		cerr << "    value entered in text box is not valid" << endl;
 	}
 	return ok;
