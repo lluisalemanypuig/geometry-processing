@@ -26,6 +26,16 @@ void MainWindow::change_poly_mode() {
 		ui->DualView_LeftRenderer->change_polygon_mode();
 		ui->DualView_RightRenderer->change_polygon_mode();
 	}
+
+	// Update the type of harmonic maps being shown
+	if (ui->RB_Render_HarmonicMaps->isChecked()) {
+		if (ui->RB_Render_HarmonicMaps_Circle->isChecked()) {
+			on_RB_Render_HarmonicMaps_Circle_toggled(true);
+		}
+		else if (ui->RB_Render_HarmonicMaps_Square->isChecked()) {
+			on_RB_Render_HarmonicMaps_Square_toggled(true);
+		}
+	}
 }
 
 void MainWindow::change_curvature() {
