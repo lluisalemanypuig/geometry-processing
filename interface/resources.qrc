@@ -2,6 +2,5 @@
     <qresource prefix="/">
         <file>shaders/fragment_shader.frag</file>
         <file>shaders/vertex_shader.vert</file>
-        <file>shaders/geometry_shader.geom</file>
     </qresource>
 </RCC>
