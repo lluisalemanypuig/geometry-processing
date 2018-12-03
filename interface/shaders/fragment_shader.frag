@@ -43,24 +43,73 @@ vec4 RL(vec3 a, vec3 v) {
 // Harmonic Maps Remeshing
 // do not render 'interior' fragments
 void HM_remeshing() {
+	// grid of 10x10
+	const int N = 10;
 
+	// in our application, texture coordinates
+	// are in the space [-1,-1]x[1,1]
+	float s = tex_coord.x + 1;
+	float t = tex_coord.y + 1;
+
+	int fs = int((N*N)*s);
+	int ft = int((N*N)*t);
+
+	if (mod(fs, N) == 0 || mod(ft, N) == 0) {
+		frag_color = vec4(0.0,0.0,0.0,0.0);
+	}
+	else {
+		discard;
+	}
 }
 
 // Harmonic Maps Checkered
 // render a checkered board using the
 // texture coordinates
 void HM_checkered() {
-	float total =	floor(tex_coord.x*10) +
-					floor(tex_coord.y*10);
+	// grid of 10x10
+	const int N = 10;
 
-	bool is_even = mod(total, 2.0) == 0.0;
-	if (is_even) {
-		// black
-		frag_color = vec4(0.0,0.0,0.0,1.0);
+	// in our application, texture coordinates
+	// are in the space [-1,-1]x[1,1]
+	float s = tex_coord.x + 1;
+	float t = tex_coord.y + 1;
+
+	/*
+	// An alternative to the code being used is:
+	vec4 col;
+	int ks = int(N*s); // 1 <= ks <= 10
+	int kt = int(N*t); // 1 <= kt <= 10
+	if (ks%2 == 0) {
+		if (kt%2 == 0) col = vec4(0.0, 0.0, 0.0, 1.0);
+		else col = vec4(1.0, 1.0, 1.0, 1.0);
 	}
 	else {
-		// white
-		frag_color = vec4(1.0,1.0,1.0,1.0);
+		if (kt%2 == 0) col = vec4(1.0, 1.0, 1.0, 1.0);
+		else col = vec4(0.0, 0.0, 0.0, 1.0);
+	}
+	frag_color = col;
+	*/
+	/*
+	// There is yet another simplification
+	// of the same code
+	vec4 col;
+	int ks = int(N*s); // 1 <= ks <= 10
+	int kt = int(N*t); // 1 <= kt <= 10
+	if (ks%2 == kt%2) {
+		col = vec4(0.0, 0.0, 0.0, 1.0);
+	}
+	else {
+		col = vec4(1.0, 1.0, 1.0, 1.0);
+	}
+	frag_color = col;
+	*/
+
+	// when 'ks' has the same parity as 'kt' we have
+	// that the parity of the sum 'ks + kt' is even
+	int sum = int(N*s) + int(N*t);
+	frag_color = vec4(1.0,1.0,1.0,1.0);
+	if (mod(sum, 2) == 0) {
+		frag_color = vec4(0.0,0.0,0.0,1.0);
 	}
 }
 

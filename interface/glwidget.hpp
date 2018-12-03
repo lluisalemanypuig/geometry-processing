@@ -127,6 +127,11 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		void change_polygon_mode();
 		/// Set the type of harmonic map generated.
 		void set_harmonic_map(const polymode& current_polymode);
+		/**
+		 * @brief Render a wireframe for harmonic maps.
+		 * @pre The widget must be rendering a harmonic type.
+		 */
+		void set_harmonic_map_remeshing(bool r);
 		/// Sets the type of curvature to be displayed. See @ref curvature_display.
 		void set_curvature_display(const curv_type& current_curv_display);
 		/**

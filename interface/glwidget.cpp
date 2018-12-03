@@ -66,7 +66,6 @@ void GLWidget::load_shader() {
 	delete_program();
 	program = new QOpenGLShaderProgram();
 	program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/vertex_shader.vert");
-	//program->addShaderFromSourceFile(QOpenGLShader::Geometry, ":/shaders/geometry_shader.geom");
 	program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/fragment_shader.frag");
 	program->link();
 	if (not program->isLinked()) {
@@ -490,6 +489,16 @@ void GLWidget::set_harmonic_map(const polymode& pmode) {
 	harmonic_maps_mode = pmode;
 
 	compute_harmonic_maps();
+}
+
+void GLWidget::set_harmonic_map_remeshing(bool r) {
+	assert(current_polymode == polymode::harmonic_maps);
+	makeCurrent();
+	program->bind();
+	program->setUniformValue("remeshing", r);
+	program->release();
+	doneCurrent();
+	update();
 }
 
 void GLWidget::set_curvature_display(const curv_type& cd) {

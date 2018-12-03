@@ -25,8 +25,7 @@ SOURCES +=						\
 
 DISTFILES +=					\
     shaders/vertex_shader.vert \
-    shaders/fragment_shader.frag \
-    shaders/geometry_shader.geom
+    shaders/fragment_shader.frag
 
 RESOURCES +=					\
 	resources.qrc

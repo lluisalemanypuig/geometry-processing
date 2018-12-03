@@ -324,7 +324,13 @@ void MainWindow::on_RB_Render_HarmonicMaps_Square_toggled(bool checked) {
 }
 
 void MainWindow::on_CB_Render_HarmonicMaps_Wireframe_toggled(bool checked) {
-
+	if (current_tab == 0) {
+		ui->SingleView_Renderer->set_harmonic_map_remeshing(checked);
+	}
+	else if (current_tab == 1) {
+		ui->DualView_LeftRenderer->set_harmonic_map_remeshing(checked);
+		ui->DualView_RightRenderer->set_harmonic_map_remeshing(checked);
+	}
 }
 
 /* Curvature radio buttons */
@@ -507,6 +513,17 @@ void MainWindow::on_TW_View_currentChanged(int index) {
 		else if (current_tab == 1) {
 			ui->DualView_LeftRenderer->set_light_sources_refl_lines(v);
 			ui->DualView_RightRenderer->set_light_sources_refl_lines(v);
+		}
+	}
+
+	if (ui->RB_Render_HarmonicMaps->isChecked()) {
+		bool remesh = ui->CB_Render_HarmonicMaps_Wireframe->isChecked();
+		if (current_tab == 0) {
+			ui->SingleView_Renderer->set_harmonic_map_remeshing(remesh);
+		}
+		else if (current_tab == 1) {
+			ui->DualView_LeftRenderer->set_harmonic_map_remeshing(remesh);
+			ui->DualView_RightRenderer->set_harmonic_map_remeshing(remesh);
 		}
 	}
 }
