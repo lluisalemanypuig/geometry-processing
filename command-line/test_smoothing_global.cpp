@@ -21,7 +21,7 @@ namespace test_geoproc {
 		cout << "        of the input mesh and of the smoothed mesh." << endl;
 		cout << "        Default: do not print." << endl;
 		cout << endl;
-		cout << "    --percentage p : percentage of the mesh's vertices to be fixed" << endl;
+		cout << "    --percentage p: percentage of the mesh's vertices to be fixed" << endl;
 		cout << "        Default 50.0" << endl;
 		cout << "        Optional" << endl;
 		cout << endl;
@@ -43,6 +43,9 @@ namespace test_geoproc {
 		cout << "                * uniform" << endl;
 		cout << "                * cotangent" << endl;*/
 		cout << endl;
+		cout << "    --threads n: number of threads to use." << endl;
+		cout << "        Default: 1" << endl;
+		cout << endl;
 	}
 
 	int test_smoothing_global(int argc, char *argv[]) {
@@ -51,6 +54,7 @@ namespace test_geoproc {
 		string mesh_file = "none";
 		string opt = "none";
 		string weight_type = "none";
+		size_t n_threads = 1;
 		float perc = 50.0f;
 
 		bool _print = false;
@@ -82,6 +86,10 @@ namespace test_geoproc {
 			}
 			else if (strcmp(argv[i], "--weight-type") == 0) {
 				weight_type = string(argv[i + 1]);
+				++i;
+			}
+			else if (strcmp(argv[i], "--threads") == 0) {
+				n_threads = atoi(argv[i + 1]);
 				++i;
 			}
 			else {
@@ -142,6 +150,7 @@ namespace test_geoproc {
 			return 1;
 		}
 		cout << " weights" << endl;
+		cout << "    using " << n_threads << " threads" << endl;
 		cout << "    percentage of fixed vertices: " << perc << "%" << endl;
 
 		TriangleMesh mesh;
@@ -175,7 +184,7 @@ namespace test_geoproc {
 		}
 
 		begin = timing::now();
-		smoothing::global::smooth(o, w, constant, mesh);
+		smoothing::global::smooth(o, w, constant, n_threads, mesh);
 		end = timing::now();
 
 		cout << "Smoothed mesh globally in "

@@ -77,6 +77,27 @@ namespace global {
 	(const smooth_operator& op, const smooth_weight& w,
 	 const std::vector<bool>& constant, TriangleMesh& m);
 
+	/**
+	 * @brief Apply a global smoothing algorithm for a given operator and weight.
+	 *
+	 * This procedure does the same as
+	 * @ref smooth(const smooth_operator&, const smooth_weight&, const std::vector<bool>&, TriangleMesh&)
+	 * but uses as many threads as indicated in parameter @e n_threads.
+	 * @param op Smoothing operator.
+	 * @param w Weight type.
+	 * @param constant @e constant[i] is true if, and only if, @e i-th vertex
+	 * is a constant vertex.
+	 * @param n_threads Number of threads.
+	 * @param[out] m Smoothed mesh.
+	 * @pre The same preconditions as
+	 * @ref smooth(const smooth_operator&, const smooth_weight&, const std::vector<bool>&, TriangleMesh&);
+	 * @returns Returns true on success: parameters were correct and the system
+	 * was solved succesfully.
+	 */
+	bool smooth
+	(const smooth_operator& op, const smooth_weight& w,
+	 const std::vector<bool>& constant, size_t n_threads, TriangleMesh& m);
+
 } // -- namespace global
 } // -- namespace smoothing
 } // -- namespace geoproc

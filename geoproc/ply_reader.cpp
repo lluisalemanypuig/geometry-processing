@@ -8,6 +8,8 @@
 #include <fstream>
 using namespace std;
 
+#define ERR "Error (" << __LINE__ << ")"
+
 namespace geoproc {
 namespace PLY_reader {
 
@@ -16,8 +18,8 @@ namespace PLY_reader {
 
 		fin.getline(line, 100);
 		if (strncmp(line, "ply", 3) != 0) {
-			cerr << "    PLY_reader::__load_header - Error:" << endl;
-			cerr << "        Wrong format of file: first line does not contain 'ply'." << endl;
+			cerr << "PLY_reader::__load_header - " << ERR << endl;
+			cerr << "    Wrong format of file: first line does not contain 'ply'." << endl;
 			return false;
 		}
 		n_verts = 0;
@@ -34,25 +36,19 @@ namespace PLY_reader {
 				format = string(&line[7]);
 			}
 			else if (strncmp(line, "property float nx", 17) == 0) {
-				cerr << "        PLY_reader::__load_header - Error:" << endl;
-				cerr << "            This model has normals: more vertices than necessary" << endl;
-				cerr << "            are in the file and this makes it too difficult to" << endl;
-				cerr << "            create the mesh." << endl;
+				cerr << "PLY_reader::__load_header - " << ERR << endl;
+				cerr << "    This model has normals: more vertices than necessary" << endl;
+				cerr << "    are in the file and this makes it too difficult to" << endl;
+				cerr << "    create the mesh." << endl;
 				return false;
 			}
 			fin.getline(line, 100);
 		}
 		if (n_verts <= 0) {
-			cerr << "        PLY_reader::__load_header - Error:" << endl;
-			cerr << "            Number of vertices read is negative." << endl;
+			cerr << "PLY_reader::__load_header - " << ERR << endl;
+			cerr << "    Number of vertices read is negative." << endl;
 			return false;
 		}
-
-		#if defined(DEBUG)
-		cout << "        PLY_reader: triangle mesh has:" << endl;
-		cout << "            Vertices = " << n_verts << endl;
-		cout << "            Faces = " << n_faces << endl;
-		#endif
 		return true;
 	}
 
@@ -165,27 +161,19 @@ namespace PLY_reader {
 		ifstream fin;
 		int n_verts, n_faces;
 
-		#if defined(DEBUG)
-		cout << "    PLY_reader: opening file '" << filename << "'..." << endl;
-		#endif
-
 		fin.open(filename.c_str(), ios_base::in | ios_base::binary);
 		if (not fin.is_open()) {
-			cerr << "    PLY_reader::read_mesh - Error:" << endl;
-			cerr << "        Could not open file '" << filename << "'." << endl;
+			cerr << "PLY_reader::read_mesh - " << ERR << endl;
+			cerr << "    Could not open file '" << filename << "'." << endl;
 			return false;
 		}
-
-		#if defined(DEBUG)
-		cout << "    PLY_reader: reading header..." << endl;
-		#endif
 
 		string format;
 		bool header_read = __load_header(fin, n_verts, n_faces, format);
 		if (not header_read) {
 			fin.close();
-			cerr << "    PLY_reader::read_mesh - Error:" << endl;
-			cerr << "        Bad input file format." << endl;
+			cerr << "PLY_reader::read_mesh - " << ERR << endl;
+			cerr << "    Bad input file format." << endl;
 			return false;
 		}
 
@@ -195,45 +183,17 @@ namespace PLY_reader {
 		// Load the vertices and the faces from the ply file.
 		// Call the appropriate functions depending on the format.
 		if (format == "binary_little_endian 1.0") {
-			#if defined(DEBUG)
-			cout << "    PLY_reader: loading vertices..." << endl;
-			#endif
-
 			__load_vertices_binary_le_1_0(fin, n_verts, plyVertices);
-
-			#if defined(DEBUG)
-			cout << "    PLY_reader: loading faces..." << endl;
-			#endif
-
 			__load_faces_binary_le_1_0(fin, n_faces, plyTriangles);
 		}
 		else if (format == "ascii 1.0") {
-			#if defined(DEBUG)
-			cout << "    PLY_reader: loading vertices..." << endl;
-			#endif
-
 			__load_vertices_ascii_1_0(fin, n_verts, plyVertices);
-
-			#if defined(DEBUG)
-			cout << "    PLY_reader: loading faces..." << endl;
-			#endif
-
 			__load_faces_ascii_1_0(fin, n_faces, plyTriangles);
 		}
 
 		fin.close();
 
-		// build the TriangleMesh object
-		#if defined(DEBUG)
-		cout << "    PLY_reader: building triangle mesh..." << endl;
-		#endif
-
 		__add_model_to_mesh(plyVertices, plyTriangles, mesh);
-
-		#if defined(DEBUG)
-		cout << "    PLY_reader: triangle mesh built succesfully." << endl;
-		#endif
-
 		return true;
 	}
 
