@@ -12,15 +12,20 @@ uniform bool remeshing;
 
 uniform vec4 color;
 
-in vec3 frag_normal;
-in vec3 frag_pos_world;
-in vec3 vert_col;
-in vec2 tex_coord;
-out vec4 frag_color;
+in vec3 frag_normal;	// normal of the fragment
+in vec4 vert_pos_world;	// position of the vertex in world coordinates
+in vec3 vert_col;		// colour of the vertex
+in vec2 tex_coord;		// texture coordinates [-1,-1]x[1,1]
+out vec4 frag_color;	// color of the fragment
 
 // Reflection Lines
 vec4 RL(vec3 a, vec3 v) {
-	vec3 n = frag_normal;
+	vec3 n = normalize(
+		cross(
+			vec3(dFdx(vert_pos_world)),
+			vec3(dFdy(vert_pos_world))
+		)
+	);
 
 	float lv = length(v);
 	vec3 r = (2/(lv*lv))*(dot(n, v)*n - v);
@@ -123,7 +128,7 @@ void main() {
 		frag_color = color;
 	}
 	else if (reflection_lines) {
-		vec3 v = viewer_pos - frag_pos_world;
+		vec3 v = viewer_pos - vec3(vert_pos_world);
 		vec3 a = vec3(1,0,0);
 		frag_color = RL(a, v);
 	}
