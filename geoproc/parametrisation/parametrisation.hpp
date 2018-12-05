@@ -24,7 +24,7 @@ namespace parametrisation {
 		/// a circle of radius 1, centered at (0,0).
 		Circle,
 		/// The boundary vertices are placed on the boundary of
-		/// a square of side length 1, centered at (0,0).
+		/// a square of side length 2, centered at (0,0).
 		Square
 	};
 
@@ -33,7 +33,8 @@ namespace parametrisation {
 	 * @param m Input mesh. It must have one single boundary.
 	 * @param w Type of weights to use to compute the parametrisation.
 	 * @param s Shape of the boundary vertices on the texture.
-	 * @param[out] uvs Texture coordinates of the vertices of @e m.
+	 * @param[out] uvs Texture coordinates of the vertices of @e m in space
+	 * [0,0] x [1,1].
 	 * @pre The mesh requires:
 	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
 	 * - Boundaries (see @ref TriangleMesh::make_boundaries)

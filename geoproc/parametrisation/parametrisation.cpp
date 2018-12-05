@@ -126,7 +126,7 @@ namespace parametrisation {
 		}
 
 		const int N = m.n_vertices();
-		uvs = vector<glm::vec2>(N, glm::vec2(0.0f,0.0f));
+		uvs = vector<glm::vec2>(N, glm::vec2(-1.0f,-1.0f));
 
 		// constant vertices
 		vector<bool> constant(N, false);
@@ -151,17 +151,17 @@ namespace parametrisation {
 			// place vertices of the boundary on a square of side
 			// length 1, starting at (1,-1), in counterclockwise order
 			int r = boundary.size()%4;
-			int n_side1 = boundary.size()/4 + (r > 0 ? 1 : 0); --r;
-			int n_side2 = boundary.size()/4 + (r > 0 ? 1 : 0); --r;
-			int n_side3 = boundary.size()/4 + (r > 0 ? 1 : 0); --r;
-			int n_side4 = boundary.size()/4 + (r > 0 ? 1 : 0);
+			int n_side1 = boundary.size()/4 + int(r > 0); --r;
+			int n_side2 = boundary.size()/4 + int(r > 0); --r;
+			int n_side3 = boundary.size()/4 + int(r > 0); --r;
+			int n_side4 = boundary.size()/4 + int(r > 0);
 
 			// texture coordinates of boundary vertices
 			size_t bound_it = 0;
 			for (int i = 0; i < n_side1; ++i, ++bound_it) {
 				int v_idx = m.get_vertex_corner(boundary[bound_it]);
 				constant[v_idx] = true;
-				uvs[v_idx].x = 1.0f;
+				uvs[v_idx].x =  1.0f;
 				uvs[v_idx].y = -1.0f + i*(2.0f/n_side1);
 			}
 			for (int i = 0; i < n_side2; ++i, ++bound_it) {
@@ -174,7 +174,7 @@ namespace parametrisation {
 				int v_idx = m.get_vertex_corner(boundary[bound_it]);
 				constant[v_idx] = true;
 				uvs[v_idx].x = -1.0f;
-				uvs[v_idx].y = 1.0f - i*(2.0f/n_side3);
+				uvs[v_idx].y =  1.0f - i*(2.0f/n_side3);
 			}
 			for (int i = 0; i < n_side4; ++i, ++bound_it) {
 				int v_idx = m.get_vertex_corner(boundary[bound_it]);
@@ -187,8 +187,14 @@ namespace parametrisation {
 		const int n_constant = boundary.size();
 		const int variable = N - n_constant;
 
+		// compute uvs
 		harmonic_maps_laplacian(m, N, variable, w, constant, uvs);
 
+		// rescale to [0,0]x[1,1]
+		for (size_t i = 0; i < uvs.size(); ++i) {
+			uvs[i].x = 0.5f*uvs[i].x + 0.5f;
+			uvs[i].y = 0.5f*uvs[i].y + 0.5f;
+		}
 		return true;
 	}
 
