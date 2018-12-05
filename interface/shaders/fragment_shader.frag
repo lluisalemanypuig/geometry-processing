@@ -129,7 +129,7 @@ void main() {
 	}
 	else if (reflection_lines) {
 		vec3 v = viewer_pos - vec3(vert_pos_world);
-		vec3 a = vec3(1,0,0);
+		vec3 a = vec3(0,0,1);
 		frag_color = RL(a, v);
 	}
 	else if (harmonic_maps) {
