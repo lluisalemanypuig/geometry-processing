@@ -8,7 +8,8 @@
 #include <iostream>
 #include <cmath>
 
-#define ERR "Error (" << __LINE__ << "):"
+// Custom includes
+#include "err_war_helper.hpp"
 
 // LOCAL-DEFINED
 
@@ -23,7 +24,7 @@ bool RenderTriangleMesh::make_buffers
 		vao.bind();
 	}
 	else {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::make_buffers", "") << endl;
 		cerr << "    Array object 'vao' not created." << endl;
 		return false;
 	}
@@ -32,56 +33,59 @@ bool RenderTriangleMesh::make_buffers
 	vbo_vertices.create();
 	if (vbo_vertices.isCreated()) {
 		if (not vbo_vertices.bind()) {
-			cerr << "TriangleMesh::init - " << ERR << endl;
+			cerr << ERR("TriangleMesh::make_buffers", "") << endl;
 			cerr << "    Buffer object 'vbo_vertices' not bound" << endl;
 			return false;
 		}
 	}
 	else {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::make_buffers", "") << endl;
 		cerr << "    Buffer object 'vbo_vertices' not created." << endl;
 		return false;
 	}
 	vbo_vertices.setUsagePattern(QOpenGLBuffer::DynamicDraw);
 	program->enableAttributeArray(0);
 	program->setAttributeBuffer(0, GL_FLOAT, 0, 3, 0);
+	vbo_vertices.release();
 
 	/* ----- VBO NORMALS create ----- */
 	vbo_normals.create();
 	if (vbo_normals.isCreated()) {
 		if (not vbo_normals.bind()) {
-			cerr << "TriangleMesh::init - " << ERR << endl;
+			cerr << ERR("TriangleMesh::make_buffers", "") << endl;
 			cerr << "    Buffer object 'vbo_normals' not bound" << endl;
 			return false;
 		}
 	}
 	else {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::make_buffers", "") << endl;
 		cerr << "    Buffer object 'vbo_normals' not created." << endl;
 		return false;
 	}
-	vbo_normals.setUsagePattern(QOpenGLBuffer::StaticDraw);
+	vbo_normals.setUsagePattern(QOpenGLBuffer::DynamicDraw);
 	program->enableAttributeArray(1);
 	program->setAttributeBuffer(1, GL_FLOAT, 0, 3, 0);
+	vbo_normals.release();
 
 	/* ----- VBO COLORS create ----- */
 	if (with_colours) {
 		vbo_colors.create();
 		if (vbo_colors.isCreated()) {
 			if (not vbo_colors.bind()) {
-				cerr << "TriangleMesh::init - " << ERR << endl;
+				cerr << ERR("TriangleMesh::make_buffers", "") << endl;
 				cerr << "    Buffer object 'vbo_colors' not bound" << endl;
 				return false;
 			}
 		}
 		else {
-			cerr << "TriangleMesh::init - " << ERR << endl;
+			cerr << ERR("TriangleMesh::make_buffers", "") << endl;
 			cerr << "    Buffer object 'vbo_colors' not created." << endl;
 			return false;
 		}
 		vbo_colors.setUsagePattern(QOpenGLBuffer::DynamicDraw);
 		program->enableAttributeArray(2);
 		program->setAttributeBuffer(2, GL_FLOAT, 0, 3, 0);
+		vbo_colors.release();
 	}
 
 	/* ----- VBO TEXTURE COORDINATES create ----- */
@@ -89,36 +93,38 @@ bool RenderTriangleMesh::make_buffers
 		vbo_tex_coord.create();
 		if (vbo_tex_coord.isCreated()) {
 			if (not vbo_tex_coord.bind()) {
-				cerr << "TriangleMesh::init - " << ERR << endl;
+				cerr << ERR("TriangleMesh::make_buffers", "") << endl;
 				cerr << "    Buffer object 'vbo_tex_coord' not bound" << endl;
 				return false;
 			}
 		}
 		else {
-			cerr << "TriangleMesh::init - " << ERR << endl;
+			cerr << ERR("TriangleMesh::make_buffers", "") << endl;
 			cerr << "    Buffer object 'vbo_tex_coord' not created." << endl;
 			return false;
 		}
 		vbo_tex_coord.setUsagePattern(QOpenGLBuffer::DynamicDraw);
 		program->enableAttributeArray(3);
 		program->setAttributeBuffer(3, GL_FLOAT, 0, 2, 0);
+		vbo_tex_coord.release();
 	}
 
 	/* ----- VBO TRIANGLES create ----- */
 	vbo_triangles.create();
 	if (vbo_triangles.isCreated()) {
 		if (not vbo_triangles.bind()) {
-			cerr << "TriangleMesh::init - " << ERR << endl;
+			cerr << ERR("TriangleMesh::make_buffers", "") << endl;
 			cerr << "    Buffer object 'vbo_triangles' not bound" << endl;
 			return false;
 		}
 	}
 	else {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::make_buffers", "") << endl;
 		cerr << "    Buffer object 'vbo_triangles' not created." << endl;
 		return false;
 	}
-	vbo_triangles.setUsagePattern(QOpenGLBuffer::StaticDraw);
+	vbo_triangles.setUsagePattern(QOpenGLBuffer::DynamicDraw);
+	vbo_triangles.release();
 
 	return true;
 }
@@ -291,14 +297,14 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program) {
 
 	bool program_bind = program->bind();
 	if (not program_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::init", "") << endl;
 		cerr << "    Shader program was not bound" << endl;
 		return false;
 	}
 
 	bool i = make_buffers(program);
 	if (not i) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::init", "") << endl;
 		cerr << "    Some buffer could not be made." << endl;
 		return false;
 	}
@@ -308,7 +314,7 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program) {
 
 	bool vertices_bind = vbo_vertices.bind();
 	if (not vertices_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::init", "") << endl;
 		cerr << "    Vertices buffer object was not bound" << endl;
 		return false;
 	}
@@ -317,7 +323,7 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program) {
 
 	bool normals_bind = vbo_normals.bind();
 	if (not normals_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::init", "") << endl;
 		cerr << "    Normals buffer object was not bound" << endl;
 		return false;
 	}
@@ -326,7 +332,7 @@ bool RenderTriangleMesh::init(QOpenGLShaderProgram *program) {
 
 	bool triangles_bind = vbo_triangles.bind();
 	if (not triangles_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::init", "") << endl;
 		cerr << "    Triangles buffer object was not bound" << endl;
 		return false;
 	}
@@ -356,14 +362,14 @@ bool RenderTriangleMesh::init
 
 	bool program_bind = program->bind();
 	if (not program_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::init", "") << endl;
 		cerr << "    Shader program was not bound" << endl;
 		return false;
 	}
 
 	bool i = make_buffers(program, true);
 	if (not i) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::init", "") << endl;
 		cerr << "    Some buffer could not be made." << endl;
 		return false;
 	}
@@ -373,7 +379,7 @@ bool RenderTriangleMesh::init
 
 	bool vertices_bind = vbo_vertices.bind();
 	if (not vertices_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::init", "") << endl;
 		cerr << "    Vertices buffer object was not bound" << endl;
 		return false;
 	}
@@ -382,7 +388,7 @@ bool RenderTriangleMesh::init
 
 	bool normals_bind = vbo_normals.bind();
 	if (not normals_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::init", "") << endl;
 		cerr << "    Normals buffer object was not bound" << endl;
 		return false;
 	}
@@ -391,7 +397,7 @@ bool RenderTriangleMesh::init
 
 	bool colors_bind = vbo_colors.bind();
 	if (not colors_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::init", "") << endl;
 		cerr << "    Colours buffer object was not bound" << endl;
 		return false;
 	}
@@ -400,7 +406,7 @@ bool RenderTriangleMesh::init
 
 	bool triangles_bind = vbo_triangles.bind();
 	if (not triangles_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::init", "") << endl;
 		cerr << "    Triangles buffer object was not bound" << endl;
 		return false;
 	}
@@ -431,14 +437,14 @@ bool RenderTriangleMesh::init
 
 	bool program_bind = program->bind();
 	if (not program_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::init", "") << endl;
 		cerr << "    Shader program was not bound" << endl;
 		return false;
 	}
 
 	bool i = make_buffers(program, false, true);
 	if (not i) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::init", "") << endl;
 		cerr << "    Some buffer could not be made." << endl;
 		return false;
 	}
@@ -446,40 +452,45 @@ bool RenderTriangleMesh::init
 	/* ------------------------------------- */
 	/* Fill the vertex array/buffer objects. */
 
+	// -- VERTICES --
 	bool vertices_bind = vbo_vertices.bind();
 	if (not vertices_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::init", "") << endl;
 		cerr << "    Vertices buffer object was not bound" << endl;
 		return false;
 	}
 	vbo_vertices.allocate(&vert_info[0], 3*sizeof(float)*vert_info.size());
 	vbo_vertices.release();
 
+	// -- NORMALS --
 	bool normals_bind = vbo_normals.bind();
 	if (not normals_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::init", "") << endl;
 		cerr << "    Normals buffer object was not bound" << endl;
 		return false;
 	}
 	vbo_normals.allocate(&normals[0], 3*sizeof(float)*normals.size());
 	vbo_normals.release();
 
+	// -- TEXTURE COORDINATES --
 	bool texs_bind = vbo_tex_coord.bind();
 	if (not texs_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::init", "") << endl;
 		cerr << "    Texture coordinates buffer object was not bound" << endl;
 		return false;
 	}
 	vbo_tex_coord.allocate(&texs[0], 2*sizeof(float)*texs.size());
 	vbo_tex_coord.release();
 
+	// -- INDICES --
 	bool triangles_bind = vbo_triangles.bind();
 	if (not triangles_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::init", "") << endl;
 		cerr << "    Triangles buffer object was not bound" << endl;
 		return false;
 	}
-	vbo_triangles.allocate(&perFaceTriangles[0], sizeof(uint)*perFaceTriangles.size());
+	vbo_triangles.allocate
+	(&perFaceTriangles[0], sizeof(uint)*perFaceTriangles.size());
 	vbo_triangles.release();
 
 	// ----- release
@@ -505,7 +516,7 @@ bool RenderTriangleMesh::make_vertices_buffers(QOpenGLShaderProgram *program) {
 
 	bool program_bind = program->bind();
 	if (not program_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::make_vertices_buffers", "") << endl;
 		cerr << "    Shader program was not bound" << endl;
 		return false;
 	}
@@ -517,7 +528,7 @@ bool RenderTriangleMesh::make_vertices_buffers(QOpenGLShaderProgram *program) {
 
 	bool vertices_bind = vbo_vertices.bind();
 	if (not vertices_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::make_vertices_buffers", "") << endl;
 		cerr << "    Vertices buffer object was not bound" << endl;
 		return false;
 	}
@@ -554,7 +565,7 @@ bool RenderTriangleMesh::make_vertices_normals_buffers
 
 	bool program_bind = program->bind();
 	if (not program_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::make_vertices_normals_buffers", "") << endl;
 		cerr << "    Shader program was not bound" << endl;
 		return false;
 	}
@@ -566,7 +577,7 @@ bool RenderTriangleMesh::make_vertices_normals_buffers
 
 	bool vertices_bind = vbo_vertices.bind();
 	if (not vertices_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::make_vertices_normals_buffers", "") << endl;
 		cerr << "    Vertices buffer object was not bound" << endl;
 		return false;
 	}
@@ -575,7 +586,7 @@ bool RenderTriangleMesh::make_vertices_normals_buffers
 
 	bool normals_bind = vbo_normals.bind();
 	if (not normals_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::make_vertices_normals_buffers", "") << endl;
 		cerr << "    Normals buffer object was not bound" << endl;
 		return false;
 	}
@@ -594,10 +605,8 @@ bool RenderTriangleMesh::make_colours_buffer
 {
 	// make colour information
 	vector<vec3> cols(triangles.size());
-	for (uint i = 0; i < triangles.size(); i += 3) {
-		cols[i    ] =   colors[triangles[i    ]];
-		cols[i + 1] =   colors[triangles[i + 1]];
-		cols[i + 2] =   colors[triangles[i + 2]];
+	for (uint i = 0; i < triangles.size(); ++i) {
+		cols[i] =   colors[triangles[i]];
 	}
 
 	/* --------------------------------------- */
@@ -605,7 +614,7 @@ bool RenderTriangleMesh::make_colours_buffer
 
 	bool program_bind = program->bind();
 	if (not program_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::make_colours_buffer", "") << endl;
 		cerr << "    Shader program was not bound" << endl;
 		return false;
 	}
@@ -617,7 +626,7 @@ bool RenderTriangleMesh::make_colours_buffer
 
 	bool colors_bind = vbo_colors.bind();
 	if (not colors_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::make_colours_buffer", "") << endl;
 		cerr << "    Colours buffer object was not bound" << endl;
 		return false;
 	}
@@ -635,22 +644,26 @@ bool RenderTriangleMesh::make_tex_coord_buffer
 (QOpenGLShaderProgram *program, const vector<vec2>& texs)
 {
 	if (not vbo_tex_coord.isCreated()) {
+		cout << PROG("TriangleMesh::make_tex_coord_buffer", "",
+					 "free and remake all buffers") << endl;
+
 		free_buffers();
 		bool i = make_buffers(program, true, true);
 		if (not i) {
-			cerr << "TriangleMesh::init - " << ERR << endl;
+			cerr << ERR("TriangleMesh::make_tex_coord_buffer", "") << endl;
 			cerr << "    Some buffer could not be made." << endl;
 			return false;
 		}
 		return init(program, texs);
 	}
 
+	cout << PROG("TriangleMesh::make_tex_coord_buffer", "",
+				 "Remake texture buffers") << endl;
+
 	// make texture coordinates information
 	vector<vec2> texs_coords(triangles.size());
-	for (uint i = 0; i < triangles.size(); i += 3) {
-		texs_coords[i    ] = texs[triangles[i    ]];
-		texs_coords[i + 1] = texs[triangles[i + 1]];
-		texs_coords[i + 2] = texs[triangles[i + 2]];
+	for (uint i = 0; i < triangles.size(); ++i) {
+		texs_coords[i] = texs[triangles[i]];
 	}
 
 	/* --------------------------------------- */
@@ -658,7 +671,7 @@ bool RenderTriangleMesh::make_tex_coord_buffer
 
 	bool program_bind = program->bind();
 	if (not program_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::init", "") << endl;
 		cerr << "    Shader program was not bound" << endl;
 		return false;
 	}
@@ -670,7 +683,7 @@ bool RenderTriangleMesh::make_tex_coord_buffer
 
 	bool texs_bind = vbo_tex_coord.bind();
 	if (not texs_bind) {
-		cerr << "TriangleMesh::init - " << ERR << endl;
+		cerr << ERR("TriangleMesh::init", "") << endl;
 		cerr << "    Texture coordinate buffer object was not bound" << endl;
 		return false;
 	}

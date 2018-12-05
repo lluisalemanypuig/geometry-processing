@@ -14,7 +14,7 @@ using namespace geoproc;
 #include <QFileDialog>
 #include "ui_mainwindow.h"
 
-#define line "(" << __LINE__ << ")"
+#include "err_war_helper.hpp"
 
 // PRIVATE
 
@@ -118,7 +118,8 @@ void MainWindow::set_local_smooth_params() {
 		);
 	}
 	else {
-		cerr << "Error: value in combo box for smoothing operator '"
+		cerr << ERR("MainWindow::set_local_smooth_params", "MainWindow") << endl;
+		cerr << "    Value in combo box for smoothing operator '"
 			 << smooth_operator.toStdString() << "' not recognised." << endl;
 	}
 
@@ -134,7 +135,8 @@ void MainWindow::set_local_smooth_params() {
 		);
 	}
 	else {
-		cerr << "Error: value in combo box for weight type '"
+		cerr << ERR("MainWindow::set_local_smooth_params", "MainWindow") << endl;
+		cerr << "    Value in combo box for weight type '"
 			 << weight_type.toStdString() << "' not recognised." << endl;
 	}
 
@@ -153,7 +155,8 @@ void MainWindow::set_global_smooth_params() {
 		);
 	}
 	else {
-		cerr << "Error: value in combo box for smoothing operator '"
+		cerr << ERR("MainWindow::set_global_smooth_params", "MainWindow") << endl;
+		cerr << "    Value in combo box for smoothing operator '"
 			 << smooth_operator.toStdString() << "' not recognised." << endl;
 	}
 
@@ -169,7 +172,8 @@ void MainWindow::set_global_smooth_params() {
 		);
 	}
 	else {
-		cerr << "Error: value in combo box for weight type '"
+		cerr << ERR("MainWindow::set_global_smooth_params", "MainWindow") << endl;
+		cerr << "    Value in combo box for weight type '"
 			 << weight_type.toStdString() << "' not recognised." << endl;
 	}
 
@@ -339,8 +343,8 @@ bool MainWindow::get_prop_curvature_values(float& p) {
 	bool ok = true;
 	p = ui->LE_Curvature_Proportion->text().toFloat(&ok);
 	if (not ok) {
-		cerr << "MainWindow::on_LE_Curvature_Proportion_returnPressed - Error:"
-			 << endl;
+		cerr << ERR("MainWindow::on_LE_Curvature_Proportion_returnPressed",
+					"MainWindow") << endl;
 		cerr << "    value entered in text box is not valid" << endl;
 	}
 	return ok;
@@ -389,7 +393,6 @@ void MainWindow::on_VS_Curvature_Proportion_sliderMoved(int value) {
 }
 
 void MainWindow::on_RB_Curvature_Gauss_toggled(bool checked) {
-	cout << "MainWindow::on_RB_Curvature_Gauss_toggled " << line << endl;
 	if (checked) {
 		set_prop_values_to_all();
 		ui->SingleView_Renderer->set_curvature_display(curv_type::Gauss);
@@ -403,7 +406,6 @@ void MainWindow::on_RB_Curvature_Gauss_toggled(bool checked) {
 }
 
 void MainWindow::on_RB_Curvature_Mean_toggled(bool checked) {
-	cout << "MainWindow::on_RB_Curvature_Mean_toggled " << line << endl;
 	if (checked) {
 		set_prop_values_to_all();
 		ui->SingleView_Renderer->set_curvature_display(curv_type::Mean);
@@ -470,9 +472,12 @@ void MainWindow::on_PB_BandFreqs_Run_clicked() {
 	QJsonDocument doc = QJsonDocument::fromJson(txt.toUtf8());
 
 	if (doc.isNull()) {
-		cerr << "Error: data entered:" << endl;
+		cerr << ERR("MainWindow::on_PB_BandFreqs_Run_clicked", "MainWindow") << endl;
+		cerr << "    Data entered:" << endl;
+		cerr << "-----------------------------------" << endl;
 		cerr << txt.toStdString() << endl;
-		cerr << "is not valid" << endl;
+		cerr << "-----------------------------------" << endl;
+		cerr << "    is not valid" << endl;
 		return;
 	}
 

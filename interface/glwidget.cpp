@@ -294,7 +294,7 @@ void GLWidget::paintGL() {
 	else {
 		// no polygon mode
 		cerr << WAR("GLWidget::paintGL", name) << endl;
-		cerr << "    no polygon mode selected" << endl;
+		cerr << "    No polygon mode selected" << endl;
 	}
 
 	program->release();
@@ -506,10 +506,8 @@ void GLWidget::set_curvature_display(const curv_type& cd) {
 }
 
 void GLWidget::change_curvature_display() {
-	cout << PROG("GLWidget::change_curvature_display",
-				 name,
-				 "changing curvature display")
-		 << endl;
+	cout << PROG("GLWidget::change_curvature_display", name,
+				 "changing curvature display") << endl;
 
 	// if we don't curvature colours anymore...
 	if (to_curv_display == curv_type::none) {
@@ -519,10 +517,8 @@ void GLWidget::change_curvature_display() {
 		 * (current_curv_display -> to_curv_display)
 		 */
 
-		cout << PROG("GLWidget::change_curvature_display",
-					 name,
-					 "no curvature to show")
-			 << endl;
+		cout << PROG("GLWidget::change_curvature_display", name,
+					 "no curvature to show") << endl;
 
 		current_curv_display = curv_type::none;
 		curvature_values.clear();
@@ -543,10 +539,8 @@ void GLWidget::change_curvature_display() {
 	 * 'curv_type::none'
 	 */
 
-	cout << PROG("GLWidget::change_curvature_display",
-				 name,
-				 "some curvature is to be displayed")
-		 << endl;
+	cout << PROG("GLWidget::change_curvature_display", name,
+				 "some curvature is to be displayed") << endl;
 
 	// make all buffers only if the colour buffer was not made
 	// before: if the current curvature mode is "deactivated"
@@ -554,10 +548,8 @@ void GLWidget::change_curvature_display() {
 	if (current_curv_display == curv_type::none) {
 		make_all_buffers = true;
 
-		cout << PROG("GLWidget::change_curvature_display",
-					 name,
-					 "all bufferss will be made")
-			 << endl;
+		cout << PROG("GLWidget::change_curvature_display", name,
+					 "all bufferss will be made") << endl;
 	}
 
 	if (current_curv_display != to_curv_display) {
@@ -567,11 +559,8 @@ void GLWidget::change_curvature_display() {
 		 * (current_curv_display -> to_curv_display)
 		 */
 
-		cout << PROG("GLWidget::change_curvature_display",
-					 name,
-					 "clear the current curvature values")
-			 << endl;
-
+		cout << PROG("GLWidget::change_curvature_display", name,
+					 "clear the current curvature values") << endl;
 		curvature_values.clear();
 	}
 
@@ -591,19 +580,15 @@ void GLWidget::change_curvature_display() {
 			comp_curv = true;
 			make_all_buffers = true;
 
-			cout << PROG("GLWidget::change_curvature_display",
-						 name,
-						 "recompute all the curvature and buffers")
-				 << endl;
+			cout << PROG("GLWidget::change_curvature_display", name,
+						 "recompute all the curvature and buffers") << endl;
 		}
 		else {
 			// make only buffer colours
 			make_all_buffers = false;
 
-			cout << PROG("GLWidget::change_curvature_display",
-						 name,
-						 "do not make all buffers again")
-				 << endl;
+			cout << PROG("GLWidget::change_curvature_display", name,
+						 "do not make all buffers again") << endl;
 		}
 	}
 	else {
@@ -616,11 +601,8 @@ void GLWidget::change_curvature_display() {
 	}
 
 	if (comp_curv) {
-		cout << PROG("GLWidget::change_curvature_display",
-					 name,
-					 "compute curvature")
-			 << endl;
-
+		cout << PROG("GLWidget::change_curvature_display", name,
+					 "compute curvature") << endl;
 		current_curv_display = to_curv_display;
 		compute_curvature();
 	}
@@ -628,11 +610,8 @@ void GLWidget::change_curvature_display() {
 	// since there are already curvature values computed ...
 	// make the colours
 
-	cout << PROG("GLWidget::change_curvature_display",
-				 name,
-				 "show curvature")
-		 << endl;
-
+	cout << PROG("GLWidget::change_curvature_display", name,
+				 "show curvature") << endl;
 	to_prop = prop;
 	show_curvature(make_all_buffers);
 }

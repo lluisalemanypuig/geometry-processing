@@ -52,9 +52,9 @@ void HM_remeshing() {
 	const int N = 10;
 
 	// in our application, texture coordinates
-	// are in the space [-1,-1]x[1,1]
-	float s = tex_coord.x + 1;
-	float t = tex_coord.y + 1;
+	// are in the space [0,0]x[1,1]
+	float s = tex_coord.x;
+	float t = tex_coord.y;
 
 	int fs = int((N*N)*s);
 	int ft = int((N*N)*t);
@@ -75,9 +75,9 @@ void HM_checkered() {
 	const int N = 10;
 
 	// in our application, texture coordinates
-	// are in the space [-1,-1]x[1,1]
-	float s = tex_coord.x + 1;
-	float t = tex_coord.y + 1;
+	// are in the space [0,0]x[1,1]
+	float s = tex_coord.x;
+	float t = tex_coord.y;
 
 	/*
 	// An alternative to the code being used is:
