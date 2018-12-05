@@ -13,7 +13,8 @@ HEADERS +=						\
 	mainwindow.hpp				\
 	twinglwidget.hpp			\
 	render_triangle_mesh.hpp	\
-	utils.hpp
+	utils.hpp \
+    err_war_helper.hpp
 
 SOURCES +=						\
 	main.cpp					\

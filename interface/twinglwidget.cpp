@@ -15,6 +15,9 @@ using namespace std;
 #include <geoproc/smoothing/global.hpp>
 #include <geoproc/filter_frequencies/band_frequencies.hpp>
 
+// custom includes
+#include "err_war_helper.hpp"
+
 // OTHERS
 
 static inline
@@ -124,7 +127,10 @@ void TwinGLWidget::run_local_smoothing_algorithm() {
 	mesh.make_neighbourhood_data();
 	mesh.make_angles_area();
 
-	cout << "Local smooth with:" << endl;
+	cout << PROG("TwinGLWidget::run_local_smoothing_algorithm",
+				 name,
+				 "Local smooth with:")
+		 << endl;
 	cout << "    operator ";
 	if (op == smoothing::smooth_operator::Laplacian) {
 		cout << "'Laplacian'";
@@ -185,7 +191,10 @@ void TwinGLWidget::run_global_smoothing_algorithm() {
 	mesh.make_neighbourhood_data();
 	mesh.make_angles_area();
 
-	cout << "Global smooth with:" << endl;
+	cout << PROG("TwinGLWidget::run_local_smoothing_algorithm",
+				 name,
+				 "Global smooth with:")
+		 << endl;
 	cout << "    operator ";
 	if (op == smoothing::smooth_operator::Laplacian) {
 		cout << "'Laplacian'";
@@ -260,50 +269,59 @@ bool parseJsonObject
 (
 	const QJsonObject& obj,
 	vector<filter_frequencies::smoothing_configuration>& confs,
-	float& mu
+	float& mu, const string& name
 )
 {
 	// error control
 	if (obj.find(QString("A")) == obj.end()) {
-		cerr << "Error: missing algorithm parameter A." << endl;
+		cerr << ERR("TwinGLWidget -> parseJsonObject", name) << endl;
+		cerr << "    Missing algorithm parameter A." << endl;
 		return false;
 	}
 	if (obj.find(QString("W")) == obj.end()) {
-		cerr << "Error: missing weight type parameter W." << endl;
+		cerr << ERR("TwinGLWidget -> parseJsonObject", name) << endl;
+		cerr << "    Missing weight type parameter W." << endl;
 		return false;
 	}
 	if (obj.find(QString("N")) == obj.end()) {
-		cerr << "Error: missing number of iterations parameter N." << endl;
+		cerr << ERR("TwinGLWidget -> parseJsonObject", name) << endl;
+		cerr << "    Missing number of iterations parameter N." << endl;
 		return false;
 	}
 	if (obj.find(QString("L")) == obj.end()) {
-		cerr << "Error: missing lambda parameter L." << endl;
+		cerr << ERR("TwinGLWidget -> parseJsonObject", name) << endl;
+		cerr << "    Missing lambda parameter L." << endl;
 		return false;
 	}
 	QJsonValue alg_value = obj.value("A");
 	if (not alg_value.isString()) {
-		cerr << "Error: algorithm parameter value is not a string." << endl;
+		cerr << ERR("TwinGLWidget -> parseJsonObject", name) << endl;
+		cerr << "    Algorithm parameter value is not a string." << endl;
 		return false;
 	}
 	QJsonValue weight_value = obj.value("W");
 	if (not weight_value.isString()) {
-		cerr << "Error: weight type parameter value is not a string." << endl;
+		cerr << ERR("TwinGLWidget -> parseJsonObject", name) << endl;
+		cerr << "    Weight type parameter value is not a string." << endl;
 		return false;
 	}
 	QJsonValue nit_value = obj.value("N");
 	if (not nit_value.isDouble()) {
-		cerr << "Error: number of iterations parameter value is not a number." << endl;
+		cerr << ERR("TwinGLWidget -> parseJsonObject", name) << endl;
+		cerr << "    Number of iterations parameter value is not a number." << endl;
 		return false;
 	}
 	QJsonValue lambda_value = obj.value("L");
 	if (not lambda_value.isDouble()) {
-		cerr << "Error: lambda parameter value is not a number." << endl;
+		cerr << ERR("TwinGLWidget -> parseJsonObject", name) << endl;
+		cerr << "    Lambda parameter value is not a number." << endl;
 		return false;
 	}
 	if (obj.find(QString("mu")) != obj.end()) {
 		QJsonValue mu_value = obj.value("mu");
 		if (not mu_value.isDouble()) {
-			cerr << "Error: mu parameter value is not a number." << endl;
+			cerr << ERR("TwinGLWidget -> parseJsonObject", name) << endl;
+			cerr << "    Mu parameter value is not a number." << endl;
 			return false;
 		}
 	}
@@ -322,7 +340,8 @@ bool parseJsonObject
 		conf.so = smoothing::smooth_operator::TaubinLM;
 	}
 	else {
-		cerr << "Error: algorithm parameter value '"
+		cerr << ERR("TwinGLWidget -> parseJsonObject", name) << endl;
+		cerr << "    Algorithm parameter value '"
 			 << alg_str.toStdString() << "' is not valid." << endl;
 		return false;
 	}
@@ -336,7 +355,8 @@ bool parseJsonObject
 		conf.sw = smoothing::smooth_weight::cotangent;
 	}
 	else {
-		cerr << "Error: weigth type parameter value '"
+		cerr << ERR("TwinGLWidget -> parseJsonObject", name) << endl;
+		cerr << "    Weigth type parameter value '"
 			 << weight_str.toStdString() << "' is not valid." << endl;
 		return false;
 	}
@@ -364,7 +384,7 @@ void TwinGLWidget::run_band_frequencies(const QJsonDocument& doc) {
 	if (doc.isObject()) {
 		QJsonObject obj = doc.object();
 		float mu;
-		bool res = parseJsonObject(obj, confs, mu);
+		bool res = parseJsonObject(obj, confs, mu, name);
 		if (not res) {
 			return;
 		}
@@ -375,7 +395,7 @@ void TwinGLWidget::run_band_frequencies(const QJsonDocument& doc) {
 		for (int i = 0; i < arr.count(); ++i) {
 			float mu;
 			QJsonObject obj = arr.at(i).toObject();
-			bool res = parseJsonObject(obj, confs, mu);
+			bool res = parseJsonObject(obj, confs, mu, name);
 			if (not res) {
 				return;
 			}
@@ -386,22 +406,19 @@ void TwinGLWidget::run_band_frequencies(const QJsonDocument& doc) {
 	}
 
 	if (confs.size() <= 1) {
-		cerr << "Error: only one smoothing configuration.." << endl;
-		cerr << "    Band frequencies require at least 2.." << endl;
+		cerr << ERR("TwinGLWidget::run_band_frequencies", name) << endl;
+		cerr << "    Only one smoothing configuration." << endl;
+		cerr << "    Band frequencies require at least 2." << endl;
 		return;
 	}
 
 	mesh.make_neighbourhood_data();
 	mesh.make_angles_area();
 
-	timing::time_point begin = timing::now();
-	filter_frequencies::band_frequencies(confs, mus, nt, mesh);
-	timing::time_point end = timing::now();
-
-	mesh.make_normal_vectors();
-
-	// output execution time
-	cout << "Computed band frequencies with:." << endl;
+	cout << PROG("TwinGLWidget::run_band_frequencies",
+				 name,
+				 "Computing band frequencies with:")
+		 << endl;
 	for (size_t i = 0; i < confs.size(); ++i) {
 		cout << "    Configuration " << i + 1 << endl;
 		print_smoothing_configuration(confs[i], nt, "        ");
@@ -411,6 +428,14 @@ void TwinGLWidget::run_band_frequencies(const QJsonDocument& doc) {
 		cout << " " << mus[i];
 	}
 	cout << endl;
+
+	timing::time_point begin = timing::now();
+	filter_frequencies::band_frequencies(confs, mus, nt, mesh);
+	timing::time_point end = timing::now();
+
+	mesh.make_normal_vectors();
+
+	// output execution time
 	cout << "    in: "
 		 << timing::elapsed_seconds(begin,end)
 		 << " seconds." << endl;
@@ -427,7 +452,10 @@ void TwinGLWidget::run_band_frequencies(const QJsonDocument& doc) {
 		show_curvature(true);
 	}
 	else {
-		cout << "Remake buffers for vertices and normals." << endl;
+		cout << PROG("TwinGLWidget::run_band_frequencies",
+					 name,
+					 "Remake buffers for vertices and normals")
+			 << endl;
 		makeCurrent();
 		mesh.make_vertices_normals_buffers(program);
 		doneCurrent();

@@ -16,15 +16,12 @@ using namespace std;
 
 // custom includes
 #include "utils.hpp"
+#include "err_war_helper.hpp"
 
 const float rotationFactor = 0.5f;
 const float maxRotationCamera = 75.0f;
 const float minDistanceCamera = 0.25f;
 const float maxDistanceCamera = 3.0f;
-
-#define line "[" << name << "] (" << __LINE__ << ")"
-#define ERR "[" << name << "] Error (" << __LINE__ << "):"
-#define WAR "[" << name << "] Warning (" << __LINE__ << "):"
 
 // PRIVATE
 
@@ -69,8 +66,8 @@ void GLWidget::load_shader() {
 	program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/fragment_shader.frag");
 	program->link();
 	if (not program->isLinked()) {
-		cerr << "GLWidget::initializeGL " << line << " - Error:" << endl;
-		cerr << "Shader program 'simple' has not linked" << endl;
+		cerr << ERR("GLWidget::load_shader", name) << endl;
+		cerr << "    Shader program 'simple' has not linked" << endl;
 		cerr << endl;
 		cerr << "Log: " << endl;
 		cerr << endl;
@@ -80,7 +77,7 @@ void GLWidget::load_shader() {
 }
 
 void GLWidget::compute_curvature() {
-	cout << "GLWidget::compute_curvature " << line << " - computing curvature"
+	cout << PROG("GLWidget::compute_curvature", name, "computing curvature")
 		 << endl;
 
 	mesh.make_neighbourhood_data();
@@ -106,10 +103,10 @@ void GLWidget::compute_curvature() {
 }
 
 void GLWidget::show_curvature(bool make_all_buffers) {
-	cout << "GLWidget::show_curvature " << line << " - should all buffers be made? "
+	cout << PROG("GLWidget::show_curvature", name, "should all buffers be made? ")
 		 << (make_all_buffers ? "Yes" : "No") << endl;
-
-	cout << "GLWidget::show_curvature " << line << " - make colours with curvature" << endl;
+	cout << PROG("GLWidget::show_curvature", name, "make colours with curvature")
+		 << endl;
 
 	vector<vec3> cols;
 	float min, max;
@@ -125,11 +122,13 @@ void GLWidget::show_curvature(bool make_all_buffers) {
 
 	makeCurrent();
 	if (make_all_buffers) {
-		cout << "    GLWidget::show_curvature " << line << " - make ALL buffers" << endl;
+		cout << PROG("GLWidget::show_curvature", name, "make all buffers")
+			 << endl;
 		mesh.init(program, cols);
 	}
 	else {
-		cout << "    GLWidget::show_curvature " << line << " - make only buffer colour" << endl;
+		cout << PROG("GLWidget::show_curvature", name, "make only buffer colour")
+			 << endl;
 		mesh.make_colours_buffer(program, cols);
 	}
 	program->bind();
@@ -138,7 +137,8 @@ void GLWidget::show_curvature(bool make_all_buffers) {
 	doneCurrent();
 	update();
 
-	cout << "GLWidget::show_curvature " << line << " - curvature should be displayed" << endl;
+	cout << PROG("GLWidget::show_curvature", name, "curvature should be displayed")
+		 << endl;
 }
 
 void GLWidget::compute_harmonic_maps() {
@@ -156,15 +156,14 @@ void GLWidget::compute_harmonic_maps() {
 	mesh.make_boundaries();
 
 	if (mesh.get_boundaries().size() != 1) {
-		cerr << "GLWidget::set_harmonic_map - " << WAR << endl;
+		cerr << WAR("GLWidget::set_harmonic_map", name) << endl;
 		cerr << "    No boundaries in the mesh." << endl;
-		cerr << "    Prevent the application from terminating by not calling" << endl;
-		cerr << "    the algorithm." << endl;
+		cerr << "    The application has been prevented from" << endl;
+		cerr << "    terminating by not calling the algorithm." << endl;
 		return;
 	}
 
-	cout << "GLWidget::set_harmonic_map " << line
-		 << " - Harmonic maps" << endl;
+	cout << PROG("GLWidget::set_harmonic_map", name, "Harmonic maps") << endl;
 	cout << "    with shape: ";
 	if (s == parametrisation::boundary_shape::Circle) {
 		cout << "circle";
@@ -198,33 +197,32 @@ void GLWidget::compute_harmonic_maps() {
 }
 
 void GLWidget::init_mesh(bool make_all_buffers) {
-	cout << "GLWidget::init_mesh " << line << " - initialising mesh..." << endl;
+	cout << PROG("GLWidget::init_mesh", name, "initialising mesh") << endl;
 
 	makeCurrent();
 	if (not mesh.init(program)) {
-		cerr << "GLWidget::init_mesh - Error:" << endl;
+		cerr << ERR("GLWidget::init_mesh", name) << endl;
 		cerr << "    Could not initialise mesh." << endl;
 		QApplication::quit();
 	}
 	doneCurrent();
 	update();
 
-	cout << "GLWidget::init_mesh " << line
-		 << " - computing data for render:" << endl;
+	cout << PROG("GLWidget::init_mesh", name, "computing data for render") << endl;
 
 	if (current_curv_display != curv_type::none) {
-		cout << "GLWidget::init_mesh " << line << " - need curvature" << endl;
+		cout << PROG("GLWidget::init_mesh", name, "need curvature") << endl;
 		cout << "    computing curvature..." << endl;
 		compute_curvature();
 		cout << "    displaying curvature..." << endl;
 		show_curvature(make_all_buffers);
 	}
 	else if (current_polymode == polymode::harmonic_maps) {
-		cout << "GLWidget::init_mesh " << line << " - need harmonic maps" << endl;
+		cout << PROG("GLWidget::init_mesh", name, "need harmonic maps") << endl;
 		compute_harmonic_maps();
 	}
 
-	cout << "GLWidget::init_mesh " << line << " - initialised succesfully!" << endl;
+	cout << PROG("GLWidget::init_mesh", name, "initialised succesfully") << endl;
 }
 
 void GLWidget::initializeGL() {
@@ -240,7 +238,7 @@ void GLWidget::initializeGL() {
 	bool init = mesh.init(program);
 
 	if (not init) {
-		cerr << "GLWidget::initializeGL - " << ERR << endl;
+		cerr << ERR("GLWidget::initializeGL", name) << endl;
 		cerr << "    Could not initialise mesh cube." << endl;
 		QApplication::quit();
 	}
@@ -295,7 +293,7 @@ void GLWidget::paintGL() {
 	}
 	else {
 		// no polygon mode
-		cerr << "GLWidget::paintGL - " << WAR << endl;
+		cerr << WAR("GLWidget::paintGL", name) << endl;
 		cerr << "    no polygon mode selected" << endl;
 	}
 
@@ -365,13 +363,14 @@ void GLWidget::load_mesh(const QString& filename) {
 	mesh.free_buffers();
 	mesh.destroy();
 
-	cout << "GLWidget::load_mesh " << line << " - reading mesh..." << endl;
+	cout << PROG("GLWidget::load_mesh", name, "reading mesh") << endl;
 
 	geoproc::PLY_reader::read_mesh(filename.toStdString(), mesh);
 	mesh.make_normal_vectors();
 	mesh.scale_to_unit();
 
-	cout << "GLWidget::load_mesh " << line << " - going to initialise mesh now" << endl;
+	cout << PROG("GLWidget::load_mesh", name, "going to initialise mesh now")
+		 << endl;
 
 	init_mesh(true);
 }
@@ -400,7 +399,8 @@ void GLWidget::set_polygon_mode(const polymode& pmode) {
 }
 
 void GLWidget::change_polygon_mode() {
-	cout << "GLWidget::change_polygon_mode " << line << endl;
+	cout << PROG("GLWidget::change_polygon_mode", name, "changing polygon mode")
+		 << endl;
 
 	makeCurrent();
 	program->bind();
@@ -444,7 +444,7 @@ void GLWidget::change_polygon_mode() {
 		program->setUniformValue("harmonic_maps", true);
 	}
 	else {
-		cerr << "GLWidget::set_polygon_mode - " << WAR << endl;
+		cerr << WAR("GLWidget::set_polygon_mode", name) << endl;
 		cerr << "    Unhandled selected polymode: expect undefined behaviour" << endl;
 	}
 
@@ -506,8 +506,10 @@ void GLWidget::set_curvature_display(const curv_type& cd) {
 }
 
 void GLWidget::change_curvature_display() {
-	cout << "GLWidget::change_curvature_display " << line
-		 << " - changing curvature display" << endl;
+	cout << PROG("GLWidget::change_curvature_display",
+				 name,
+				 "changing curvature display")
+		 << endl;
 
 	// if we don't curvature colours anymore...
 	if (to_curv_display == curv_type::none) {
@@ -517,8 +519,10 @@ void GLWidget::change_curvature_display() {
 		 * (current_curv_display -> to_curv_display)
 		 */
 
-		cout << "GLWidget::change_curvature_display " << line
-			 << " - no curvature to show" << endl;
+		cout << PROG("GLWidget::change_curvature_display",
+					 name,
+					 "no curvature to show")
+			 << endl;
 
 		current_curv_display = curv_type::none;
 		curvature_values.clear();
@@ -539,8 +543,10 @@ void GLWidget::change_curvature_display() {
 	 * 'curv_type::none'
 	 */
 
-	cout << "GLWidget::change_curvature_display " << line
-		 << " - some curvature is to be displayed" << endl;
+	cout << PROG("GLWidget::change_curvature_display",
+				 name,
+				 "some curvature is to be displayed")
+		 << endl;
 
 	// make all buffers only if the colour buffer was not made
 	// before: if the current curvature mode is "deactivated"
@@ -548,8 +554,10 @@ void GLWidget::change_curvature_display() {
 	if (current_curv_display == curv_type::none) {
 		make_all_buffers = true;
 
-		cout << "GLWidget::change_curvature_display " << line
-			 << " -     all bufferss will be made" << endl;
+		cout << PROG("GLWidget::change_curvature_display",
+					 name,
+					 "all bufferss will be made")
+			 << endl;
 	}
 
 	if (current_curv_display != to_curv_display) {
@@ -559,8 +567,11 @@ void GLWidget::change_curvature_display() {
 		 * (current_curv_display -> to_curv_display)
 		 */
 
-		cout << "GLWidget::change_curvature_display " << line
-			 << " - clear the current curvature values" << endl;
+		cout << PROG("GLWidget::change_curvature_display",
+					 name,
+					 "clear the current curvature values")
+			 << endl;
+
 		curvature_values.clear();
 	}
 
@@ -580,15 +591,19 @@ void GLWidget::change_curvature_display() {
 			comp_curv = true;
 			make_all_buffers = true;
 
-			cout << "GLWidget::change_curvature_display " << line
-				 << " - recompute all the curvature and buffers" << endl;
+			cout << PROG("GLWidget::change_curvature_display",
+						 name,
+						 "recompute all the curvature and buffers")
+				 << endl;
 		}
 		else {
 			// make only buffer colours
 			make_all_buffers = false;
 
-			cout << "GLWidget::change_curvature_display " << line
-				 << " - do not make all buffers again" << endl;
+			cout << PROG("GLWidget::change_curvature_display",
+						 name,
+						 "do not make all buffers again")
+				 << endl;
 		}
 	}
 	else {
@@ -601,8 +616,10 @@ void GLWidget::change_curvature_display() {
 	}
 
 	if (comp_curv) {
-		cout << "GLWidget::change_curvature_display " << line
-			 << " - compute curvature..." << endl;
+		cout << PROG("GLWidget::change_curvature_display",
+					 name,
+					 "compute curvature")
+			 << endl;
 
 		current_curv_display = to_curv_display;
 		compute_curvature();
@@ -611,8 +628,10 @@ void GLWidget::change_curvature_display() {
 	// since there are already curvature values computed ...
 	// make the colours
 
-	cout << "GLWidget::change_curvature_display " << line
-		 << " - show curvature" << endl;
+	cout << PROG("GLWidget::change_curvature_display",
+				 name,
+				 "show curvature")
+		 << endl;
 
 	to_prop = prop;
 	show_curvature(make_all_buffers);
