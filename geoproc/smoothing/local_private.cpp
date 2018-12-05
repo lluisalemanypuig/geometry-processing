@@ -38,9 +38,9 @@ namespace local_private {
 		}
 		while (j != first);
 
-		// set contents of pv_ws to null
+		// set weights to 0
 		for (int j = 0; j < m.n_vertices(); ++j) {
-			pv_ws[j] = 0;
+			pv_ws[j] = 0.0f;
 		}
 		for (int j : neighs) {
 			pv_ws[j] = 1.0f/neighs.size();
@@ -86,9 +86,9 @@ namespace local_private {
 	{
 		assert(pv_ws != nullptr);
 
-		// set contents of pv_ws to null
+		// set weights to 0
 		for (int j = 0; j < m.n_vertices(); ++j) {
-			pv_ws[j] = 0;
+			pv_ws[j] = 0.0f;
 		}
 
 		const glm::vec3 *verts = &m.get_vertices()[0];

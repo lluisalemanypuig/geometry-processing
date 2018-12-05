@@ -19,10 +19,11 @@ namespace local_private {
 	 * For vertex @e vi computes \f$\frac{1}{d_i}\f$ where \f$d_i\f$ is
 	 * the valence of vertex @e vi (the number of neighbours in its one-ring).
 	 * This value is value is assigned to all its neighbours in the mesh
-	 * in the output parameter @e pv_ws. The other vertices have null weight.
+	 * in the output parameter @e pv_ws..
 	 * @param vi Valid vertex index.
 	 * @param m Mesh to be iterated.
-	 * @param[out] pv_ws Weights per vertex.
+	 * @param[out] pv_ws Weights per vertex. Non-neighbours of @e vi are
+	 * guaranteed to have null weight.
 	 * @pre The mesh requires:
 	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
 	 */

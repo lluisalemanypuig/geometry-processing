@@ -46,11 +46,6 @@ namespace global {
 	)
 	{
 		if (not constant[i]) {
-			// set to 0
-			for (int j = 0; j < N; ++j) {
-				ws[j] = 0.0f;
-			}
-
 			if (w == smooth_weight::uniform) {
 				local_private::make_uniform_weights(i, m, ws);
 			}
