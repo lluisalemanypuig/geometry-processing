@@ -163,9 +163,22 @@ namespace test_geoproc {
 		print_segments(mesh, uvs);
 		cout << "Computed in: " << timing::elapsed_seconds(begin, end) << " s" << endl;
 
-		if (uvs.size() < 50) {
+		const int N = mesh.n_vertices();
+		vector<bool> constant(N, false);
+		for (size_t i = 0; i < mesh.get_boundaries()[0].size(); ++i) {
+			int corner_index = mesh.get_boundaries()[0][i];
+			constant[ mesh.get_vertex_corner(corner_index) ] = true;
+		}
+
+		if (uvs.size() < 20) {
 			for (size_t i = 0;  i < uvs.size(); ++i) {
-				cout << "    " << i << ": " << uvs[i].x << "," << uvs[i].y << endl;
+				if (constant[i]) {
+					cout << "   *";
+				}
+				else {
+					cout << "    ";
+				}
+				cout << i << ": " << uvs[i].x << "," << uvs[i].y << endl;
 			}
 		}
 
