@@ -6,6 +6,7 @@
 
 // C++ includes
 #include <vector>
+using namespace std;
 
 // glm includes
 using namespace glm;
@@ -30,7 +31,7 @@ namespace local_private {
 		int first = it.init(vi);
 
 		// neighbours of vi
-		std::vector<int> neighs;
+		vector<int> neighs;
 		int j = it.current();
 		do {
 			neighs.push_back(j);
@@ -57,7 +58,7 @@ namespace local_private {
 		int first = it.init(vi);
 
 		// differences vector
-		std::vector<vec3> diffs;
+		vector<vec3> diffs;
 		int j = it.current();
 		do {
 			diffs.push_back( verts[j] - verts[vi] );
@@ -79,19 +80,20 @@ namespace local_private {
 	/* COTANGENT */
 
 	static inline
-	float cotan(float a) { return std::cos(a)/std::sin(a); }
+	float cotan(float a) { return cos(a)/sin(a); }
 
 	void make_cotangent_weights
 	(int vi, const TriangleMesh& m, float *pv_ws)
 	{
 		assert(pv_ws != nullptr);
 
+		// mesh info
+		const vector<vec3>& mesh_angles = m.get_angles();
+
 		// set weights to 0
 		for (int j = 0; j < m.n_vertices(); ++j) {
 			pv_ws[j] = 0.0f;
 		}
-
-		const glm::vec3 *verts = &m.get_vertices()[0];
 
 		iterators::vertex::vertex_face_iterator it(m);
 		const int first = it.init(vi);
@@ -103,16 +105,12 @@ namespace local_private {
 		// its corresponding weight.
 
 		// loop variables
-		vec3 u, v;
-		float alpha, beta;
+		vector<pair<int, float> > weight_per_neigh;
+		float alpha = 0.0f;
+		float beta = 0.0f;
+		float W = 0.0f;
+		float sW = 0.0f;
 		do {
-			// it is guaranteed that
-			//     i1 = i
-			//     i2 = i
-			// also, faces are sorted in counterclockwise order
-			// therefore:
-			//      i1 -> j1 -> k1 -> i1
-			// (i1) i2 -> j2 -> k2 -> i2 (i1)
 			int i1,j1,k1, i2,j2,k2;
 			m.get_vertices_triangle(next1, vi, i1,j1,k1);
 			m.get_vertices_triangle(next2, vi, i2,j2,k2);
@@ -122,16 +120,23 @@ namespace local_private {
 			assert(i1 == i2);
 			assert(k1 == j2);
 
-			// compute the two angles: alpha and beta
-			u = normalize( verts[i1] - verts[j1] );
-			v = normalize( verts[k1] - verts[j1] );
-			alpha = acos( dot(u,v) );
-			u = normalize( verts[i2] - verts[k2] );
-			v = normalize( verts[j2] - verts[k2] );
-			beta = acos( dot(u,v) );
+			// Compute the two angles (alpha and beta).
+			// At the same time, compute the difference vector.
 
-			// compute and assign weight to neighbour
-			pv_ws[k1] = cotan(alpha) + cotan(beta);
+			const vec3 angles1 = mesh_angles[next1];
+			const vec3 angles2 = mesh_angles[next2];
+
+			if (vi == i1)		{ alpha = angles1.y; }
+			else if (vi == j1)	{ alpha = angles1.z; }
+			else if (vi == k1)	{ alpha = angles1.x; }
+			if (vi == i2)		{ beta = angles2.z; }
+			else if (vi == j2)	{ beta = angles2.x; }
+			else if (vi == k2)	{ beta = angles2.y; }
+
+			// compute and store weight
+			W = cotan(alpha) + cotan(beta);
+			weight_per_neigh.push_back( make_pair(k1,W) );
+			sW += W;
 
 			// go to next 2 faces
 			next1 = next2;
@@ -139,6 +144,9 @@ namespace local_private {
 		}
 		while (next1 != first);
 
+		for (const pair<int,float>& nw : weight_per_neigh) {
+			pv_ws[nw.first] = nw.second/sW;
+		}
 	}
 
 	void make_cotangent_weight
@@ -152,9 +160,9 @@ namespace local_private {
 		int next2 = it.next();
 
 		// differences vector
-		std::vector<vec3> diffs;
+		vector<vec3> diffs;
 		// sum of cotangents vector
-		std::vector<float> weights;
+		vector<float> weights;
 		// sum of all weights
 		float S = 0.0f;
 
