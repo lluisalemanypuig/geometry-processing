@@ -41,6 +41,8 @@ class MainWindow : public QMainWindow {
 		void on_RB_Render_HarmonicMaps_Circle_toggled(bool checked);
 		void on_RB_Render_HarmonicMaps_Square_toggled(bool checked);
 		void on_CB_Render_HarmonicMaps_Wireframe_toggled(bool checked);
+		void on_CB_Render_HarmonicMaps_Weights_currentTextChanged
+		(const QString &arg1);
 
 		/* Curvature */
 		bool get_prop_curvature_values(float& p);
@@ -67,7 +69,7 @@ class MainWindow : public QMainWindow {
 		/* Tab widget stuff */
 		void on_TW_View_currentChanged(int index);
 
-public:
+	public:
 		explicit MainWindow(QWidget *parent = nullptr);
 		~MainWindow();
 };

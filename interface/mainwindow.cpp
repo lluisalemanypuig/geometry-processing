@@ -270,6 +270,7 @@ void MainWindow::on_RB_Render_HarmonicMaps_toggled(bool checked) {
 	ui->RB_Render_HarmonicMaps_Circle->setEnabled(checked);
 	ui->RB_Render_HarmonicMaps_Square->setEnabled(checked);
 	ui->CB_Render_HarmonicMaps_Wireframe->setEnabled(checked);
+	ui->CB_Render_HarmonicMaps_Weights->setEnabled(checked);
 
 	if (checked) {
 		// set polygon mode
@@ -293,17 +294,26 @@ void MainWindow::on_RB_Render_HarmonicMaps_toggled(bool checked) {
 
 void MainWindow::on_RB_Render_HarmonicMaps_Circle_toggled(bool checked) {
 	if (checked) {
+		string w = ui->CB_Render_HarmonicMaps_Weights->currentText().toStdString();
+		smoothing::smooth_weight weight;
+		if (w == "Uniform") {
+			weight = smoothing::smooth_weight::uniform;
+		}
+		else if (w == "Cotangent") {
+			weight = smoothing::smooth_weight::cotangent;
+		}
+
 		if (current_tab == 0) {
 			ui->SingleView_Renderer->set_harmonic_map(
-				polymode::harmonic_maps_Circle
+				polymode::harmonic_maps_Circle, weight
 			);
 		}
 		else if (current_tab == 1) {
 			ui->DualView_LeftRenderer->set_harmonic_map(
-				polymode::harmonic_maps_Circle
+				polymode::harmonic_maps_Circle, weight
 			);
 			ui->DualView_RightRenderer->set_harmonic_map(
-				polymode::harmonic_maps_Circle
+				polymode::harmonic_maps_Circle, weight
 			);
 		}
 	}
@@ -311,17 +321,26 @@ void MainWindow::on_RB_Render_HarmonicMaps_Circle_toggled(bool checked) {
 
 void MainWindow::on_RB_Render_HarmonicMaps_Square_toggled(bool checked) {
 	if (checked) {
+		string w = ui->CB_Render_HarmonicMaps_Weights->currentText().toStdString();
+		smoothing::smooth_weight weight;
+		if (w == "Uniform") {
+			weight = smoothing::smooth_weight::uniform;
+		}
+		else if (w == "Cotangent") {
+			weight = smoothing::smooth_weight::cotangent;
+		}
+
 		if (current_tab == 0) {
 			ui->SingleView_Renderer->set_harmonic_map(
-				polymode::harmonic_maps_Square
+				polymode::harmonic_maps_Square, weight
 			);
 		}
 		else if (current_tab == 1) {
 			ui->DualView_LeftRenderer->set_harmonic_map(
-				polymode::harmonic_maps_Square
+				polymode::harmonic_maps_Square, weight
 			);
 			ui->DualView_RightRenderer->set_harmonic_map(
-				polymode::harmonic_maps_Square
+				polymode::harmonic_maps_Square, weight
 			);
 		}
 	}
@@ -334,6 +353,37 @@ void MainWindow::on_CB_Render_HarmonicMaps_Wireframe_toggled(bool checked) {
 	else if (current_tab == 1) {
 		ui->DualView_LeftRenderer->set_harmonic_map_remeshing(checked);
 		ui->DualView_RightRenderer->set_harmonic_map_remeshing(checked);
+	}
+}
+
+void MainWindow::on_CB_Render_HarmonicMaps_Weights_currentTextChanged
+(
+	const QString& t
+)
+{
+	string w = t.toStdString();
+	smoothing::smooth_weight weight;
+	if (w == "Uniform") {
+		weight = smoothing::smooth_weight::uniform;
+	}
+	else if (w == "Cotangent") {
+		weight = smoothing::smooth_weight::cotangent;
+	}
+
+	polymode pm;
+	if (ui->RB_Render_HarmonicMaps_Circle->isChecked()) {
+		pm = polymode::harmonic_maps_Circle;
+	}
+	else if (ui->RB_Render_HarmonicMaps_Circle->isChecked()) {
+		pm = polymode::harmonic_maps_Square;
+	}
+
+	if (current_tab == 0) {
+		ui->SingleView_Renderer->set_harmonic_map(pm, weight);
+	}
+	else if (current_tab == 1) {
+		ui->DualView_LeftRenderer->set_harmonic_map(pm, weight);
+		ui->DualView_RightRenderer->set_harmonic_map(pm, weight);
 	}
 }
 
