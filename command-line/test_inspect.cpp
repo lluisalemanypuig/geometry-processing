@@ -60,7 +60,7 @@ namespace test_geoproc {
 	}
 
 	inline void print_edges(const vector<mesh_edge>& edges) {
-		size_t col_max_len[7] = {0,0,0,0,0,0,0};
+		size_t col_max_len[7] = {0,2,2,2,2,2,2};
 		col_max_len[0] =
 			std::max(std::to_string(edges.size()).length(), size_t(6));
 
@@ -171,7 +171,11 @@ namespace test_geoproc {
 		// ---------------------------------------------------------------------
 		cout << "Vertices:" << endl;
 		for (int v = 0; v < mesh.n_vertices(); ++v) {
-			cout << "    " << v << ": " << edge_vertex[v] << endl;
+			const glm::vec3& vtx = mesh.get_vertex(v);
+			cout << "    " << v << ": "
+				 << "(" << vtx.x << "," << vtx.y << "," << vtx.z << ")"
+				 << endl;
+			cout << "        incident to edge: " << edge_vertex[v] << endl;
 
 			int e = edge_vertex[v];
 			const mesh_edge& mE = edges[e];
