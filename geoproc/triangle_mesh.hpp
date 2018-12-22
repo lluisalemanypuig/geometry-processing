@@ -170,13 +170,15 @@ class TriangleMesh {
 		std::vector<MeshEdge> all_edges;
 
 		/**
-		 * @brief Edge vertices for each vertex.
+		 * @brief Edge index for each vertex.
 		 *
-		 * Each vertex is incident to an edge. This container
-		 * relates each vertex to an edge. Therefore, this container
+		 * Each vertex is incident to several edges. This container
+		 * relates each vertex to a asingle edge. Therefore, this container
 		 * has as many edge indices as vertices are in this mesh.
+		 *
+		 * These indices point to values in @ref all_edges.
 		 */
-		std::vector<size_t> vertex_edge;
+		std::vector<int> vertex_edge;
 
 		/**
 		 * @brief Boundary edges of the mesh.
@@ -194,7 +196,7 @@ class TriangleMesh {
 		 * In order to make all boundary lists call @ref make_boundaries,
 		 * which will fill the member @ref boundaries.
 		 */
-		std::vector<MeshEdge> boundary_edges;
+		std::vector<int> boundary_edges;
 
 		/**
 		 * @brief Boundaries of this mesh.
@@ -546,8 +548,12 @@ class TriangleMesh {
 		/// Are the boundaries valid?
 		bool are_boundaries_valid() const;
 
+		/// Returns a relation between vertices and edges.
+		const std::vector<int>& get_vertex_edge() const;
+		/// Returns all edges in the mesh.
+		const std::vector<MeshEdge>& get_edges() const;
 		/// Returns the boundary edges in this mesh.
-		const std::vector<MeshEdge>& get_boundary_edges() const;
+		const std::vector<int>& get_boundary_edges() const;
 		/// Returns the boundaries in this mesh.
 		const std::vector<std::vector<int> >& get_boundaries() const;
 

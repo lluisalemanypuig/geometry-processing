@@ -117,7 +117,7 @@ void TriangleMesh::make_neighbourhood_data() {
 		// edge v1,v2  (vertex indices)
 		e2.set_indices(triangles[c1], triangles[c2], c0, i/3);
 		// edge v0,v2  (vertex indices)
-		e3.set_indices(triangles[c0], triangles[c2], c1, i/3);
+		e3.set_indices(triangles[c2], triangles[c0], c1, i/3);
 
 		corner_data.push_back(e1);
 		corner_data.push_back(e2);
@@ -131,87 +131,55 @@ void TriangleMesh::make_neighbourhood_data() {
 
 	all_edges.clear();
 	boundary_edges.clear();
+	vertex_edge.clear();
+
+	// -------------------
+	// Build edges of mesh
+
+	vertex_edge.resize(vertices.size(), -1);
 
 	// For each corner edge, check that a twin exists.
 	// If so, we have found a pair of opposite corners.
 	// Notice that, by construction*, twins are consecutive.
 	// *: corner_data is sorted!
 	for (size_t i = 0; i < corner_data.size(); ++i) {
+		const CornerEdgeFace& cef1 = corner_data[i];
+
 		// take vertex indices
-		int vA = corner_data[i].vA;
-		int vB = corner_data[i].vB;
+		int vA = cef1.vA;
+		int vB = cef1.vB;
+
+		MeshEdge E;
+		E.v0 = vA;
+		E.v1 = vB;
+		if (corner_data[i].sorted) {
+			E.right_trgl = corner_data[i].tri_index;
+		}
+		else {
+			E.left_trgl = corner_data[i].tri_index;
+		}
 
 		bool has_twin = false;
 		if (i + 1 < corner_data.size()) {
-			const CornerEdgeFace& cef = corner_data[i + 1];
-			if (cef.vA == vA and cef.vB == vB) {
-				// a twin exists
+			const CornerEdgeFace& cef2 = corner_data[i + 1];
+			if (cef2.vA == vA and cef2.vB == vB) {
+				has_twin = true;
+				// if a twin exists then we can find
+				// the missing adjacent triangle
+				if (cef2.sorted) {
+					E.right_trgl = cef2.tri_index;
+				}
+				else {
+					E.left_trgl = cef2.tri_index;
+				}
+
+				// make opposites...
 				int o = corner_data[i].corner;
 				int c = corner_data[i + 1].corner;
 				opposite_corners[o] = c;
 				opposite_corners[c] = o;
 
-				has_twin = true;
-				// SKIP (go to the next pair)
 				++i;
-			}
-		}
-
-		if (not has_twin) {
-			// this single CornerEdgeFace contains
-			// an edge of the boundary -> hard boundary
-
-			// obtain next and previous corners of data[i].corner
-			int corner = corner_data[i].corner;
-			int next_corner = 3*(corner/3) + (corner + 1)%3;
-			int prev_corner = 3*(corner/3) + (corner + 2)%3;
-
-			// At this point the left and right triangles are
-			// wrong! They are corrected in the coming code
-			boundary_edges.push_back(
-				MeshEdge(get_vertex_corner(next_corner),
-						 get_vertex_corner(prev_corner),
-						 -1, -1)
-			);
-
-			boundary_vertices.insert(vA);
-			boundary_vertices.insert(vB);
-		}
-	}
-
-	// -------------------
-	// Build edges of mesh
-
-	vertex_edge.resize(vertices.size());
-	// we have to use the fact that corner_data is sorted.
-	for (size_t i = 0; i < corner_data.size(); ++i) {
-
-		// vertex indices
-		int vA = corner_data[i].vA;
-		int vB = corner_data[i].vB;
-
-		MeshEdge E;
-		E.v0 = get_vertex_corner(vA);
-		E.v1 = get_vertex_corner(vB);
-		if (corner_data[i].sorted) {
-			E.left_trgl = corner_data[i].tri_index;
-		}
-		else {
-			E.right_trgl = corner_data[i].tri_index;
-		}
-
-		if (i + 1 < corner_data.size()) {
-			const CornerEdgeFace& cef = corner_data[i + 1];
-			if (cef.vA == vA and cef.vB == vB) {
-				++i;
-				// if a twin exists then we can find
-				// the missing adjacent triangle
-				if (cef.sorted) {
-					E.left_trgl = cef.tri_index;
-				}
-				else {
-					E.right_trgl = cef.tri_index;
-				}
 			}
 		}
 
@@ -224,7 +192,24 @@ void TriangleMesh::make_neighbourhood_data() {
 
 		// relate this edge to its first vertex for fast
 		// retrieval (given a vertex, return an edge index)
-		vertex_edge[E.v0] = all_edges.size() - 1;
+		if (vertex_edge[E.v0] == -1) {
+			vertex_edge[E.v0] = all_edges.size() - 1;
+		}
+		if (vertex_edge[E.v1] == -1) {
+			vertex_edge[E.v1] = all_edges.size() - 1;
+		}
+
+		if (not has_twin) {
+			// this single CornerEdgeFace contains
+			// an edge of the boundary -> hard boundary
+
+			// At this point the left and right triangles are
+			// wrong! They are corrected in the coming code
+			boundary_edges.push_back(all_edges.size() - 1);
+
+			boundary_vertices.insert(vA);
+			boundary_vertices.insert(vB);
+		}
 	}
 
 	// because we have done too many push_backs
@@ -336,7 +321,7 @@ void TriangleMesh::make_boundaries() {
 	for (size_t i = 0; i < boundary_edges.size(); ++i) {
 		if (visited[i]) { continue; }
 
-		const MeshEdge& ei = boundary_edges[i];
+		const MeshEdge& ei = all_edges[boundary_edges[i]];
 
 		// find the boundary starting at i-th edge
 		visited[i] = true;
@@ -361,7 +346,7 @@ void TriangleMesh::make_boundaries() {
 				if (visited[j]) { ++j; continue; }
 
 				// corner and vertex pair
-				const MeshEdge& ej = boundary_edges[j];
+				const MeshEdge& ej = all_edges[boundary_edges[j]];
 
 				if (ej.v0 == next_vertex) {
 					add_vertex = next_vertex;
