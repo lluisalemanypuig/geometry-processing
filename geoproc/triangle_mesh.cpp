@@ -265,6 +265,10 @@ int TriangleMesh::n_vertices() const {
 	return static_cast<int>(vertices.size());
 }
 
+int TriangleMesh::n_edges() const {
+	return static_cast<int>(all_edges.size());
+}
+
 int TriangleMesh::n_triangles() const {
 	return static_cast<int>(triangles.size()/3);
 }
@@ -273,16 +277,12 @@ int TriangleMesh::n_corners() const {
 	return static_cast<int>(triangles.size());
 }
 
-size_t TriangleMesh::n_boundary_edges() const {
-	return boundary_edges.size();
+int TriangleMesh::n_boundary_edges() const {
+	return static_cast<int>(boundary_edges.size());
 }
 
 size_t TriangleMesh::n_boundaries() const {
 	return boundaries.size();
-}
-
-size_t TriangleMesh::n_edges() const {
-	return all_edges.size();
 }
 
 int TriangleMesh::get_vertex_corner(int c) const {
@@ -387,7 +387,7 @@ const std::vector<int>& TriangleMesh::get_vertex_edge() const {
 	return vertex_edge;
 }
 
-const vector<MeshEdge>& TriangleMesh::get_edges() const {
+const vector<mesh_edge>& TriangleMesh::get_edges() const {
 	return all_edges;
 }
 

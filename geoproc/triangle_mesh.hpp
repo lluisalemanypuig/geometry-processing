@@ -6,55 +6,10 @@
 // glm includes
 #include <glm/glm.hpp>
 
+// geoproc includes
+#include <geoproc/mesh_edge.hpp>
+
 namespace geoproc {
-
-/**
- * @brief Meshe's edge defition.
- *
- * It is basically a set of four indices pointing to the first
- * and last vertices (order decided arbitrarily), and to the left
- * and right faces (with respect to the previous and next vertices).
- */
-struct MeshEdge {
-	/**
-	 * @brief First vertex's index.
-	 *
-	 * The edge is oriented from @ref v0 to @ref v1.
-	 */
-	int v0;
-	/**
-	 * @brief Last vertex's index.
-	 *
-	 * The edge is oriented from @ref v0 to @ref v1.
-	 */
-	int v1;
-	/**
-	 * @brief Left triangle index.
-	 *
-	 * The incident triangle to this edge to the left of
-	 * the oriented segment from the previous to the next vertex.
-	 */
-	int left_trgl;
-	/**
-	 * @brief Right triangle index.
-	 *
-	 * The incident triangle to this edge to the right of
-	 * the oriented segment from the previous to the next vertex.
-	 */
-	int right_trgl;
-
-	/// Default constructor.
-	MeshEdge() {
-		v0 = v1 = left_trgl = right_trgl = -1;
-	}
-	/// Constructor with indices.
-	MeshEdge(int pv, int nv, int lt, int rt) {
-		v0 = pv;
-		v1 = nv;
-		left_trgl = lt;
-		right_trgl = rt;
-	}
-};
 
 /**
  * @brief Implementation of a triangular mesh.
@@ -166,8 +121,11 @@ class TriangleMesh {
 		 * This vector is filled in the @ref make_neighbourhood_data
 		 * function. The contents of this container are valid only when
 		 * @ref is_neighbourhood_valid evaluates to true.
+		 *
+		 * The members of the class @ref mesh_edge make this container
+		 * a DCEL.
 		 */
-		std::vector<MeshEdge> all_edges;
+		std::vector<mesh_edge> all_edges;
 
 		/**
 		 * @brief Edge index for each vertex.
@@ -413,16 +371,16 @@ class TriangleMesh {
 
 		/// Returns the number of vertices.
 		int n_vertices() const;
+		/// Returns the number of edges.
+		int n_edges() const;
 		/// Returns the number of triangles.
 		int n_triangles() const;
 		/// Returns the number of corners.
 		int n_corners() const;
 		/// Returns the number of boundary edges.
-		size_t n_boundary_edges() const;
+		int n_boundary_edges() const;
 		/// Returns the number of boundaries in this mesh.
 		size_t n_boundaries() const;
-		/// Returns the number of edges in this mesh.
-		size_t n_edges() const;
 
 		/**
 		 * @brief Returns the index of the vertex corresponding to corner @e c.
@@ -551,7 +509,7 @@ class TriangleMesh {
 		/// Returns a relation between vertices and edges.
 		const std::vector<int>& get_vertex_edge() const;
 		/// Returns all edges in the mesh.
-		const std::vector<MeshEdge>& get_edges() const;
+		const std::vector<mesh_edge>& get_edges() const;
 		/// Returns the boundary edges in this mesh.
 		const std::vector<int>& get_boundary_edges() const;
 		/// Returns the boundaries in this mesh.

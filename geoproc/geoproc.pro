@@ -22,7 +22,8 @@ HEADERS += \
     smoothing/local.hpp \
     smoothing/local_private.hpp \
     smoothing/global.hpp \
-    parametrisation/parametrisation.hpp
+    parametrisation/parametrisation.hpp \
+    mesh_edge.hpp
 
 SOURCES += \
 	ply_reader.cpp \
@@ -36,7 +37,8 @@ SOURCES += \
     smoothing/local_private.cpp \
     smoothing/global.cpp \
     parametrisation/parametrisation.cpp \
-    triangle_mesh_algs.cpp
+    triangle_mesh_algs.cpp \
+    mesh_edge.cpp
 
 # self-includes
 INCLUDEPATH += ..
