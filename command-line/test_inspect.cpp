@@ -38,6 +38,53 @@ namespace test_geoproc {
 	"(" << vertex_id(e.v0)				\
 	<< "," << vertex_id(e.v1) << ")"
 
+	inline void print_edge(size_t i, const MeshEdge& e) {
+		cout << "    " << setw(4) << i
+			 << ": v0: " << e.v0 << endl;
+
+		cout << "    " << setw(4) << " "
+			 << "  v1: " << e.v1 << endl;
+		cout << "    " << setw(4) << " "
+			 << "  fL: " << e.left_trgl << endl;
+		cout << "    " << setw(4) << " "
+			 << "  fR: " << e.right_trgl << endl;
+	}
+
+	inline void print_edges(const vector<MeshEdge>& edges) {
+		size_t col_max_len[5] = {0,0,0,0,0};
+		col_max_len[0] =
+			std::max(std::to_string(edges.size()).length(), size_t(6));
+
+		for (size_t i = 0; i < edges.size(); ++i) {
+			string v0 = std::to_string(edges[i].v0);
+			string v1 = std::to_string(edges[i].v1);
+			string lT = std::to_string(edges[i].left_trgl);
+			string rT = std::to_string(edges[i].right_trgl);
+
+			col_max_len[1] = std::max(v0.length(), col_max_len[1]);
+			col_max_len[2] = std::max(v1.length(), col_max_len[2]);
+			col_max_len[3] = std::max(lT.length(), col_max_len[3]);
+			col_max_len[4] = std::max(rT.length(), col_max_len[4]);
+		}
+
+		// print header
+		cout << setw(col_max_len[0]) << "index" << " "
+			 << setw(col_max_len[1]) << "v0" << " "
+			 << setw(col_max_len[2]) << "v1" << " "
+			 << setw(col_max_len[3]) << "lT" << " "
+			 << setw(col_max_len[4]) << "rT" << endl;
+
+		// print edges
+		for (size_t i = 0; i < edges.size(); ++i) {
+			const MeshEdge& E = edges[i];
+			cout << setw(col_max_len[0]) << i << " "
+				 << setw(col_max_len[1]) << E.v0 << " "
+				 << setw(col_max_len[2]) << E.v1 << " "
+				 << setw(col_max_len[3]) << E.left_trgl << " "
+				 << setw(col_max_len[4]) << E.right_trgl << endl;
+		}
+	}
+
 	int test_inspect(int argc, char *argv[]) {
 		string mesh_file = "none";
 
@@ -80,6 +127,10 @@ namespace test_geoproc {
 		mesh.make_angles_area();
 		mesh.make_boundaries();
 
+		timing::time_point end = timing::now();
+		cout << "Gathered data in: " << timing::elapsed_seconds(begin, end)
+			 << " seconds" << endl;
+
 		int max_length = 20;
 
 		cout << setw(max_length)
@@ -95,9 +146,28 @@ namespace test_geoproc {
 		cout << setw(max_length)
 			 << "# boundaries: " << mesh.n_boundaries() << endl;
 
-		timing::time_point end = timing::now();
-		cout << "All this in: " << timing::elapsed_seconds(begin, end)
-			 << " seconds" << endl;
+		const vector<int>& edge_vertex = mesh.get_vertex_edge();
+		const vector<MeshEdge>& edges = mesh.get_edges();
+
+		// ---------------------------------------------------------------------
+		cout << "Vertices:" << endl;
+		for (size_t v = 0; v < edge_vertex.size(); ++v) {
+			cout << "    " << v << ": " << edge_vertex[v] << endl;
+
+			int e = edge_vertex[v];
+			const MeshEdge& mE = edges[e];
+			if (mE.v0 != v and mE.v1 != v) {
+				cerr << "Error (" << __LINE__ << "):" << endl;
+				cerr << "    vertex is related to edge with different endpoints"
+					 << endl;
+				print_edge(e, mE);
+				return 1;
+			}
+		}
+
+		// ---------------------------------------------------------------------
+		cout << "Edges:" << endl;
+		print_edges(edges);
 
 		return 0;
 	}

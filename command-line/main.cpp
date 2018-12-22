@@ -18,24 +18,27 @@ namespace test_geoproc {
 
 } // -- namespace test_algorithms
 
+void command_line_usage() {
+	cout << "List of tests:" << endl;
+	cout << "    inspect" << endl;
+	cout << "    iterate" << endl;
+	cout << "    boundaries" << endl;
+	cout << "    curvature" << endl;
+	cout << "    local-smoothing" << endl;
+	cout << "    global-smoothing" << endl;
+	cout << "    band-frequencies" << endl;
+	cout << "    harmonic-maps" << endl;
+	cout << "Use [-h|--help] on every option to see its usage." << endl;
+}
+
 int main(int argc, char *argv[]) {
 	if (argc == 1) {
-		cerr << "Wrong usage: ./command-line algorithm-type" << endl;
-		cerr << "    Use [-h|--help] to see the complete list of algorithms available" << endl;
+		command_line_usage();
 		return 1;
 	}
 
 	if (strcmp(argv[1], "--help") == 0 or strcmp(argv[1], "-h") == 0) {
-		cout << "List of tests:" << endl;
-		cout << "    inspect" << endl;
-		cout << "    iterate" << endl;
-		cout << "    boundaries" << endl;
-		cout << "    curvature" << endl;
-		cout << "    local-smoothing" << endl;
-		cout << "    global-smoothing" << endl;
-		cout << "    band-frequencies" << endl;
-		cout << "    harmonic-maps" << endl;
-		cout << "Use [-h|--help] on every option to see its usage." << endl;
+		command_line_usage();
 		return 0;
 	}
 

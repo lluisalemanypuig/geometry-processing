@@ -31,6 +31,7 @@ namespace test_geoproc {
 		cout << "        Allowed values:" << endl;
 		cout << "        * circle" << endl;
 		cout << "        * square" << endl;
+		cout << endl;
 		cout << "    --weight-type" << endl;
 		cout << "        Allowed values:" << endl;
 		cout << "        * uniform" << endl;

@@ -62,19 +62,21 @@ namespace test_geoproc {
 		PLY_reader::read_mesh(mesh_file, mesh);
 		mesh.make_neighbourhood_data();
 
-		cout << "This mesh has " << mesh.get_boundary_edges().size()
+		const vector<MeshEdge>& all_edges = mesh.get_edges();
+		const vector<int>& boundary_edges = mesh.get_boundary_edges();
+
+		cout << "This mesh has " << boundary_edges.size()
 			 << " boundary edges" << endl;
-		const vector<MeshEdge>& boundary_edges = mesh.get_boundary_edges();
 		cout << "Boundary edges (corners):" << endl;
-		cout << "    : [" << edge_corner_out(boundary_edges[0]);
+		cout << "    : [" << edge_corner_out(all_edges[boundary_edges[0]]);
 		for (size_t i = 1; i < boundary_edges.size(); ++i) {
-			cout << "," << edge_corner_out(boundary_edges[i]);
+			cout << "," << edge_corner_out(all_edges[boundary_edges[i]]);
 		}
 		cout << "]" << endl;
 		cout << "Boundary edges (vertices):" << endl;
-		cout << "    : [" << edge_vertex_out(boundary_edges[0]);
+		cout << "    : [" << edge_vertex_out(all_edges[boundary_edges[0]]);
 		for (size_t i = 1; i < boundary_edges.size(); ++i) {
-			cout << "," << edge_vertex_out(boundary_edges[i]);
+			cout << "," << edge_vertex_out(all_edges[boundary_edges[i]]);
 		}
 		cout << "]" << endl;
 
