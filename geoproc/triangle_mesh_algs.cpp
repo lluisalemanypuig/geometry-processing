@@ -57,24 +57,47 @@ struct CornerEdgeFace {
 	}
 };
 
-inline
-void add_edge_to_triangle(int ept[][3], unsigned char *count, int t, int e) {
+inline void add_edge_to_triangle(int ept[][3], unsigned char *count, int t, int e) {
 	ept[t][ count[t] ] = e;
 	++count[t];
 }
 
-inline
-int tri_has_edge_share_vertex
+inline int tri_has_edge_share_vertex
 (
 	const vector<geoproc::mesh_edge>& edges,
-	int ept[][3], unsigned char *count,
-	int t, int endpoint
+	int ept[3], unsigned char count,
+	int edge_idx, int endpoint
 )
 {
-	for (unsigned char i = 0; i < count[t]; ++i) {
-		const geoproc::mesh_edge& m_edge = edges[ ept[t][i] ];
+	for (unsigned char i = 0; i < count; ++i) {
+		if (ept[i] == edge_idx) {
+			continue;
+		}
+
+		const geoproc::mesh_edge& m_edge = edges[ ept[i] ];
 		if (m_edge.v0 == endpoint or m_edge.v1 == endpoint) {
-			return ept[t][i];
+			return ept[i];
+		}
+	}
+	return -1;
+}
+
+inline int find_common_boundary_edge(
+	const vector<geoproc::mesh_edge>& edges,
+	const vector<int>& boundary_edges,
+	int edge_idx, int endpoint
+)
+{
+	for (size_t be = 0; be < boundary_edges.size(); ++be) {
+		if (boundary_edges[be] == edge_idx) {
+			continue;
+		}
+
+		int e = boundary_edges[be];
+		const geoproc::mesh_edge& m_edge = edges[e];
+
+		if (m_edge.v0 == endpoint or m_edge.v1 == endpoint) {
+			return e;
 		}
 	}
 	return -1;
@@ -82,8 +105,8 @@ int tri_has_edge_share_vertex
 
 inline
 void find_prev_next_edges(
-	int eptL[][3], unsigned char *cL,
-	int eptR[][3], unsigned char *cR,
+	const vector<int>& boundary_edges,
+	int ept[][3], unsigned char *count,
 	vector<geoproc::mesh_edge>& edges
 )
 {
@@ -92,23 +115,37 @@ void find_prev_next_edges(
 	for (size_t e = 0; e < edges.size(); ++e) {
 		geoproc::mesh_edge& cur_edge = edges[e];
 
-		// left faces: the edge that has the same
-		// left face as edge 'e' AND shares an endpoint
-		// with current edge is the previous edge
+		// previous edge: an edge that shares endpoint v0
+		// and that also has left triangle lT
 		int lT = cur_edge.lT;
 		if (lT != -1) {
-			int prev = tri_has_edge_share_vertex(edges, eptL, cL, lT, cur_edge.v0);
+			// try in interior triangles
+			int prev = tri_has_edge_share_vertex(edges, ept[lT], count[lT], e, cur_edge.v0);
+			if (prev != -1) {
+				cur_edge.pE = prev;
+			}
+		}
+		else {
+			// try in boundary triangle
+			int prev = find_common_boundary_edge(edges, boundary_edges, e, cur_edge.v0);
 			if (prev != -1) {
 				cur_edge.pE = prev;
 			}
 		}
 
-		// left faces: the edge that has the same
-		// left face as edge 'e' AND shares an endpoint
-		// with current edge is the previous edge
+		// next edge: an edge that shares endpoint v1
+		// and that also has right triangle rT
 		int rT = cur_edge.rT;
 		if (rT != -1) {
-			int next = tri_has_edge_share_vertex(edges, eptR, cR, rT, cur_edge.v1);
+			// try in left
+			int next = tri_has_edge_share_vertex(edges, ept[rT], count[rT], e, cur_edge.v1);
+			if (next != -1) {
+				cur_edge.nE = next;
+			}
+		}
+		else {
+			// try in boundary triangle
+			int next = find_common_boundary_edge(edges, boundary_edges, e, cur_edge.v1);
 			if (next != -1) {
 				cur_edge.nE = next;
 			}
@@ -199,22 +236,18 @@ void TriangleMesh::make_neighbourhood_data() {
 	vertex_edge.resize(vertices.size(), -1);
 
 	// these are used to find the previous and next edges.
-	// ept_L/R[t] :   at most three edges such that their
-	//                left/right triangle is triangle 'i'
-	// count_L/R[t] : triangle t has 'count_L/R[t]' edges
-	//                such that their left/right triangle
-	//                is triangle 'i'
-	int ept_L[n_triangles()][3];
-	unsigned char count_L[n_triangles()];
-	int ept_R[n_triangles()][3];
-	unsigned char count_R[n_triangles()];
+	// ept[t]   : at most three edges such that their
+	//            left/right triangle is triangle 'i'
+	// count[t] : triangle t has 'count_L/R[t]' edges
+	//            such that their left/right triangle
+	//            is triangle 'i'
+	int ept[n_triangles()][3];
+	unsigned char count[n_triangles()];
 
 	// initialise values
 	for (int i = 0; i < n_triangles(); ++i) {
-		ept_L[i][0] = ept_L[i][1] = ept_L[i][2] = -1;
-		ept_R[i][0] = ept_R[i][1] = ept_R[i][2] = -1;
-		count_L[i] = 0;
-		count_R[i] = 0;
+		ept[i][0] = ept[i][1] = ept[i][2] = -1;
+		count[i] = 0;
 	}
 
 	// For each corner edge, check that a twin exists.
@@ -272,13 +305,13 @@ void TriangleMesh::make_neighbourhood_data() {
 
 		int edge_idx = all_edges.size() - 1;
 		if (E.lT != -1) {
-			add_edge_to_triangle(ept_L, count_L, E.lT, edge_idx);
+			add_edge_to_triangle(ept, count, E.lT, edge_idx);
 		}
 		if (E.rT != -1) {
-			add_edge_to_triangle(ept_R, count_R, E.rT, edge_idx);
+			add_edge_to_triangle(ept, count, E.rT, edge_idx);
 		}
 
-		// relate this edge to its first vertex for fast
+		// relate this edge to its vertices for fast
 		// retrieval (given a vertex, return an edge index)
 		if (vertex_edge[E.v0] == -1) {
 			vertex_edge[E.v0] = edge_idx;
@@ -305,7 +338,7 @@ void TriangleMesh::make_neighbourhood_data() {
 
 	// find previous and next edges
 	// this is a DCEL
-	find_prev_next_edges(ept_L, count_L, ept_R, count_R, all_edges);
+	find_prev_next_edges(boundary_edges, ept, count, all_edges);
 
 	// -------------------------------------
 	// sanity check (debug compilation only)
