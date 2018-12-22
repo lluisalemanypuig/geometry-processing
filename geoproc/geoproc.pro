@@ -35,7 +35,8 @@ SOURCES += \
     smoothing/local.cpp \
     smoothing/local_private.cpp \
     smoothing/global.cpp \
-    parametrisation/parametrisation.cpp
+    parametrisation/parametrisation.cpp \
+    triangle_mesh_algs.cpp
 
 # self-includes
 INCLUDEPATH += ..

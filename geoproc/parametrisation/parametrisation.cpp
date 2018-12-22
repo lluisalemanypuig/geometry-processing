@@ -39,7 +39,7 @@ namespace parametrisation {
 		Vectorf bX(variable), bY(variable);
 
 		// weights for system's matrix (per row)
-		float *ws = (float *)malloc(N*sizeof(float));
+		float *ws = static_cast<float *>(malloc(N*sizeof(float)));
 		// list of triplets for system's matrix
 		vector<T> triplet_list;
 
@@ -141,7 +141,7 @@ namespace parametrisation {
 			float inc = (2.0f*M_PI)/boundary.size();
 			float alpha = 0.0f;
 			for (size_t i = 0; i < boundary.size(); ++i, alpha += inc) {
-				int v_idx = m.get_vertex_corner(boundary[i]);
+				int v_idx = boundary[i];
 				constant[v_idx] = true;
 				uvs[v_idx].x = std::cos(alpha);
 				uvs[v_idx].y = std::sin(alpha);
@@ -159,25 +159,25 @@ namespace parametrisation {
 			// texture coordinates of boundary vertices
 			size_t bound_it = 0;
 			for (int i = 0; i < n_side1; ++i, ++bound_it) {
-				int v_idx = m.get_vertex_corner(boundary[bound_it]);
+				int v_idx = boundary[bound_it];
 				constant[v_idx] = true;
 				uvs[v_idx].x =  1.0f;
 				uvs[v_idx].y = -1.0f + i*(2.0f/n_side1);
 			}
 			for (int i = 0; i < n_side2; ++i, ++bound_it) {
-				int v_idx = m.get_vertex_corner(boundary[bound_it]);
+				int v_idx = boundary[bound_it];
 				constant[v_idx] = true;
 				uvs[v_idx].x = 1.0f - i*(2.0f/n_side2);
 				uvs[v_idx].y = 1.0f;
 			}
 			for (int i = 0; i < n_side3; ++i, ++bound_it) {
-				int v_idx = m.get_vertex_corner(boundary[bound_it]);
+				int v_idx = boundary[bound_it];
 				constant[v_idx] = true;
 				uvs[v_idx].x = -1.0f;
 				uvs[v_idx].y =  1.0f - i*(2.0f/n_side3);
 			}
 			for (int i = 0; i < n_side4; ++i, ++bound_it) {
-				int v_idx = m.get_vertex_corner(boundary[bound_it]);
+				int v_idx = boundary[bound_it];
 				constant[v_idx] = true;
 				uvs[v_idx].x = -1.0f + i*(2.0f/n_side4);
 				uvs[v_idx].y = -1.0f;

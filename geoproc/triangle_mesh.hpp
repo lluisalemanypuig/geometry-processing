@@ -8,8 +8,53 @@
 
 namespace geoproc {
 
-/// Shorthand for a pair of vertex indices.
-typedef std::pair<int,int> mesh_edge;
+/**
+ * @brief Meshe's edge defition.
+ *
+ * It is basically a set of four indices pointing to the first
+ * and last vertices (order decided arbitrarily), and to the left
+ * and right faces (with respect to the previous and next vertices).
+ */
+struct MeshEdge {
+	/**
+	 * @brief First vertex's index.
+	 *
+	 * The edge is oriented from @ref v0 to @ref v1.
+	 */
+	int v0;
+	/**
+	 * @brief Last vertex's index.
+	 *
+	 * The edge is oriented from @ref v0 to @ref v1.
+	 */
+	int v1;
+	/**
+	 * @brief Left triangle index.
+	 *
+	 * The incident triangle to this edge to the left of
+	 * the oriented segment from the previous to the next vertex.
+	 */
+	int left_trgl;
+	/**
+	 * @brief Right triangle index.
+	 *
+	 * The incident triangle to this edge to the right of
+	 * the oriented segment from the previous to the next vertex.
+	 */
+	int right_trgl;
+
+	/// Default constructor.
+	MeshEdge() {
+		v0 = v1 = left_trgl = right_trgl = -1;
+	}
+	/// Constructor with indices.
+	MeshEdge(int pv, int nv, int lt, int rt) {
+		v0 = pv;
+		v1 = nv;
+		left_trgl = lt;
+		right_trgl = rt;
+	}
+};
 
 /**
  * @brief Implementation of a triangular mesh.
@@ -38,7 +83,10 @@ class TriangleMesh {
 		 * triangle.
 		 *
 		 * Then, the @e i-th triangle has vertices
-		 * @ref triangles[i], @ref triangles[i+1], @ref triangles[i+2]
+		 * @ref triangles[i], @ref triangles[i+1], @ref triangles[i+2].
+		 *
+		 * Just to make it clear: @ref triangles contains indices
+		 * pointing to values in @ref vertices.
 		 */
 		std::vector<int> triangles;
 
@@ -113,6 +161,24 @@ class TriangleMesh {
 		 */
 		std::vector<int> corners;
 		/**
+		 * @brief Edges of this mesh.
+		 *
+		 * This vector is filled in the @ref make_neighbourhood_data
+		 * function. The contents of this container are valid only when
+		 * @ref is_neighbourhood_valid evaluates to true.
+		 */
+		std::vector<MeshEdge> all_edges;
+
+		/**
+		 * @brief Edge vertices for each vertex.
+		 *
+		 * Each vertex is incident to an edge. This container
+		 * relates each vertex to an edge. Therefore, this container
+		 * has as many edge indices as vertices are in this mesh.
+		 */
+		std::vector<size_t> vertex_edge;
+
+		/**
 		 * @brief Boundary edges of the mesh.
 		 *
 		 * The hard boundary is composed by pairs of vertices
@@ -120,7 +186,7 @@ class TriangleMesh {
 		 *
 		 * The hard is boundary is defined as those edges ({@e vi,@e vj})
 		 * of those triangles ({@e vi,@e vj,@e vk}) such that @e vk has no
-		 * opposite corner. All @e vi, @e vj, @e vk are valid corner
+		 * opposite corner. All @e vi, @e vj, @e vk are valid vertex
 		 * indices.
 		 *
 		 * Boundary vertices are collected into this container when the
@@ -128,7 +194,7 @@ class TriangleMesh {
 		 * In order to make all boundary lists call @ref make_boundaries,
 		 * which will fill the member @ref boundaries.
 		 */
-		std::vector<mesh_edge> boundary_edges;
+		std::vector<MeshEdge> boundary_edges;
 
 		/**
 		 * @brief Boundaries of this mesh.
@@ -136,7 +202,7 @@ class TriangleMesh {
 		 * Call method @ref make_boundaries to have this container filled
 		 * with the appropriate data.
 		 *
-		 * This container contains as many lists of corner indices
+		 * This container contains as many lists of vertex indices
 		 * as boundaries are in the mesh.
 		 */
 		std::vector<std::vector<int> > boundaries;
@@ -335,7 +401,9 @@ class TriangleMesh {
 		 * - @ref opposite_corners,
 		 * - @ref corners,
 		 * - @ref boundary_edges,
-		 * - @ref boundaries
+		 * - @ref boundaries,
+		 * - @ref all_edges,
+		 * - @ref vertex_edge
 		 */
 		void destroy();
 
@@ -347,6 +415,12 @@ class TriangleMesh {
 		int n_triangles() const;
 		/// Returns the number of corners.
 		int n_corners() const;
+		/// Returns the number of boundary edges.
+		size_t n_boundary_edges() const;
+		/// Returns the number of boundaries in this mesh.
+		size_t n_boundaries() const;
+		/// Returns the number of edges in this mesh.
+		size_t n_edges() const;
 
 		/**
 		 * @brief Returns the index of the vertex corresponding to corner @e c.
@@ -365,6 +439,16 @@ class TriangleMesh {
 		 * 0 <= @e c < number of triangles
 		 */
 		int get_corner_vertex(int v) const;
+
+		/**
+		 * @brief Returns the index of an edge incident to vertex @e v.
+		 * @param v A valid vertex index: 0 <= @e v < number of vertices.
+		 * @pre Neighbourhood data must be valid, i.e, the result of
+		 * @ref is_neighbourhood_valid() must be true. If false,
+		 * call @ref make_neighbourhood_data.
+		 * @return Returns a valid edge index.
+		 */
+		int get_edge_vertex(int v) const;
 
 		/**
 		 * @brief Returns a triangle index for corner @e c.
@@ -462,14 +546,8 @@ class TriangleMesh {
 		/// Are the boundaries valid?
 		bool are_boundaries_valid() const;
 
-		/// Returns the number of boundary edges.
-		size_t n_boundary_edges() const;
-
-		/// Returns the number of boundaries in this mesh.
-		size_t n_boundaries() const;
-
 		/// Returns the boundary edges in this mesh.
-		const std::vector<mesh_edge>& get_boundary_edges() const;
+		const std::vector<MeshEdge>& get_boundary_edges() const;
 		/// Returns the boundaries in this mesh.
 		const std::vector<std::vector<int> >& get_boundaries() const;
 
