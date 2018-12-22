@@ -18,10 +18,10 @@ SOURCES +=						\
     test_smoothing_local.cpp \
     test_smoothing_global.cpp \
     test_boundaries.cpp \
-    test_harmonic_maps.cpp
+    test_harmonic_maps.cpp \
+    test_inspect.cpp
 
 HEADERS +=						\
-    test_geoproc.hpp			\
     time.hpp
 
 # OpenMP

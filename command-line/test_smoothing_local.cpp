@@ -1,13 +1,20 @@
-#include "test_geoproc.hpp"
-
 // C++ includes
+#include <iostream>
 #include <set>
+using namespace std;
+
+// glm includes
+#include <glm/vec3.hpp>
+using namespace glm;
 
 // geoproc includes
 #include <geoproc/smoothing/local.hpp>
 #include <geoproc/triangle_mesh.hpp>
 #include <geoproc/ply_reader.hpp>
 using namespace geoproc;
+
+// custom includes
+#include "time.hpp"
 
 namespace test_geoproc {
 

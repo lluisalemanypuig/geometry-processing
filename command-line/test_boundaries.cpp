@@ -1,4 +1,6 @@
-#include "test_geoproc.hpp"
+// C++ includes
+#include <iostream>
+using namespace std;
 
 // geoproc includes
 #include <geoproc/iterators/mesh_iterator.hpp>
@@ -7,23 +9,23 @@
 #include <geoproc/ply_reader.hpp>
 using namespace geoproc;
 
+// custom includes
+#include "time.hpp"
+
 namespace test_geoproc {
 
 	void boundaries_usage() {
 		cout << "Boundary computation" << endl;
 		cout << "Output the corners that make up a mesh. Then," << endl;
-		cout << "output the vertex indices." << endl;
+		cout << "output the corner indices of each boundary." << endl;
 		cout << endl;
 		cout << "    --load f: load a mesh stored in the .ply file f" << endl;
 		cout << endl;
 	}
 
-#define vertex_id(c) mesh.get_vertex_corner(c)
-#define edge_corner_out(e)					\
-	"(" << e.first << "," << e.second << ")"
-#define edge_vertex_out(e)					\
-	"(" << vertex_id(e.first)				\
-	<< "," << vertex_id(e.second) << ")"
+#define corner_id(c) mesh.get_corner_vertex(c)
+#define edge_corner_out(e) "(" << corner_id(e.v0) << "," << corner_id(e.v1) << ")"
+#define edge_vertex_out(e) "(" << e.v0 << "," << e.v1 << ")"
 
 	int test_boundaries(int argc, char *argv[]) {
 		string mesh_file = "none";
@@ -43,7 +45,8 @@ namespace test_geoproc {
 				++i;
 			}
 			else {
-				cerr << "Error: option '" << string(argv[i]) << "' not recognised" << endl;
+				cerr << "Error: option '" << string(argv[i])
+					 << "' not recognised" << endl;
 				return 1;
 			}
 		}
@@ -61,7 +64,7 @@ namespace test_geoproc {
 
 		cout << "This mesh has " << mesh.get_boundary_edges().size()
 			 << " boundary edges" << endl;
-		const vector<mesh_edge>& boundary_edges = mesh.get_boundary_edges();
+		const vector<MeshEdge>& boundary_edges = mesh.get_boundary_edges();
 		cout << "Boundary edges (corners):" << endl;
 		cout << "    : [" << edge_corner_out(boundary_edges[0]);
 		for (size_t i = 1; i < boundary_edges.size(); ++i) {
@@ -85,17 +88,17 @@ namespace test_geoproc {
 		cout << "This mesh has " << bounds.size() << " boundaries." << endl;
 		cout << "Corner indices:" << endl;
 		for (size_t i = 0; i < bounds.size(); ++i) {
-			cout << "    " << i << ": [" << bounds[i][0];
+			cout << "    " << i << ": [" << corner_id(bounds[i][0]);
 			for (size_t j = 1; j < bounds[i].size(); ++j) {
-				cout << ", " << bounds[i][j];
+				cout << ", " << corner_id(bounds[i][j]);
 			}
 			cout << "]" << endl;
 		}
 		cout << "Vertex indices:" << endl;
 		for (size_t i = 0; i < bounds.size(); ++i) {
-			cout << "    " << i << ": [" << vertex_id(bounds[i][0]);
+			cout << "    " << i << ": [" << bounds[i][0];
 			for (size_t j = 1; j < bounds[i].size(); ++j) {
-				cout << ", " << vertex_id(bounds[i][j]);
+				cout << ", " << bounds[i][j];
 			}
 			cout << "]" << endl;
 		}

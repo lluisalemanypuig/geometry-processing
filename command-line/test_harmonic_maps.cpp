@@ -1,7 +1,12 @@
-#include "test_geoproc.hpp"
-
 // C++ includes
+#include <iostream>
 #include <set>
+using namespace std;
+
+// glm includes
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+using namespace glm;
 
 // geoproc includes
 #include <geoproc/parametrisation/parametrisation.hpp>
@@ -10,6 +15,9 @@
 #include <geoproc/ply_reader.hpp>
 using namespace geoproc;
 using namespace parametrisation;
+
+// custom includes
+#include "time.hpp"
 
 namespace test_geoproc {
 
@@ -166,11 +174,12 @@ namespace test_geoproc {
 		const int N = mesh.n_vertices();
 		vector<bool> constant(N, false);
 		for (size_t i = 0; i < mesh.get_boundaries()[0].size(); ++i) {
-			int corner_index = mesh.get_boundaries()[0][i];
-			constant[ mesh.get_vertex_corner(corner_index) ] = true;
+			int vertex_index = mesh.get_boundaries()[0][i];
+			constant[ vertex_index ] = true;
 		}
 
 		if (uvs.size() < 20) {
+			cout << "Texture coordinates per vertex:" << endl;
 			for (size_t i = 0;  i < uvs.size(); ++i) {
 				if (constant[i]) {
 					cout << "   *";

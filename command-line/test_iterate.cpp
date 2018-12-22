@@ -1,4 +1,6 @@
-#include "test_geoproc.hpp"
+// C++ includes
+#include <iostream>
+using namespace std;
 
 // geoproc includes
 #include <geoproc/iterators/mesh_iterator.hpp>

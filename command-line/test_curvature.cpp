@@ -1,10 +1,15 @@
-#include "test_geoproc.hpp"
+// C++ includes
+#include <iostream>
+using namespace std;
 
 // geoproc includes
 #include <geoproc/curvature/curvature.hpp>
 #include <geoproc/triangle_mesh.hpp>
 #include <geoproc/ply_reader.hpp>
 using namespace geoproc;
+
+// custom includes
+#include "time.hpp"
 
 namespace test_geoproc {
 
