@@ -369,13 +369,25 @@ void MainWindow::on_CB_Render_HarmonicMaps_Weights_currentTextChanged
 	else if (w == "Cotangent") {
 		weight = smoothing::smooth_weight::cotangent;
 	}
+	else {
+		cerr << ERR("MainWindow::on_CB_Render_HarmonicMaps_Weights_currentTextChanged",
+					"MainWindow") << endl;
+		cerr << "    Value in combobox '" << t.toStdString() << "' not valid" << endl;
+		return;
+	}
 
 	polymode pm;
 	if (ui->RB_Render_HarmonicMaps_Circle->isChecked()) {
 		pm = polymode::harmonic_maps_Circle;
 	}
-	else if (ui->RB_Render_HarmonicMaps_Circle->isChecked()) {
+	else if (ui->RB_Render_HarmonicMaps_Square->isChecked()) {
 		pm = polymode::harmonic_maps_Square;
+	}
+	else {
+		cerr << ERR("MainWindow::on_CB_Render_HarmonicMaps_Weights_currentTextChanged",
+					"MainWindow") << endl;
+		cerr << "    Neither the radio button for 'Circle' or 'Square' are checked." << endl;
+		return;
 	}
 
 	if (current_tab == 0) {
