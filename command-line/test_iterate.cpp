@@ -112,6 +112,8 @@ namespace test_geoproc {
 		}
 		while (v != first);
 
+		delete it;
+
 		return 0;
 	}
 
