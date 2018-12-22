@@ -1,3 +1,6 @@
+// C includes
+#include <string.h>
+
 // C++ includes
 #include <iostream>
 using namespace std;
@@ -62,7 +65,7 @@ namespace test_geoproc {
 		PLY_reader::read_mesh(mesh_file, mesh);
 		mesh.make_neighbourhood_data();
 
-		const vector<MeshEdge>& all_edges = mesh.get_edges();
+		const vector<mesh_edge>& all_edges = mesh.get_edges();
 		const vector<int>& boundary_edges = mesh.get_boundary_edges();
 
 		cout << "This mesh has " << boundary_edges.size()

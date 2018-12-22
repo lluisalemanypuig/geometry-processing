@@ -1,3 +1,6 @@
+// C includes
+#include <string.h>
+
 // C++ includes
 #include <iostream>
 using namespace std;
