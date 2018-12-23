@@ -143,6 +143,7 @@ namespace test_geoproc {
 		mesh.make_neighbourhood_data();
 		mesh.make_angles_area();
 		mesh.make_boundaries();
+		mesh.make_normal_vectors();
 
 		timing::time_point end = timing::now();
 		cout << "Gathered data in: " << timing::elapsed_seconds(begin, end)
@@ -151,9 +152,9 @@ namespace test_geoproc {
 		int max_length = 20;
 
 		cout << setw(max_length)
-			 << "# vertices:" << mesh.n_vertices() << endl;
+			 << "# vertices: " << mesh.n_vertices() << endl;
 		cout << setw(max_length)
-			 << "# edges:" << mesh.n_edges() << endl;
+			 << "# edges: " << mesh.n_edges() << endl;
 		cout << setw(max_length)
 			 << "# triangles: " << mesh.n_triangles() << endl;
 		cout << setw(max_length)
@@ -189,8 +190,37 @@ namespace test_geoproc {
 		}
 
 		// ---------------------------------------------------------------------
-		cout << "Edges:" << endl;
+		cout << "DCEL:" << endl;
 		print_edges(edges);
+
+		// ---------------------------------------------------------------------
+		const vector<float>& areas = mesh.get_areas();
+		const vector<glm::vec3>& angles = mesh.get_angles();
+		const vector<glm::vec3>& normals = mesh.get_normal_vectors();
+		cout << "Triangles:" << endl;
+		for (int t = 0; t < mesh.n_triangles(); ++t) {
+			int v0,v1,v2;
+			mesh.get_vertices_triangle(t, v0,v1,v2);
+
+			cout << "    " << t << ": " << v0 << "," << v1 << "," << v2 << endl;
+			cout << "    area: " << areas[t] << endl;
+			cout << "    angles: " << endl;
+			cout << "        <" << v1 << "," << v0 << "," << v2 << ">= "
+				 << angles[t].x << endl;
+			cout << "        <" << v0 << "," << v1 << "," << v2 << ">= "
+				 << angles[t].y << endl;
+			cout << "        <" << v1 << "," << v2 << "," << v0 << ">= "
+				 << angles[t].z << endl;
+			cout << "    normal: "
+				 << normals[t].x << "," << normals[t].y << "," << normals[t].z << endl;
+		}
+
+		// ---------------------------------------------------------------------
+		cout << "Opposite corners:" << endl;
+		for (int c = 0; c < mesh.n_corners(); ++c) {
+			cout << "    corner " << c << " has opposite corner: "
+				 << mesh.get_opposite_corner(c) << endl;
+		}
 
 		return 0;
 	}
