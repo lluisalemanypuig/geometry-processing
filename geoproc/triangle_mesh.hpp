@@ -4,7 +4,7 @@
 #include <vector>
 
 // glm includes
-#include <glm/glm.hpp>
+#include <glm/vec3.hpp>
 
 // geoproc includes
 #include <geoproc/mesh_edge.hpp>
@@ -479,6 +479,12 @@ class TriangleMesh {
 		const std::vector<glm::vec3>& get_vertices() const;
 		/// Returns a constant reference to all vertices of the mesh.
 		const glm::vec3 *get_pvertices() const;
+
+		/**
+		 * @brief Returns a constant reference to all normal vectors.
+		 * @return Returns a constant reference to @ref normal_vectors.
+		 */
+		const std::vector<glm::vec3>& get_normal_vectors() const;
 
 		/**
 		 * @brief Returns the area of face @e f.
