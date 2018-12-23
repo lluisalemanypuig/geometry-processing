@@ -11,6 +11,7 @@ using namespace std;
 #include <QOpenGLBuffer>
 
 // glm includes
+#include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 using namespace glm;
 
