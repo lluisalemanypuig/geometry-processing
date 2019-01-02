@@ -38,10 +38,10 @@ SOURCES += \
     smoothing/local.cpp \
     smoothing/local_private.cpp \
     smoothing/global.cpp \
-    parametrisation/parametrisation.cpp \
     triangle_mesh_algs.cpp \
     mesh_edge.cpp \
-    remeshing/remeshing.cpp
+    remeshing/remeshing_harmonic_maps.cpp \
+    parametrisation/parametrisation_harmonic_maps.cpp
 
 # self-includes
 INCLUDEPATH += ..

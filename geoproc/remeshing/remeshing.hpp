@@ -56,8 +56,11 @@ namespace remeshing {
 	 * data has to be valid.
 	 * @pre The preconditions of the method @ref parametrisation::harmonic_maps
 	 * have to be true before calling this method.
+	 * @returns If method @ref parametrisation::harmonic_maps fails (and returns
+	 * false) this method will return false. Otherwise it will always return
+	 * true.
 	 */
-	void remeshing_harmonic_maps
+	bool harmonic_maps
 	(const TriangleMesh& m, size_t N, size_t M, const smoothing::smooth_weight& w,
 	 const parametrisation::boundary_shape& s, TriangleMesh& rm);
 
