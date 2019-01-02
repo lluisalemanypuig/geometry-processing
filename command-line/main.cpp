@@ -15,6 +15,7 @@ namespace test_geoproc {
 	int test_smoothing_global(int argc, char *argv[]);
 	int test_band_frequency(int argc, char *argv[]);
 	int test_harmonic_maps(int argc, char *argv[]);
+	int test_remeshing_harmonic_maps(int argc, char *argv[]);
 
 } // -- namespace test_algorithms
 
@@ -28,6 +29,7 @@ void command_line_usage() {
 	cout << "    global-smoothing" << endl;
 	cout << "    band-frequencies" << endl;
 	cout << "    harmonic-maps" << endl;
+	cout << "    remeshing" << endl;
 	cout << "Use [-h|--help] on every option to see its usage." << endl;
 }
 
@@ -72,6 +74,10 @@ int main(int argc, char *argv[]) {
 
 	if (strcmp(argv[1], "harmonic-maps") == 0) {
 		return test_geoproc::test_harmonic_maps(argc, argv);
+	}
+
+	if (strcmp(argv[1], "remeshing") == 0) {
+		return test_geoproc::test_remeshing_harmonic_maps(argc, argv);
 	}
 
 	cerr << "Error: algorithm '" << string(argv[1]) << "' not recognised" << endl;

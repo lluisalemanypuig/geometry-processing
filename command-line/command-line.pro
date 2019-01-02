@@ -9,19 +9,20 @@ QMAKE_CXXFLAGS += -fopenmp
 QMAKE_CXXFLAGS_DEBUG += -DDEBUG
 QMAKE_CXXFLAGS_RELEASE += -DNDEBUG
 
-SOURCES +=						\
-    main.cpp					\
-    test_curvature.cpp			\
-    test_iterate.cpp			\
-    time.cpp					\
+SOURCES += \
+    main.cpp \
+    test_curvature.cpp \
+    test_iterate.cpp \
+    time.cpp \
     test_band_frequencies.cpp \
     test_smoothing_local.cpp \
     test_smoothing_global.cpp \
     test_boundaries.cpp \
     test_harmonic_maps.cpp \
-    test_inspect.cpp
+    test_inspect.cpp \
+    test_remeshing.cpp
 
-HEADERS +=						\
+HEADERS += \
     time.hpp
 
 # OpenMP
