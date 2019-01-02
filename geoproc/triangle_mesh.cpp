@@ -392,18 +392,22 @@ bool TriangleMesh::are_boundaries_valid() const {
 }
 
 const std::vector<int>& TriangleMesh::get_vertex_edge() const {
+	assert(neigh_valid);
 	return vertex_edge;
 }
 
 const vector<mesh_edge>& TriangleMesh::get_edges() const {
+	assert(neigh_valid);
 	return all_edges;
 }
 
 const vector<int>& TriangleMesh::get_boundary_edges() const {
+	assert(boundaries_valid);
 	return boundary_edges;
 }
 
 const vector<vector<int> >& TriangleMesh::get_boundaries() const {
+	assert(boundaries_valid);
 	return boundaries;
 }
 

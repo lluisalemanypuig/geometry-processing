@@ -512,13 +512,29 @@ class TriangleMesh {
 		/// Are the boundaries valid?
 		bool are_boundaries_valid() const;
 
-		/// Returns a relation between vertices and edges.
+		/**
+		 * @brief Returns a relation between vertices and edges.
+		 * @pre Neighbourhood has to be valid (@ref is_neighbourhood_valid()
+		 * evaluates to true).
+		 */
 		const std::vector<int>& get_vertex_edge() const;
-		/// Returns all edges in the mesh.
+		/**
+		 * @brief Returns all edges in the mesh.
+		 * @pre Neighbourhood has to be valid (@ref is_neighbourhood_valid()
+		 * evaluates to true).
+		 */
 		const std::vector<mesh_edge>& get_edges() const;
-		/// Returns the boundary edges in this mesh.
+		/**
+		 * @brief Returns the boundary edges in this mesh.
+		 * @pre Boundaries have to be valid (@ref are_boundaries_valid()
+		 * evaluates to true).
+		 */
 		const std::vector<int>& get_boundary_edges() const;
-		/// Returns the boundaries in this mesh.
+		/**
+		 * @brief Returns the boundaries in this mesh.
+		 * @pre Boundaries have to be valid (@ref are_boundaries_valid()
+		 * evaluates to true).
+		 */
 		const std::vector<std::vector<int> >& get_boundaries() const;
 
 		/**
