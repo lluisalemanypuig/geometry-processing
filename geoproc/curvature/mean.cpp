@@ -17,17 +17,14 @@ using namespace glm;
 #include <geoproc/iterators/mesh_iterator.hpp>
 #include <geoproc/iterators/vertex_iterators.hpp>
 
-namespace geoproc {
-namespace curvature {
-
 inline float cotan(float a) { return cos(a)/sin(a); }
 
-inline float Kh_at_vertex(const TriangleMesh& m, int vi) {
+inline float Kh_at_vertex(const geoproc::TriangleMesh& m, int vi) {
 	// mesh info
 	const vector<float>& mesh_areas = m.get_areas();
 	const vector<vec3>& mesh_angles = m.get_angles();
 
-	iterators::vertex::vertex_face_iterator it(m);
+	geoproc::iterators::vertex::vertex_face_iterator it(m);
 	const int first = it.init(vi);
 	int next1 = first;
 	int next2 = it.next();
@@ -94,68 +91,71 @@ inline float Kh_at_vertex(const TriangleMesh& m, int vi) {
 	return (1.0f/2.0f)*length(curv_vec);
 }
 
-void mean
-(const TriangleMesh& mesh, std::vector<float>& Kh, float *m, float *M) {
-	const int N = mesh.n_vertices();
-	Kh.resize(N);
+namespace geoproc {
+namespace curvature {
 
-	if (m != nullptr) {
-		*m = numeric_limits<float>::max();
-	}
-	if (M != nullptr) {
-		*M = -numeric_limits<float>::max();
-	}
+	void mean
+	(const TriangleMesh& mesh, std::vector<float>& Kh, float *m, float *M) {
+		const int N = mesh.n_vertices();
+		Kh.resize(N);
 
-	for (int i = 0; i < N; ++i) {
-		Kh[i] = Kh_at_vertex(mesh, i);
 		if (m != nullptr) {
-			*m = std::min(*m, Kh[i]);
+			*m = numeric_limits<float>::max();
 		}
 		if (M != nullptr) {
-			*M = std::max(*M, Kh[i]);
+			*M = -numeric_limits<float>::max();
+		}
+
+		for (int i = 0; i < N; ++i) {
+			Kh[i] = Kh_at_vertex(mesh, i);
+			if (m != nullptr) {
+				*m = std::min(*m, Kh[i]);
+			}
+			if (M != nullptr) {
+				*M = std::max(*M, Kh[i]);
+			}
 		}
 	}
-}
 
-void mean(const TriangleMesh& mesh, std::vector<float>& Kh, size_t nt) {
-	if (nt == 1) {
-		mean(mesh, Kh);
-		return;
+	void mean(const TriangleMesh& mesh, std::vector<float>& Kh, size_t nt) {
+		if (nt == 1) {
+			mean(mesh, Kh);
+			return;
+		}
+
+		const int N = mesh.n_vertices();
+		Kh.resize(N);
+
+		#pragma omp parallel for num_threads(nt)
+		for (int i = 0; i < N; ++i) {
+			Kh[i] = Kh_at_vertex(mesh, i);
+		}
 	}
 
-	const int N = mesh.n_vertices();
-	Kh.resize(N);
+	void mean
+	(const TriangleMesh& mesh, std::vector<float>& Kh, size_t nt, float *m, float *M)
+	{
+		if (nt == 1) {
+			mean(mesh, Kh, m, M);
+			return;
+		}
 
-	#pragma omp parallel for num_threads(nt)
-	for (int i = 0; i < N; ++i) {
-		Kh[i] = Kh_at_vertex(mesh, i);
+		const int N = mesh.n_vertices();
+		Kh.resize(N);
+
+		float mm = std::numeric_limits<float>::max();
+		float MM = -mm;
+
+		#pragma omp parallel for num_threads(nt) reduction(min:mm) reduction(max:MM)
+		for (int i = 0; i < N; ++i) {
+			Kh[i] = Kh_at_vertex(mesh, i);
+			mm = std::min(mm, Kh[i]);
+			MM = std::max(MM, Kh[i]);
+		}
+
+		*m = mm;
+		*M = MM;
 	}
-}
-
-void mean
-(const TriangleMesh& mesh, std::vector<float>& Kh, size_t nt, float *m, float *M)
-{
-	if (nt == 1) {
-		mean(mesh, Kh, m, M);
-		return;
-	}
-
-	const int N = mesh.n_vertices();
-	Kh.resize(N);
-
-	float mm = std::numeric_limits<float>::max();
-	float MM = -mm;
-
-	#pragma omp parallel for num_threads(nt) reduction(min:mm) reduction(max:MM)
-	for (int i = 0; i < N; ++i) {
-		Kh[i] = Kh_at_vertex(mesh, i);
-		mm = std::min(mm, Kh[i]);
-		MM = std::max(MM, Kh[i]);
-	}
-
-	*m = mm;
-	*M = MM;
-}
 
 } // -- namespace curavture
 } // -- namespace geoproc

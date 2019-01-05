@@ -19,10 +19,6 @@ using namespace std;
 // Eigen includes
 #include <Eigen/Sparse>
 
-namespace geoproc {
-namespace smoothing {
-namespace global {
-
 typedef Eigen::Triplet<float> T;
 static inline bool comp_triplet(const T& t1, const T& t2) {
 	if (t1.row() == t2.row()) {
@@ -38,19 +34,20 @@ typedef Eigen::SparseMatrix<float> SparseMatrixf;
 /* ---------------- */
 /* HELPER FUNCTIONS */
 
-static inline void compute_row
+inline void compute_row
 (
-	int i, int N, const smooth_weight& w, const vector<bool>& constant,
-	const TriangleMesh& m, vector<T>& triplet_list, float *ws,
-	int& row_it, int& col_it, glm::vec3& sums
+	int i, int N, const geoproc::smoothing::smooth_weight& w,
+	const vector<bool>& constant, const geoproc::TriangleMesh& m,
+	vector<T>& triplet_list, float *ws, int& row_it, int& col_it,
+	glm::vec3& sums
 )
 {
 	if (not constant[i]) {
-		if (w == smooth_weight::uniform) {
-			local_private::make_uniform_weights(i, m, ws);
+		if (w == geoproc::smoothing::smooth_weight::uniform) {
+			geoproc::smoothing::local_private::make_uniform_weights(i, m, ws);
 		}
-		else if (w == smooth_weight::cotangent) {
-			local_private::make_cotangent_weights(i, m, ws);
+		else if (w == geoproc::smoothing::smooth_weight::cotangent) {
+			geoproc::smoothing::local_private::make_cotangent_weights(i, m, ws);
 		}
 		ws[i] = -1.0f;
 	}
@@ -71,10 +68,10 @@ static inline void compute_row
 	}
 }
 
-static inline void smooth_laplacian
+inline void smooth_laplacian
 (
-	int N, int variable, const smooth_weight& w,
-	const vector<bool>& constant, TriangleMesh& m
+	int N, int variable, const geoproc::smoothing::smooth_weight& w,
+	const vector<bool>& constant, geoproc::TriangleMesh& m
 )
 {
 	/* This code was engineered to avoid high memory
@@ -139,10 +136,14 @@ static inline void smooth_laplacian
 	m.set_vertices(coords);
 }
 
+namespace geoproc {
+namespace smoothing {
+namespace global {
+
 bool smooth
 (
 	const smooth_operator& op, const smooth_weight& w,
-	const vector<bool>& constant, TriangleMesh& m
+	const std::vector<bool>& constant, TriangleMesh& m
 )
 {
 	if (op == smooth_operator::BiLaplacian) {

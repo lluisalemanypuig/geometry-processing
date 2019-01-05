@@ -20,20 +20,6 @@ namespace geoproc {
  * of every face.
  */
 namespace PLY_reader {
-	bool __load_header(std::ifstream& fin, int& n_verts, int& n_faces, std::string& format);
-
-	/* Loading the vertices must be done accordingly to the format. */
-	// BINARY format
-	//     little endian 1.0
-	void __load_vertices_binary_le_1_0(std::ifstream& fin, int n_verts, std::vector<float>& verts);
-	void __load_faces_binary_le_1_0(std::ifstream& fin, int n_faces, std::vector<int>& tris);
-	// ASCII format
-	//     ascii 1.0
-	void __load_vertices_ascii_1_0(std::ifstream& fin, int n_verts, std::vector<float>& verts);
-	void __load_faces_ascii_1_0(std::ifstream& fin, int n_faces, std::vector<int>& tris);
-
-	void __add_model_to_mesh
-	(const std::vector<float>& verts, const std::vector<int>& tris, TriangleMesh& mesh);
 
 	/**
 	 * @brief Loads a triangular mesh stored in @e filename.
