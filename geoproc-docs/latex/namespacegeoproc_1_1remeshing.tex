@@ -1,0 +1,72 @@
+\hypertarget{namespacegeoproc_1_1remeshing}{}\section{geoproc\+:\+:remeshing Namespace Reference}
+\label{namespacegeoproc_1_1remeshing}\index{geoproc\+::remeshing@{geoproc\+::remeshing}}
+
+
+Remeshing algorithms.  
+
+
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{namespacegeoproc_1_1remeshing_aaee6fb40eac4d9d9426e4f0f5d15d28c}{harmonic\+\_\+maps} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, size\+\_\+t N, size\+\_\+t M, const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smoothing\+::smooth\+\_\+weight} \&w, const \hyperlink{namespacegeoproc_1_1parametrisation_a7f001bf497830114e8aea2c884a948b7}{parametrisation\+::boundary\+\_\+shape} \&s, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&rm)
+\begin{DoxyCompactList}\small\item\em Remeshes a triangle mesh using harmonic map coordinates. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Remeshing algorithms. 
+
+Implemented\+:
+\begin{DoxyItemize}
+\item Using Harmonic maps\textquotesingle{} parametrisation (see \hyperlink{namespacegeoproc_1_1remeshing_aaee6fb40eac4d9d9426e4f0f5d15d28c}{harmonic\+\_\+maps}). 
+\end{DoxyItemize}
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespacegeoproc_1_1remeshing_aaee6fb40eac4d9d9426e4f0f5d15d28c}\label{namespacegeoproc_1_1remeshing_aaee6fb40eac4d9d9426e4f0f5d15d28c}} 
+\index{geoproc\+::remeshing@{geoproc\+::remeshing}!harmonic\+\_\+maps@{harmonic\+\_\+maps}}
+\index{harmonic\+\_\+maps@{harmonic\+\_\+maps}!geoproc\+::remeshing@{geoproc\+::remeshing}}
+\subsubsection{\texorpdfstring{harmonic\+\_\+maps()}{harmonic\_maps()}}
+{\footnotesize\ttfamily bool geoproc\+::remeshing\+::harmonic\+\_\+maps (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{size\+\_\+t}]{N,  }\item[{size\+\_\+t}]{M,  }\item[{const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smoothing\+::smooth\+\_\+weight} \&}]{w,  }\item[{const \hyperlink{namespacegeoproc_1_1parametrisation_a7f001bf497830114e8aea2c884a948b7}{parametrisation\+::boundary\+\_\+shape} \&}]{s,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{rm }\end{DoxyParamCaption})}
+
+
+
+Remeshes a triangle mesh using harmonic map coordinates. 
+
+First, computes the harmonic maps parametrisation of the mesh, which yields a set of 2d coordinates in the xy plane, more concretely in the square \mbox{[}0,1\mbox{]}x\mbox{[}0,1\mbox{]} (regardless of the shape).
+
+Then, in this square is generated a NxM grid of points. The point $P_{ij}$ (with $0\le i < N, \quad 0\le j < M$) has coordinates $(x(P_{ij}), y(P_{ij})) = (i/N, j/M)$.
+
+Each of these points is located in the triangulation obtained from the parametrisation. That means, that we know the triangle of the triangulation each point of the grid is in.
+
+With this information, for each point in the grid $P_{ij}$, inside triangle $t_k$, the algorithm computes the contribution of the vertices of $t_k$ to make point $P_{ij}$. That is, it computes the weights $w_1,w_2,w_3 > 0, w_1 + w_2 + w_3 = 1$ such that
+
+$ P_{ij} = w_1 \cdot v_1(t_k) + w_2 \cdot v_2(t_k) + w_2 \cdot v_2(t_k) $
+
+where $v_s(t_k)$ is the {\itshape s-\/th} vertex of triangle $t_k$ in the triangulation obtained from the parametrisation.
+
+Once all the $w_i$ are known for each point in the grid, the new mesh is computed\+: a new 3-\/dimensional point is made for each point in the grid, using the weights $w_1,w_2,w_3$ calculated before\+:
+
+$ Q_{ij} = w_1 \cdot v_1(T_k) + w_2 \cdot v_2(T_k) + w_3 \cdot v_3(T_k) $
+
+where $T_k$ denotes the triangle of the original mesh {\itshape m} that is mapped to triangle $t_k$ due to the parametrisation, which is, in turn, the triangle that encloses point $P_{ij}$. 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em m} & Triangle mesh to be remeshed. \\
+\hline
+\mbox{\tt in}  & {\em N} & Size of the grid in the x-\/axis. \\
+\hline
+\mbox{\tt in}  & {\em M} & Size of the grid in the y-\/axis. \\
+\hline
+\mbox{\tt in}  & {\em w} & Type of weight to use to obtain the parametrisation. \\
+\hline
+\mbox{\tt in}  & {\em s} & Boundary shape of the parametrisation. \\
+\hline
+\mbox{\tt out}  & {\em rm} & Remeshed mesh. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+The input mesh needs all of its edges computed, namely, neighbourhood data has to be valid. 
+
+The preconditions of the method \hyperlink{namespacegeoproc_1_1parametrisation_aa73e02d994e3ef3eba0fcfc5863c8416}{parametrisation\+::harmonic\+\_\+maps} have to be true before calling this method. 
+\end{DoxyPrecond}
+\begin{DoxyReturn}{Returns}
+If method \hyperlink{namespacegeoproc_1_1parametrisation_aa73e02d994e3ef3eba0fcfc5863c8416}{parametrisation\+::harmonic\+\_\+maps} fails (and returns false) this method will return false. Otherwise it will always return true. 
+\end{DoxyReturn}

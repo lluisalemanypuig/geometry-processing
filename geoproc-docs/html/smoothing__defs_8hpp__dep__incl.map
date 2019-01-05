@@ -1,0 +1,15 @@
+<map id="geoproc/smoothing/smoothing_defs.hpp" name="geoproc/smoothing/smoothing_defs.hpp">
+<area shape="rect" id="node2" href="$band__frequencies_8hpp.html" title="geoproc/filter_frequencies\l/band_frequencies.hpp" alt="" coords="437,95,608,136"/>
+<area shape="rect" id="node4" href="$local__private_8hpp.html" title="geoproc/smoothing/local\l_private.hpp" alt="" coords="632,95,795,136"/>
+<area shape="rect" id="node6" href="$global_8cpp.html" title="geoproc/smoothing/global.cpp" alt="" coords="819,199,1013,225"/>
+<area shape="rect" id="node9" href="$parametrisation_8hpp.html" title="geoproc/parametrisation\l/parametrisation.hpp" alt="" coords="251,95,413,136"/>
+<area shape="rect" id="node11" href="$remeshing_8hpp.html" title="geoproc/remeshing/remeshing.hpp" alt="" coords="5,102,227,129"/>
+<area shape="rect" id="node12" href="$global_8hpp.html" title="geoproc/smoothing/global.hpp" alt="" coords="869,102,1064,129"/>
+<area shape="rect" id="node13" href="$local_8hpp.html" title="geoproc/smoothing/local.hpp" alt="" coords="1089,102,1277,129"/>
+<area shape="rect" id="node14" href="$smoothing_8hpp.html" title="geoproc/smoothing/smoothing.hpp" alt="" coords="1251,199,1472,225"/>
+<area shape="rect" id="node3" href="$band__frequencies_8cpp.html" title="geoproc/filter_frequencies\l/band_frequencies.cpp" alt="" coords="437,191,608,233"/>
+<area shape="rect" id="node5" href="$parametrisation__harmonic__maps_8cpp.html" title="geoproc/parametrisation\l/parametrisation_harmonic\l_maps.cpp" alt="" coords="238,184,413,240"/>
+<area shape="rect" id="node7" href="$local_8cpp.html" title="geoproc/smoothing/local.cpp" alt="" coords="1038,199,1226,225"/>
+<area shape="rect" id="node8" href="$local__private_8cpp.html" title="geoproc/smoothing/local\l_private.cpp" alt="" coords="632,191,795,233"/>
+<area shape="rect" id="node10" href="$remeshing__harmonic__maps_8cpp.html" title="geoproc/remeshing/remeshing\l_harmonic_maps.cpp" alt="" coords="18,191,214,233"/>
+</map>

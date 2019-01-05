@@ -1,0 +1,109 @@
+\hypertarget{namespacegeoproc_1_1filter__frequencies}{}\section{geoproc\+:\+:filter\+\_\+frequencies Namespace Reference}
+\label{namespacegeoproc_1_1filter__frequencies}\index{geoproc\+::filter\+\_\+frequencies@{geoproc\+::filter\+\_\+frequencies}}
+
+
+Frequencies filtering.  
+
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structgeoproc_1_1filter__frequencies_1_1smoothing__configuration}{smoothing\+\_\+configuration}
+\begin{DoxyCompactList}\small\item\em A smoothing algorithm configuration. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{namespacegeoproc_1_1filter__frequencies_aa795010d1cd2daaafb0b1f60ee3ab1cd}{band\+\_\+frequencies} (const std\+::vector$<$ \hyperlink{structgeoproc_1_1filter__frequencies_1_1smoothing__configuration}{smoothing\+\_\+configuration} $>$ \&confs, const std\+::vector$<$ float $>$ \&mus, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
+\begin{DoxyCompactList}\small\item\em Band frequencies operator. \end{DoxyCompactList}\item 
+void \hyperlink{namespacegeoproc_1_1filter__frequencies_a2af31b5e6e8c4d0f5de51c488c1d69b2}{band\+\_\+frequencies} (const std\+::vector$<$ \hyperlink{structgeoproc_1_1filter__frequencies_1_1smoothing__configuration}{smoothing\+\_\+configuration} $>$ \&confs, const std\+::vector$<$ float $>$ \&mus, size\+\_\+t nt, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
+\begin{DoxyCompactList}\small\item\em Band frequencies operator. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Frequencies filtering. 
+
+Implementation of algorithms to highlight certain frequencies of a mesh. 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespacegeoproc_1_1filter__frequencies_aa795010d1cd2daaafb0b1f60ee3ab1cd}\label{namespacegeoproc_1_1filter__frequencies_aa795010d1cd2daaafb0b1f60ee3ab1cd}} 
+\index{geoproc\+::filter\+\_\+frequencies@{geoproc\+::filter\+\_\+frequencies}!band\+\_\+frequencies@{band\+\_\+frequencies}}
+\index{band\+\_\+frequencies@{band\+\_\+frequencies}!geoproc\+::filter\+\_\+frequencies@{geoproc\+::filter\+\_\+frequencies}}
+\subsubsection{\texorpdfstring{band\+\_\+frequencies()}{band\_frequencies()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void geoproc\+::filter\+\_\+frequencies\+::band\+\_\+frequencies (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ \hyperlink{structgeoproc_1_1filter__frequencies_1_1smoothing__configuration}{smoothing\+\_\+configuration} $>$ \&}]{confs,  }\item[{const std\+::vector$<$ float $>$ \&}]{mus,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
+
+
+
+Band frequencies operator. 
+
+Apply several smoothing operations onto the mesh {\itshape m}. Each operation is described by a \hyperlink{structgeoproc_1_1filter__frequencies_1_1smoothing__configuration}{smoothing\+\_\+configuration} struct.
+
+The operations applied are\+:
+
+$M + \sum_{i=1}^n \mu_i \cdot D_i$
+
+where each $D_i$ is the difference of meshes resulting from two consecutive smoothing operations (or band frequency), and $\mu_i$ are the weights for each band frequency.
+
+The band frequencies $D_i$ are more precisely defined as\+:
+
+$D_i = S_i(M) - S_{i+1}(M)$,
+
+where $S_i$ is the {\itshape i-\/th} smoothing configuration in parameter {\itshape confs}. Notice, then, that there are $n + 1$ smoothing configurations in {\itshape confs}.
+
+
+\begin{DoxyParams}[1]{Parameters}
+ & {\em confs} & The $S_1,\cdots,S_{n + 1}$ configurations to be applied. \\
+\hline
+ & {\em mus} & The weights $\mu_1,\cdots,\mu_n$ for each band frequency. \\
+\hline
+\mbox{\tt out}  & {\em m} & The mesh resulting of applying the operations described above. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+The mesh requires\+:
+\begin{DoxyItemize}
+\item Neighbourhood data (see \hyperlink{classgeoproc_1_1TriangleMesh_a84003dfdfd5e591c00f01a797578ff1f}{Triangle\+Mesh\+::make\+\_\+neighbourhood\+\_\+data})
+\item Angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}) 
+\end{DoxyItemize}
+\end{DoxyPrecond}
+\mbox{\Hypertarget{namespacegeoproc_1_1filter__frequencies_a2af31b5e6e8c4d0f5de51c488c1d69b2}\label{namespacegeoproc_1_1filter__frequencies_a2af31b5e6e8c4d0f5de51c488c1d69b2}} 
+\index{geoproc\+::filter\+\_\+frequencies@{geoproc\+::filter\+\_\+frequencies}!band\+\_\+frequencies@{band\+\_\+frequencies}}
+\index{band\+\_\+frequencies@{band\+\_\+frequencies}!geoproc\+::filter\+\_\+frequencies@{geoproc\+::filter\+\_\+frequencies}}
+\subsubsection{\texorpdfstring{band\+\_\+frequencies()}{band\_frequencies()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void geoproc\+::filter\+\_\+frequencies\+::band\+\_\+frequencies (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ \hyperlink{structgeoproc_1_1filter__frequencies_1_1smoothing__configuration}{smoothing\+\_\+configuration} $>$ \&}]{confs,  }\item[{const std\+::vector$<$ float $>$ \&}]{mus,  }\item[{size\+\_\+t}]{nt,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
+
+
+
+Band frequencies operator. 
+
+Apply several smoothing operations onto the mesh {\itshape m}. Each operation is described by a \hyperlink{structgeoproc_1_1filter__frequencies_1_1smoothing__configuration}{smoothing\+\_\+configuration} struct.
+
+The operations applied are\+:
+
+$M + \sum_{i=1}^n \mu_i \cdot D_i$
+
+where each $D_i$ is the difference of meshes resulting from two consecutive smoothing operations (or band frequency), and $\mu_i$ are the weights for each band frequency.
+
+The band frequencies $D_i$ are more precisely defined as\+:
+
+$D_i = S_i(M) - S_{i+1}(M)$,
+
+where $S_i$ is the {\itshape i-\/th} smoothing configuration in parameter {\itshape confs}. Notice, then, that there are $n + 1$ smoothing configurations in {\itshape confs}.
+
+
+\begin{DoxyParams}[1]{Parameters}
+ & {\em confs} & The $S_1,\cdots,S_{n + 1}$ configurations to be applied. \\
+\hline
+ & {\em mus} & The weights $\mu_1,\cdots,\mu_n$ for each band frequency. \\
+\hline
+ & {\em nt} & Number of threads. \\
+\hline
+\mbox{\tt out}  & {\em m} & The mesh resulting of applying the operations described above. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+The mesh requires\+:
+\begin{DoxyItemize}
+\item Neighbourhood data (see \hyperlink{classgeoproc_1_1TriangleMesh_a84003dfdfd5e591c00f01a797578ff1f}{Triangle\+Mesh\+::make\+\_\+neighbourhood\+\_\+data})
+\item Angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}) 
+\end{DoxyItemize}
+\end{DoxyPrecond}

@@ -1,0 +1,164 @@
+\hypertarget{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator}{}\section{geoproc\+:\+:iterators\+:\+:vertex\+:\+:vertex\+\_\+face\+\_\+iterator Class Reference}
+\label{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator}\index{geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator@{geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator}}
+
+
+Face iterator class.  
+
+
+
+
+{\ttfamily \#include $<$vertex\+\_\+iterators.\+hpp$>$}
+
+
+
+Inheritance diagram for geoproc\+:\+:iterators\+:\+:vertex\+:\+:vertex\+\_\+face\+\_\+iterator\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=187pt]{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for geoproc\+:\+:iterators\+:\+:vertex\+:\+:vertex\+\_\+face\+\_\+iterator\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=196pt]{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_ad45cd64b9e5a3321ac6344984c7cf564}{vertex\+\_\+face\+\_\+iterator} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_ad3c9661cf4eeb062fd22fc0f4820ba2c}\label{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_ad3c9661cf4eeb062fd22fc0f4820ba2c}} 
+\hyperlink{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_ad3c9661cf4eeb062fd22fc0f4820ba2c}{$\sim$vertex\+\_\+face\+\_\+iterator} ()
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\item 
+int \hyperlink{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_a713d8d9edb7121c729b5717261fd8b3b}{init} (int v)
+\begin{DoxyCompactList}\small\item\em Initialise iterator at a vertex. \end{DoxyCompactList}\item 
+int \hyperlink{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_aa75fe423e210cf4e20e721307c80f6fb}{current} () const
+\begin{DoxyCompactList}\small\item\em Returns the current index of vertex. \end{DoxyCompactList}\item 
+int \hyperlink{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_aa2a7fb3ee7e703d815e7f1664fbd99d4}{next} ()
+\begin{DoxyCompactList}\small\item\em Returns the next face. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classgeoproc_1_1iterators_1_1mesh__iterator_a6102e0c43bcf7008597387a2f085ca0e}\label{classgeoproc_1_1iterators_1_1mesh__iterator_a6102e0c43bcf7008597387a2f085ca0e}} 
+const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \& \hyperlink{classgeoproc_1_1iterators_1_1mesh__iterator_a6102e0c43bcf7008597387a2f085ca0e}{mesh}
+\begin{DoxyCompactList}\small\item\em Constant reference to iterated mesh. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_a3e59b193d3d83c32a803528a0661672b}\label{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_a3e59b193d3d83c32a803528a0661672b}} 
+int \hyperlink{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_a3e59b193d3d83c32a803528a0661672b}{cur\+\_\+corner}
+\begin{DoxyCompactList}\small\item\em Current corner index. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_ac7cecb32cc46b910764b56b977ca8366}\label{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_ac7cecb32cc46b910764b56b977ca8366}} 
+int \hyperlink{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_ac7cecb32cc46b910764b56b977ca8366}{cur\+\_\+face}
+\begin{DoxyCompactList}\small\item\em Current face index. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Face iterator class. 
+
+Iterates over the faces on the 1-\/ring neighbourhood of a given vertex. These are the faces adjacent to the given vertex. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_ad45cd64b9e5a3321ac6344984c7cf564}\label{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_ad45cd64b9e5a3321ac6344984c7cf564}} 
+\index{geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator@{geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator}!vertex\+\_\+face\+\_\+iterator@{vertex\+\_\+face\+\_\+iterator}}
+\index{vertex\+\_\+face\+\_\+iterator@{vertex\+\_\+face\+\_\+iterator}!geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator@{geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator}}
+\subsubsection{\texorpdfstring{vertex\+\_\+face\+\_\+iterator()}{vertex\_face\_iterator()}}
+{\footnotesize\ttfamily geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator\+::vertex\+\_\+face\+\_\+iterator (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
+
+
+
+Default constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em m} & Constant reference to the iterated mesh. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+The mesh requires\+:
+\begin{DoxyItemize}
+\item Neighbourhood data (see \hyperlink{classgeoproc_1_1TriangleMesh_a84003dfdfd5e591c00f01a797578ff1f}{Triangle\+Mesh\+::make\+\_\+neighbourhood\+\_\+data}) 
+\end{DoxyItemize}
+\end{DoxyPrecond}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_aa75fe423e210cf4e20e721307c80f6fb}\label{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_aa75fe423e210cf4e20e721307c80f6fb}} 
+\index{geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator@{geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator}!current@{current}}
+\index{current@{current}!geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator@{geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator}}
+\subsubsection{\texorpdfstring{current()}{current()}}
+{\footnotesize\ttfamily int geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator\+::current (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Returns the current index of vertex. 
+
+\begin{DoxyPrecond}{Precondition}
+This method must be called after initialising the iteratior with \hyperlink{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_a713d8d9edb7121c729b5717261fd8b3b}{init}, and after having called, at least, method \hyperlink{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_aa2a7fb3ee7e703d815e7f1664fbd99d4}{next} once. 
+\end{DoxyPrecond}
+\begin{DoxyReturn}{Returns}
+Returns the face index last returned by method \hyperlink{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_aa2a7fb3ee7e703d815e7f1664fbd99d4}{next}. 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{classgeoproc_1_1iterators_1_1mesh__iterator_ae6151b065602980d37a582977083ef42}{geoproc\+::iterators\+::mesh\+\_\+iterator}.
+
+\mbox{\Hypertarget{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_a713d8d9edb7121c729b5717261fd8b3b}\label{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_a713d8d9edb7121c729b5717261fd8b3b}} 
+\index{geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator@{geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator}!init@{init}}
+\index{init@{init}!geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator@{geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator}}
+\subsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily int geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator\+::init (\begin{DoxyParamCaption}\item[{int}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Initialise iterator at a vertex. 
+
+Modifies this class so that \hyperlink{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_aa75fe423e210cf4e20e721307c80f6fb}{current} returns the first face on the 1-\/ring neighbourhood of {\itshape v}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & Index of the vertex. Must be a valid vertex index\+: 0 $<$= {\itshape v} $<$ number of vertices. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns the first iterated face index. If this value is not collected, call \hyperlink{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_aa75fe423e210cf4e20e721307c80f6fb}{current}, before calling \hyperlink{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_aa2a7fb3ee7e703d815e7f1664fbd99d4}{next}. 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{classgeoproc_1_1iterators_1_1mesh__iterator_a8a4d8b5c84941dd0a7cb7373abcd3fcc}{geoproc\+::iterators\+::mesh\+\_\+iterator}.
+
+\mbox{\Hypertarget{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_aa2a7fb3ee7e703d815e7f1664fbd99d4}\label{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_aa2a7fb3ee7e703d815e7f1664fbd99d4}} 
+\index{geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator@{geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator}!next@{next}}
+\index{next@{next}!geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator@{geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator}}
+\subsubsection{\texorpdfstring{next()}{next()}}
+{\footnotesize\ttfamily int geoproc\+::iterators\+::vertex\+::vertex\+\_\+face\+\_\+iterator\+::next (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Returns the next face. 
+
+The face index returned is in the 1-\/ring neighbourhood of the vertex used to initialise the iterator (see \hyperlink{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_a713d8d9edb7121c729b5717261fd8b3b}{init}).
+
+The order of the faces is guaranteed to be counterclockwise.
+
+\begin{DoxyPrecond}{Precondition}
+This method must be called after initialising the iteratior with \hyperlink{classgeoproc_1_1iterators_1_1vertex_1_1vertex__face__iterator_a713d8d9edb7121c729b5717261fd8b3b}{init}. 
+\end{DoxyPrecond}
+\begin{DoxyReturn}{Returns}
+Returns a valid face index. 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{classgeoproc_1_1iterators_1_1mesh__iterator_a32f1ddc2f83743a2b0a4633506601cfe}{geoproc\+::iterators\+::mesh\+\_\+iterator}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+geoproc/iterators/vertex\+\_\+iterators.\+hpp\item 
+geoproc/iterators/vertex\+\_\+iterators.\+cpp\end{DoxyCompactItemize}

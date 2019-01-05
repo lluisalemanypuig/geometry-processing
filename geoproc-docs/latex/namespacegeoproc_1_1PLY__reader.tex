@@ -1,0 +1,42 @@
+\hypertarget{namespacegeoproc_1_1PLY__reader}{}\section{geoproc\+:\+:P\+L\+Y\+\_\+reader Namespace Reference}
+\label{namespacegeoproc_1_1PLY__reader}\index{geoproc\+::\+P\+L\+Y\+\_\+reader@{geoproc\+::\+P\+L\+Y\+\_\+reader}}
+
+
+Read a mesh in .ply format.  
+
+
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{namespacegeoproc_1_1PLY__reader_a7b13df3c66f0cf33b5ae96ad3302d2e2}{read\+\_\+mesh} (const std\+::string \&filename, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&mesh)
+\begin{DoxyCompactList}\small\item\em Loads a triangular mesh stored in {\itshape filename}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Read a mesh in .ply format. 
+
+In order to load a mesh in ply format call only function \hyperlink{namespacegeoproc_1_1PLY__reader_a7b13df3c66f0cf33b5ae96ad3302d2e2}{read\+\_\+mesh(const std\+::string\&, Triangle\+Mesh\&)}.
+
+This reader only supports those files that do not contain anything else than vertex coordinates and the description of every face. 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespacegeoproc_1_1PLY__reader_a7b13df3c66f0cf33b5ae96ad3302d2e2}\label{namespacegeoproc_1_1PLY__reader_a7b13df3c66f0cf33b5ae96ad3302d2e2}} 
+\index{geoproc\+::\+P\+L\+Y\+\_\+reader@{geoproc\+::\+P\+L\+Y\+\_\+reader}!read\+\_\+mesh@{read\+\_\+mesh}}
+\index{read\+\_\+mesh@{read\+\_\+mesh}!geoproc\+::\+P\+L\+Y\+\_\+reader@{geoproc\+::\+P\+L\+Y\+\_\+reader}}
+\subsubsection{\texorpdfstring{read\+\_\+mesh()}{read\_mesh()}}
+{\footnotesize\ttfamily bool geoproc\+::\+P\+L\+Y\+\_\+reader\+::read\+\_\+mesh (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{mesh }\end{DoxyParamCaption})}
+
+
+
+Loads a triangular mesh stored in {\itshape filename}. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+ & {\em filename} & File with the mesh in .ply format. \\
+\hline
+\mbox{\tt out}  & {\em mesh} & Mesh loaded from file. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns false on error. 
+\end{DoxyReturn}

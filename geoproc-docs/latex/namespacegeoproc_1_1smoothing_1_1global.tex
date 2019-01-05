@@ -1,0 +1,94 @@
+\hypertarget{namespacegeoproc_1_1smoothing_1_1global}{}\section{geoproc\+:\+:smoothing\+:\+:global Namespace Reference}
+\label{namespacegeoproc_1_1smoothing_1_1global}\index{geoproc\+::smoothing\+::global@{geoproc\+::smoothing\+::global}}
+
+
+Global smoothing algorithms.  
+
+
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{namespacegeoproc_1_1smoothing_1_1global_a7e294855e2c00be2b1141aa3f4e2650a}{smooth} (const \hyperlink{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537}{smooth\+\_\+operator} \&op, const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&w, const std\+::vector$<$ bool $>$ \&constant, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
+\begin{DoxyCompactList}\small\item\em Apply a global smoothing algorithm for a given operator and weight. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Global smoothing algorithms. 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1global_a7e294855e2c00be2b1141aa3f4e2650a}\label{namespacegeoproc_1_1smoothing_1_1global_a7e294855e2c00be2b1141aa3f4e2650a}} 
+\index{geoproc\+::smoothing\+::global@{geoproc\+::smoothing\+::global}!smooth@{smooth}}
+\index{smooth@{smooth}!geoproc\+::smoothing\+::global@{geoproc\+::smoothing\+::global}}
+\subsubsection{\texorpdfstring{smooth()}{smooth()}}
+{\footnotesize\ttfamily bool geoproc\+::smoothing\+::global\+::smooth (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537}{smooth\+\_\+operator} \&}]{op,  }\item[{const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&}]{w,  }\item[{const std\+::vector$<$ bool $>$ \&}]{constant,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
+
+
+
+Apply a global smoothing algorithm for a given operator and weight. 
+
+This algorithm smoothes a given mesh globally, and in one single step. It defines a system of linear equations, whose matrix is $A$. Such matrix is defined as
+\begin{DoxyItemize}
+\item $A_{ii} = -1$
+\item $A_{ij} = w_{ij}, \forall i \neq j$ where $ 0 \le i,j \le N$.
+\end{DoxyItemize}
+
+The values $w_{ij}$ are the weights for vertex $v_i$, and their values depend on parameter {\itshape w}. Matrix $A$ has dimensions $N \times N$, where $N$ is the number of vertices of the mesh. (keep reading to know how fixed vertices are considered...).
+
+The new coordinates of the vertices of the mesh is the solution $x$ of the equation\+:
+
+$Ax_x = b_x$, $Ax_y = b_y$, $Ax_z = b_z$
+
+where $b_x,b_y,b_z$ contain some values. When parameter {\itshape constant} contains no fixed vertices, these vectors will be the zero vector. However, this makes the vertices collapse to the point (0,0,0). Therefore, this algorithm needs some vertices to be set constant (parameter {\itshape constant}).
+
+The vertices defined as constant are moved to the right hand-\/side of the equation and the matrix of the system becomes $A'$ and has dimensions $v \times v$ where $v$ is the number of variable vertices\+:
+
+$v = N - v^*$, where $v^*$ is the amount of fixed vertices in {\itshape constant}.
+
+The systems are solved using the Simplicial Cholesky method from library Eigen in a least square sense\+:
+
+$ A^TAx_x = A^Tb_x$, $A^TAx_y = A^Tb_y$, $A^TAx_z = A^Tb_z$
+
+In order to save time, the decomposition needed for the Cholesky method is computed only once and reused to solve the three systems defined above.
+
+Now, the Laplacian operator defines the linear equation for vertex $v_i$ as\+:
+
+$L(v_i) = \left(\sum_{j \in N(i)} w_{ij}*v_j\right) - v_i$
+
+
+\begin{DoxyParams}[1]{Parameters}
+ & {\em op} & Smoothing operator. \\
+\hline
+ & {\em w} & Weight type. \\
+\hline
+ & {\em constant} & {\itshape constant}\mbox{[}i\mbox{]} is true if, and only if, {\itshape i-\/th} vertex is a constant vertex. \\
+\hline
+\mbox{\tt out}  & {\em m} & Smoothed mesh. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+The mesh requires\+:
+\begin{DoxyItemize}
+\item Neighbourhood data (see \hyperlink{classgeoproc_1_1TriangleMesh_a84003dfdfd5e591c00f01a797578ff1f}{Triangle\+Mesh\+::make\+\_\+neighbourhood\+\_\+data})
+\item Angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}) 
+\end{DoxyItemize}
+
+This algorithm is implemented for the following smoothing operators\+:
+\begin{DoxyItemize}
+\item \hyperlink{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537a799723f39baf497704a3d39e7c03555f}{smooth\+\_\+operator\+::\+Laplacian} 
+\end{DoxyItemize}
+
+This algorithm is implemented for the following weight types\+:
+\begin{DoxyItemize}
+\item \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028aa489ffed938ef1b9e86889bc413501ee}{smooth\+\_\+weight\+::uniform}
+\item \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028a8e8ea879f40475ae2c70be8b296bf950}{smooth\+\_\+weight\+::cotangent} 
+\end{DoxyItemize}
+
+The last precodintion is that the mesh requires\+:
+\begin{DoxyItemize}
+\item Neighbourhood data (see \hyperlink{classgeoproc_1_1TriangleMesh_a84003dfdfd5e591c00f01a797578ff1f}{Triangle\+Mesh\+::make\+\_\+neighbourhood\+\_\+data})
+\item Angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}) 
+\end{DoxyItemize}
+\end{DoxyPrecond}
+\begin{DoxyReturn}{Returns}
+Returns true on success\+: parameters were correct and the system was solved succesfully. 
+\end{DoxyReturn}

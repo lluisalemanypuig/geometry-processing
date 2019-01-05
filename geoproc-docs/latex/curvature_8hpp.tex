@@ -1,0 +1,42 @@
+\hypertarget{curvature_8hpp}{}\section{geoproc/curvature/curvature.hpp File Reference}
+\label{curvature_8hpp}\index{geoproc/curvature/curvature.\+hpp@{geoproc/curvature/curvature.\+hpp}}
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$geoproc/triangle\+\_\+mesh.\+hpp$>$}\newline
+Include dependency graph for curvature.\+hpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{curvature_8hpp__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{curvature_8hpp__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacegeoproc}{geoproc}
+\begin{DoxyCompactList}\small\item\em Main namespace of the library. \end{DoxyCompactList}\item 
+ \hyperlink{namespacegeoproc_1_1curvature}{geoproc\+::curvature}
+\begin{DoxyCompactList}\small\item\em Implementation of different curvature algorithms. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{namespacegeoproc_1_1curvature_a1d38de2a33224952f31f3447aafb9484}{geoproc\+::curvature\+::\+Gauss} (const Triangle\+Mesh \&mesh, std\+::vector$<$ float $>$ \&Kg, float $\ast$min=nullptr, float $\ast$max=nullptr)
+\begin{DoxyCompactList}\small\item\em Computes the Gauss curvature for each vertex. \end{DoxyCompactList}\item 
+void \hyperlink{namespacegeoproc_1_1curvature_a2b648a2fed90b2541e2c4c48b0bdc514}{geoproc\+::curvature\+::\+Gauss} (const Triangle\+Mesh \&mesh, std\+::vector$<$ float $>$ \&Kg, size\+\_\+t n\+\_\+threads)
+\begin{DoxyCompactList}\small\item\em Computes the Gauss curvature for each vertex. \end{DoxyCompactList}\item 
+void \hyperlink{namespacegeoproc_1_1curvature_a8a166392e1df0d1f24f98a214e85aea4}{geoproc\+::curvature\+::\+Gauss} (const Triangle\+Mesh \&mesh, std\+::vector$<$ float $>$ \&Kg, size\+\_\+t n\+\_\+threads, float $\ast$min, float $\ast$max)
+\begin{DoxyCompactList}\small\item\em Computes the Gauss curvature for each vertex. \end{DoxyCompactList}\item 
+void \hyperlink{namespacegeoproc_1_1curvature_ac095baa6ee2f7db33430b8545eae8207}{geoproc\+::curvature\+::mean} (const Triangle\+Mesh \&mesh, std\+::vector$<$ float $>$ \&Kh, float $\ast$min=nullptr, float $\ast$max=nullptr)
+\begin{DoxyCompactList}\small\item\em Computes the mean curvature for each vertex. \end{DoxyCompactList}\item 
+void \hyperlink{namespacegeoproc_1_1curvature_a8048e3a6ac3d896f2a795b75996c6997}{geoproc\+::curvature\+::mean} (const Triangle\+Mesh \&mesh, std\+::vector$<$ float $>$ \&Kh, size\+\_\+t n\+\_\+threads)
+\begin{DoxyCompactList}\small\item\em Computes the mean curvature for each vertex. \end{DoxyCompactList}\item 
+void \hyperlink{namespacegeoproc_1_1curvature_abb57cc83faf5e8f776cf3624a0b1b152}{geoproc\+::curvature\+::mean} (const Triangle\+Mesh \&mesh, std\+::vector$<$ float $>$ \&Kh, size\+\_\+t n\+\_\+threads, float $\ast$min, float $\ast$max)
+\begin{DoxyCompactList}\small\item\em Computes the mean curvature for each vertex. \end{DoxyCompactList}\end{DoxyCompactItemize}

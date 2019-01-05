@@ -1,0 +1,39 @@
+\hypertarget{parametrisation__harmonic__maps_8cpp}{}\section{geoproc/parametrisation/parametrisation\+\_\+harmonic\+\_\+maps.cpp File Reference}
+\label{parametrisation__harmonic__maps_8cpp}\index{geoproc/parametrisation/parametrisation\+\_\+harmonic\+\_\+maps.\+cpp@{geoproc/parametrisation/parametrisation\+\_\+harmonic\+\_\+maps.\+cpp}}
+{\ttfamily \#include $<$geoproc/parametrisation/parametrisation.\+hpp$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$geoproc/smoothing/local\+\_\+private.\+hpp$>$}\newline
+{\ttfamily \#include $<$Eigen/\+Sparse$>$}\newline
+Include dependency graph for parametrisation\+\_\+harmonic\+\_\+maps.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{parametrisation__harmonic__maps_8cpp__incl}
+\end{center}
+\end{figure}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacegeoproc}{geoproc}
+\begin{DoxyCompactList}\small\item\em Main namespace of the library. \end{DoxyCompactList}\item 
+ \hyperlink{namespacegeoproc_1_1parametrisation}{geoproc\+::parametrisation}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef Eigen\+::\+Triplet$<$ float $>$ \hyperlink{namespacegeoproc_1_1parametrisation_a167d0e7733242219092b6ea9bc6d094f}{geoproc\+::parametrisation\+::T}
+\item 
+typedef Eigen\+::\+Matrix\+Xf \hyperlink{namespacegeoproc_1_1parametrisation_a818792d45f3fd0151517ce69c9842558}{geoproc\+::parametrisation\+::\+Matrixf}
+\item 
+typedef Eigen\+::\+Vector\+Xf \hyperlink{namespacegeoproc_1_1parametrisation_ae7c3f0e55b5cc67a95acb18387d3e0b9}{geoproc\+::parametrisation\+::\+Vectorf}
+\item 
+typedef Eigen\+::\+Sparse\+Matrix$<$ float $>$ \hyperlink{namespacegeoproc_1_1parametrisation_a9b8f62d41ba8cba6e03693ef62ffe028}{geoproc\+::parametrisation\+::\+Sparse\+Matrixf}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{namespacegeoproc_1_1parametrisation_a64cf69e8ec926e1880e4aa0f529ddc66}{geoproc\+::parametrisation\+::harmonic\+\_\+maps\+\_\+laplacian} (const Triangle\+Mesh \&m, int N, int variable, const smooth\+\_\+weight \&w, const std\+::vector$<$ bool $>$ \&constant, vector$<$ glm\+::vec2 $>$ \&uvs)
+\item 
+bool \hyperlink{namespacegeoproc_1_1parametrisation_aab5836b43e81af49fe264549f60643d1}{geoproc\+::parametrisation\+::harmonic\+\_\+maps} (const Triangle\+Mesh \&m, const smooth\+\_\+weight \&w, const boundary\+\_\+shape \&s, vector$<$ glm\+::vec2 $>$ \&uvs)
+\end{DoxyCompactItemize}

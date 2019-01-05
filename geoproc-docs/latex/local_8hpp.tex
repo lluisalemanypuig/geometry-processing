@@ -1,0 +1,44 @@
+\hypertarget{local_8hpp}{}\section{geoproc/smoothing/local.hpp File Reference}
+\label{local_8hpp}\index{geoproc/smoothing/local.\+hpp@{geoproc/smoothing/local.\+hpp}}
+{\ttfamily \#include $<$geoproc/triangle\+\_\+mesh.\+hpp$>$}\newline
+{\ttfamily \#include $<$geoproc/smoothing/smoothing\+\_\+defs.\+hpp$>$}\newline
+Include dependency graph for local.\+hpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{local_8hpp__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{local_8hpp__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacegeoproc}{geoproc}
+\begin{DoxyCompactList}\small\item\em Main namespace of the library. \end{DoxyCompactList}\item 
+ \hyperlink{namespacegeoproc_1_1smoothing}{geoproc\+::smoothing}
+\begin{DoxyCompactList}\small\item\em Implementation of different smoothing algorithms. \end{DoxyCompactList}\item 
+ \hyperlink{namespacegeoproc_1_1smoothing_1_1local}{geoproc\+::smoothing\+::local}
+\begin{DoxyCompactList}\small\item\em Local smoothing algorithms. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a3eaa81a7fe893e316190a0ab9598732c}{geoproc\+::smoothing\+::local\+::laplacian} (const smooth\+\_\+weight \&w, float lambda, size\+\_\+t n\+\_\+iter, Triangle\+Mesh \&m)
+\begin{DoxyCompactList}\small\item\em Laplacian operator for mesh smoothing. \end{DoxyCompactList}\item 
+void \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a160f3ee32c5073d99e3f38782bd4a070}{geoproc\+::smoothing\+::local\+::laplacian} (const smooth\+\_\+weight \&w, float lambda, size\+\_\+t n\+\_\+iter, size\+\_\+t nt, Triangle\+Mesh \&m)
+\begin{DoxyCompactList}\small\item\em Parallel Laplacian operator for mesh smoothing. \end{DoxyCompactList}\item 
+void \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a5958a9bdf688836bd6242de213a68ec4}{geoproc\+::smoothing\+::local\+::bilaplacian} (const smooth\+\_\+weight \&w, float lambda, size\+\_\+t n\+\_\+iter, Triangle\+Mesh \&m)
+\begin{DoxyCompactList}\small\item\em Bilaplacian operator for mesh smoothing. \end{DoxyCompactList}\item 
+void \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a7c96dc664c1900b1cba6d3a3eb2547d7}{geoproc\+::smoothing\+::local\+::bilaplacian} (const smooth\+\_\+weight \&w, float lambda, size\+\_\+t n\+\_\+iter, size\+\_\+t nt, Triangle\+Mesh \&m)
+\begin{DoxyCompactList}\small\item\em Parallel Bilaplacian operator for mesh smoothing. \end{DoxyCompactList}\item 
+void \hyperlink{namespacegeoproc_1_1smoothing_1_1local_acb46f51bf5fefe33b36ae6d7e0c4a899}{geoproc\+::smoothing\+::local\+::\+Taubin\+LM} (const smooth\+\_\+weight \&w, float lambda, size\+\_\+t n\+\_\+iter, Triangle\+Mesh \&m)
+\begin{DoxyCompactList}\small\item\em Taubin $\lambda-\mu$ operator for mesh smoothing. \end{DoxyCompactList}\item 
+void \hyperlink{namespacegeoproc_1_1smoothing_1_1local_ae68c255cdba405972ce42238aee04c3b}{geoproc\+::smoothing\+::local\+::\+Taubin\+LM} (const smooth\+\_\+weight \&w, float lambda, size\+\_\+t n\+\_\+iter, size\+\_\+t nt, Triangle\+Mesh \&m)
+\begin{DoxyCompactList}\small\item\em Parallel Taubin $\lambda-\mu$ operator for mesh smoothing. \end{DoxyCompactList}\end{DoxyCompactItemize}

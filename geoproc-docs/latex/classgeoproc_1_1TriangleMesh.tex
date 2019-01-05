@@ -1,0 +1,868 @@
+\hypertarget{classgeoproc_1_1TriangleMesh}{}\section{geoproc\+:\+:Triangle\+Mesh Class Reference}
+\label{classgeoproc_1_1TriangleMesh}\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+
+
+Implementation of a triangular mesh.  
+
+
+
+
+{\ttfamily \#include $<$triangle\+\_\+mesh.\+hpp$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a73c49980eb81e2df75242515b5ef1ed7}\label{classgeoproc_1_1TriangleMesh_a73c49980eb81e2df75242515b5ef1ed7}} 
+\hyperlink{classgeoproc_1_1TriangleMesh_a73c49980eb81e2df75242515b5ef1ed7}{Triangle\+Mesh} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_ae660da7765a405ac44640d2ad46a6903}\label{classgeoproc_1_1TriangleMesh_ae660da7765a405ac44640d2ad46a6903}} 
+\hyperlink{classgeoproc_1_1TriangleMesh_ae660da7765a405ac44640d2ad46a6903}{Triangle\+Mesh} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
+\begin{DoxyCompactList}\small\item\em Copy constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a587721dac1419702470fbca953fb7f1c}\label{classgeoproc_1_1TriangleMesh_a587721dac1419702470fbca953fb7f1c}} 
+virtual \hyperlink{classgeoproc_1_1TriangleMesh_a587721dac1419702470fbca953fb7f1c}{$\sim$\+Triangle\+Mesh} ()
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\item 
+void \hyperlink{classgeoproc_1_1TriangleMesh_aa9ca26f1ededecd289d1a8800dca2c23}{set\+\_\+vertices} (const std\+::vector$<$ float $>$ \&coords)
+\begin{DoxyCompactList}\small\item\em Sets the vertices to the mesh. \end{DoxyCompactList}\item 
+void \hyperlink{classgeoproc_1_1TriangleMesh_a09b76789e908062501de253d360e0236}{set\+\_\+vertices} (const glm\+::vec3 $\ast$vs, int N)
+\begin{DoxyCompactList}\small\item\em Sets the vertices to the mesh. \end{DoxyCompactList}\item 
+void \hyperlink{classgeoproc_1_1TriangleMesh_a2bd9a343db1642d11b39b6fab5710d3a}{set\+\_\+vertices} (const std\+::vector$<$ glm\+::vec3 $>$ \&vs)
+\begin{DoxyCompactList}\small\item\em Sets the vertices to the mesh. \end{DoxyCompactList}\item 
+void \hyperlink{classgeoproc_1_1TriangleMesh_a5e35cad5c18195e6397f22bc951161f1}{set\+\_\+triangles} (const std\+::vector$<$ int $>$ \&tris)
+\begin{DoxyCompactList}\small\item\em Adds the connectivity information to the mesh. \end{DoxyCompactList}\item 
+void \hyperlink{classgeoproc_1_1TriangleMesh_a638f0267d7d8e51498330e414fa25bfe}{make\+\_\+normal\+\_\+vectors} ()
+\begin{DoxyCompactList}\small\item\em Computes the normal of every triangle. \end{DoxyCompactList}\item 
+void \hyperlink{classgeoproc_1_1TriangleMesh_a2b34ddfa21f906805451e6dbbb4ce064}{scale\+\_\+to\+\_\+unit} ()
+\begin{DoxyCompactList}\small\item\em Reescales the mesh so that it fits in a unit box. \end{DoxyCompactList}\item 
+void \hyperlink{classgeoproc_1_1TriangleMesh_a84003dfdfd5e591c00f01a797578ff1f}{make\+\_\+neighbourhood\+\_\+data} ()
+\begin{DoxyCompactList}\small\item\em Builds the necessary tables to iterate through the one-\/ring of a vertex, .... \end{DoxyCompactList}\item 
+void \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{make\+\_\+angles\+\_\+area} ()
+\begin{DoxyCompactList}\small\item\em Computes the angles and the areas of the triangles. \end{DoxyCompactList}\item 
+void \hyperlink{classgeoproc_1_1TriangleMesh_ad11c9406e2677e4d72d53837206fd769}{make\+\_\+boundaries} ()
+\begin{DoxyCompactList}\small\item\em Computes the boundaries of this mesh. \end{DoxyCompactList}\item 
+void \hyperlink{classgeoproc_1_1TriangleMesh_abc27a4416e1d33b8718c4afb77a8acf5}{destroy} ()
+\begin{DoxyCompactList}\small\item\em Frees all the memoery occupied by the mesh. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_aa36cc7e86835794dcbbb3d823b4a39ac}\label{classgeoproc_1_1TriangleMesh_aa36cc7e86835794dcbbb3d823b4a39ac}} 
+int \hyperlink{classgeoproc_1_1TriangleMesh_aa36cc7e86835794dcbbb3d823b4a39ac}{n\+\_\+vertices} () const
+\begin{DoxyCompactList}\small\item\em Returns the number of vertices. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_afdc430c1b3943895f85be7224b580ed6}\label{classgeoproc_1_1TriangleMesh_afdc430c1b3943895f85be7224b580ed6}} 
+int \hyperlink{classgeoproc_1_1TriangleMesh_afdc430c1b3943895f85be7224b580ed6}{n\+\_\+edges} () const
+\begin{DoxyCompactList}\small\item\em Returns the number of edges. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_ac6db86ebd1e12d187f4bd4fcbb1e0809}\label{classgeoproc_1_1TriangleMesh_ac6db86ebd1e12d187f4bd4fcbb1e0809}} 
+int \hyperlink{classgeoproc_1_1TriangleMesh_ac6db86ebd1e12d187f4bd4fcbb1e0809}{n\+\_\+triangles} () const
+\begin{DoxyCompactList}\small\item\em Returns the number of triangles. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a6b8c186ba032170de9d4f36b4c1d298b}\label{classgeoproc_1_1TriangleMesh_a6b8c186ba032170de9d4f36b4c1d298b}} 
+int \hyperlink{classgeoproc_1_1TriangleMesh_a6b8c186ba032170de9d4f36b4c1d298b}{n\+\_\+corners} () const
+\begin{DoxyCompactList}\small\item\em Returns the number of corners. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a9986b64e0bb60968c95bdc9c3614959c}\label{classgeoproc_1_1TriangleMesh_a9986b64e0bb60968c95bdc9c3614959c}} 
+int \hyperlink{classgeoproc_1_1TriangleMesh_a9986b64e0bb60968c95bdc9c3614959c}{n\+\_\+boundary\+\_\+edges} () const
+\begin{DoxyCompactList}\small\item\em Returns the number of boundary edges. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a41a3d6325dcbd8891cd8cad06561b1b4}\label{classgeoproc_1_1TriangleMesh_a41a3d6325dcbd8891cd8cad06561b1b4}} 
+size\+\_\+t \hyperlink{classgeoproc_1_1TriangleMesh_a41a3d6325dcbd8891cd8cad06561b1b4}{n\+\_\+boundaries} () const
+\begin{DoxyCompactList}\small\item\em Returns the number of boundaries in this mesh. \end{DoxyCompactList}\item 
+int \hyperlink{classgeoproc_1_1TriangleMesh_aba03ea01f69c0888e0aae17ec330d31d}{get\+\_\+vertex\+\_\+corner} (int c) const
+\begin{DoxyCompactList}\small\item\em Returns the index of the vertex corresponding to corner {\itshape c}. \end{DoxyCompactList}\item 
+int \hyperlink{classgeoproc_1_1TriangleMesh_a1a9e75bf79d26456527f943c653f31ab}{get\+\_\+corner\+\_\+vertex} (int v) const
+\begin{DoxyCompactList}\small\item\em Returns a corner index for vertex {\itshape v}. \end{DoxyCompactList}\item 
+int \hyperlink{classgeoproc_1_1TriangleMesh_acc3b8ff563eef67b3f55606a716d5dd9}{get\+\_\+edge\+\_\+vertex} (int v) const
+\begin{DoxyCompactList}\small\item\em Returns the index of an edge incident to vertex {\itshape v}. \end{DoxyCompactList}\item 
+int \hyperlink{classgeoproc_1_1TriangleMesh_a8f4d4fc9ea8c907d154605eee686807e}{get\+\_\+triangle\+\_\+corner} (int c) const
+\begin{DoxyCompactList}\small\item\em Returns a triangle index for corner {\itshape c}. \end{DoxyCompactList}\item 
+void \hyperlink{classgeoproc_1_1TriangleMesh_acd89c54ec14ddfb5d38f1baedb717fc2}{get\+\_\+corners\+\_\+triangle} (int t, int \&v0, int \&v1, int \&v2) const
+\begin{DoxyCompactList}\small\item\em Returns the indexes of the vertices of a triangle. \end{DoxyCompactList}\item 
+void \hyperlink{classgeoproc_1_1TriangleMesh_aab448f6f589f4c329b4daca635d9d865}{get\+\_\+vertices\+\_\+triangle} (int t, int \&v0, int \&v1, int \&v2) const
+\begin{DoxyCompactList}\small\item\em Returns the indexes of the vertices of a triangle. \end{DoxyCompactList}\item 
+void \hyperlink{classgeoproc_1_1TriangleMesh_af315fcda4f23dc0f3e9041e6d6d24601}{get\+\_\+vertices\+\_\+triangle} (int t, int v, int \&v0, int \&v1, int \&v2) const
+\begin{DoxyCompactList}\small\item\em Returns the sorted indexes of the vertices of a face. \end{DoxyCompactList}\item 
+int \hyperlink{classgeoproc_1_1TriangleMesh_a0ea38352c56a76d6def1fce67253f433}{get\+\_\+opposite\+\_\+corner} (int c) const
+\begin{DoxyCompactList}\small\item\em Returns the corner opposite to corner c. \end{DoxyCompactList}\item 
+const glm\+::vec3 \& \hyperlink{classgeoproc_1_1TriangleMesh_a9c231aaac3dfbfe9b6334df6cabb741e}{get\+\_\+vertex} (int v) const
+\begin{DoxyCompactList}\small\item\em Returns the coordinates of a vertex. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a5dcfcb21cbd8e737813ff17cf5ecc566}\label{classgeoproc_1_1TriangleMesh_a5dcfcb21cbd8e737813ff17cf5ecc566}} 
+const std\+::vector$<$ glm\+::vec3 $>$ \& \hyperlink{classgeoproc_1_1TriangleMesh_a5dcfcb21cbd8e737813ff17cf5ecc566}{get\+\_\+vertices} () const
+\begin{DoxyCompactList}\small\item\em Returns a constant reference to all vertices of the mesh. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a5298c715723c9f247a998418d3fea286}\label{classgeoproc_1_1TriangleMesh_a5298c715723c9f247a998418d3fea286}} 
+const glm\+::vec3 $\ast$ \hyperlink{classgeoproc_1_1TriangleMesh_a5298c715723c9f247a998418d3fea286}{get\+\_\+pvertices} () const
+\begin{DoxyCompactList}\small\item\em Returns a constant reference to all vertices of the mesh. \end{DoxyCompactList}\item 
+const std\+::vector$<$ glm\+::vec3 $>$ \& \hyperlink{classgeoproc_1_1TriangleMesh_ac21af48c99662a753251a5b7507c175f}{get\+\_\+normal\+\_\+vectors} () const
+\begin{DoxyCompactList}\small\item\em Returns a constant reference to all normal vectors. \end{DoxyCompactList}\item 
+float \hyperlink{classgeoproc_1_1TriangleMesh_ad43ef04d90bdde58951b3ee438b87c1e}{get\+\_\+triangle\+\_\+area} (int t) const
+\begin{DoxyCompactList}\small\item\em Returns the area of face {\itshape f}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a17b467002bd0f8373f7de367adfb1ec2}\label{classgeoproc_1_1TriangleMesh_a17b467002bd0f8373f7de367adfb1ec2}} 
+const std\+::vector$<$ float $>$ \& \hyperlink{classgeoproc_1_1TriangleMesh_a17b467002bd0f8373f7de367adfb1ec2}{get\+\_\+areas} () const
+\begin{DoxyCompactList}\small\item\em Returns the area of each triangle. \end{DoxyCompactList}\item 
+const std\+::vector$<$ glm\+::vec3 $>$ \& \hyperlink{classgeoproc_1_1TriangleMesh_ae883c39c841c6598b0490224755f25b9}{get\+\_\+angles} () const
+\begin{DoxyCompactList}\small\item\em Returns the angles on each triangle. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_ad25eb7051e7eac604142d45929f33c19}\label{classgeoproc_1_1TriangleMesh_ad25eb7051e7eac604142d45929f33c19}} 
+bool \hyperlink{classgeoproc_1_1TriangleMesh_ad25eb7051e7eac604142d45929f33c19}{are\+\_\+angles\+\_\+area\+\_\+valid} () const
+\begin{DoxyCompactList}\small\item\em Is neighbourhood data valid? \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_aa6f95b95709a72a14a15638bfeeed3f9}\label{classgeoproc_1_1TriangleMesh_aa6f95b95709a72a14a15638bfeeed3f9}} 
+bool \hyperlink{classgeoproc_1_1TriangleMesh_aa6f95b95709a72a14a15638bfeeed3f9}{is\+\_\+neighbourhood\+\_\+valid} () const
+\begin{DoxyCompactList}\small\item\em Is neighbourhood data valid? \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a409e399857e1a1abc9f23918ff5f5860}\label{classgeoproc_1_1TriangleMesh_a409e399857e1a1abc9f23918ff5f5860}} 
+bool \hyperlink{classgeoproc_1_1TriangleMesh_a409e399857e1a1abc9f23918ff5f5860}{are\+\_\+boundaries\+\_\+valid} () const
+\begin{DoxyCompactList}\small\item\em Are the boundaries valid? \end{DoxyCompactList}\item 
+const std\+::vector$<$ int $>$ \& \hyperlink{classgeoproc_1_1TriangleMesh_ae73a760e61250eb2f474b8ab03a1e2ab}{get\+\_\+vertex\+\_\+edge} () const
+\begin{DoxyCompactList}\small\item\em Returns a relation between vertices and edges. \end{DoxyCompactList}\item 
+const std\+::vector$<$ int\mbox{[}3\mbox{]}$>$ \& \hyperlink{classgeoproc_1_1TriangleMesh_af56b3521a8df241f4f67c7f2bbacfa51}{get\+\_\+edges\+\_\+triangle} () const
+\begin{DoxyCompactList}\small\item\em Returns a relation between tirnalges and edges. \end{DoxyCompactList}\item 
+const std\+::vector$<$ \hyperlink{classgeoproc_1_1mesh__edge}{mesh\+\_\+edge} $>$ \& \hyperlink{classgeoproc_1_1TriangleMesh_a742e5769cb3e26303eb8ec1af57c9ac4}{get\+\_\+edges} () const
+\begin{DoxyCompactList}\small\item\em Returns all edges in the mesh. \end{DoxyCompactList}\item 
+const std\+::vector$<$ int $>$ \& \hyperlink{classgeoproc_1_1TriangleMesh_a0cf960fcf069954b51ce567304359d4e}{get\+\_\+boundary\+\_\+edges} () const
+\begin{DoxyCompactList}\small\item\em Returns the boundary edges in this mesh. \end{DoxyCompactList}\item 
+const std\+::vector$<$ std\+::vector$<$ int $>$ $>$ \& \hyperlink{classgeoproc_1_1TriangleMesh_a07a91ab963592c2560eec6409194ba66}{get\+\_\+boundaries} () const
+\begin{DoxyCompactList}\small\item\em Returns the boundaries in this mesh. \end{DoxyCompactList}\item 
+void \hyperlink{classgeoproc_1_1TriangleMesh_a00f918f8d96560f640efd244fd273cec}{get\+\_\+min\+\_\+max\+\_\+coordinates} (glm\+::vec3 \&m, glm\+::vec3 \&M) const
+\begin{DoxyCompactList}\small\item\em Returns the minimum and maximum coordinates. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_aace37defd7566fed311222b7e22264a5}\label{classgeoproc_1_1TriangleMesh_aace37defd7566fed311222b7e22264a5}} 
+void \hyperlink{classgeoproc_1_1TriangleMesh_aace37defd7566fed311222b7e22264a5}{invalidate\+\_\+areas\+\_\+angles} ()
+\begin{DoxyCompactList}\small\item\em Sets to false the attribute \hyperlink{classgeoproc_1_1TriangleMesh_a046a6679ae404e02ae40d4d4d798b6f6}{angles\+\_\+area\+\_\+valid}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_add9ebc58773a0127b9a0467d33cfe3c6}\label{classgeoproc_1_1TriangleMesh_add9ebc58773a0127b9a0467d33cfe3c6}} 
+void \hyperlink{classgeoproc_1_1TriangleMesh_add9ebc58773a0127b9a0467d33cfe3c6}{invalidate\+\_\+neighbourhood} ()
+\begin{DoxyCompactList}\small\item\em Sets to false the attribute \hyperlink{classgeoproc_1_1TriangleMesh_a21205ec88e494f864db4d8247db70d3c}{neigh\+\_\+valid}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_af8c9c5ef993c961f24cdf189a990e6e8}\label{classgeoproc_1_1TriangleMesh_af8c9c5ef993c961f24cdf189a990e6e8}} 
+void \hyperlink{classgeoproc_1_1TriangleMesh_af8c9c5ef993c961f24cdf189a990e6e8}{invalidate\+\_\+boundaries} ()
+\begin{DoxyCompactList}\small\item\em Sets to false the attribute \hyperlink{classgeoproc_1_1TriangleMesh_a1384fa834aaa4ec3dc7c3b025b1ca528}{boundaries\+\_\+valid}. \end{DoxyCompactList}\item 
+void \hyperlink{classgeoproc_1_1TriangleMesh_af83d7e4da9103a2d4ce965955b4520f7}{invalidate\+\_\+state} ()
+\begin{DoxyCompactList}\small\item\em Invalidates the whole state of the mesh. \end{DoxyCompactList}\item 
+void \hyperlink{classgeoproc_1_1TriangleMesh_a1680c786572ac504621f253b7407d4f7}{copy\+\_\+mesh} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
+\begin{DoxyCompactList}\small\item\em Copies mesh {\itshape m} contents into this one. \end{DoxyCompactList}\item 
+float \hyperlink{classgeoproc_1_1TriangleMesh_a8a07f19f9d81952752d9c8973a2eb011}{get\+\_\+triangle\+\_\+area} (int i, int j, int k) const
+\begin{DoxyCompactList}\small\item\em Assuming the vertices make a triangle, return its area. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a82c3351de37daa9440f53597f080992d}\label{classgeoproc_1_1TriangleMesh_a82c3351de37daa9440f53597f080992d}} 
+std\+::vector$<$ glm\+::vec3 $>$ \hyperlink{classgeoproc_1_1TriangleMesh_a82c3351de37daa9440f53597f080992d}{vertices}
+\begin{DoxyCompactList}\small\item\em The set of vertices of the mesh. \end{DoxyCompactList}\item 
+std\+::vector$<$ int $>$ \hyperlink{classgeoproc_1_1TriangleMesh_ad1cf20622f2bb080100862f413bd89c2}{triangles}
+\begin{DoxyCompactList}\small\item\em The set of triangles of the mesh. \end{DoxyCompactList}\item 
+std\+::vector$<$ glm\+::vec3 $>$ \hyperlink{classgeoproc_1_1TriangleMesh_ab9030a0301b2fe5868ad6c08692cce09}{normal\+\_\+vectors}
+\begin{DoxyCompactList}\small\item\em Normal vector for every triangle of the mesh. \end{DoxyCompactList}\item 
+std\+::vector$<$ glm\+::vec3 $>$ \hyperlink{classgeoproc_1_1TriangleMesh_ab255af87d20d76ad84246560fa3579b3}{angles}
+\begin{DoxyCompactList}\small\item\em Angles of each triangle. \end{DoxyCompactList}\item 
+std\+::vector$<$ float $>$ \hyperlink{classgeoproc_1_1TriangleMesh_a684ecaaa03f1739856bba03167e51dd1}{areas}
+\begin{DoxyCompactList}\small\item\em Area of each triangle. \end{DoxyCompactList}\item 
+std\+::vector$<$ int $>$ \hyperlink{classgeoproc_1_1TriangleMesh_a2604795c90c694116513252b86d242b4}{opposite\+\_\+corners}
+\begin{DoxyCompactList}\small\item\em The set of opposite corners. \end{DoxyCompactList}\item 
+std\+::vector$<$ int $>$ \hyperlink{classgeoproc_1_1TriangleMesh_ab9610d614e081deb28010d237fecd55b}{corners}
+\begin{DoxyCompactList}\small\item\em Corner table. \end{DoxyCompactList}\item 
+std\+::vector$<$ \hyperlink{classgeoproc_1_1mesh__edge}{mesh\+\_\+edge} $>$ \hyperlink{classgeoproc_1_1TriangleMesh_ab10f052ad932cd78056a55b58ddd475c}{all\+\_\+edges}
+\begin{DoxyCompactList}\small\item\em Edges of this mesh. \end{DoxyCompactList}\item 
+std\+::vector$<$ int\mbox{[}3\mbox{]}$>$ \hyperlink{classgeoproc_1_1TriangleMesh_ad72cdd2358e815a09c07176730b4e0a5}{edges\+\_\+per\+\_\+triangle}
+\begin{DoxyCompactList}\small\item\em Edges per triangle. \end{DoxyCompactList}\item 
+std\+::vector$<$ int $>$ \hyperlink{classgeoproc_1_1TriangleMesh_abbc25699f67776fc99c909124b0c584a}{vertex\+\_\+edge}
+\begin{DoxyCompactList}\small\item\em Edge index for each vertex. \end{DoxyCompactList}\item 
+std\+::vector$<$ int $>$ \hyperlink{classgeoproc_1_1TriangleMesh_a142a764ddf07b98c7efcd596d88c3f87}{boundary\+\_\+edges}
+\begin{DoxyCompactList}\small\item\em Boundary edges of the mesh. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::vector$<$ int $>$ $>$ \hyperlink{classgeoproc_1_1TriangleMesh_a57162eac37831c87786a8dab8331d72f}{boundaries}
+\begin{DoxyCompactList}\small\item\em Boundaries of this mesh. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_aab5e7d8baf6f6cd7b5655b4c89f79e00}\label{classgeoproc_1_1TriangleMesh_aab5e7d8baf6f6cd7b5655b4c89f79e00}} 
+glm\+::vec3 \hyperlink{classgeoproc_1_1TriangleMesh_aab5e7d8baf6f6cd7b5655b4c89f79e00}{min\+\_\+coord}
+\begin{DoxyCompactList}\small\item\em Minimum value of x-\/,y-\/, and z-\/coordinates. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_acffb17b164f0428aa01316b0a08bc2a3}\label{classgeoproc_1_1TriangleMesh_acffb17b164f0428aa01316b0a08bc2a3}} 
+glm\+::vec3 \hyperlink{classgeoproc_1_1TriangleMesh_acffb17b164f0428aa01316b0a08bc2a3}{max\+\_\+coord}
+\begin{DoxyCompactList}\small\item\em Maximum value of x-\/,y-\/, and z-\/coordinates. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a046a6679ae404e02ae40d4d4d798b6f6}\label{classgeoproc_1_1TriangleMesh_a046a6679ae404e02ae40d4d4d798b6f6}} 
+bool \hyperlink{classgeoproc_1_1TriangleMesh_a046a6679ae404e02ae40d4d4d798b6f6}{angles\+\_\+area\+\_\+valid}
+\begin{DoxyCompactList}\small\item\em Are the computed triangle angles and areas valid? \end{DoxyCompactList}\item 
+bool \hyperlink{classgeoproc_1_1TriangleMesh_a21205ec88e494f864db4d8247db70d3c}{neigh\+\_\+valid}
+\begin{DoxyCompactList}\small\item\em Is the neighbourhood data valid? \end{DoxyCompactList}\item 
+bool \hyperlink{classgeoproc_1_1TriangleMesh_a1384fa834aaa4ec3dc7c3b025b1ca528}{boundaries\+\_\+valid}
+\begin{DoxyCompactList}\small\item\em Are the boundaries of the mesh valid? \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Implementation of a triangular mesh. 
+
+It contains the vertices of a triangular mesh (\hyperlink{classgeoproc_1_1TriangleMesh_a82c3351de37daa9440f53597f080992d}{vertices}) which are related using indices (\hyperlink{classgeoproc_1_1TriangleMesh_ad1cf20622f2bb080100862f413bd89c2}{triangles}), hence following the usual implementation.
+
+It also stores normal vectors per triangle (\hyperlink{classgeoproc_1_1TriangleMesh_ab9030a0301b2fe5868ad6c08692cce09}{normal\+\_\+vectors}), angles and area of each triangle (\hyperlink{classgeoproc_1_1TriangleMesh_ab255af87d20d76ad84246560fa3579b3}{angles}, \hyperlink{classgeoproc_1_1TriangleMesh_a684ecaaa03f1739856bba03167e51dd1}{areas}), and implements the corner table data structure (see \hyperlink{classgeoproc_1_1TriangleMesh_ab9610d614e081deb28010d237fecd55b}{corners}, \hyperlink{classgeoproc_1_1TriangleMesh_a2604795c90c694116513252b86d242b4}{opposite\+\_\+corners}).
+
+Finally, it holds other interesting information about the structure of the mesh, like boundaries (see \hyperlink{classgeoproc_1_1TriangleMesh_a142a764ddf07b98c7efcd596d88c3f87}{boundary\+\_\+edges}, \hyperlink{classgeoproc_1_1TriangleMesh_a57162eac37831c87786a8dab8331d72f}{boundaries}). 
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a1680c786572ac504621f253b7407d4f7}\label{classgeoproc_1_1TriangleMesh_a1680c786572ac504621f253b7407d4f7}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!copy\+\_\+mesh@{copy\+\_\+mesh}}
+\index{copy\+\_\+mesh@{copy\+\_\+mesh}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{copy\+\_\+mesh()}{copy\_mesh()}}
+{\footnotesize\ttfamily void geoproc\+::\+Triangle\+Mesh\+::copy\+\_\+mesh (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Copies mesh {\itshape m} contents into this one. 
+
+This mesh is previously freed. 
+\begin{DoxyParams}{Parameters}
+{\em m} & Mesh to be copied. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_abc27a4416e1d33b8718c4afb77a8acf5}\label{classgeoproc_1_1TriangleMesh_abc27a4416e1d33b8718c4afb77a8acf5}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!destroy@{destroy}}
+\index{destroy@{destroy}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{destroy()}{destroy()}}
+{\footnotesize\ttfamily void geoproc\+::\+Triangle\+Mesh\+::destroy (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Frees all the memoery occupied by the mesh. 
+
+Clears the contents of\+:
+\begin{DoxyItemize}
+\item \hyperlink{classgeoproc_1_1TriangleMesh_a82c3351de37daa9440f53597f080992d}{vertices},
+\item \hyperlink{classgeoproc_1_1TriangleMesh_ad1cf20622f2bb080100862f413bd89c2}{triangles},
+\item \hyperlink{classgeoproc_1_1TriangleMesh_ab9030a0301b2fe5868ad6c08692cce09}{normal\+\_\+vectors},
+\item \hyperlink{classgeoproc_1_1TriangleMesh_ab255af87d20d76ad84246560fa3579b3}{angles},
+\item \hyperlink{classgeoproc_1_1TriangleMesh_a684ecaaa03f1739856bba03167e51dd1}{areas},
+\item \hyperlink{classgeoproc_1_1TriangleMesh_a2604795c90c694116513252b86d242b4}{opposite\+\_\+corners},
+\item \hyperlink{classgeoproc_1_1TriangleMesh_ab9610d614e081deb28010d237fecd55b}{corners},
+\item \hyperlink{classgeoproc_1_1TriangleMesh_a142a764ddf07b98c7efcd596d88c3f87}{boundary\+\_\+edges},
+\item \hyperlink{classgeoproc_1_1TriangleMesh_a57162eac37831c87786a8dab8331d72f}{boundaries},
+\item \hyperlink{classgeoproc_1_1TriangleMesh_ab10f052ad932cd78056a55b58ddd475c}{all\+\_\+edges},
+\item \hyperlink{classgeoproc_1_1TriangleMesh_abbc25699f67776fc99c909124b0c584a}{vertex\+\_\+edge} 
+\end{DoxyItemize}\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_ae883c39c841c6598b0490224755f25b9}\label{classgeoproc_1_1TriangleMesh_ae883c39c841c6598b0490224755f25b9}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+angles@{get\+\_\+angles}}
+\index{get\+\_\+angles@{get\+\_\+angles}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{get\+\_\+angles()}{get\_angles()}}
+{\footnotesize\ttfamily const vector$<$ vec3 $>$ \& geoproc\+::\+Triangle\+Mesh\+::get\+\_\+angles (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Returns the angles on each triangle. 
+
+\begin{DoxyPrecond}{Precondition}
+Angles and area data must be valid 
+\end{DoxyPrecond}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a07a91ab963592c2560eec6409194ba66}\label{classgeoproc_1_1TriangleMesh_a07a91ab963592c2560eec6409194ba66}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+boundaries@{get\+\_\+boundaries}}
+\index{get\+\_\+boundaries@{get\+\_\+boundaries}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{get\+\_\+boundaries()}{get\_boundaries()}}
+{\footnotesize\ttfamily const vector$<$ vector$<$ int $>$ $>$ \& geoproc\+::\+Triangle\+Mesh\+::get\+\_\+boundaries (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Returns the boundaries in this mesh. 
+
+\begin{DoxyPrecond}{Precondition}
+Boundaries have to be valid (\hyperlink{classgeoproc_1_1TriangleMesh_a409e399857e1a1abc9f23918ff5f5860}{are\+\_\+boundaries\+\_\+valid()} evaluates to true). 
+\end{DoxyPrecond}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a0cf960fcf069954b51ce567304359d4e}\label{classgeoproc_1_1TriangleMesh_a0cf960fcf069954b51ce567304359d4e}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+boundary\+\_\+edges@{get\+\_\+boundary\+\_\+edges}}
+\index{get\+\_\+boundary\+\_\+edges@{get\+\_\+boundary\+\_\+edges}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{get\+\_\+boundary\+\_\+edges()}{get\_boundary\_edges()}}
+{\footnotesize\ttfamily const vector$<$ int $>$ \& geoproc\+::\+Triangle\+Mesh\+::get\+\_\+boundary\+\_\+edges (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Returns the boundary edges in this mesh. 
+
+\begin{DoxyPrecond}{Precondition}
+Boundaries have to be valid (\hyperlink{classgeoproc_1_1TriangleMesh_a409e399857e1a1abc9f23918ff5f5860}{are\+\_\+boundaries\+\_\+valid()} evaluates to true). 
+\end{DoxyPrecond}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a1a9e75bf79d26456527f943c653f31ab}\label{classgeoproc_1_1TriangleMesh_a1a9e75bf79d26456527f943c653f31ab}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+corner\+\_\+vertex@{get\+\_\+corner\+\_\+vertex}}
+\index{get\+\_\+corner\+\_\+vertex@{get\+\_\+corner\+\_\+vertex}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{get\+\_\+corner\+\_\+vertex()}{get\_corner\_vertex()}}
+{\footnotesize\ttfamily int geoproc\+::\+Triangle\+Mesh\+::get\+\_\+corner\+\_\+vertex (\begin{DoxyParamCaption}\item[{int}]{v }\end{DoxyParamCaption}) const}
+
+
+
+Returns a corner index for vertex {\itshape v}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & A valid vertex index\+: 0 $<$= {\itshape v} $<$ number of vertices. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+Neighbourhood data must be valid, i.\+e, the result of \hyperlink{classgeoproc_1_1TriangleMesh_aa6f95b95709a72a14a15638bfeeed3f9}{is\+\_\+neighbourhood\+\_\+valid()} must be true. If false, call \hyperlink{classgeoproc_1_1TriangleMesh_a84003dfdfd5e591c00f01a797578ff1f}{make\+\_\+neighbourhood\+\_\+data}. 
+\end{DoxyPrecond}
+\begin{DoxyReturn}{Returns}
+Returns a valid corner index (unless there are no faces in this mesh). Returns {\itshape c} such that 0 $<$= {\itshape c} $<$ number of triangles 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_acd89c54ec14ddfb5d38f1baedb717fc2}\label{classgeoproc_1_1TriangleMesh_acd89c54ec14ddfb5d38f1baedb717fc2}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+corners\+\_\+triangle@{get\+\_\+corners\+\_\+triangle}}
+\index{get\+\_\+corners\+\_\+triangle@{get\+\_\+corners\+\_\+triangle}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{get\+\_\+corners\+\_\+triangle()}{get\_corners\_triangle()}}
+{\footnotesize\ttfamily void geoproc\+::\+Triangle\+Mesh\+::get\+\_\+corners\+\_\+triangle (\begin{DoxyParamCaption}\item[{int}]{t,  }\item[{int \&}]{v0,  }\item[{int \&}]{v1,  }\item[{int \&}]{v2 }\end{DoxyParamCaption}) const}
+
+
+
+Returns the indexes of the vertices of a triangle. 
+
+It is guaranteed that the order of the vertices is the same as it is given in the loaded file. 
+\begin{DoxyParams}[1]{Parameters}
+ & {\em t} & A valid triangle index\+: 0 $<$= {\itshape t} $<$ number of triangles. \\
+\hline
+\mbox{\tt out}  & {\em v0} & The first vertex index of the face. \\
+\hline
+\mbox{\tt out}  & {\em v1} & The second vertex index of the face. \\
+\hline
+\mbox{\tt out}  & {\em v2} & The third vertex index of the face. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_acc3b8ff563eef67b3f55606a716d5dd9}\label{classgeoproc_1_1TriangleMesh_acc3b8ff563eef67b3f55606a716d5dd9}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+edge\+\_\+vertex@{get\+\_\+edge\+\_\+vertex}}
+\index{get\+\_\+edge\+\_\+vertex@{get\+\_\+edge\+\_\+vertex}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{get\+\_\+edge\+\_\+vertex()}{get\_edge\_vertex()}}
+{\footnotesize\ttfamily int geoproc\+::\+Triangle\+Mesh\+::get\+\_\+edge\+\_\+vertex (\begin{DoxyParamCaption}\item[{int}]{v }\end{DoxyParamCaption}) const}
+
+
+
+Returns the index of an edge incident to vertex {\itshape v}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & A valid vertex index\+: 0 $<$= {\itshape v} $<$ number of vertices. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+Neighbourhood data must be valid, i.\+e, the result of \hyperlink{classgeoproc_1_1TriangleMesh_aa6f95b95709a72a14a15638bfeeed3f9}{is\+\_\+neighbourhood\+\_\+valid()} must be true. If false, call \hyperlink{classgeoproc_1_1TriangleMesh_a84003dfdfd5e591c00f01a797578ff1f}{make\+\_\+neighbourhood\+\_\+data}. 
+\end{DoxyPrecond}
+\begin{DoxyReturn}{Returns}
+Returns a valid edge index. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a742e5769cb3e26303eb8ec1af57c9ac4}\label{classgeoproc_1_1TriangleMesh_a742e5769cb3e26303eb8ec1af57c9ac4}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+edges@{get\+\_\+edges}}
+\index{get\+\_\+edges@{get\+\_\+edges}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{get\+\_\+edges()}{get\_edges()}}
+{\footnotesize\ttfamily const vector$<$ \hyperlink{classgeoproc_1_1mesh__edge}{mesh\+\_\+edge} $>$ \& geoproc\+::\+Triangle\+Mesh\+::get\+\_\+edges (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Returns all edges in the mesh. 
+
+\begin{DoxyPrecond}{Precondition}
+Neighbourhood has to be valid (\hyperlink{classgeoproc_1_1TriangleMesh_aa6f95b95709a72a14a15638bfeeed3f9}{is\+\_\+neighbourhood\+\_\+valid()} evaluates to true). 
+\end{DoxyPrecond}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_af56b3521a8df241f4f67c7f2bbacfa51}\label{classgeoproc_1_1TriangleMesh_af56b3521a8df241f4f67c7f2bbacfa51}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+edges\+\_\+triangle@{get\+\_\+edges\+\_\+triangle}}
+\index{get\+\_\+edges\+\_\+triangle@{get\+\_\+edges\+\_\+triangle}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{get\+\_\+edges\+\_\+triangle()}{get\_edges\_triangle()}}
+{\footnotesize\ttfamily const vector$<$ int\mbox{[}3\mbox{]}$>$ \& geoproc\+::\+Triangle\+Mesh\+::get\+\_\+edges\+\_\+triangle (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Returns a relation between tirnalges and edges. 
+
+\begin{DoxyPrecond}{Precondition}
+Neighbourhood has to be valid (\hyperlink{classgeoproc_1_1TriangleMesh_aa6f95b95709a72a14a15638bfeeed3f9}{is\+\_\+neighbourhood\+\_\+valid()} evaluates to true). 
+\end{DoxyPrecond}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a00f918f8d96560f640efd244fd273cec}\label{classgeoproc_1_1TriangleMesh_a00f918f8d96560f640efd244fd273cec}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+min\+\_\+max\+\_\+coordinates@{get\+\_\+min\+\_\+max\+\_\+coordinates}}
+\index{get\+\_\+min\+\_\+max\+\_\+coordinates@{get\+\_\+min\+\_\+max\+\_\+coordinates}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{get\+\_\+min\+\_\+max\+\_\+coordinates()}{get\_min\_max\_coordinates()}}
+{\footnotesize\ttfamily void geoproc\+::\+Triangle\+Mesh\+::get\+\_\+min\+\_\+max\+\_\+coordinates (\begin{DoxyParamCaption}\item[{glm\+::vec3 \&}]{m,  }\item[{glm\+::vec3 \&}]{M }\end{DoxyParamCaption}) const}
+
+
+
+Returns the minimum and maximum coordinates. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt out}  & {\em m} & Minimum x-\/,y-\/,z-\/ coordinates. \\
+\hline
+\mbox{\tt out}  & {\em M} & Maximum x-\/,y-\/,z-\/ coordinates. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_ac21af48c99662a753251a5b7507c175f}\label{classgeoproc_1_1TriangleMesh_ac21af48c99662a753251a5b7507c175f}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+normal\+\_\+vectors@{get\+\_\+normal\+\_\+vectors}}
+\index{get\+\_\+normal\+\_\+vectors@{get\+\_\+normal\+\_\+vectors}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{get\+\_\+normal\+\_\+vectors()}{get\_normal\_vectors()}}
+{\footnotesize\ttfamily const vector$<$ vec3 $>$ \& geoproc\+::\+Triangle\+Mesh\+::get\+\_\+normal\+\_\+vectors (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Returns a constant reference to all normal vectors. 
+
+\begin{DoxyReturn}{Returns}
+Returns a constant reference to \hyperlink{classgeoproc_1_1TriangleMesh_ab9030a0301b2fe5868ad6c08692cce09}{normal\+\_\+vectors}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a0ea38352c56a76d6def1fce67253f433}\label{classgeoproc_1_1TriangleMesh_a0ea38352c56a76d6def1fce67253f433}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+opposite\+\_\+corner@{get\+\_\+opposite\+\_\+corner}}
+\index{get\+\_\+opposite\+\_\+corner@{get\+\_\+opposite\+\_\+corner}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{get\+\_\+opposite\+\_\+corner()}{get\_opposite\_corner()}}
+{\footnotesize\ttfamily int geoproc\+::\+Triangle\+Mesh\+::get\+\_\+opposite\+\_\+corner (\begin{DoxyParamCaption}\item[{int}]{c }\end{DoxyParamCaption}) const}
+
+
+
+Returns the corner opposite to corner c. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & Valid corner index\+: 0 $<$= {\itshape c} $<$ number of corners. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+Neighbourhood data must be valid, i.\+e, the result of \hyperlink{classgeoproc_1_1TriangleMesh_aa6f95b95709a72a14a15638bfeeed3f9}{is\+\_\+neighbourhood\+\_\+valid()} must be true. If false, call \hyperlink{classgeoproc_1_1TriangleMesh_a84003dfdfd5e591c00f01a797578ff1f}{make\+\_\+neighbourhood\+\_\+data}. 
+\end{DoxyPrecond}
+\begin{DoxyReturn}{Returns}
+Returns -\/1 if there is no opposite corner (the case of hard boundary). Returns a valid corner index otherwise. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a8a07f19f9d81952752d9c8973a2eb011}\label{classgeoproc_1_1TriangleMesh_a8a07f19f9d81952752d9c8973a2eb011}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+triangle\+\_\+area@{get\+\_\+triangle\+\_\+area}}
+\index{get\+\_\+triangle\+\_\+area@{get\+\_\+triangle\+\_\+area}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{get\+\_\+triangle\+\_\+area()}{get\_triangle\_area()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily float geoproc\+::\+Triangle\+Mesh\+::get\+\_\+triangle\+\_\+area (\begin{DoxyParamCaption}\item[{int}]{i,  }\item[{int}]{j,  }\item[{int}]{k }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Assuming the vertices make a triangle, return its area. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & A valid vertex index. \\
+\hline
+{\em j} & A valid vertex index. \\
+\hline
+{\em k} & A valid vertex index. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_ad43ef04d90bdde58951b3ee438b87c1e}\label{classgeoproc_1_1TriangleMesh_ad43ef04d90bdde58951b3ee438b87c1e}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+triangle\+\_\+area@{get\+\_\+triangle\+\_\+area}}
+\index{get\+\_\+triangle\+\_\+area@{get\+\_\+triangle\+\_\+area}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{get\+\_\+triangle\+\_\+area()}{get\_triangle\_area()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily float geoproc\+::\+Triangle\+Mesh\+::get\+\_\+triangle\+\_\+area (\begin{DoxyParamCaption}\item[{int}]{t }\end{DoxyParamCaption}) const}
+
+
+
+Returns the area of face {\itshape f}. 
+
+First, retrieves the vertices of the face with \hyperlink{classgeoproc_1_1TriangleMesh_aab448f6f589f4c329b4daca635d9d865}{get\+\_\+vertices\+\_\+triangle} and then calls \hyperlink{classgeoproc_1_1TriangleMesh_a8a07f19f9d81952752d9c8973a2eb011}{get\+\_\+triangle\+\_\+area(int,int,int)const}. 
+\begin{DoxyParams}{Parameters}
+{\em t} & A valid triangle index\+: 0 $<$= {\itshape t} $<$ number of triangles. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a8f4d4fc9ea8c907d154605eee686807e}\label{classgeoproc_1_1TriangleMesh_a8f4d4fc9ea8c907d154605eee686807e}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+triangle\+\_\+corner@{get\+\_\+triangle\+\_\+corner}}
+\index{get\+\_\+triangle\+\_\+corner@{get\+\_\+triangle\+\_\+corner}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{get\+\_\+triangle\+\_\+corner()}{get\_triangle\_corner()}}
+{\footnotesize\ttfamily int geoproc\+::\+Triangle\+Mesh\+::get\+\_\+triangle\+\_\+corner (\begin{DoxyParamCaption}\item[{int}]{c }\end{DoxyParamCaption}) const}
+
+
+
+Returns a triangle index for corner {\itshape c}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & A valid corner index\+: 0 $<$= {\itshape c} $<$ number of corners. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+Neighbourhood data must exist in this mesh. See \hyperlink{classgeoproc_1_1TriangleMesh_a84003dfdfd5e591c00f01a797578ff1f}{make\+\_\+neighbourhood\+\_\+data}. 
+\end{DoxyPrecond}
+\begin{DoxyReturn}{Returns}
+If the corner index is valid, the face index {\itshape f} returned is also valid\+: 0 $<$= {\itshape 3$\ast$f} $<$ number of triangles. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a9c231aaac3dfbfe9b6334df6cabb741e}\label{classgeoproc_1_1TriangleMesh_a9c231aaac3dfbfe9b6334df6cabb741e}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+vertex@{get\+\_\+vertex}}
+\index{get\+\_\+vertex@{get\+\_\+vertex}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{get\+\_\+vertex()}{get\_vertex()}}
+{\footnotesize\ttfamily const vec3 \& geoproc\+::\+Triangle\+Mesh\+::get\+\_\+vertex (\begin{DoxyParamCaption}\item[{int}]{v }\end{DoxyParamCaption}) const}
+
+
+
+Returns the coordinates of a vertex. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & A valid vertex index\+: 0 $<$= {\itshape v} $<$ number of vertices. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_aba03ea01f69c0888e0aae17ec330d31d}\label{classgeoproc_1_1TriangleMesh_aba03ea01f69c0888e0aae17ec330d31d}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+vertex\+\_\+corner@{get\+\_\+vertex\+\_\+corner}}
+\index{get\+\_\+vertex\+\_\+corner@{get\+\_\+vertex\+\_\+corner}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{get\+\_\+vertex\+\_\+corner()}{get\_vertex\_corner()}}
+{\footnotesize\ttfamily int geoproc\+::\+Triangle\+Mesh\+::get\+\_\+vertex\+\_\+corner (\begin{DoxyParamCaption}\item[{int}]{c }\end{DoxyParamCaption}) const}
+
+
+
+Returns the index of the vertex corresponding to corner {\itshape c}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & Valid corner index\+: 0 $<$= {\itshape c} $<$ number of corners. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_ae73a760e61250eb2f474b8ab03a1e2ab}\label{classgeoproc_1_1TriangleMesh_ae73a760e61250eb2f474b8ab03a1e2ab}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+vertex\+\_\+edge@{get\+\_\+vertex\+\_\+edge}}
+\index{get\+\_\+vertex\+\_\+edge@{get\+\_\+vertex\+\_\+edge}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{get\+\_\+vertex\+\_\+edge()}{get\_vertex\_edge()}}
+{\footnotesize\ttfamily const vector$<$ int $>$ \& geoproc\+::\+Triangle\+Mesh\+::get\+\_\+vertex\+\_\+edge (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Returns a relation between vertices and edges. 
+
+\begin{DoxyPrecond}{Precondition}
+Neighbourhood has to be valid (\hyperlink{classgeoproc_1_1TriangleMesh_aa6f95b95709a72a14a15638bfeeed3f9}{is\+\_\+neighbourhood\+\_\+valid()} evaluates to true). 
+\end{DoxyPrecond}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_aab448f6f589f4c329b4daca635d9d865}\label{classgeoproc_1_1TriangleMesh_aab448f6f589f4c329b4daca635d9d865}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+vertices\+\_\+triangle@{get\+\_\+vertices\+\_\+triangle}}
+\index{get\+\_\+vertices\+\_\+triangle@{get\+\_\+vertices\+\_\+triangle}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{get\+\_\+vertices\+\_\+triangle()}{get\_vertices\_triangle()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void geoproc\+::\+Triangle\+Mesh\+::get\+\_\+vertices\+\_\+triangle (\begin{DoxyParamCaption}\item[{int}]{t,  }\item[{int \&}]{v0,  }\item[{int \&}]{v1,  }\item[{int \&}]{v2 }\end{DoxyParamCaption}) const}
+
+
+
+Returns the indexes of the vertices of a triangle. 
+
+It is guaranteed that the order of the vertices is the same as it is given in the loaded file. 
+\begin{DoxyParams}[1]{Parameters}
+ & {\em t} & A valid triangle index\+: 0 $<$= {\itshape t} $<$ number of triangles. \\
+\hline
+\mbox{\tt out}  & {\em v0} & The first vertex index of the face. \\
+\hline
+\mbox{\tt out}  & {\em v1} & The second vertex index of the face. \\
+\hline
+\mbox{\tt out}  & {\em v2} & The third vertex index of the face. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_af315fcda4f23dc0f3e9041e6d6d24601}\label{classgeoproc_1_1TriangleMesh_af315fcda4f23dc0f3e9041e6d6d24601}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+vertices\+\_\+triangle@{get\+\_\+vertices\+\_\+triangle}}
+\index{get\+\_\+vertices\+\_\+triangle@{get\+\_\+vertices\+\_\+triangle}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{get\+\_\+vertices\+\_\+triangle()}{get\_vertices\_triangle()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void geoproc\+::\+Triangle\+Mesh\+::get\+\_\+vertices\+\_\+triangle (\begin{DoxyParamCaption}\item[{int}]{t,  }\item[{int}]{v,  }\item[{int \&}]{v0,  }\item[{int \&}]{v1,  }\item[{int \&}]{v2 }\end{DoxyParamCaption}) const}
+
+
+
+Returns the sorted indexes of the vertices of a face. 
+
+The vertices are sorted so that the first is equal to vertex index {\itshape v}. 
+\begin{DoxyParams}[1]{Parameters}
+ & {\em t} & A valid triangle index\+: 0 $<$= {\itshape t} $<$ number of triangles. \\
+\hline
+ & {\em v} & A vertex of the triangle {\itshape t}. \\
+\hline
+\mbox{\tt out}  & {\em v0} & The first vertex index of the face. \\
+\hline
+\mbox{\tt out}  & {\em v1} & The second vertex index of the face. \\
+\hline
+\mbox{\tt out}  & {\em v2} & The third vertex index of the face. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_af83d7e4da9103a2d4ce965955b4520f7}\label{classgeoproc_1_1TriangleMesh_af83d7e4da9103a2d4ce965955b4520f7}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!invalidate\+\_\+state@{invalidate\+\_\+state}}
+\index{invalidate\+\_\+state@{invalidate\+\_\+state}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{invalidate\+\_\+state()}{invalidate\_state()}}
+{\footnotesize\ttfamily void geoproc\+::\+Triangle\+Mesh\+::invalidate\+\_\+state (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Invalidates the whole state of the mesh. 
+
+Sets to false all validty attributes\+:
+\begin{DoxyItemize}
+\item \hyperlink{classgeoproc_1_1TriangleMesh_a046a6679ae404e02ae40d4d4d798b6f6}{angles\+\_\+area\+\_\+valid}
+\item \hyperlink{classgeoproc_1_1TriangleMesh_a21205ec88e494f864db4d8247db70d3c}{neigh\+\_\+valid} 
+\end{DoxyItemize}\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}\label{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!make\+\_\+angles\+\_\+area@{make\+\_\+angles\+\_\+area}}
+\index{make\+\_\+angles\+\_\+area@{make\+\_\+angles\+\_\+area}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{make\+\_\+angles\+\_\+area()}{make\_angles\_area()}}
+{\footnotesize\ttfamily void geoproc\+::\+Triangle\+Mesh\+::make\+\_\+angles\+\_\+area (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Computes the angles and the areas of the triangles. 
+
+Fills the containers \hyperlink{classgeoproc_1_1TriangleMesh_ab255af87d20d76ad84246560fa3579b3}{angles}, \hyperlink{classgeoproc_1_1TriangleMesh_a684ecaaa03f1739856bba03167e51dd1}{areas}. \mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_ad11c9406e2677e4d72d53837206fd769}\label{classgeoproc_1_1TriangleMesh_ad11c9406e2677e4d72d53837206fd769}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!make\+\_\+boundaries@{make\+\_\+boundaries}}
+\index{make\+\_\+boundaries@{make\+\_\+boundaries}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{make\+\_\+boundaries()}{make\_boundaries()}}
+{\footnotesize\ttfamily void geoproc\+::\+Triangle\+Mesh\+::make\+\_\+boundaries (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Computes the boundaries of this mesh. 
+
+Fills container \hyperlink{classgeoproc_1_1TriangleMesh_a57162eac37831c87786a8dab8331d72f}{boundaries}. \begin{DoxyPrecond}{Precondition}
+Neighbourhood data must have been made (see \hyperlink{classgeoproc_1_1TriangleMesh_a84003dfdfd5e591c00f01a797578ff1f}{make\+\_\+neighbourhood\+\_\+data}). 
+\end{DoxyPrecond}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a84003dfdfd5e591c00f01a797578ff1f}\label{classgeoproc_1_1TriangleMesh_a84003dfdfd5e591c00f01a797578ff1f}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!make\+\_\+neighbourhood\+\_\+data@{make\+\_\+neighbourhood\+\_\+data}}
+\index{make\+\_\+neighbourhood\+\_\+data@{make\+\_\+neighbourhood\+\_\+data}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{make\+\_\+neighbourhood\+\_\+data()}{make\_neighbourhood\_data()}}
+{\footnotesize\ttfamily void geoproc\+::\+Triangle\+Mesh\+::make\+\_\+neighbourhood\+\_\+data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Builds the necessary tables to iterate through the one-\/ring of a vertex, .... 
+
+Builds \hyperlink{classgeoproc_1_1TriangleMesh_ab9610d614e081deb28010d237fecd55b}{corners} and \hyperlink{classgeoproc_1_1TriangleMesh_a2604795c90c694116513252b86d242b4}{opposite\+\_\+corners} tables. It also collects all boundary edges and stores them in the same \char`\"{}boundary list\char`\"{} in \hyperlink{classgeoproc_1_1TriangleMesh_a57162eac37831c87786a8dab8331d72f}{boundaries}. If one wants all boundaries as edge lists, call function \hyperlink{classgeoproc_1_1TriangleMesh_ad11c9406e2677e4d72d53837206fd769}{make\+\_\+boundaries} after this one.
+
+This function should be called only after all vertices and triangles have been added.
+
+If this function is called when the corresponding state is valid then this function does nothing. \mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a638f0267d7d8e51498330e414fa25bfe}\label{classgeoproc_1_1TriangleMesh_a638f0267d7d8e51498330e414fa25bfe}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!make\+\_\+normal\+\_\+vectors@{make\+\_\+normal\+\_\+vectors}}
+\index{make\+\_\+normal\+\_\+vectors@{make\+\_\+normal\+\_\+vectors}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{make\+\_\+normal\+\_\+vectors()}{make\_normal\_vectors()}}
+{\footnotesize\ttfamily void geoproc\+::\+Triangle\+Mesh\+::make\+\_\+normal\+\_\+vectors (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Computes the normal of every triangle. 
+
+Once the triangles and vertices have been set to the mesh, this method can compute the normal vectors for every triangle.
+
+The container is resized to be able to allocate as many normal vectors as triangles in the mesh.
+
+The normal is calculated as the normalisation of the cross product of the vectors from the first vertex of the triangle to the other two vertices\+:
+
+$ n_i = \frac{ u_1 \times u_2 }{ || u_1 \times u_2 || } $
+
+where $ u_1 = v_1 - v_0 $ and $ u_2 = v_2 - v_0 $, and $v_0,v_1,v_2$ are the first, second and third vertices of the triangle. \mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a2b34ddfa21f906805451e6dbbb4ce064}\label{classgeoproc_1_1TriangleMesh_a2b34ddfa21f906805451e6dbbb4ce064}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!scale\+\_\+to\+\_\+unit@{scale\+\_\+to\+\_\+unit}}
+\index{scale\+\_\+to\+\_\+unit@{scale\+\_\+to\+\_\+unit}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{scale\+\_\+to\+\_\+unit()}{scale\_to\_unit()}}
+{\footnotesize\ttfamily void geoproc\+::\+Triangle\+Mesh\+::scale\+\_\+to\+\_\+unit (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Reescales the mesh so that it fits in a unit box. 
+
+The mesh is reescaled so that the longest length of the sides of the bounding box equals 1. \mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a5e35cad5c18195e6397f22bc951161f1}\label{classgeoproc_1_1TriangleMesh_a5e35cad5c18195e6397f22bc951161f1}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!set\+\_\+triangles@{set\+\_\+triangles}}
+\index{set\+\_\+triangles@{set\+\_\+triangles}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{set\+\_\+triangles()}{set\_triangles()}}
+{\footnotesize\ttfamily void geoproc\+::\+Triangle\+Mesh\+::set\+\_\+triangles (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ int $>$ \&}]{tris }\end{DoxyParamCaption})}
+
+
+
+Adds the connectivity information to the mesh. 
+
+The contents of {\itshape tris} are the vertex indices of the triangles of the mesh. That is, face {\itshape f} has vertices \hyperlink{classgeoproc_1_1TriangleMesh_a82c3351de37daa9440f53597f080992d}{vertices}\mbox{[}3$\ast${\itshape f}\mbox{]}, \hyperlink{classgeoproc_1_1TriangleMesh_a82c3351de37daa9440f53597f080992d}{vertices}\mbox{[}3$\ast${\itshape f} + 1\mbox{]}, \hyperlink{classgeoproc_1_1TriangleMesh_a82c3351de37daa9440f53597f080992d}{vertices}\mbox{[}3$\ast${\itshape f} + 2\mbox{]}.
+
+Once the triangles have been copied, computes the angles of each triangle. See \hyperlink{classgeoproc_1_1TriangleMesh_ab255af87d20d76ad84246560fa3579b3}{angles} for details. Also, computes the areas of each of the triangles (see \hyperlink{classgeoproc_1_1TriangleMesh_a684ecaaa03f1739856bba03167e51dd1}{areas}).
+
+\begin{DoxyPrecond}{Precondition}
+The vertices must have been set. 
+\end{DoxyPrecond}
+\begin{DoxyPostcond}{Postcondition}
+The state of the mesh is invalidated (angles, area, neighbourhood data is not valid). 
+\end{DoxyPostcond}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_aa9ca26f1ededecd289d1a8800dca2c23}\label{classgeoproc_1_1TriangleMesh_aa9ca26f1ededecd289d1a8800dca2c23}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!set\+\_\+vertices@{set\+\_\+vertices}}
+\index{set\+\_\+vertices@{set\+\_\+vertices}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{set\+\_\+vertices()}{set\_vertices()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily void geoproc\+::\+Triangle\+Mesh\+::set\+\_\+vertices (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ float $>$ \&}]{coords }\end{DoxyParamCaption})}
+
+
+
+Sets the vertices to the mesh. 
+
+Each vertex starts at a position multiple of 3. Then, the contents of \hyperlink{classgeoproc_1_1TriangleMesh_a82c3351de37daa9440f53597f080992d}{vertices} is set to the contents of {\itshape vs}.
+
+It also, computes the minimum and maximum coordinates (see \hyperlink{classgeoproc_1_1TriangleMesh_aab5e7d8baf6f6cd7b5655b4c89f79e00}{min\+\_\+coord}, and \hyperlink{classgeoproc_1_1TriangleMesh_acffb17b164f0428aa01316b0a08bc2a3}{max\+\_\+coord}). 
+\begin{DoxyParams}{Parameters}
+{\em coords} & The coordinates of all the vertices. The size must be a multiple of 3.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyPostcond}{Postcondition}
+The angles and areas of the triangles are invalidated. 
+\end{DoxyPostcond}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a09b76789e908062501de253d360e0236}\label{classgeoproc_1_1TriangleMesh_a09b76789e908062501de253d360e0236}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!set\+\_\+vertices@{set\+\_\+vertices}}
+\index{set\+\_\+vertices@{set\+\_\+vertices}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{set\+\_\+vertices()}{set\_vertices()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily void geoproc\+::\+Triangle\+Mesh\+::set\+\_\+vertices (\begin{DoxyParamCaption}\item[{const glm\+::vec3 $\ast$}]{vs,  }\item[{int}]{N }\end{DoxyParamCaption})}
+
+
+
+Sets the vertices to the mesh. 
+
+The contents of \hyperlink{classgeoproc_1_1TriangleMesh_a82c3351de37daa9440f53597f080992d}{vertices} is set to the contents of {\itshape vs}. It also, computes the minimum and maximum coordinates (see \hyperlink{classgeoproc_1_1TriangleMesh_aab5e7d8baf6f6cd7b5655b4c89f79e00}{min\+\_\+coord}, and \hyperlink{classgeoproc_1_1TriangleMesh_acffb17b164f0428aa01316b0a08bc2a3}{max\+\_\+coord}). \begin{DoxyPrecond}{Precondition}
+{\itshape vs} is not null and points to the first element of an array of {\itshape N} vertices.
+\end{DoxyPrecond}
+\begin{DoxyPostcond}{Postcondition}
+The angles and areas of the triangles are invalidated. 
+\end{DoxyPostcond}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a2bd9a343db1642d11b39b6fab5710d3a}\label{classgeoproc_1_1TriangleMesh_a2bd9a343db1642d11b39b6fab5710d3a}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!set\+\_\+vertices@{set\+\_\+vertices}}
+\index{set\+\_\+vertices@{set\+\_\+vertices}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{set\+\_\+vertices()}{set\_vertices()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily void geoproc\+::\+Triangle\+Mesh\+::set\+\_\+vertices (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ glm\+::vec3 $>$ \&}]{vs }\end{DoxyParamCaption})}
+
+
+
+Sets the vertices to the mesh. 
+
+The contents of \hyperlink{classgeoproc_1_1TriangleMesh_a82c3351de37daa9440f53597f080992d}{vertices} is set to the contents of {\itshape vs}.
+
+\begin{DoxyPostcond}{Postcondition}
+The angles and areas of the triangles are invalidated. 
+\end{DoxyPostcond}
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_ab10f052ad932cd78056a55b58ddd475c}\label{classgeoproc_1_1TriangleMesh_ab10f052ad932cd78056a55b58ddd475c}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!all\+\_\+edges@{all\+\_\+edges}}
+\index{all\+\_\+edges@{all\+\_\+edges}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{all\+\_\+edges}{all\_edges}}
+{\footnotesize\ttfamily std\+::vector$<$\hyperlink{classgeoproc_1_1mesh__edge}{mesh\+\_\+edge}$>$ geoproc\+::\+Triangle\+Mesh\+::all\+\_\+edges\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Edges of this mesh. 
+
+This vector is filled in the \hyperlink{classgeoproc_1_1TriangleMesh_a84003dfdfd5e591c00f01a797578ff1f}{make\+\_\+neighbourhood\+\_\+data} function. The contents of this container are valid only when \hyperlink{classgeoproc_1_1TriangleMesh_aa6f95b95709a72a14a15638bfeeed3f9}{is\+\_\+neighbourhood\+\_\+valid} evaluates to true.
+
+The members of the class \hyperlink{classgeoproc_1_1mesh__edge}{mesh\+\_\+edge} make this container a D\+C\+EL. \mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_ab255af87d20d76ad84246560fa3579b3}\label{classgeoproc_1_1TriangleMesh_ab255af87d20d76ad84246560fa3579b3}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!angles@{angles}}
+\index{angles@{angles}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{angles}{angles}}
+{\footnotesize\ttfamily std\+::vector$<$glm\+::vec3$>$ geoproc\+::\+Triangle\+Mesh\+::angles\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Angles of each triangle. 
+
+Position {\itshape i} contains three values\+:
+\begin{DoxyItemize}
+\item angle $<$1,0,2$>$ (angle incident to 0)
+\item angle $<$0,1,2$>$ (angle incident to 1)
+\item angle $<$1,2,0$>$ (angle incident to 2)
+\end{DoxyItemize}
+
+where 0,1,2 represent, respectively, the first, second and third vertex of the {\itshape i-\/th} triangle.
+
+Notice that its size is \hyperlink{classgeoproc_1_1TriangleMesh_ac6db86ebd1e12d187f4bd4fcbb1e0809}{n\+\_\+triangles()} or \hyperlink{classgeoproc_1_1TriangleMesh_a6b8c186ba032170de9d4f36b4c1d298b}{n\+\_\+corners()}/3. \mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a684ecaaa03f1739856bba03167e51dd1}\label{classgeoproc_1_1TriangleMesh_a684ecaaa03f1739856bba03167e51dd1}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!areas@{areas}}
+\index{areas@{areas}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{areas}{areas}}
+{\footnotesize\ttfamily std\+::vector$<$float$>$ geoproc\+::\+Triangle\+Mesh\+::areas\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Area of each triangle. 
+
+Notice that its size is \hyperlink{classgeoproc_1_1TriangleMesh_ac6db86ebd1e12d187f4bd4fcbb1e0809}{n\+\_\+triangles()} or \hyperlink{classgeoproc_1_1TriangleMesh_a6b8c186ba032170de9d4f36b4c1d298b}{n\+\_\+corners()}/3. \mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a57162eac37831c87786a8dab8331d72f}\label{classgeoproc_1_1TriangleMesh_a57162eac37831c87786a8dab8331d72f}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!boundaries@{boundaries}}
+\index{boundaries@{boundaries}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{boundaries}{boundaries}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::vector$<$int$>$ $>$ geoproc\+::\+Triangle\+Mesh\+::boundaries\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Boundaries of this mesh. 
+
+Call method \hyperlink{classgeoproc_1_1TriangleMesh_ad11c9406e2677e4d72d53837206fd769}{make\+\_\+boundaries} to have this container filled with the appropriate data.
+
+This container contains as many lists of vertex indices as boundaries are in the mesh. \mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a1384fa834aaa4ec3dc7c3b025b1ca528}\label{classgeoproc_1_1TriangleMesh_a1384fa834aaa4ec3dc7c3b025b1ca528}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!boundaries\+\_\+valid@{boundaries\+\_\+valid}}
+\index{boundaries\+\_\+valid@{boundaries\+\_\+valid}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{boundaries\+\_\+valid}{boundaries\_valid}}
+{\footnotesize\ttfamily bool geoproc\+::\+Triangle\+Mesh\+::boundaries\+\_\+valid\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Are the boundaries of the mesh valid? 
+
+Is the data in \hyperlink{classgeoproc_1_1TriangleMesh_a57162eac37831c87786a8dab8331d72f}{boundaries} valid? \mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a142a764ddf07b98c7efcd596d88c3f87}\label{classgeoproc_1_1TriangleMesh_a142a764ddf07b98c7efcd596d88c3f87}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!boundary\+\_\+edges@{boundary\+\_\+edges}}
+\index{boundary\+\_\+edges@{boundary\+\_\+edges}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{boundary\+\_\+edges}{boundary\_edges}}
+{\footnotesize\ttfamily std\+::vector$<$int$>$ geoproc\+::\+Triangle\+Mesh\+::boundary\+\_\+edges\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Boundary edges of the mesh. 
+
+The hard boundary is composed by pairs of vertices (each identified with a vertex index).
+
+The hard is boundary is defined as those edges (\{{\itshape vi},{\itshape vj\}}) of those triangles (\{{\itshape vi},{\itshape vj},{\itshape vk\}}) such that {\itshape vk} has no opposite corner. All {\itshape vi}, {\itshape vj}, {\itshape vk} are valid vertex indices.
+
+Boundary vertices are collected into this container when the neighbourhood data is made (see \hyperlink{classgeoproc_1_1TriangleMesh_a84003dfdfd5e591c00f01a797578ff1f}{make\+\_\+neighbourhood\+\_\+data}). In order to make all boundary lists call \hyperlink{classgeoproc_1_1TriangleMesh_ad11c9406e2677e4d72d53837206fd769}{make\+\_\+boundaries}, which will fill the member \hyperlink{classgeoproc_1_1TriangleMesh_a57162eac37831c87786a8dab8331d72f}{boundaries}. \mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_ab9610d614e081deb28010d237fecd55b}\label{classgeoproc_1_1TriangleMesh_ab9610d614e081deb28010d237fecd55b}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!corners@{corners}}
+\index{corners@{corners}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{corners}{corners}}
+{\footnotesize\ttfamily std\+::vector$<$int$>$ geoproc\+::\+Triangle\+Mesh\+::corners\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Corner table. 
+
+Relates each vertex of the mesh to a corner.
+
+A vertex may belong to several corners (as many as triangles it is found in), but this table associates each vertex to a single corner index. \mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_ad72cdd2358e815a09c07176730b4e0a5}\label{classgeoproc_1_1TriangleMesh_ad72cdd2358e815a09c07176730b4e0a5}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!edges\+\_\+per\+\_\+triangle@{edges\+\_\+per\+\_\+triangle}}
+\index{edges\+\_\+per\+\_\+triangle@{edges\+\_\+per\+\_\+triangle}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{edges\+\_\+per\+\_\+triangle}{edges\_per\_triangle}}
+{\footnotesize\ttfamily std\+::vector$<$int\mbox{[}3\mbox{]}$>$ geoproc\+::\+Triangle\+Mesh\+::edges\+\_\+per\+\_\+triangle\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Edges per triangle. 
+
+In the D\+C\+EL, each triangle has exactly three edges incident to it, that is, three edges such that their right or left face is that triangle. Formally,
+
+\hyperlink{classgeoproc_1_1TriangleMesh_ad72cdd2358e815a09c07176730b4e0a5}{edges\+\_\+per\+\_\+triangle}\mbox{[}{\itshape i}\mbox{]} = \{{\itshape e\+\_\+p}, {\itshape e\+\_\+q}, {\itshape e\+\_\+r\}} 
+
+where {\itshape e\+\_\+p}, {\itshape e\+\_\+q}, {\itshape e\+\_\+r} are edges such that either their \hyperlink{classgeoproc_1_1mesh__edge_a348d06b420ce1588be1bc7eac781c6ef}{mesh\+\_\+edge\+::lT} or \hyperlink{classgeoproc_1_1mesh__edge_af19f02d3f6c36f2b23afa581c8ae3f59}{mesh\+\_\+edge\+::rT} equals {\itshape i}. \mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a21205ec88e494f864db4d8247db70d3c}\label{classgeoproc_1_1TriangleMesh_a21205ec88e494f864db4d8247db70d3c}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!neigh\+\_\+valid@{neigh\+\_\+valid}}
+\index{neigh\+\_\+valid@{neigh\+\_\+valid}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{neigh\+\_\+valid}{neigh\_valid}}
+{\footnotesize\ttfamily bool geoproc\+::\+Triangle\+Mesh\+::neigh\+\_\+valid\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Is the neighbourhood data valid? 
+
+Is the data in \hyperlink{classgeoproc_1_1TriangleMesh_ab9610d614e081deb28010d237fecd55b}{corners}, \hyperlink{classgeoproc_1_1TriangleMesh_a2604795c90c694116513252b86d242b4}{opposite\+\_\+corners} and \hyperlink{classgeoproc_1_1TriangleMesh_a142a764ddf07b98c7efcd596d88c3f87}{boundary\+\_\+edges} valid? \mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_ab9030a0301b2fe5868ad6c08692cce09}\label{classgeoproc_1_1TriangleMesh_ab9030a0301b2fe5868ad6c08692cce09}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!normal\+\_\+vectors@{normal\+\_\+vectors}}
+\index{normal\+\_\+vectors@{normal\+\_\+vectors}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{normal\+\_\+vectors}{normal\_vectors}}
+{\footnotesize\ttfamily std\+::vector$<$glm\+::vec3$>$ geoproc\+::\+Triangle\+Mesh\+::normal\+\_\+vectors\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Normal vector for every triangle of the mesh. 
+
+The {\itshape i-\/th} vector of this container corresponds to the normal vector of the {\itshape i-\/th} triangle of the mesh. This container can be filled after having set the vertices and the triangles. \mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a2604795c90c694116513252b86d242b4}\label{classgeoproc_1_1TriangleMesh_a2604795c90c694116513252b86d242b4}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!opposite\+\_\+corners@{opposite\+\_\+corners}}
+\index{opposite\+\_\+corners@{opposite\+\_\+corners}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{opposite\+\_\+corners}{opposite\_corners}}
+{\footnotesize\ttfamily std\+::vector$<$int$>$ geoproc\+::\+Triangle\+Mesh\+::opposite\+\_\+corners\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The set of opposite corners. 
+
+This table stores for every corner its opposite corner. Therefore, we can access the vertex opposite to another vertex (with respect to an edge).
+
+In general, \hyperlink{classgeoproc_1_1TriangleMesh_a2604795c90c694116513252b86d242b4}{opposite\+\_\+corners}\mbox{[}{\itshape i}\mbox{]} = {\itshape j} iff corner {\itshape j} is the opposite corner of {\itshape i}.
+
+In some cases this is not true, since the \char`\"{}opposite\char`\"{} corner is found by crossing a boundary. Such opposite is given as a negative value, but less than the number of triangles in absolute value if \hyperlink{classgeoproc_1_1TriangleMesh_a84003dfdfd5e591c00f01a797578ff1f}{make\+\_\+neighbourhood\+\_\+data} was called with a \textquotesingle{}true\textquotesingle{} value. In this case, we need to consider orientations\+: take its opposite edge and the \textquotesingle{}right\textquotesingle{} shared vertex (when placing the corner \textquotesingle{}on top of\textquotesingle{} the opposite edge), now take the other boundary edge incident to the \textquotesingle{}right\textquotesingle{} edge and, finally, this edge\textquotesingle{}s opposite corner. The corner found is defined to be opposite of the starting corner. Notice that this is defined for counterclockwise traversals on the one-\/ring neighbourhood of the \textquotesingle{}right\textquotesingle{} vertex. \mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_ad1cf20622f2bb080100862f413bd89c2}\label{classgeoproc_1_1TriangleMesh_ad1cf20622f2bb080100862f413bd89c2}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!triangles@{triangles}}
+\index{triangles@{triangles}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{triangles}{triangles}}
+{\footnotesize\ttfamily std\+::vector$<$int$>$ geoproc\+::\+Triangle\+Mesh\+::triangles\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+The set of triangles of the mesh. 
+
+Every three consecutive values starting at a position multiple of 3 contain the indexes of the vertices (stored in \hyperlink{classgeoproc_1_1TriangleMesh_a82c3351de37daa9440f53597f080992d}{vertices}) of the triangle.
+
+Then, the {\itshape i-\/th} triangle has vertices \hyperlink{classgeoproc_1_1TriangleMesh_ad1cf20622f2bb080100862f413bd89c2}{triangles}\mbox{[}i\mbox{]}, \hyperlink{classgeoproc_1_1TriangleMesh_ad1cf20622f2bb080100862f413bd89c2}{triangles}\mbox{[}i+1\mbox{]}, \hyperlink{classgeoproc_1_1TriangleMesh_ad1cf20622f2bb080100862f413bd89c2}{triangles}\mbox{[}i+2\mbox{]}.
+
+Just to make it clear\+: \hyperlink{classgeoproc_1_1TriangleMesh_ad1cf20622f2bb080100862f413bd89c2}{triangles} contains indices pointing to values in \hyperlink{classgeoproc_1_1TriangleMesh_a82c3351de37daa9440f53597f080992d}{vertices}. \mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_abbc25699f67776fc99c909124b0c584a}\label{classgeoproc_1_1TriangleMesh_abbc25699f67776fc99c909124b0c584a}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!vertex\+\_\+edge@{vertex\+\_\+edge}}
+\index{vertex\+\_\+edge@{vertex\+\_\+edge}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{vertex\+\_\+edge}{vertex\_edge}}
+{\footnotesize\ttfamily std\+::vector$<$int$>$ geoproc\+::\+Triangle\+Mesh\+::vertex\+\_\+edge\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Edge index for each vertex. 
+
+Each vertex is incident to several edges. This container relates each vertex to a asingle edge. Therefore, this container has as many edge indices as vertices are in this mesh.
+
+These indices point to values in \hyperlink{classgeoproc_1_1TriangleMesh_ab10f052ad932cd78056a55b58ddd475c}{all\+\_\+edges}. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+geoproc/triangle\+\_\+mesh.\+hpp\item 
+geoproc/triangle\+\_\+mesh.\+cpp\item 
+geoproc/triangle\+\_\+mesh\+\_\+algs.\+cpp\end{DoxyCompactItemize}
