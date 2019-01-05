@@ -57,7 +57,9 @@ struct CornerEdgeFace {
 	}
 };
 
-inline void add_edge_to_triangle(int ept[][3], unsigned char *count, int t, int e) {
+inline void add_edge_to_triangle
+(vector<int[3]>& ept, unsigned char *count, int t, int e)
+{
 	ept[t][ count[t] ] = e;
 	++count[t];
 }
@@ -65,7 +67,7 @@ inline void add_edge_to_triangle(int ept[][3], unsigned char *count, int t, int 
 inline int tri_has_edge_share_vertex
 (
 	const vector<geoproc::mesh_edge>& edges,
-	int ept[3], unsigned char count,
+	const int ept[3], unsigned char count,
 	int edge_idx, int endpoint
 )
 {
@@ -103,10 +105,9 @@ inline int find_common_boundary_edge(
 	return -1;
 }
 
-inline
-void find_prev_next_edges(
+inline void find_prev_next_edges(
 	const vector<int>& boundary_edges,
-	int ept[][3], unsigned char *count,
+	const vector<int[3]>& ept, unsigned char *count,
 	vector<geoproc::mesh_edge>& edges
 )
 {
@@ -236,17 +237,19 @@ void TriangleMesh::make_neighbourhood_data() {
 	vertex_edge.resize(vertices.size(), -1);
 
 	// these are used to find the previous and next edges.
-	// ept[t]   : at most three edges such that their
-	//            left/right triangle is triangle 'i'
+	// edges_per_triangle[t]   : at most three edges such that their
+	//                           left/right triangle is triangle 'i'
+	edges_per_triangle = vector<int[3]>(n_triangles());
 	// count[t] : triangle t has 'count_L/R[t]' edges
 	//            such that their left/right triangle
 	//            is triangle 'i'
-	int ept[n_triangles()][3];
 	unsigned char count[n_triangles()];
 
 	// initialise values
 	for (int i = 0; i < n_triangles(); ++i) {
-		ept[i][0] = ept[i][1] = ept[i][2] = -1;
+		edges_per_triangle[i][0] = -1;
+		edges_per_triangle[i][1] = -1;
+		edges_per_triangle[i][2] = -1;
 		count[i] = 0;
 	}
 
@@ -305,10 +308,10 @@ void TriangleMesh::make_neighbourhood_data() {
 
 		int edge_idx = all_edges.size() - 1;
 		if (E.lT != -1) {
-			add_edge_to_triangle(ept, count, E.lT, edge_idx);
+			add_edge_to_triangle(edges_per_triangle, count, E.lT, edge_idx);
 		}
 		if (E.rT != -1) {
-			add_edge_to_triangle(ept, count, E.rT, edge_idx);
+			add_edge_to_triangle(edges_per_triangle, count, E.rT, edge_idx);
 		}
 
 		// relate this edge to its vertices for fast
@@ -338,7 +341,7 @@ void TriangleMesh::make_neighbourhood_data() {
 
 	// find previous and next edges
 	// this is a DCEL
-	find_prev_next_edges(boundary_edges, ept, count, all_edges);
+	find_prev_next_edges(boundary_edges, edges_per_triangle, count, all_edges);
 
 	// -------------------------------------
 	// sanity check (debug compilation only)
