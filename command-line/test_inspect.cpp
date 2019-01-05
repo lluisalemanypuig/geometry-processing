@@ -33,6 +33,12 @@ namespace test_geoproc {
 		cout << "    - Number of edges" << endl;
 		cout << "    - Number of boundary edges" << endl;
 		cout << "    - Number of boundaries" << endl;
+		cout << "    - For every vertex, one edge incident to it" << endl;
+		cout << "    - The DCEL of the mesh" << endl;
+		cout << "    - For each triangle:" << endl;
+		cout << "          * the vertices, angles, area, and normal" << endl;
+		cout << "          * the three edges incident to it" << endl;
+		cout << "    - For each corner, its opposite corner" << endl;
 		cout << endl;
 	}
 
@@ -197,22 +203,26 @@ namespace test_geoproc {
 		const vector<float>& areas = mesh.get_areas();
 		const vector<glm::vec3>& angles = mesh.get_angles();
 		const vector<glm::vec3>& normals = mesh.get_normal_vectors();
+		const vector<int[3]>& ept = mesh.get_edges_triangle();
 		cout << "Triangles:" << endl;
 		for (int t = 0; t < mesh.n_triangles(); ++t) {
 			int v0,v1,v2;
 			mesh.get_vertices_triangle(t, v0,v1,v2);
 
-			cout << "    " << t << ": " << v0 << "," << v1 << "," << v2 << endl;
-			cout << "    area: " << areas[t] << endl;
-			cout << "    angles: " << endl;
+			cout << "    * " << t << ":" << endl;
+			cout << "      vertices: " << v0 << "," << v1 << "," << v2 << endl;
+			cout << "      area: " << areas[t] << endl;
+			cout << "      angles: " << endl;
 			cout << "        <" << v1 << "," << v0 << "," << v2 << ">= "
 				 << angles[t].x << endl;
 			cout << "        <" << v0 << "," << v1 << "," << v2 << ">= "
 				 << angles[t].y << endl;
 			cout << "        <" << v1 << "," << v2 << "," << v0 << ">= "
 				 << angles[t].z << endl;
-			cout << "    normal: "
+			cout << "      normal: "
 				 << normals[t].x << "," << normals[t].y << "," << normals[t].z << endl;
+			cout << "      edges: "
+				 << ept[t][0] << ", " << ept[t][1] << ", " << ept[t][2] << endl;
 		}
 
 		// ---------------------------------------------------------------------
