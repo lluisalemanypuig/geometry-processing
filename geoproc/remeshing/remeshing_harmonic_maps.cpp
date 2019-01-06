@@ -18,10 +18,6 @@ using namespace glm;
 #define triangle_orientation(p1,p2,p3)								\
 	((p1.x - p3.x)*(p2.y - p3.y) - (p1.y - p3.y)*(p2.x - p3.x))
 
-// i ranges from 0 to n-1
-// j ranges from 0 to m-1
-#define index_point(i,j, n) ((j)*n + (i))
-
 #define vec2out(p) "(" << p.x << "," << p.y << ")"
 
 enum seg_ori {
@@ -35,11 +31,6 @@ inline bool inside_triangle
 	const vec2& p0 = uvs[v0];
 	const vec2& p1 = uvs[v1];
 	const vec2& p2 = uvs[v2];
-
-	cout << "        Triangle " << vec2out(p0) << ", "
-							<< vec2out(p1) << ", "
-							<< vec2out(p2) << endl;
-
 	// triangle orientations
 	float tri_ori = triangle_orientation(p0, p1, p2);
 	if (std::abs(tri_ori) <= 1e-6f) {
@@ -47,16 +38,9 @@ inline bool inside_triangle
 		// division by 0 when computing barycentric coordinates
 		return false;
 	}
-
 	float o0 = triangle_orientation(p0,p1,p);
 	float o1 = triangle_orientation(p1,p2,p);
 	float o2 = triangle_orientation(p2,p0,p);
-
-	cout << "        tri_ori= " << tri_ori << endl;
-	cout << "        o0= " << o0 << endl;
-	cout << "        o1= " << o1 << endl;
-	cout << "        o2= " << o2 << endl;
-
 	if (tri_ori >= 0.0f) {
 		return o0 >= 0.0f and o1 >= 0.0f and o2 >= 0.0f;
 	}
@@ -80,17 +64,12 @@ inline seg_ori segment_orientation
 (const vec2& p, const vec2& q, const vec2& r)
 {
 	float v = (q.x - p.x)*(r.y - p.y) - (q.y - p.y)*(r.x - p.x);
-	cout << "        v= " << v;
 	if (std::abs(v) <= 1.0e-20f) {
-		cout << " -> collinear" << endl;
 		return seg_ori::collinear;
 	}
 	if (v < 0.0f) {
-		cout << " -> right" << endl;
 		return seg_ori::right;
 	}
-
-	cout << " -> left" << endl;
 	return seg_ori::left;
 }
 
@@ -106,30 +85,13 @@ inline bool get_next_triangle(
 	const vec2& r = uvs[v0];
 	const vec2& s = uvs[v1];
 
-	cout << "    edge " << edge_idx << ": " << v0 << " -> " << v1 << endl;
-	cout << "        " << vec2out(r) << " -> " << vec2out(s) << endl;
-
 	seg_ori pq_r = segment_orientation(p,q, r);
 	seg_ori pq_s = segment_orientation(p,q, s);
 	seg_ori rs_p = segment_orientation(r,s, p);
 	seg_ori rs_q = segment_orientation(r,s, q);
 
-	cout << "        orientation(p,q, r): "
-		 << (pq_r == seg_ori::collinear ? "collinear" : pq_r == seg_ori::left ? "left" : "right")
-		 << endl;
-	cout << "        orientation(p,q, s): "
-		 << (pq_s == seg_ori::collinear ? "collinear" : pq_s == seg_ori::left ? "left" : "right")
-		 << endl;
-	cout << "        orientation(r,s, p): "
-		 << (rs_p == seg_ori::collinear ? "collinear" : rs_p == seg_ori::left ? "left" : "right")
-		 << endl;
-	cout << "        orientation(r,s, q): "
-		 << (rs_q == seg_ori::collinear ? "collinear" : rs_q == seg_ori::left ? "left" : "right")
-		 << endl;
-
 	// general case: intersection between the vertices
 	if (pq_r != pq_s and rs_p != rs_q) {
-		cout << "        ++ crossing" << endl;
 		return true;
 	}
 
@@ -140,29 +102,23 @@ inline bool get_next_triangle(
 
 	// p,q, r are colinear and r lies on segment pq
 	if (pq_r == seg_ori::collinear and on_segment(p,q, r)) {
-		cout << "        ++ collinearity" << endl;
 		return true;
 	}
 	// p,q, s are colinear and s lies on segment pq
 	if (pq_s == seg_ori::collinear and on_segment(p,q, s)) {
-		cout << "        ++ collinearity" << endl;
 		return true;
 	}
 
 	// r,s, p are colinear and p lies on segment rs
 	if (rs_p == seg_ori::collinear and on_segment(r,s, p)) {
-		cout << "        ++ collinearity" << endl;
 		return true;
 	}
-
-	 // r,s, q are colinear and q lies on segment rs
+	// r,s, q are colinear and q lies on segment rs
 	if (rs_q == seg_ori::collinear and on_segment(r,s, q)) {
-		cout << "        ++ collinearity" << endl;
 		return true;
 	}
 
 	// no intersection
-	cout << "        .. no intersection" << endl;
 	return false;
 }
 
@@ -173,16 +129,9 @@ inline int find_first_triangle
 	for (int t = 0; t < mesh.n_triangles(); ++t) {
 		int v0,v1,v2;
 		mesh.get_vertices_triangle(t, v0,v1,v2);
-
-		cout << "    Checking triangle " << t << endl;
-		cout << "        with vertices " << v0 << "," << v1 << "," << v2 << endl;
-		cout << "        Is point (" << p.x << "," << p.y << ") inside this triangle?" << endl;
-
 		if (inside_triangle(uvs, p, v0,v1,v2)) {
-			cout << "        --> yes" << endl;
 			return t;
 		}
-		cout << "        --> no" << endl;
 	}
 
 	// no triangle found
@@ -200,12 +149,6 @@ inline int find_next_triangle(
 	const vector<int[3]>& edges_per_triangle = mesh.get_edges_triangle();
 
 	// assume we have a segment from 'pre' to 'next'
-
-	cout << "    Finding next triangle" << endl;
-	cout << "        for next point: " << vec2out(next) << endl;
-	cout << "        from previous point: " << vec2out(prev) << endl;
-	cout << "            in triangle: " << prev_tri << endl;
-
 	int T = prev_tri;
 	bool finish = false;
 	// prev_edge to avoid infinite loop going back and forth
@@ -216,18 +159,10 @@ inline int find_next_triangle(
 		mesh.get_vertices_triangle(T, vt0,vt1,vt2);
 		const int *ept = edges_per_triangle[T];
 
-		cout << "    Checking triangle " << T << endl;
-		cout << "        with vertices " << vt0 << "," << vt1 << "," << vt2 << endl;
-		cout << "        and edges " << ept[0] << "," << ept[1] << "," << ept[2] << endl;
-		cout << "        Is point (" << next.x << "," << next.y << ") inside this triangle?" << endl;
-
 		if (inside_triangle(uvs, next, vt0,vt1,vt2)) {
 			finish = true;
-			cout << "        --> yes. Finish" << endl;
 			continue;
 		}
-		cout << "        --> no. Continue" << endl;
-
 		int e_idx;
 
 		bool next_found = false;
@@ -271,8 +206,6 @@ inline int find_next_triangle(
 			T = -1;
 			finish = true;
 		}
-
-		cout << "        next triangle to look at: " << T << endl;
 	}
 	return T;
 }
@@ -306,10 +239,6 @@ inline void make_new_vertex
 	vert = vertices[v0]*w0 + vertices[v1]*w1 + vertices[v2]*w2;
 }
 
-#define it_start_at 1
-#define it_end_at(k) (k - 1) // included end
-#define point_start_at(k) ((1.0f*it_start_at)/k)
-
 namespace geoproc {
 using namespace parametrisation;
 using namespace smoothing;
@@ -334,14 +263,13 @@ namespace remeshing {
 		}
 
 		size_t it = 0;
-		vec2 pre(point_start_at(N), point_start_at(M));
-		vector<vec3> new_vertices(N*M);
+		vec2 pre(1.0f/N, 1.0f/M);
+		vector<vec3> new_vertices((N - 1)*(M - 1));
 		float w0,w1,w2;
 
 		/* compute the coordinates of the new vertices */
 
-		cout << "Locating point " << vec2out(pre) << endl;
-
+		// first point - to be handled differently
 		int nT = find_first_triangle(mesh, uvs, pre);
 		if (nT == -1) {
 			cerr << "geoproc::remeshing::harmonic_maps - Error" << endl;
@@ -354,60 +282,37 @@ namespace remeshing {
 		++it;
 
 		// first row of points
-		for (size_t j = it_start_at + 1; j <= it_end_at(M); ++j) {
-			vec2 next(point_start_at(N), (1.0f*j)/M);
-			cout << "Locating point " << vec2out(next)
-				 << " (index: " << it_start_at << "," << j << ")" << endl;
+		for (size_t j = 2; j < M; ++j) {
+			vec2 next(1.0f/N, (1.0f*j)/M);
 
 			nT = find_next_triangle(mesh, nT, uvs, pre, next);
 			if (nT == -1) {
 				cerr << "geoproc::remeshing::harmonic_maps - Error" << endl;
-				cerr << "    Could not locate point (0," << j << ")= ("
-					 << next.x << "," << next.y << ")" << endl;
+				cerr << "    Could not locate point (0," << j << ")= "
+					 << vec2out(next) << endl;
 				return false;
 			}
-
-			cout << "    ** Point " << vec2out(next) << " is in triangle " << nT << endl;
-
 			barycentric_coordinates(mesh, nT, uvs, pre, w0,w1,w2);
-
-			cout << "    weights: w0= " << w0 << endl;
-			cout << "             w1= " << w1 << endl;
-			cout << "             w2= " << w2 << endl;
-
 			make_new_vertex(mesh, nT, w0,w1,w2, new_vertices[it]);
 			++it;
-
 			pre = next;
 		}
 
 		// rest of the grid
-		for (size_t i = it_start_at + 1; i <= it_end_at(N); ++i) {
-			for (size_t j = it_start_at; j <= it_end_at(M); ++j) {
+		for (size_t i = 2; i < N; ++i) {
+			for (size_t j = 1; j < M; ++j) {
 				vec2 next((1.0f*i)/N, (1.0f*j)/M);
-
-				cout << "Locating point " << vec2out(next)
-					 << " (index: " << i << "," << j << ")" << endl;
 
 				nT = find_next_triangle(mesh, nT, uvs, pre, next);
 				if (nT == -1) {
 					cerr << "geoproc::remeshing::harmonic_maps - Error" << endl;
 					cerr << "    Could not locate point (" << i << "," << j << ")= ("
-						 << next.x << "," << next.y << ")" << endl;
+						 << vec2out(next) << endl;
 					return false;
 				}
-
-				cout << "    ** Point " << vec2out(next) << " is in triangle " << nT << endl;
-
 				barycentric_coordinates(mesh, nT, uvs, pre, w0,w1,w2);
-
-				cout << "    weights: w0= " << w0 << endl;
-				cout << "             w1= " << w1 << endl;
-				cout << "             w2= " << w2 << endl;
-
 				make_new_vertex(mesh, nT, w0,w1,w2, new_vertices[it]);
 				++it;
-
 				pre = next;
 			}
 		}
@@ -415,15 +320,16 @@ namespace remeshing {
 		/* compute new triangles */
 		// this is easy because we handle only the 'Square' case
 		vector<int> new_triangles;
-		for (size_t i = it_start_at; i <= it_end_at(N); ++i) {
-			for (size_t j = it_start_at; j <= it_end_at(M); ++j) {
-				new_triangles.push_back(index_point(i,j, N));
-				new_triangles.push_back(index_point(i+1,j, N));
-				new_triangles.push_back(index_point(i+1,j+1, N));
+		size_t N1 = N - 1;
+		for (size_t i = 0; i < N - 1; ++i) {
+			for (size_t j = 0; j < M - 1; ++j) {
+				new_triangles.push_back(j*N1 + i);
+				new_triangles.push_back(j*N1 + i + 1);
+				new_triangles.push_back((j + 1)*N1 + i + 1);
 
-				new_triangles.push_back(index_point(i,j, N));
-				new_triangles.push_back(index_point(i+1,j+1, N));
-				new_triangles.push_back(index_point(i,j+1, N));
+				new_triangles.push_back(j*N1 + i);
+				new_triangles.push_back((j + 1)*N1 + i + 1);
+				new_triangles.push_back((j + 1)*N1 + i);
 			}
 		}
 
