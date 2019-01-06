@@ -108,7 +108,7 @@ void TriangleMesh::set_vertices(const std::vector<float>& coords) {
 		vertices[i/3].z = coords[i+2];
 
 		min_coord = min(min_coord, vertices[i/3]);
-		max_coord = min(max_coord, vertices[i/3]);
+		max_coord = max(max_coord, vertices[i/3]);
 	}
 	vertices.shrink_to_fit();
 
@@ -128,7 +128,7 @@ void TriangleMesh::set_vertices(const glm::vec3 *vs, int N) {
 		vs, vs + N, vertices.begin(),
 		[&](const vec3& v) -> bool {
 			min_coord = min(min_coord, v);
-			max_coord = min(max_coord, v);
+			max_coord = max(max_coord, v);
 			return true;
 		}
 	);
@@ -140,7 +140,6 @@ void TriangleMesh::set_vertices(const glm::vec3 *vs, int N) {
 void TriangleMesh::set_vertices(const std::vector<glm::vec3>& vs) {
 	assert(vs.size() >= 1); // at least one vertex
 
-	// initialise min,max coords so that valgrind doesn't cry
 	min_coord = vs[0];
 	max_coord = vs[0];
 
@@ -149,7 +148,7 @@ void TriangleMesh::set_vertices(const std::vector<glm::vec3>& vs) {
 		vs.begin(), vs.end(), vertices.begin(),
 		[&](const vec3& v) -> bool {
 			min_coord = min(min_coord, v);
-			max_coord = min(max_coord, v);
+			max_coord = max(max_coord, v);
 			return true;
 		}
 	);
@@ -161,7 +160,7 @@ void TriangleMesh::set_vertices(const std::vector<glm::vec3>& vs) {
 void TriangleMesh::set_triangles(const vector<int>& tris) {
 	triangles.resize(tris.size());
 	copy(tris.begin(), tris.end(), triangles.begin());
-	// try optimising consumption of memory
+	// try optimising memory allocation
 	triangles.shrink_to_fit();
 
 	invalidate_state();
