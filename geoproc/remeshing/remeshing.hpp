@@ -16,7 +16,7 @@ namespace remeshing {
 	 * the square [0,1]x[0,1] (regardless of the shape).
 	 *
 	 * Then, in this square is generated a NxM grid of points. The point
-	 * \f$P_{ij}\f$ (with \f$0\le i < N, \quad 0\le j < M\f$) has coordinates
+	 * \f$P_{ij}\f$ (with \f$1\le i < N, \quad 1\le j < M\f$) has coordinates
 	 * \f$(x(P_{ij}), y(P_{ij})) = (i/N, j/M)\f$.
 	 *
 	 * Each of these points is located in the triangulation obtained from the
