@@ -158,8 +158,6 @@ namespace test_geoproc {
 		mesh.make_boundaries();
 		mesh.make_angles_area();
 
-		vector<glm::vec2> uvs;
-
 		bool r;
 		timing::time_point begin = timing::now();
 		r = remeshing::harmonic_maps(mesh, N,M, w, shape, new_mesh);
@@ -168,7 +166,7 @@ namespace test_geoproc {
 			 << " seconds" << endl;
 
 		if (not r) {
-			cerr << "Error: some error occured in the remeshing_harmonic_maps function"
+			cerr << "Error: some error occured. Aborting."
 				 << endl;
 			return 1;
 		}
