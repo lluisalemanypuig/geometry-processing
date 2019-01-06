@@ -262,6 +262,7 @@ namespace remeshing {
 			return false;
 		}
 
+		++N; ++M;
 		size_t it = 0;
 		vec2 pre(1.0f/N, 1.0f/M);
 		vector<vec3> new_vertices((N - 1)*(M - 1));
@@ -321,8 +322,8 @@ namespace remeshing {
 		// this is easy because we handle only the 'Square' case
 		vector<int> new_triangles;
 		size_t N1 = N - 1;
-		for (size_t i = 0; i < N - 1; ++i) {
-			for (size_t j = 0; j < M - 1; ++j) {
+		for (size_t i = 0; i < N - 2; ++i) {
+			for (size_t j = 0; j < M - 2; ++j) {
 				new_triangles.push_back(j*N1 + i);
 				new_triangles.push_back(j*N1 + i + 1);
 				new_triangles.push_back((j + 1)*N1 + i + 1);
