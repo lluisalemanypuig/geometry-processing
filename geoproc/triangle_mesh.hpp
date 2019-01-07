@@ -532,6 +532,11 @@ class TriangleMesh {
 		 */
 		const std::vector<int>& get_vertex_edge() const;
 		/**
+		 * @brief Returns a constant reference to all the triangles in this mesh.
+		 * @return Returns a constant reference to @ref triangles.
+		 */
+		const std::vector<int>& get_triangles() const;
+		/**
 		 * @brief Returns a relation between tirnalges and edges.
 		 * @pre Neighbourhood has to be valid (@ref is_neighbourhood_valid()
 		 * evaluates to true).

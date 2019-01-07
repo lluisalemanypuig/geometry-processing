@@ -395,6 +395,10 @@ const vector<int>& TriangleMesh::get_vertex_edge() const {
 	return vertex_edge;
 }
 
+const vector<int>& TriangleMesh::get_triangles() const {
+	return triangles;
+}
+
 const vector<int[3]>& TriangleMesh::get_edges_triangle() const {
 	return edges_per_triangle;
 }
