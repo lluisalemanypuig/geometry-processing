@@ -171,10 +171,16 @@ namespace test_geoproc {
 			return 1;
 		}
 
+		new_mesh.make_normal_vectors();
+		new_mesh.make_neighbourhood_data();
+		new_mesh.make_boundaries();
+		new_mesh.make_angles_area();
+
 		const vector<glm::vec3>& new_verts = new_mesh.get_vertices();
 		if (new_verts.size() <= 30) {
+			cout << "Vertices of the new mesh:" << endl;
 			for (const glm::vec3& v : new_verts) {
-				cout << v.x << "," << v.y << "," << v.z << endl;
+				cout << "    " << v.x << "," << v.y << "," << v.z << endl;
 			}
 		}
 
