@@ -12,7 +12,7 @@ using namespace glm;
 
 // geoproc includes
 #include <geoproc/filter_frequencies/band_frequencies.hpp>
-#include <geoproc/smoothing/smoothing_defs.hpp>
+#include <geoproc/definitions.hpp>
 #include <geoproc/triangle_mesh.hpp>
 #include <geoproc/ply_reader.hpp>
 using namespace geoproc;
@@ -97,15 +97,15 @@ namespace test_geoproc {
 				string o;
 				cin >> o;
 				if (o == "laplacian") {
-					S.so = smoothing::smooth_operator::Laplacian;
+					S.so = modifier::Laplacian;
 					oper = true;
 				}
 				else if (o == "laplacian") {
-					S.so = smoothing::smooth_operator::BiLaplacian;
+					S.so = modifier::BiLaplacian;
 					oper = true;
 				}
 				else if (o == "laplacian") {
-					S.so = smoothing::smooth_operator::TaubinLM;
+					S.so = modifier::TaubinLM;
 					oper = true;
 				}
 				else {
@@ -119,11 +119,11 @@ namespace test_geoproc {
 				string w;
 				cin >> w;
 				if (w == "uniform") {
-					S.sw = smoothing::smooth_weight::uniform;
+					S.sw = weight::uniform;
 					weight = true;
 				}
 				else if (w == "cotangent") {
-					S.sw = smoothing::smooth_weight::cotangent;
+					S.sw = weight::cotangent;
 					weight = true;
 				}
 				else {

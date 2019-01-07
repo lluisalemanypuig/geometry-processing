@@ -15,6 +15,7 @@ using namespace std;
 #include <geoproc/smoothing/global.hpp>
 #include <geoproc/filter_frequencies/band_frequencies.hpp>
 #include <geoproc/remeshing/remeshing.hpp>
+#include <geoproc/parametrisation/parametrisation.hpp>
 
 // custom includes
 #include "err_war_helper.hpp"
@@ -30,22 +31,22 @@ void print_smoothing_configuration
 )
 {
 	cout << tab << "operator ";
-	if (conf.so == smoothing::smooth_operator::Laplacian) {
+	if (conf.so == modifier::Laplacian) {
 		cout << "'Laplacian'";
 	}
-	else if (conf.so == smoothing::smooth_operator::BiLaplacian) {
+	else if (conf.so == modifier::BiLaplacian) {
 		cout << "'biLaplacian'";
 	}
-	else if (conf.so == smoothing::smooth_operator::TaubinLM) {
+	else if (conf.so == modifier::TaubinLM) {
 		cout << "'Taubin'";
 	}
 	cout << endl;
 
 	cout << tab << "weight type ";
-	if (conf.sw == smoothing::smooth_weight::uniform) {
+	if (conf.sw == weight::uniform) {
 		cout << "'uniform'";
 	}
-	else if (conf.sw == smoothing::smooth_weight::cotangent) {
+	else if (conf.sw == weight::cotangent) {
 		cout << "'cotangent'";
 	}
 	cout << endl;
@@ -69,8 +70,8 @@ void TwinGLWidget::mouseMoveEvent(QMouseEvent *event) {
 // PUBLIC
 
 TwinGLWidget::TwinGLWidget(QWidget *parent) : GLWidget(parent) {
-	op = smoothing::smooth_operator::Laplacian;
-	wt = smoothing::smooth_weight::uniform;
+	op = modifier::Laplacian;
+	wt = weight::uniform;
 	twin = nullptr;
 
 	nit = 0;
@@ -114,11 +115,11 @@ void TwinGLWidget::set_perc_fixed_vertices(float p) {
 	perc_fix_vertices = p;
 }
 
-void TwinGLWidget::set_smooth_operator(const smoothing::smooth_operator& o) {
+void TwinGLWidget::set_smooth_operator(const modifier& o) {
 	op = o;
 }
 
-void TwinGLWidget::set_smooth_weight_type(const smoothing::smooth_weight& w) {
+void TwinGLWidget::set_smooth_weight_type(const weight& w) {
 	wt = w;
 }
 
@@ -132,7 +133,7 @@ void TwinGLWidget::make_remeshing(size_t N, size_t M) {
 
 	TriangleMesh res;
 	bool r = remeshing::harmonic_maps
-	(mesh, N, M, wt, parametrisation::boundary_shape::Square, res);
+	(mesh, N, M, wt, boundary_shape::Square, res);
 
 	if (not r) {
 		cerr << ERR("TwinGLWidget::make_remeshing", name) << endl;
@@ -164,21 +165,21 @@ void TwinGLWidget::run_local_smoothing_algorithm() {
 				 "Local smooth with:")
 		 << endl;
 	cout << "    operator ";
-	if (op == smoothing::smooth_operator::Laplacian) {
+	if (op == modifier::Laplacian) {
 		cout << "'Laplacian'";
 	}
-	else if (op == smoothing::smooth_operator::BiLaplacian) {
+	else if (op == modifier::BiLaplacian) {
 		cout << "'biLaplacian'";
 	}
-	else if (op == smoothing::smooth_operator::TaubinLM) {
+	else if (op == modifier::TaubinLM) {
 		cout << "'Taubin'";
 	}
 	cout << endl;
 	cout << "    weight type ";
-	if (wt == smoothing::smooth_weight::uniform) {
+	if (wt == weight::uniform) {
 		cout << "'uniform'";
 	}
-	else if (wt == smoothing::smooth_weight::cotangent) {
+	else if (wt == weight::cotangent) {
 		cout << "'cotangent'";
 	}
 	cout << endl;
@@ -187,13 +188,13 @@ void TwinGLWidget::run_local_smoothing_algorithm() {
 	cout << "    # threads: " << nt << endl;
 
 	timing::time_point begin = timing::now();
-	if (op == smoothing::smooth_operator::Laplacian) {
+	if (op == modifier::Laplacian) {
 		smoothing::local::laplacian(wt, lambda, nit, nt, mesh);
 	}
-	else if (op == smoothing::smooth_operator::BiLaplacian) {
+	else if (op == modifier::BiLaplacian) {
 		smoothing::local::bilaplacian(wt, lambda, nit, nt, mesh);
 	}
-	else if (op == smoothing::smooth_operator::TaubinLM) {
+	else if (op == modifier::TaubinLM) {
 		smoothing::local::TaubinLM(wt, lambda, nit, nt, mesh);
 	}
 	timing::time_point end = timing::now();
@@ -228,21 +229,21 @@ void TwinGLWidget::run_global_smoothing_algorithm() {
 				 "Global smooth with:")
 		 << endl;
 	cout << "    operator ";
-	if (op == smoothing::smooth_operator::Laplacian) {
+	if (op == modifier::Laplacian) {
 		cout << "'Laplacian'";
 	}
-	else if (op == smoothing::smooth_operator::BiLaplacian) {
+	else if (op == modifier::BiLaplacian) {
 		cout << "'biLaplacian'";
 	}
-	else if (op == smoothing::smooth_operator::TaubinLM) {
+	else if (op == modifier::TaubinLM) {
 		cout << "'Taubin'";
 	}
 	cout << endl;
 	cout << "    weight type ";
-	if (wt == smoothing::smooth_weight::uniform) {
+	if (wt == weight::uniform) {
 		cout << "'uniform'";
 	}
-	else if (wt == smoothing::smooth_weight::cotangent) {
+	else if (wt == weight::cotangent) {
 		cout << "'cotangent'";
 	}
 	cout << endl;
@@ -363,13 +364,13 @@ bool parseJsonObject
 	/* parse ALGORITHM */
 	QString alg_str = alg_value.toString();
 	if (alg_str == "Laplacian") {
-		conf.so = smoothing::smooth_operator::Laplacian;
+		conf.so = modifier::Laplacian;
 	}
 	else if (alg_str == "Laplacian") {
-		conf.so = smoothing::smooth_operator::BiLaplacian;
+		conf.so = modifier::BiLaplacian;
 	}
 	else if (alg_str == "Laplacian") {
-		conf.so = smoothing::smooth_operator::TaubinLM;
+		conf.so = modifier::TaubinLM;
 	}
 	else {
 		cerr << ERR("TwinGLWidget -> parseJsonObject", name) << endl;
@@ -381,10 +382,10 @@ bool parseJsonObject
 	/* parse WEIGHT TYPE */
 	QString weight_str = weight_value.toString();
 	if (weight_str == "uniform") {
-		conf.sw = smoothing::smooth_weight::uniform;
+		conf.sw = weight::uniform;
 	}
 	else if (weight_str == "cotangent") {
-		conf.sw = smoothing::smooth_weight::cotangent;
+		conf.sw = weight::cotangent;
 	}
 	else {
 		cerr << ERR("TwinGLWidget -> parseJsonObject", name) << endl;

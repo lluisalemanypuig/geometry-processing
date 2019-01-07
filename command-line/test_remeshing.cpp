@@ -12,7 +12,6 @@ using namespace std;
 using namespace glm;
 
 // geoproc includes
-#include <geoproc/parametrisation/parametrisation_defs.hpp>
 #include <geoproc/parametrisation/parametrisation.hpp>
 #include <geoproc/remeshing/remeshing.hpp>
 #include <geoproc/triangle_mesh.hpp>
@@ -122,12 +121,12 @@ namespace test_geoproc {
 			return 1;
 		}
 
-		smoothing::smooth_weight w;
+		weight w;
 		if (weight_type == "uniform") {
-			w = smoothing::smooth_weight::uniform;
+			w = weight::uniform;
 		}
 		else if (weight_type == "cotangent") {
-			w = smoothing::smooth_weight::cotangent;
+			w = weight::cotangent;
 		}
 		else {
 			cerr << "Error: value for weight type '" << weight_type

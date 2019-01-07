@@ -142,13 +142,13 @@ void GLWidget::show_curvature(bool make_all_buffers) {
 }
 
 void GLWidget::compute_harmonic_maps() {
-	parametrisation::boundary_shape s;
+	boundary_shape s;
 
 	if (harmonic_maps_mode == polymode::harmonic_maps_Circle) {
-		s = parametrisation::boundary_shape::Circle;
+		s = boundary_shape::Circle;
 	}
 	else if (harmonic_maps_mode == polymode::harmonic_maps_Square) {
-		s = parametrisation::boundary_shape::Square;
+		s = boundary_shape::Square;
 	}
 
 	mesh.make_neighbourhood_data();
@@ -165,18 +165,18 @@ void GLWidget::compute_harmonic_maps() {
 
 	cout << PROG("GLWidget::set_harmonic_map", name, "Harmonic maps") << endl;
 	cout << "    with shape: ";
-	if (s == parametrisation::boundary_shape::Circle) {
+	if (s == boundary_shape::Circle) {
 		cout << "circle";
 	}
-	else if (s == parametrisation::boundary_shape::Square) {
+	else if (s == boundary_shape::Square) {
 		cout << "square";
 	}
 	cout << endl;
 	cout << "    weight type: ";
-	if (harmonic_maps_weight == smoothing::smooth_weight::uniform) {
+	if (harmonic_maps_weight == weight::uniform) {
 		cout << "uniform";
 	}
-	else if (harmonic_maps_weight == smoothing::smooth_weight::cotangent) {
+	else if (harmonic_maps_weight == weight::cotangent) {
 		cout << "cotangent";
 	}
 	cout << endl;
@@ -476,7 +476,7 @@ void GLWidget::change_polygon_mode() {
 }
 
 void GLWidget::set_harmonic_map(
-	const polymode& pmode, const smoothing::smooth_weight& w
+	const polymode& pmode, const weight& w
 )
 {
 	assert(current_polymode == polymode::harmonic_maps);

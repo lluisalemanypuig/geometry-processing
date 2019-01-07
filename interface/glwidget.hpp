@@ -9,7 +9,7 @@
 #include <QMouseEvent>
 
 // geoproc includes
-#include <geoproc/smoothing/smoothing_defs.hpp>
+#include <geoproc/definitions.hpp>
 
 // Custom includes
 #include "render_triangle_mesh.hpp"
@@ -58,7 +58,7 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		polymode to_polymode;
 		polymode current_polymode;
 		polymode harmonic_maps_mode;
-		smoothing::smooth_weight harmonic_maps_weight;
+		weight harmonic_maps_weight;
 		/// Type of curvature to be displayed. See @ref curvature_display.
 		curv_type current_curv_display;
 		curv_type to_curv_display;
@@ -131,7 +131,7 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		void change_polygon_mode();
 		/// Set the type of harmonic map generated.
 		void set_harmonic_map
-		(const polymode& current_polymode, const smoothing::smooth_weight& weight);
+		(const polymode& current_polymode, const weight& weight);
 		/**
 		 * @brief Render a wireframe for harmonic maps.
 		 * @pre The widget must be rendering a harmonic type.

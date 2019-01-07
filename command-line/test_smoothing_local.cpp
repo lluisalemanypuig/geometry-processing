@@ -174,12 +174,12 @@ namespace test_geoproc {
 			return 1;
 		}
 
-		smoothing::smooth_weight w;
+		weight w;
 		if (weight_type == "uniform") {
-			w = smoothing::smooth_weight::uniform;
+			w = weight::uniform;
 		}
 		else if (weight_type == "cotangent") {
-			w = smoothing::smooth_weight::cotangent;
+			w = weight::cotangent;
 		}
 		else {
 			cerr << "Error: value for weight type '" << weight_type << "' not valid" << endl;

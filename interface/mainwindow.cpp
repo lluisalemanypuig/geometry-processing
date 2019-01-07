@@ -5,7 +5,7 @@
 using namespace std;
 
 // geoproc includes
-#include <geoproc/smoothing/smoothing_defs.hpp>
+#include <geoproc/definitions.hpp>
 using namespace geoproc;
 
 // Qt includes
@@ -104,17 +104,17 @@ void MainWindow::set_local_smooth_params() {
 	const QString& smooth_operator = ui->CB_Smooth_Local_Operators->currentText();
 	if (smooth_operator == "Laplacian") {
 		ui->DualView_RightRenderer->set_smooth_operator(
-			smoothing::smooth_operator::Laplacian
+			modifier::Laplacian
 		);
 	}
 	else if (smooth_operator == "Bilaplacian") {
 		ui->DualView_RightRenderer->set_smooth_operator(
-			smoothing::smooth_operator::BiLaplacian
+			modifier::BiLaplacian
 		);
 	}
 	else if (smooth_operator == "TaubinLM") {
 		ui->DualView_RightRenderer->set_smooth_operator(
-			smoothing::smooth_operator::TaubinLM
+			modifier::TaubinLM
 		);
 	}
 	else {
@@ -126,12 +126,12 @@ void MainWindow::set_local_smooth_params() {
 	const QString& weight_type = ui->CB_Smooth_Local_WeightType->currentText();
 	if (weight_type == "Uniform") {
 		ui->DualView_RightRenderer->set_smooth_weight_type(
-			smoothing::smooth_weight::uniform
+			weight::uniform
 		);
 	}
 	else if (weight_type == "Cotangent") {
 		ui->DualView_RightRenderer->set_smooth_weight_type(
-			smoothing::smooth_weight::cotangent
+			weight::cotangent
 		);
 	}
 	else {
@@ -151,7 +151,7 @@ void MainWindow::set_global_smooth_params() {
 	const QString& smooth_operator = ui->CB_Smooth_Global_Operators->currentText();
 	if (smooth_operator == "Laplacian") {
 		ui->DualView_RightRenderer->set_smooth_operator(
-			smoothing::smooth_operator::Laplacian
+			modifier::Laplacian
 		);
 	}
 	else {
@@ -163,12 +163,12 @@ void MainWindow::set_global_smooth_params() {
 	const QString& weight_type = ui->CB_Smooth_Global_WeightType->currentText();
 	if (weight_type == "Uniform") {
 		ui->DualView_RightRenderer->set_smooth_weight_type(
-			smoothing::smooth_weight::uniform
+			weight::uniform
 		);
 	}
 	else if (weight_type == "Cotangent") {
 		ui->DualView_RightRenderer->set_smooth_weight_type(
-			smoothing::smooth_weight::cotangent
+			weight::cotangent
 		);
 	}
 	else {
@@ -295,12 +295,12 @@ void MainWindow::on_RB_Render_HarmonicMaps_toggled(bool checked) {
 void MainWindow::on_RB_Render_HarmonicMaps_Circle_toggled(bool checked) {
 	if (checked) {
 		string w = ui->CB_Render_HarmonicMaps_Weights->currentText().toStdString();
-		smoothing::smooth_weight weight;
+		weight weight;
 		if (w == "Uniform") {
-			weight = smoothing::smooth_weight::uniform;
+			weight = weight::uniform;
 		}
 		else if (w == "Cotangent") {
-			weight = smoothing::smooth_weight::cotangent;
+			weight = weight::cotangent;
 		}
 
 		if (current_tab == 0) {
@@ -322,12 +322,12 @@ void MainWindow::on_RB_Render_HarmonicMaps_Circle_toggled(bool checked) {
 void MainWindow::on_RB_Render_HarmonicMaps_Square_toggled(bool checked) {
 	if (checked) {
 		string w = ui->CB_Render_HarmonicMaps_Weights->currentText().toStdString();
-		smoothing::smooth_weight weight;
+		weight weight;
 		if (w == "Uniform") {
-			weight = smoothing::smooth_weight::uniform;
+			weight = weight::uniform;
 		}
 		else if (w == "Cotangent") {
-			weight = smoothing::smooth_weight::cotangent;
+			weight = weight::cotangent;
 		}
 
 		if (current_tab == 0) {
@@ -362,12 +362,12 @@ void MainWindow::on_CB_Render_HarmonicMaps_Weights_currentTextChanged
 )
 {
 	string w = t.toStdString();
-	smoothing::smooth_weight weight;
+	weight weight;
 	if (w == "Uniform") {
-		weight = smoothing::smooth_weight::uniform;
+		weight = weight::uniform;
 	}
 	else if (w == "Cotangent") {
-		weight = smoothing::smooth_weight::cotangent;
+		weight = weight::cotangent;
 	}
 	else {
 		cerr << ERR("MainWindow::on_CB_Render_HarmonicMaps_Weights_currentTextChanged",
@@ -585,12 +585,12 @@ void MainWindow::on_PB_Remeshing_Run_clicked() {
 	}
 
 	string w = ui->CB_Remeshing_Weights->currentText().toStdString();
-	smoothing::smooth_weight weight;
+	weight weight;
 	if (w == "Uniform") {
-		weight = smoothing::smooth_weight::uniform;
+		weight = weight::uniform;
 	}
 	else if (w == "Cotangent") {
-		weight = smoothing::smooth_weight::cotangent;
+		weight = weight::cotangent;
 	}
 	else {
 		cerr << ERR("MainWindow::on_PB_Remeshing_Run_clicked", "MainWindow") << endl;

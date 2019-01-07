@@ -134,7 +134,7 @@ class RenderTriangleMesh : public TriangleMesh {
 		/// Generates the vertices and triangles of a cube.
 		void build_cube();
 
-		// MODIFIERS
+		// modifierS
 
 		/**
 		 * @brief Initialises the mesh with the shader @e program associated.

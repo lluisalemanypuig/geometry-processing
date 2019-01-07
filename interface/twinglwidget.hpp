@@ -5,7 +5,7 @@
 #include <QMouseEvent>
 
 // geoproc includes
-#include <geoproc/smoothing/smoothing_defs.hpp>
+#include <geoproc/definitions.hpp>
 using namespace geoproc;
 
 // Custom includes
@@ -15,8 +15,8 @@ using namespace geoproc;
 
 class TwinGLWidget : public GLWidget {
 	protected:
-		smoothing::smooth_operator op;
-		smoothing::smooth_weight wt;
+		modifier op;
+		weight wt;
 		size_t nit;
 		float lambda;
 		float mu;
@@ -40,8 +40,8 @@ class TwinGLWidget : public GLWidget {
 		void set_n_iterations(size_t n);
 		void set_lambda(float l);
 		void set_perc_fixed_vertices(float p);
-		void set_smooth_operator(const smoothing::smooth_operator& o);
-		void set_smooth_weight_type(const smoothing::smooth_weight& w);
+		void set_smooth_operator(const modifier& o);
+		void set_smooth_weight_type(const weight& w);
 
 		// OTHERS
 

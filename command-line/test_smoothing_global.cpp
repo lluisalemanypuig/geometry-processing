@@ -122,9 +122,9 @@ namespace test_geoproc {
 		cout << "Smooth globally:" << endl;
 		cout << "    with operator: ";
 
-		smoothing::smooth_operator o;
+		modifier o;
 		if (opt == "laplacian") {
-			o = smoothing::smooth_operator::Laplacian;
+			o = modifier::Laplacian;
 			cout << "Laplacian";
 		}
 		else {
@@ -136,13 +136,13 @@ namespace test_geoproc {
 		cout << endl;
 
 		cout << "    with ";
-		smoothing::smooth_weight w;
+		weight w;
 		if (weight_type == "uniform") {
-			w = smoothing::smooth_weight::uniform;
+			w = weight::uniform;
 			cout << "uniform";
 		}
 		else if (weight_type == "cotangent") {
-			w = smoothing::smooth_weight::cotangent;
+			w = weight::cotangent;
 			cout << "cotangent";
 		}
 		else {
