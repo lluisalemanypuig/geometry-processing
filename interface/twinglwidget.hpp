@@ -45,6 +45,7 @@ class TwinGLWidget : public GLWidget {
 
 		// OTHERS
 
+		void make_remeshing(size_t N, size_t M);
 		void run_local_smoothing_algorithm();
 		void run_global_smoothing_algorithm();
 		void run_band_frequencies(const QJsonDocument& doc);

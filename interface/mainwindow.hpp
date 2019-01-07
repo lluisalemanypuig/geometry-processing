@@ -66,6 +66,9 @@ class MainWindow : public QMainWindow {
 		void on_SB_Settings_NumThreads_valueChanged(int arg1);
 		void on_PB_Settings_ClearMesh_clicked();
 
+		/* Remeshing */
+		void on_PB_Remeshing_Run_clicked();
+
 		/* Tab widget stuff */
 		void on_TW_View_currentChanged(int index);
 

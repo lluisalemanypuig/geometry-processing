@@ -14,6 +14,7 @@ using namespace std;
 #include <geoproc/smoothing/local.hpp>
 #include <geoproc/smoothing/global.hpp>
 #include <geoproc/filter_frequencies/band_frequencies.hpp>
+#include <geoproc/remeshing/remeshing.hpp>
 
 // custom includes
 #include "err_war_helper.hpp"
@@ -122,6 +123,37 @@ void TwinGLWidget::set_smooth_weight_type(const smoothing::smooth_weight& w) {
 }
 
 // OTHERS
+
+void TwinGLWidget::make_remeshing(size_t N, size_t M) {
+
+	mesh.make_neighbourhood_data();
+	mesh.make_boundaries();
+	mesh.make_angles_area();
+
+	TriangleMesh res;
+	bool r = remeshing::harmonic_maps
+	(mesh, N, M, wt, parametrisation::boundary_shape::Square, res);
+
+	if (not r) {
+		cerr << ERR("TwinGLWidget::make_remeshing", name) << endl;
+		cerr << "    Something went wrong with remeshing." << endl;
+		return;
+	}
+
+	// destroy current mesh
+	mesh.free_buffers();
+	mesh.destroy();
+
+	// reinitialise mesh
+	mesh.set_vertices(res.get_vertices());
+	mesh.set_triangles(res.get_triangles());
+	mesh.make_normal_vectors();
+	mesh.make_neighbourhood_data();
+	mesh.make_boundaries();
+	mesh.make_angles_area();
+
+	init_mesh(true);
+}
 
 void TwinGLWidget::run_local_smoothing_algorithm() {
 	mesh.make_neighbourhood_data();

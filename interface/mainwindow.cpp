@@ -372,7 +372,7 @@ void MainWindow::on_CB_Render_HarmonicMaps_Weights_currentTextChanged
 	else {
 		cerr << ERR("MainWindow::on_CB_Render_HarmonicMaps_Weights_currentTextChanged",
 					"MainWindow") << endl;
-		cerr << "    Value in combobox '" << t.toStdString() << "' not valid" << endl;
+		cerr << "    Value in combobox '" << w << "' not valid" << endl;
 		return;
 	}
 
@@ -563,6 +563,46 @@ void MainWindow::on_PB_Settings_ClearMesh_clicked() {
 		ui->DualView_LeftRenderer->clear_mesh();
 		ui->DualView_RightRenderer->clear_mesh();
 	}
+}
+
+/* Remeshing */
+
+void MainWindow::on_PB_Remeshing_Run_clicked() {
+	bool ok = true;
+
+	int N = ui->LE_Remeshing_N->text().toInt(&ok);
+	if (not ok) {
+		cerr << ERR("MainWindow::on_PB_Remeshing_Run_clicked", "MainWindow") << endl;
+		cerr << "    Invalid contents of textbox for amount of points in x" << endl;
+		return;
+	}
+
+	int M = ui->LE_Remeshing_M->text().toInt(&ok);
+	if (not ok) {
+		cerr << ERR("MainWindow::on_PB_Remeshing_Run_clicked", "MainWindow") << endl;
+		cerr << "    Invalid contents of textbox for amount of points in y" << endl;
+		return;
+	}
+
+	string w = ui->CB_Remeshing_Weights->currentText().toStdString();
+	smoothing::smooth_weight weight;
+	if (w == "Uniform") {
+		weight = smoothing::smooth_weight::uniform;
+	}
+	else if (w == "Cotangent") {
+		weight = smoothing::smooth_weight::cotangent;
+	}
+	else {
+		cerr << ERR("MainWindow::on_PB_Remeshing_Run_clicked", "MainWindow") << endl;
+		cerr << "    Value in combobox '" << w << "' not valid" << endl;
+		return;
+	}
+
+	ui->DualView_RightRenderer->set_smooth_weight_type(weight);
+
+	size_t NN = static_cast<size_t>(N);
+	size_t MM = static_cast<size_t>(M);
+	ui->DualView_RightRenderer->make_remeshing(NN, MM);
 }
 
 /* Tab widget stuff */
