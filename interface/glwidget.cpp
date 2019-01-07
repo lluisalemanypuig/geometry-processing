@@ -298,7 +298,6 @@ void GLWidget::paintGL() {
 	}
 
 	program->release();
-
 	return;
 }
 
@@ -332,6 +331,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
 GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
 	program = nullptr;
 
+	to_polymode = polymode::solid;
 	current_polymode = polymode::solid;
 	harmonic_maps_mode = polymode::none;
 	to_curv_display = curv_type::none;
@@ -468,7 +468,6 @@ void GLWidget::change_polygon_mode() {
 			change_curvature_display();
 		}
 	}
-
 	current_polymode = to_polymode;
 
 	program->release();
