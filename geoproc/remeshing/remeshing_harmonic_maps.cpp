@@ -6,9 +6,7 @@
 using namespace std;
 
 // glm includes
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
-#include <glm/geometric.hpp>
+#include <glm/glm.hpp>
 using namespace glm;
 
 // geoproc includes
@@ -241,55 +239,71 @@ inline void make_new_vertex
 
 namespace geoproc {
 using namespace parametrisation;
-using namespace smoothing;
-
 namespace remeshing {
 
-	bool harmonic_maps(
-		const TriangleMesh& mesh, size_t N, size_t M, const smooth_weight& w,
-		const boundary_shape& s, TriangleMesh& remesh
-	)
-	{
-		if (s == boundary_shape::Circle) {
-			cerr << "geoproc::remeshing::harmonic_maps - Error" << endl;
-			cerr << "    Not implemented for shape 'Circle'." << endl;
-			return false;
-		}
+bool harmonic_maps(
+	const TriangleMesh& mesh, size_t N, size_t M, const weight& w,
+	const boundary_shape& s, TriangleMesh& remesh
+)
+{
+	if (s == boundary_shape::Circle) {
+		cerr << "geoproc::remeshing::harmonic_maps - Error" << endl;
+		cerr << "    Not implemented for shape 'Circle'." << endl;
+		return false;
+	}
 
-		vector<vec2> uvs;
-		bool r = parametrisation::harmonic_maps(mesh, w, s, uvs);
-		if (not r) {
-			return false;
-		}
+	vector<vec2> uvs;
+	bool r = parametrisation::harmonic_maps(mesh, w, s, uvs);
+	if (not r) {
+		return false;
+	}
 
-		++N; ++M;
-		size_t it = 0;
-		vec2 pre(1.0f/N, 1.0f/M);
-		vector<vec3> new_vertices((N - 1)*(M - 1));
-		float w0,w1,w2;
+	++N; ++M;
+	size_t it = 0;
+	vec2 pre(1.0f/N, 1.0f/M);
+	vector<vec3> new_vertices((N - 1)*(M - 1));
+	float w0,w1,w2;
 
-		/* compute the coordinates of the new vertices */
+	/* compute the coordinates of the new vertices */
 
-		// first point - to be handled differently
-		int nT = find_first_triangle(mesh, uvs, pre);
+	// first point - to be handled differently
+	int nT = find_first_triangle(mesh, uvs, pre);
+	if (nT == -1) {
+		cerr << "geoproc::remeshing::harmonic_maps - Error" << endl;
+		cerr << "    Could not locate point " << vec2out(pre) << "." << endl;
+		return false;
+	}
+
+	barycentric_coordinates(mesh, nT, uvs, pre, w0,w1,w2);
+	make_new_vertex(mesh, nT, w0,w1,w2, new_vertices[it]);
+	++it;
+
+	// first row of points
+	for (size_t j = 2; j < M; ++j) {
+		vec2 next(1.0f/N, (1.0f*j)/M);
+
+		nT = find_next_triangle(mesh, nT, uvs, pre, next);
 		if (nT == -1) {
 			cerr << "geoproc::remeshing::harmonic_maps - Error" << endl;
-			cerr << "    Could not locate point " << vec2out(pre) << "." << endl;
+			cerr << "    Could not locate point (0," << j << ")= "
+				 << vec2out(next) << endl;
 			return false;
 		}
-
 		barycentric_coordinates(mesh, nT, uvs, pre, w0,w1,w2);
 		make_new_vertex(mesh, nT, w0,w1,w2, new_vertices[it]);
 		++it;
+		pre = next;
+	}
 
-		// first row of points
-		for (size_t j = 2; j < M; ++j) {
-			vec2 next(1.0f/N, (1.0f*j)/M);
+	// rest of the grid
+	for (size_t i = 2; i < N; ++i) {
+		for (size_t j = 1; j < M; ++j) {
+			vec2 next((1.0f*i)/N, (1.0f*j)/M);
 
 			nT = find_next_triangle(mesh, nT, uvs, pre, next);
 			if (nT == -1) {
 				cerr << "geoproc::remeshing::harmonic_maps - Error" << endl;
-				cerr << "    Could not locate point (0," << j << ")= "
+				cerr << "    Could not locate point (" << i << "," << j << ")= ("
 					 << vec2out(next) << endl;
 				return false;
 			}
@@ -298,46 +312,28 @@ namespace remeshing {
 			++it;
 			pre = next;
 		}
-
-		// rest of the grid
-		for (size_t i = 2; i < N; ++i) {
-			for (size_t j = 1; j < M; ++j) {
-				vec2 next((1.0f*i)/N, (1.0f*j)/M);
-
-				nT = find_next_triangle(mesh, nT, uvs, pre, next);
-				if (nT == -1) {
-					cerr << "geoproc::remeshing::harmonic_maps - Error" << endl;
-					cerr << "    Could not locate point (" << i << "," << j << ")= ("
-						 << vec2out(next) << endl;
-					return false;
-				}
-				barycentric_coordinates(mesh, nT, uvs, pre, w0,w1,w2);
-				make_new_vertex(mesh, nT, w0,w1,w2, new_vertices[it]);
-				++it;
-				pre = next;
-			}
-		}
-
-		/* compute new triangles */
-		// this is easy because we handle only the 'Square' case
-		vector<int> new_triangles;
-		size_t N1 = N - 1;
-		for (size_t i = 0; i < N - 2; ++i) {
-			for (size_t j = 0; j < M - 2; ++j) {
-				new_triangles.push_back(j*N1 + i);
-				new_triangles.push_back(j*N1 + i + 1);
-				new_triangles.push_back((j + 1)*N1 + i + 1);
-
-				new_triangles.push_back(j*N1 + i);
-				new_triangles.push_back((j + 1)*N1 + i + 1);
-				new_triangles.push_back((j + 1)*N1 + i);
-			}
-		}
-
-		remesh.set_vertices(new_vertices);
-		remesh.set_triangles(new_triangles);
-		return true;
 	}
+
+	/* compute new triangles */
+	// this is easy because we handle only the 'Square' case
+	vector<int> new_triangles;
+	size_t N1 = N - 1;
+	for (size_t i = 0; i < N - 2; ++i) {
+		for (size_t j = 0; j < M - 2; ++j) {
+			new_triangles.push_back(j*N1 + i);
+			new_triangles.push_back(j*N1 + i + 1);
+			new_triangles.push_back((j + 1)*N1 + i + 1);
+
+			new_triangles.push_back(j*N1 + i);
+			new_triangles.push_back((j + 1)*N1 + i + 1);
+			new_triangles.push_back((j + 1)*N1 + i);
+		}
+	}
+
+	remesh.set_vertices(new_vertices);
+	remesh.set_triangles(new_triangles);
+	return true;
+}
 
 } // -- namespace remeshing
 } // -- namespace geoproc

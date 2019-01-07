@@ -5,7 +5,7 @@
 
 // geoproc includes
 #include <geoproc/triangle_mesh.hpp>
-#include <geoproc/smoothing/smoothing_defs.hpp>
+#include <geoproc/definitions.hpp>
 
 namespace geoproc {
 namespace smoothing {
@@ -111,7 +111,7 @@ namespace local_private {
 	 */
 	void apply_local
 	(
-		const smooth_weight& w, float lambda,
+		const weight& w, float lambda,
 		const TriangleMesh& m,
 		const glm::vec3 *old_verts,
 		glm::vec3 *new_verts
@@ -135,7 +135,7 @@ namespace local_private {
 	 */
 	void apply_local
 	(
-		const smooth_weight& w, float lambda,
+		const weight& w, float lambda,
 		const TriangleMesh& m,
 		size_t nt,
 		const glm::vec3 *old_verts,
@@ -165,7 +165,7 @@ namespace local_private {
 	 */
 	bool apply_once_per_it
 	(
-		const smooth_weight& w, float l,
+		const weight& w, float l,
 		size_t nit,
 		const TriangleMesh& m,
 		glm::vec3 *old_verts,
@@ -195,7 +195,7 @@ namespace local_private {
 	 */
 	bool apply_once_per_it
 	(
-		const smooth_weight& w, float l,
+		const weight& w, float l,
 		size_t nit, size_t n_threads,
 		const TriangleMesh& m,
 		glm::vec3 *old_verts,
@@ -224,7 +224,7 @@ namespace local_private {
 	 */
 	void apply_twice_per_it
 	(
-		const smooth_weight& w,
+		const weight& w,
 		float l1, float l2,
 		size_t nit,
 		const TriangleMesh& m,
@@ -254,7 +254,7 @@ namespace local_private {
 	 */
 	void apply_twice_per_it
 	(
-		const smooth_weight& w,
+		const weight& w,
 		float l1, float l2,
 		size_t nit, size_t n_threads,
 		const TriangleMesh& m,

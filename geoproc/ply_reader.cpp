@@ -159,45 +159,45 @@ void __add_model_to_mesh
 namespace geoproc {
 namespace PLY_reader {
 
-	bool read_mesh(const std::string& filename, TriangleMesh& mesh) {
-		ifstream fin;
-		int n_verts, n_faces;
+bool read_mesh(const std::string& filename, TriangleMesh& mesh) {
+	ifstream fin;
+	int n_verts, n_faces;
 
-		fin.open(filename.c_str(), ios_base::in | ios_base::binary);
-		if (not fin.is_open()) {
-			cerr << "PLY_reader::read_mesh - " << ERR << endl;
-			cerr << "    Could not open file '" << filename << "'." << endl;
-			return false;
-		}
-
-		string format;
-		bool header_read = __load_header(fin, n_verts, n_faces, format);
-		if (not header_read) {
-			fin.close();
-			cerr << "PLY_reader::read_mesh - " << ERR << endl;
-			cerr << "    Bad input file format." << endl;
-			return false;
-		}
-
-		vector<float> plyVertices;
-		vector<int> plyTriangles;
-
-		// Load the vertices and the faces from the ply file.
-		// Call the appropriate functions depending on the format.
-		if (format == "binary_little_endian 1.0") {
-			__load_vertices_binary_le_1_0(fin, n_verts, plyVertices);
-			__load_faces_binary_le_1_0(fin, n_faces, plyTriangles);
-		}
-		else if (format == "ascii 1.0") {
-			__load_vertices_ascii_1_0(fin, n_verts, plyVertices);
-			__load_faces_ascii_1_0(fin, n_faces, plyTriangles);
-		}
-
-		fin.close();
-
-		__add_model_to_mesh(plyVertices, plyTriangles, mesh);
-		return true;
+	fin.open(filename.c_str(), ios_base::in | ios_base::binary);
+	if (not fin.is_open()) {
+		cerr << "PLY_reader::read_mesh - " << ERR << endl;
+		cerr << "    Could not open file '" << filename << "'." << endl;
+		return false;
 	}
+
+	string format;
+	bool header_read = __load_header(fin, n_verts, n_faces, format);
+	if (not header_read) {
+		fin.close();
+		cerr << "PLY_reader::read_mesh - " << ERR << endl;
+		cerr << "    Bad input file format." << endl;
+		return false;
+	}
+
+	vector<float> plyVertices;
+	vector<int> plyTriangles;
+
+	// Load the vertices and the faces from the ply file.
+	// Call the appropriate functions depending on the format.
+	if (format == "binary_little_endian 1.0") {
+		__load_vertices_binary_le_1_0(fin, n_verts, plyVertices);
+		__load_faces_binary_le_1_0(fin, n_faces, plyTriangles);
+	}
+	else if (format == "ascii 1.0") {
+		__load_vertices_ascii_1_0(fin, n_verts, plyVertices);
+		__load_faces_ascii_1_0(fin, n_faces, plyTriangles);
+	}
+
+	fin.close();
+
+	__add_model_to_mesh(plyVertices, plyTriangles, mesh);
+	return true;
+}
 
 } // -- namespace PLY_reader
 } // -- namespace geoproc

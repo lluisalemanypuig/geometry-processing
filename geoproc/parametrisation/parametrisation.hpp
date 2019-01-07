@@ -7,8 +7,7 @@
 #include <glm/vec3.hpp>
 
 // geoproc includes
-#include <geoproc/smoothing/smoothing_defs.hpp>
-#include <geoproc/parametrisation/parametrisation_defs.hpp>
+#include <geoproc/definitions.hpp>
 #include <geoproc/triangle_mesh.hpp>
 
 namespace geoproc {
@@ -72,7 +71,7 @@ namespace parametrisation {
 	 * are no boundaries on the mesh or there are more than one.
 	 */
 	bool harmonic_maps
-	(const TriangleMesh& m, const smoothing::smooth_weight& w,
+	(const TriangleMesh& m, const weight& w,
 	 const boundary_shape& s, std::vector<glm::vec2>& uvs);
 
 } // -- namespace parametrisation

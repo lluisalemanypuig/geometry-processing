@@ -17,7 +17,6 @@ HEADERS += \
 	iterators/mesh_iterator.hpp \
 	curvature/curvature.hpp \
 	smoothing/smoothing.hpp \
-	smoothing/smoothing_defs.hpp \
     filter_frequencies/band_frequencies.hpp \
     smoothing/local.hpp \
     smoothing/local_private.hpp \
@@ -25,7 +24,7 @@ HEADERS += \
     parametrisation/parametrisation.hpp \
     mesh_edge.hpp \
     remeshing/remeshing.hpp \
-    parametrisation/parametrisation_defs.hpp
+    definitions.hpp
 
 SOURCES += \
 	ply_reader.cpp \

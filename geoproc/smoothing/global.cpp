@@ -13,7 +13,7 @@ using namespace std;
 
 // geoproc includes
 #include <geoproc/triangle_mesh.hpp>
-#include <geoproc/smoothing/smoothing_defs.hpp>
+#include <geoproc/definitions.hpp>
 #include <geoproc/smoothing/local_private.hpp>
 
 // Eigen includes
@@ -36,17 +36,17 @@ typedef Eigen::SparseMatrix<float> SparseMatrixf;
 
 inline void compute_row
 (
-	int i, int N, const geoproc::smoothing::smooth_weight& w,
+	int i, int N, const geoproc::weight& w,
 	const vector<bool>& constant, const geoproc::TriangleMesh& m,
 	vector<T>& triplet_list, float *ws, int& row_it, int& col_it,
 	glm::vec3& sums
 )
 {
 	if (not constant[i]) {
-		if (w == geoproc::smoothing::smooth_weight::uniform) {
+		if (w == geoproc::weight::uniform) {
 			geoproc::smoothing::local_private::make_uniform_weights(i, m, ws);
 		}
-		else if (w == geoproc::smoothing::smooth_weight::cotangent) {
+		else if (w == geoproc::weight::cotangent) {
 			geoproc::smoothing::local_private::make_cotangent_weights(i, m, ws);
 		}
 		ws[i] = -1.0f;
@@ -70,7 +70,7 @@ inline void compute_row
 
 inline void smooth_laplacian
 (
-	int N, int variable, const geoproc::smoothing::smooth_weight& w,
+	int N, int variable, const geoproc::weight& w,
 	const vector<bool>& constant, geoproc::TriangleMesh& m
 )
 {
@@ -142,17 +142,17 @@ namespace global {
 
 bool smooth
 (
-	const smooth_operator& op, const smooth_weight& w,
+	const modifier& op, const weight& w,
 	const std::vector<bool>& constant, TriangleMesh& m
 )
 {
-	if (op == smooth_operator::BiLaplacian) {
+	if (op == modifier::BiLaplacian) {
 		cerr << "Error: global smoothing not implemented for operator"
 			 << endl << "    Bi-Laplacian" << endl;
 		return false;
 	}
 
-	if (op == smooth_operator::TaubinLM) {
+	if (op == modifier::TaubinLM) {
 		cerr << "Error: invalid value of smoothing operator 'TaubinLM'"
 			 << endl << "    for a global smoothing operation" << endl;
 		return false;
@@ -167,7 +167,7 @@ bool smooth
 	// amount of variable vertices
 	const int variable = N - n_constant;
 
-	if (op == smooth_operator::Laplacian) {
+	if (op == modifier::Laplacian) {
 		smooth_laplacian(N, variable, w, constant, m);
 		return true;
 	}

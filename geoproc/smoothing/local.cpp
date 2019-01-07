@@ -16,7 +16,7 @@ namespace smoothing {
 namespace local {
 
 void laplacian
-(const smooth_weight& w, float l, size_t nit, TriangleMesh& m)
+(const weight& w, float l, size_t nit, TriangleMesh& m)
 {
 	const int N = m.n_vertices();
 
@@ -38,7 +38,7 @@ void laplacian
 }
 
 void laplacian
-(const smooth_weight& w, float l, size_t nit, size_t nt, TriangleMesh& m)
+(const weight& w, float l, size_t nit, size_t nt, TriangleMesh& m)
 {
 	if (nt == 1) {
 		laplacian(w,l,nit, m);
@@ -65,7 +65,7 @@ void laplacian
 }
 
 void bilaplacian
-(const smooth_weight& w, float l, size_t nit, TriangleMesh& m)
+(const weight& w, float l, size_t nit, TriangleMesh& m)
 {
 	const int N = m.n_vertices();
 
@@ -85,7 +85,7 @@ void bilaplacian
 }
 
 void bilaplacian
-(const smooth_weight& w, float l, size_t nit, size_t nt, TriangleMesh& m)
+(const weight& w, float l, size_t nit, size_t nt, TriangleMesh& m)
 {
 	if (nt == 1) {
 		bilaplacian(w,l,nit, m);
@@ -110,7 +110,7 @@ void bilaplacian
 }
 
 void TaubinLM
-(const smooth_weight& w, float l, size_t nit, TriangleMesh& m)
+(const weight& w, float l, size_t nit, TriangleMesh& m)
 {
 	const int N = m.n_vertices();
 	const float Kpb = 0.1f;
@@ -132,7 +132,7 @@ void TaubinLM
 }
 
 void TaubinLM
-(const smooth_weight& w, float l, size_t nit, size_t nt, TriangleMesh& m)
+(const weight& w, float l, size_t nit, size_t nt, TriangleMesh& m)
 {
 	if (nt == 1) {
 		TaubinLM(w,l,nit, m);

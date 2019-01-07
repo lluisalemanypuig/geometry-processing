@@ -1,8 +1,7 @@
 #pragma once
 
 // geoproc includes
-#include <geoproc/smoothing/smoothing_defs.hpp>
-#include <geoproc/parametrisation/parametrisation_defs.hpp>
+#include <geoproc/definitions.hpp>
 #include <geoproc/triangle_mesh.hpp>
 
 namespace geoproc {
@@ -60,8 +59,8 @@ namespace remeshing {
 	 * @returns Returns false on failure. Returns true on success.
 	 */
 	bool harmonic_maps
-	(const TriangleMesh& m, size_t N, size_t M, const smoothing::smooth_weight& w,
-	 const parametrisation::boundary_shape& s, TriangleMesh& rm);
+	(const TriangleMesh& m, size_t N, size_t M, const weight& w,
+	 const boundary_shape& s, TriangleMesh& rm);
 
 } // -- namespace remeshing
 } // -- namespace geoproc

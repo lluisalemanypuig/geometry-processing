@@ -65,126 +65,126 @@ inline float Kg_at_vertex_par(const geoproc::TriangleMesh& m, int v) {
 namespace geoproc {
 namespace curvature {
 
-	/* ------------------------------ */
-	/* --------- SEQUENTIAL --------- */
+/* ------------------------------ */
+/* --------- SEQUENTIAL --------- */
 
-	// Use a different algorithm from the one used for
-	// the parallel computation of the curvature
-	void Gauss
-	(const TriangleMesh& mesh, std::vector<float>& Kg, float *m, float *M)
-	{
-		// mesh info
-		const int nT = mesh.n_triangles();
-		const int nV = mesh.n_vertices();
-		const vector<float>& mesh_areas = mesh.get_areas();
-		const vector<vec3>& mesh_angles = mesh.get_angles();
+// Use a different algorithm from the one used for
+// the parallel computation of the curvature
+void Gauss
+(const TriangleMesh& mesh, std::vector<float>& Kg, float *m, float *M)
+{
+	// mesh info
+	const int nT = mesh.n_triangles();
+	const int nV = mesh.n_vertices();
+	const vector<float>& mesh_areas = mesh.get_areas();
+	const vector<vec3>& mesh_angles = mesh.get_angles();
 
-		// Gauss curvature per vertex
-		Kg = vector<float>(nV, 0.0f);
+	// Gauss curvature per vertex
+	Kg = vector<float>(nV, 0.0f);
 
-		// Angle around each vertex.
-		// Define this array to contain:
-		// angles[i] = 2*pi - sum_{face j adjacent to i} angle_j
-		// where angle_j is the j-th angle incident to vertex i
-		// for j = 1 to number of adjacent faces to vertex i.
-		vector<float> angles(nV, 2.0f*M_PI);
+	// Angle around each vertex.
+	// Define this array to contain:
+	// angles[i] = 2*pi - sum_{face j adjacent to i} angle_j
+	// where angle_j is the j-th angle incident to vertex i
+	// for j = 1 to number of adjacent faces to vertex i.
+	vector<float> angles(nV, 2.0f*M_PI);
 
-		int i0,i1,i2;
-		float area;
+	int i0,i1,i2;
+	float area;
 
-		// Compute sum of areas of triangles
-		// and angle around each vertex
-		for (int t = 0; t < nT; ++t) {
-			mesh.get_vertices_triangle(t, i0,i1,i2);
+	// Compute sum of areas of triangles
+	// and angle around each vertex
+	for (int t = 0; t < nT; ++t) {
+		mesh.get_vertices_triangle(t, i0,i1,i2);
 
-			// -- Accumulate areas --
-			// when the triangle has an angle that is larger
-			// than 90 degrees (pi/4) then the area contributes
-			// only by half.
-			area = mesh_areas[t];
-			Kg[i0] += area;
-			Kg[i1] += area;
-			Kg[i2] += area;
+		// -- Accumulate areas --
+		// when the triangle has an angle that is larger
+		// than 90 degrees (pi/4) then the area contributes
+		// only by half.
+		area = mesh_areas[t];
+		Kg[i0] += area;
+		Kg[i1] += area;
+		Kg[i2] += area;
 
-			// Similarly for the angles.
+		// Similarly for the angles.
 
-			// angle <1,0,2>
-			angles[i0] -= mesh_angles[t].x;
+		// angle <1,0,2>
+		angles[i0] -= mesh_angles[t].x;
 
-			// angle <0,1,2>
-			angles[i1] -= mesh_angles[t].y;
+		// angle <0,1,2>
+		angles[i1] -= mesh_angles[t].y;
 
-			// angle <1,2,0>
-			angles[i2] -= mesh_angles[t].z;
-		}
+		// angle <1,2,0>
+		angles[i2] -= mesh_angles[t].z;
+	}
 
-		// once the angles have been computed, and the
-		// areas stored in the curvature vector (to avoid
-		// too much memory consumption), calculate the
-		// actual value of the curvature:
+	// once the angles have been computed, and the
+	// areas stored in the curvature vector (to avoid
+	// too much memory consumption), calculate the
+	// actual value of the curvature:
+
+	if (m != nullptr) {
+		*m = numeric_limits<float>::max();
+	}
+	if (M != nullptr) {
+		*M = -numeric_limits<float>::max();
+	}
+
+	// compute curvature per vertex
+	for (int i = 0; i < nV; ++i) {
+		Kg[i] = 3.0f*(angles[i]/Kg[i]);
 
 		if (m != nullptr) {
-			*m = numeric_limits<float>::max();
+			*m = std::min(*m, Kg[i]);
 		}
 		if (M != nullptr) {
-			*M = -numeric_limits<float>::max();
-		}
-
-		// compute curvature per vertex
-		for (int i = 0; i < nV; ++i) {
-			Kg[i] = 3.0f*(angles[i]/Kg[i]);
-
-			if (m != nullptr) {
-				*m = std::min(*m, Kg[i]);
-			}
-			if (M != nullptr) {
-				*M = std::max(*M, Kg[i]);
-			}
+			*M = std::max(*M, Kg[i]);
 		}
 	}
+}
 
-	/* ---------------------------- */
-	/* --------- PARALLEL --------- */
+/* ---------------------------- */
+/* --------- PARALLEL --------- */
 
-	void Gauss(const TriangleMesh& m, std::vector<float>& Kg, size_t nt) {
-		if (nt == 1) {
-			Gauss(m, Kg);
-			return;
-		}
-
-		const int N = m.n_vertices();
-		Kg = vector<float>(N, 0.0f);
-
-		#pragma omp parallel for num_threads(nt)
-		for (int i = 0; i < N; ++i) {
-			Kg[i] = Kg_at_vertex_par(m, i);
-		}
+void Gauss(const TriangleMesh& m, std::vector<float>& Kg, size_t nt) {
+	if (nt == 1) {
+		Gauss(m, Kg);
+		return;
 	}
 
-	void Gauss
-	(const TriangleMesh& mesh, std::vector<float>& Kg, size_t nt, float *m, float *M)
-	{
-		if (nt == 1) {
-			Gauss(mesh, Kg, m, M);
-			return;
-		}
+	const int N = m.n_vertices();
+	Kg = vector<float>(N, 0.0f);
 
-		const int N = mesh.n_vertices();
-		Kg = vector<float>(N, 0.0f);
-
-		float mm = std::numeric_limits<float>::max();
-		float MM = -mm;
-
-		#pragma omp parallel for num_threads(nt) reduction(min:mm) reduction(max:MM)
-		for (int i = 0; i < N; ++i) {
-			Kg[i] = Kg_at_vertex_par(mesh, i);
-			mm = std::min(mm, Kg[i]);
-			MM = std::max(MM, Kg[i]);
-		}
-
-		*m = mm;
-		*M = MM;
+	#pragma omp parallel for num_threads(nt)
+	for (int i = 0; i < N; ++i) {
+		Kg[i] = Kg_at_vertex_par(m, i);
 	}
+}
+
+void Gauss
+(const TriangleMesh& mesh, std::vector<float>& Kg, size_t nt, float *m, float *M)
+{
+	if (nt == 1) {
+		Gauss(mesh, Kg, m, M);
+		return;
+	}
+
+	const int N = mesh.n_vertices();
+	Kg = vector<float>(N, 0.0f);
+
+	float mm = std::numeric_limits<float>::max();
+	float MM = -mm;
+
+	#pragma omp parallel for num_threads(nt) reduction(min:mm) reduction(max:MM)
+	for (int i = 0; i < N; ++i) {
+		Kg[i] = Kg_at_vertex_par(mesh, i);
+		mm = std::min(mm, Kg[i]);
+		MM = std::max(MM, Kg[i]);
+	}
+
+	*m = mm;
+	*M = MM;
+}
 
 } // -- namespace curavture
 } // -- namespace geoproc

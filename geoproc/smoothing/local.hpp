@@ -2,7 +2,7 @@
 
 // geoproc includes
 #include <geoproc/triangle_mesh.hpp>
-#include <geoproc/smoothing/smoothing_defs.hpp>
+#include <geoproc/definitions.hpp>
 
 namespace geoproc {
 namespace smoothing {
@@ -51,7 +51,7 @@ namespace local {
 	 * not checked since the mesh may not have its boundaries computed.
 	 */
 	void laplacian
-	(const smooth_weight& w, float lambda, size_t n_iter, TriangleMesh& m);
+	(const weight& w, float lambda, size_t n_iter, TriangleMesh& m);
 	/**
 	 * @brief Parallel Laplacian operator for mesh smoothing.
 	 *
@@ -70,7 +70,7 @@ namespace local {
 	 * not checked since the mesh may not have its boundaries computed.
 	 */
 	void laplacian
-	(const smooth_weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);
+	(const weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);
 
 	/**
 	 * @brief Bilaplacian operator for mesh smoothing.
@@ -90,7 +90,7 @@ namespace local {
 	 * not checked since the mesh may not have its boundaries computed.
 	 */
 	void bilaplacian
-	(const smooth_weight& w, float lambda, size_t n_iter, TriangleMesh& m);
+	(const weight& w, float lambda, size_t n_iter, TriangleMesh& m);
 	/**
 	 * @brief Parallel Bilaplacian operator for mesh smoothing.
 	 *
@@ -109,7 +109,7 @@ namespace local {
 	 * not checked since the mesh may not have its boundaries computed.
 	 */
 	void bilaplacian
-	(const smooth_weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);
+	(const weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);
 
 	/**
 	 * @brief Taubin \f$\lambda-\mu\f$ operator for mesh smoothing.
@@ -137,7 +137,7 @@ namespace local {
 	 * not checked since the mesh may not have its boundaries computed.
 	 */
 	void TaubinLM
-	(const smooth_weight& w, float lambda, size_t n_iter, TriangleMesh& m);
+	(const weight& w, float lambda, size_t n_iter, TriangleMesh& m);
 	/**
 	 * @brief Parallel Taubin \f$\lambda-\mu\f$ operator for mesh smoothing.
 	 *
@@ -156,7 +156,7 @@ namespace local {
 	 * not checked since the mesh may not have its boundaries computed.
 	 */
 	void TaubinLM
-	(const smooth_weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);
+	(const weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);
 
 } // -- namespace local
 } // -- namespace smoothing

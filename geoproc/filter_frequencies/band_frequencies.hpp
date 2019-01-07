@@ -5,7 +5,7 @@
 #include <vector>
 
 // geoproc includes
-#include <geoproc/smoothing/smoothing_defs.hpp>
+#include <geoproc/definitions.hpp>
 #include <geoproc/triangle_mesh.hpp>
 
 namespace geoproc {
@@ -30,13 +30,13 @@ namespace filter_frequencies {
 		 *
 		 * See @ref smoothing::smooth_operator.
 		 */
-		smoothing::smooth_operator so;
+		modifier so;
 		/**
 		 * @brief Type of weight applied within the operator.
 		 *
 		 * See @ref smoothing::smooth_weight.
 		 */
-		smoothing::smooth_weight sw;
+		weight sw;
 		/// Value of parameter \f$\lambda\f$.
 		float lambda;
 		/// Amount of iterations of algorithm.

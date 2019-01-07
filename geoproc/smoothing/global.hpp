@@ -2,7 +2,7 @@
 
 // geoproc includes
 #include <geoproc/triangle_mesh.hpp>
-#include <geoproc/smoothing/smoothing_defs.hpp>
+#include <geoproc/definitions.hpp>
 
 namespace geoproc {
 namespace smoothing {
@@ -63,7 +63,7 @@ namespace global {
 	 * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
 	 * - Angles and areas (see @ref TriangleMesh::make_angles_area)
 	 * @pre This algorithm is implemented for the following smoothing operators:
-	 * - @ref smooth_operator::Laplacian
+	 * - @ref smooth_modifier::Laplacian
 	 * @pre This algorithm is implemented for the following weight types:
 	 * - @ref smooth_weight::uniform
 	 * - @ref smooth_weight::cotangent
@@ -74,7 +74,7 @@ namespace global {
 	 * was solved succesfully.
 	 */
 	bool smooth
-	(const smooth_operator& op, const smooth_weight& w,
+	(const modifier& op, const weight& w,
 	 const std::vector<bool>& constant, TriangleMesh& m);
 
 } // -- namespace global
