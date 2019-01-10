@@ -262,6 +262,16 @@ bool harmonic_maps(
 		return false;
 	}
 
+	return harmonic_maps(mesh, N, M, uvs, remesh);
+}
+
+bool harmonic_maps(
+	const TriangleMesh& mesh, size_t N, size_t M,
+	const std::vector<glm::vec2>& uvs, TriangleMesh& remesh
+)
+{
+	assert(mesh.n_vertices() == uvs.size());
+
 	++N; ++M;
 	size_t it = 0;
 	vec2 pre(1.0f/N, 1.0f/M);
