@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['laplacian',['laplacian',['../namespacegeoproc_1_1smoothing_1_1local.html#a3eaa81a7fe893e316190a0ab9598732c',1,'geoproc::smoothing::local::laplacian(const smooth_weight &amp;w, float lambda, size_t n_iter, TriangleMesh &amp;m)'],['../namespacegeoproc_1_1smoothing_1_1local.html#a160f3ee32c5073d99e3f38782bd4a070',1,'geoproc::smoothing::local::laplacian(const smooth_weight &amp;w, float lambda, size_t n_iter, size_t nt, TriangleMesh &amp;m)']]]
+  ['laplacian',['laplacian',['../namespacegeoproc_1_1smoothing_1_1local.html#afc087060b0ce1c1ce40b8e5a9969e843',1,'geoproc::smoothing::local::laplacian(const weight &amp;w, float lambda, size_t n_iter, TriangleMesh &amp;m)'],['../namespacegeoproc_1_1smoothing_1_1local.html#a1b6e158caeaf3ae121b47fab6c6edbf9',1,'geoproc::smoothing::local::laplacian(const weight &amp;w, float lambda, size_t n_iter, size_t nt, TriangleMesh &amp;m)']]]
 ];

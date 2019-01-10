@@ -8,7 +8,7 @@ Global smoothing algorithms.
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-bool \hyperlink{namespacegeoproc_1_1smoothing_1_1global_a7e294855e2c00be2b1141aa3f4e2650a}{smooth} (const \hyperlink{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537}{smooth\+\_\+operator} \&op, const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&w, const std\+::vector$<$ bool $>$ \&constant, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
+bool \hyperlink{namespacegeoproc_1_1smoothing_1_1global_ac6c034cb72d0a744d0dd843d4df012ff}{smooth} (const \hyperlink{namespacegeoproc_a396280579199558902594f4df72c01c7}{modifier} \&op, const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&w, const std\+::vector$<$ bool $>$ \&constant, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
 \begin{DoxyCompactList}\small\item\em Apply a global smoothing algorithm for a given operator and weight. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -16,11 +16,11 @@ bool \hyperlink{namespacegeoproc_1_1smoothing_1_1global_a7e294855e2c00be2b1141aa
 Global smoothing algorithms. 
 
 \subsection{Function Documentation}
-\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1global_a7e294855e2c00be2b1141aa3f4e2650a}\label{namespacegeoproc_1_1smoothing_1_1global_a7e294855e2c00be2b1141aa3f4e2650a}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1global_ac6c034cb72d0a744d0dd843d4df012ff}\label{namespacegeoproc_1_1smoothing_1_1global_ac6c034cb72d0a744d0dd843d4df012ff}} 
 \index{geoproc\+::smoothing\+::global@{geoproc\+::smoothing\+::global}!smooth@{smooth}}
 \index{smooth@{smooth}!geoproc\+::smoothing\+::global@{geoproc\+::smoothing\+::global}}
 \subsubsection{\texorpdfstring{smooth()}{smooth()}}
-{\footnotesize\ttfamily bool geoproc\+::smoothing\+::global\+::smooth (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537}{smooth\+\_\+operator} \&}]{op,  }\item[{const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&}]{w,  }\item[{const std\+::vector$<$ bool $>$ \&}]{constant,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily bool geoproc\+::smoothing\+::global\+::smooth (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_a396280579199558902594f4df72c01c7}{modifier} \&}]{op,  }\item[{const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&}]{w,  }\item[{const std\+::vector$<$ bool $>$ \&}]{constant,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
 
 
 
@@ -74,13 +74,13 @@ The mesh requires\+:
 
 This algorithm is implemented for the following smoothing operators\+:
 \begin{DoxyItemize}
-\item \hyperlink{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537a799723f39baf497704a3d39e7c03555f}{smooth\+\_\+operator\+::\+Laplacian} 
+\item \hyperlink{namespacegeoproc_a396280579199558902594f4df72c01c7a799723f39baf497704a3d39e7c03555f}{smooth\+\_\+modifier\+::\+Laplacian} 
 \end{DoxyItemize}
 
 This algorithm is implemented for the following weight types\+:
 \begin{DoxyItemize}
-\item \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028aa489ffed938ef1b9e86889bc413501ee}{smooth\+\_\+weight\+::uniform}
-\item \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028a8e8ea879f40475ae2c70be8b296bf950}{smooth\+\_\+weight\+::cotangent} 
+\item \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843aa489ffed938ef1b9e86889bc413501ee}{smooth\+\_\+weight\+::uniform}
+\item \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843a8e8ea879f40475ae2c70be8b296bf950}{smooth\+\_\+weight\+::cotangent} 
 \end{DoxyItemize}
 
 The last precodintion is that the mesh requires\+:

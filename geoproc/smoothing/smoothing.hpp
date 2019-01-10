@@ -6,6 +6,5 @@
  */
 
 // geoproc includes
-#include <geoproc/smoothing/smoothing_defs.hpp>
 #include <geoproc/smoothing/local.hpp>
 

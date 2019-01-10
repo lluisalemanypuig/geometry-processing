@@ -210,6 +210,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:ae73a760e61250eb2f474b8ab03a1e2ab"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; int &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeoproc_1_1TriangleMesh.html#ae73a760e61250eb2f474b8ab03a1e2ab">get_vertex_edge</a> () const</td></tr>
 <tr class="memdesc:ae73a760e61250eb2f474b8ab03a1e2ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a relation between vertices and edges.  <a href="#ae73a760e61250eb2f474b8ab03a1e2ab">More...</a><br /></td></tr>
 <tr class="separator:ae73a760e61250eb2f474b8ab03a1e2ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5093cb9508a1f3193f5b8481bbabef3"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; int &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeoproc_1_1TriangleMesh.html#af5093cb9508a1f3193f5b8481bbabef3">get_triangles</a> () const</td></tr>
+<tr class="memdesc:af5093cb9508a1f3193f5b8481bbabef3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a constant reference to all the triangles in this mesh.  <a href="#af5093cb9508a1f3193f5b8481bbabef3">More...</a><br /></td></tr>
+<tr class="separator:af5093cb9508a1f3193f5b8481bbabef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af56b3521a8df241f4f67c7f2bbacfa51"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; int[3]&gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeoproc_1_1TriangleMesh.html#af56b3521a8df241f4f67c7f2bbacfa51">get_edges_triangle</a> () const</td></tr>
 <tr class="memdesc:af56b3521a8df241f4f67c7f2bbacfa51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a relation between tirnalges and edges.  <a href="#af56b3521a8df241f4f67c7f2bbacfa51">More...</a><br /></td></tr>
 <tr class="separator:af56b3521a8df241f4f67c7f2bbacfa51"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -775,6 +778,26 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 </dl>
 <dl class="section pre"><dt>Precondition</dt><dd>Neighbourhood data must exist in this mesh. See <a class="el" href="classgeoproc_1_1TriangleMesh.html#a84003dfdfd5e591c00f01a797578ff1f">make_neighbourhood_data</a>. </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>If the corner index is valid, the face index <em>f</em> returned is also valid: 0 &lt;= <em>3*f</em> &lt; number of triangles. </dd></dl>
+
+</div>
+</div>
+<a id="af5093cb9508a1f3193f5b8481bbabef3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5093cb9508a1f3193f5b8481bbabef3">&#9670;&nbsp;</a></span>get_triangles()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const vector&lt; int &gt; &amp; geoproc::TriangleMesh::get_triangles </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns a constant reference to all the triangles in this mesh. </p>
+<dl class="section return"><dt>Returns</dt><dd>Returns a constant reference to <a class="el" href="classgeoproc_1_1TriangleMesh.html#ad1cf20622f2bb080100862f413bd89c2">triangles</a>. </dd></dl>
 
 </div>
 </div>

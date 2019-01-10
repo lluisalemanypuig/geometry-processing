@@ -6,29 +6,41 @@
 namespace geoproc {
 
 /**
- * @brief The different types of operators available.
+ * @brief The different types of modifiers available.
  *
  * - Laplacian: see @ref smooth_modifier::Laplacian.
  * - Bi-Laplacian: see @ref smooth_modifier::BiLaplacian.
  * - TaubinLM: see @ref smooth_modifier::TaubinLM.
+ *
+ * Since 'operator' is a C++'s keyword, the word 'modifier' is
+ * used instead.
  */
 enum class modifier : int8_t {
 	/**
-	 * Detailed in the documentation of functions:
-	 * - @ref local::laplacian(const smooth_weight&, float, size_t, TriangleMesh&)
-	 * - @ref local::laplacian(const smooth_weight&, float, size_t, size_t, TriangleMesh&)
+	 * The Laplacian operator on a vertex is formally defined as:
+	 * \f$ L(v_i) = \sum_{j} w_{ij}(v_j - v_i) \f$
+	 *
+	 * where \f$w_{ij}\f$ is the type of weight. See @ref weight for details.
+	 *
+	 * Its usage is detailed in functions:
+	 * - @ref smoothing::local::laplacian(const weight&, float, size_t, TriangleMesh&).
+	 * - @ref smoothing::local::laplacian(const weight&, float, size_t, size_t, TriangleMesh&).
 	 */
 	Laplacian,
 	/**
-	 * Detailed in the documentation of functions:
-	 * - @ref local::bilaplacian(const smooth_weight&, float, size_t, TriangleMesh&)
-	 * - @ref local::bilaplacian(const smooth_weight&, float, size_t, size_t, TriangleMesh&)
+	 * The Bilaplacian operator applies twice the @ref modifier::Laplacian operator.
+	 *
+	 * Its usage is detailed in functions:
+	 * - @ref smoothing::local::bilaplacian(const weight&, float, size_t, TriangleMesh&)
+	 * - @ref smoothing::local::bilaplacian(const weight&, float, size_t, size_t, TriangleMesh&)
 	 */
 	BiLaplacian,
 	/**
+	 * The TaubinLM operator applies twice the @ref modifier::Laplacian operator.
+	 *
 	 * Detailed in the documentation of functions:
-	 * - @ref local::TaubinLM(const smooth_weight&, float, size_t, TriangleMesh&)
-	 * - @ref local::TaubinLM(const smooth_weight&, float, size_t, size_t, TriangleMesh&)
+	 * - @ref smoothing::local::TaubinLM(const weight&, float, size_t, TriangleMesh&)
+	 * - @ref smoothing::local::TaubinLM(const weight&, float, size_t, size_t, TriangleMesh&)
 	 */
 	TaubinLM
 };
@@ -36,8 +48,8 @@ enum class modifier : int8_t {
 /**
  * @brief The different types of weights.
  *
- * - uniform: see @ref smooth_weight::uniform.
- * - cotangent: see @ref smooth_weight::cotangent.
+ * - uniform: see @ref weight::uniform.
+ * - cotangent: see @ref weight::cotangent.
  */
 enum class weight : int8_t {
 	/**

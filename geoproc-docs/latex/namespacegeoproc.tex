@@ -29,6 +29,22 @@ class \hyperlink{classgeoproc_1_1mesh__edge}{mesh\+\_\+edge}
 \begin{DoxyCompactList}\small\item\em Meshe\textquotesingle{}s edge defition. \end{DoxyCompactList}\item 
 class \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh}
 \begin{DoxyCompactList}\small\item\em Implementation of a triangular mesh. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{namespacegeoproc_a396280579199558902594f4df72c01c7}{modifier} \+: int8\+\_\+t \{ \hyperlink{namespacegeoproc_a396280579199558902594f4df72c01c7a799723f39baf497704a3d39e7c03555f}{modifier\+::\+Laplacian}, 
+\hyperlink{namespacegeoproc_a396280579199558902594f4df72c01c7a0890724bffb79f511bc768c0529dce3f}{modifier\+::\+Bi\+Laplacian}, 
+\hyperlink{namespacegeoproc_a396280579199558902594f4df72c01c7ad69ec4945f39affa518f05fa077b00ae}{modifier\+::\+Taubin\+LM}
+ \}\begin{DoxyCompactList}\small\item\em The different types of modifiers available. \end{DoxyCompactList}
+\item 
+enum \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \+: int8\+\_\+t \{ \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843aa489ffed938ef1b9e86889bc413501ee}{weight\+::uniform} = 0, 
+\hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843a8e8ea879f40475ae2c70be8b296bf950}{weight\+::cotangent}
+ \}\begin{DoxyCompactList}\small\item\em The different types of weights. \end{DoxyCompactList}
+\item 
+enum \hyperlink{namespacegeoproc_a494da744a805b80f842402f0a806ccfc}{boundary\+\_\+shape} \+: int8\+\_\+t \{ \hyperlink{namespacegeoproc_a494da744a805b80f842402f0a806ccfca30954d90085f6eaaf5817917fc5fecb3}{boundary\+\_\+shape\+::\+Circle} = 0, 
+\hyperlink{namespacegeoproc_a494da744a805b80f842402f0a806ccfcaceb46ca115d05c51aa5a16a8867c3304}{boundary\+\_\+shape\+::\+Square}
+ \}\begin{DoxyCompactList}\small\item\em Shapes for boundary vertices. \end{DoxyCompactList}
+\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -39,3 +55,112 @@ In this namespace is defined the main data structure used to implement all the a
 In order to read a mesh from disk, see namespace \hyperlink{namespacegeoproc_1_1PLY__reader}{P\+L\+Y\+\_\+reader}.
 
 All the algorithms are defined in their corresponding namespaces. 
+
+\subsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{namespacegeoproc_a494da744a805b80f842402f0a806ccfc}\label{namespacegeoproc_a494da744a805b80f842402f0a806ccfc}} 
+\index{geoproc@{geoproc}!boundary\+\_\+shape@{boundary\+\_\+shape}}
+\index{boundary\+\_\+shape@{boundary\+\_\+shape}!geoproc@{geoproc}}
+\subsubsection{\texorpdfstring{boundary\+\_\+shape}{boundary\_shape}}
+{\footnotesize\ttfamily enum \hyperlink{namespacegeoproc_a494da744a805b80f842402f0a806ccfc}{geoproc\+::boundary\+\_\+shape} \+: int8\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+Shapes for boundary vertices. 
+
+Sometimes we may want to place the vertices at the boundary of a mesh in a certain shape on the xy plane. The shapes are the following\+:
+\begin{DoxyItemize}
+\item circle\+: see \hyperlink{namespacegeoproc_a494da744a805b80f842402f0a806ccfca30954d90085f6eaaf5817917fc5fecb3}{boundary\+\_\+shape\+::\+Circle}.
+\item square\+: see \hyperlink{namespacegeoproc_a494da744a805b80f842402f0a806ccfcaceb46ca115d05c51aa5a16a8867c3304}{boundary\+\_\+shape\+::\+Square}. 
+\end{DoxyItemize}\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Circle@{Circle}!geoproc@{geoproc}}\index{geoproc@{geoproc}!Circle@{Circle}}}\mbox{\Hypertarget{namespacegeoproc_a494da744a805b80f842402f0a806ccfca30954d90085f6eaaf5817917fc5fecb3}\label{namespacegeoproc_a494da744a805b80f842402f0a806ccfca30954d90085f6eaaf5817917fc5fecb3}} 
+Circle&The boundary vertices are placed on the circumference of a circle of radius 1, centered at (0,0). \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Square@{Square}!geoproc@{geoproc}}\index{geoproc@{geoproc}!Square@{Square}}}\mbox{\Hypertarget{namespacegeoproc_a494da744a805b80f842402f0a806ccfcaceb46ca115d05c51aa5a16a8867c3304}\label{namespacegeoproc_a494da744a805b80f842402f0a806ccfcaceb46ca115d05c51aa5a16a8867c3304}} 
+Square&The boundary vertices are placed on the boundary of a square of side length 2, centered at (0,0). \\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{namespacegeoproc_a396280579199558902594f4df72c01c7}\label{namespacegeoproc_a396280579199558902594f4df72c01c7}} 
+\index{geoproc@{geoproc}!modifier@{modifier}}
+\index{modifier@{modifier}!geoproc@{geoproc}}
+\subsubsection{\texorpdfstring{modifier}{modifier}}
+{\footnotesize\ttfamily enum \hyperlink{namespacegeoproc_a396280579199558902594f4df72c01c7}{geoproc\+::modifier} \+: int8\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The different types of modifiers available. 
+
+
+\begin{DoxyItemize}
+\item Laplacian\+: see \hyperlink{namespacegeoproc_a396280579199558902594f4df72c01c7a799723f39baf497704a3d39e7c03555f}{smooth\+\_\+modifier\+::\+Laplacian}.
+\item Bi-\/\+Laplacian\+: see \hyperlink{namespacegeoproc_a396280579199558902594f4df72c01c7a0890724bffb79f511bc768c0529dce3f}{smooth\+\_\+modifier\+::\+Bi\+Laplacian}.
+\item Taubin\+LM\+: see \hyperlink{namespacegeoproc_a396280579199558902594f4df72c01c7ad69ec4945f39affa518f05fa077b00ae}{smooth\+\_\+modifier\+::\+Taubin\+LM}.
+\end{DoxyItemize}
+
+Since \textquotesingle{}operator\textquotesingle{} is a C++\textquotesingle{}s keyword, the word \textquotesingle{}modifier\textquotesingle{} is used instead. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Laplacian@{Laplacian}!geoproc@{geoproc}}\index{geoproc@{geoproc}!Laplacian@{Laplacian}}}\mbox{\Hypertarget{namespacegeoproc_a396280579199558902594f4df72c01c7a799723f39baf497704a3d39e7c03555f}\label{namespacegeoproc_a396280579199558902594f4df72c01c7a799723f39baf497704a3d39e7c03555f}} 
+Laplacian&The Laplacian operator on a vertex is formally defined as\+: $ L(v_i) = \sum_{j} w_{ij}(v_j - v_i) $
+
+where $w_{ij}$ is the type of weight. See \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} for details.
+
+Its usage is detailed in functions\+:
+\begin{DoxyItemize}
+\item \hyperlink{namespacegeoproc_1_1smoothing_1_1local_afc087060b0ce1c1ce40b8e5a9969e843}{smoothing\+::local\+::laplacian(const weight\&, float, size\+\_\+t, Triangle\+Mesh\&)}.
+\item \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a1b6e158caeaf3ae121b47fab6c6edbf9}{smoothing\+::local\+::laplacian(const weight\&, float, size\+\_\+t, size\+\_\+t, Triangle\+Mesh\&)}. 
+\end{DoxyItemize}\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Bi\+Laplacian@{Bi\+Laplacian}!geoproc@{geoproc}}\index{geoproc@{geoproc}!Bi\+Laplacian@{Bi\+Laplacian}}}\mbox{\Hypertarget{namespacegeoproc_a396280579199558902594f4df72c01c7a0890724bffb79f511bc768c0529dce3f}\label{namespacegeoproc_a396280579199558902594f4df72c01c7a0890724bffb79f511bc768c0529dce3f}} 
+Bi\+Laplacian&The Bilaplacian operator applies twice the \hyperlink{namespacegeoproc_a396280579199558902594f4df72c01c7a799723f39baf497704a3d39e7c03555f}{modifier\+::\+Laplacian} operator.
+
+Its usage is detailed in functions\+:
+\begin{DoxyItemize}
+\item \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a5e2f0a2048d6fc14c372ea75bf70982f}{smoothing\+::local\+::bilaplacian(const weight\&, float, size\+\_\+t, Triangle\+Mesh\&)}
+\item \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a8a59216ea802c3ff64b4be4b904cfa5c}{smoothing\+::local\+::bilaplacian(const weight\&, float, size\+\_\+t, size\+\_\+t, Triangle\+Mesh\&)} 
+\end{DoxyItemize}\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Taubin\+LM@{Taubin\+LM}!geoproc@{geoproc}}\index{geoproc@{geoproc}!Taubin\+LM@{Taubin\+LM}}}\mbox{\Hypertarget{namespacegeoproc_a396280579199558902594f4df72c01c7ad69ec4945f39affa518f05fa077b00ae}\label{namespacegeoproc_a396280579199558902594f4df72c01c7ad69ec4945f39affa518f05fa077b00ae}} 
+Taubin\+LM&The Taubin\+LM operator applies twice the \hyperlink{namespacegeoproc_a396280579199558902594f4df72c01c7a799723f39baf497704a3d39e7c03555f}{modifier\+::\+Laplacian} operator.
+
+Detailed in the documentation of functions\+:
+\begin{DoxyItemize}
+\item \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a17dcfcb442ae9cfbad9964b789b8c7a6}{smoothing\+::local\+::\+Taubin\+L\+M(const weight\&, float, size\+\_\+t, Triangle\+Mesh\&)}
+\item \hyperlink{namespacegeoproc_1_1smoothing_1_1local_abea3fa692927cd47d165322f9791ddca}{smoothing\+::local\+::\+Taubin\+L\+M(const weight\&, float, size\+\_\+t, size\+\_\+t, Triangle\+Mesh\&)} 
+\end{DoxyItemize}\\
+\hline
+
+\end{DoxyEnumFields}
+\mbox{\Hypertarget{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}\label{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}} 
+\index{geoproc@{geoproc}!weight@{weight}}
+\index{weight@{weight}!geoproc@{geoproc}}
+\subsubsection{\texorpdfstring{weight}{weight}}
+{\footnotesize\ttfamily enum \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{geoproc\+::weight} \+: int8\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+The different types of weights. 
+
+
+\begin{DoxyItemize}
+\item uniform\+: see \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843aa489ffed938ef1b9e86889bc413501ee}{weight\+::uniform}.
+\item cotangent\+: see \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843a8e8ea879f40475ae2c70be8b296bf950}{weight\+::cotangent}. 
+\end{DoxyItemize}\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{uniform@{uniform}!geoproc@{geoproc}}\index{geoproc@{geoproc}!uniform@{uniform}}}\mbox{\Hypertarget{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843aa489ffed938ef1b9e86889bc413501ee}\label{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843aa489ffed938ef1b9e86889bc413501ee}} 
+uniform&Uniform weights. For a vertex $v_i$, the contribution of each vertex of its neighbours $v_j$ is weighted uniformly.
+
+That is, if vertex $v_i$ has $N$ neighbours, the weights are defined as\+:
+
+$ \omega_{ij} = \frac{1}{N} $ \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{cotangent@{cotangent}!geoproc@{geoproc}}\index{geoproc@{geoproc}!cotangent@{cotangent}}}\mbox{\Hypertarget{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843a8e8ea879f40475ae2c70be8b296bf950}\label{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843a8e8ea879f40475ae2c70be8b296bf950}} 
+cotangent&Cotangent weights. For a vertex $v_i$, the contribution of each vertex of its neighbours $v_j$ is weighted using the sum of the cotangents of the angles $ v_i,v_k,v_j $ and . $ v_i,v_l,v_j $, where $ v_k,v_l $ are the two common neighbours of $ v_i,v_j $.
+
+That is, if $ \alpha = \langle v_i,v_k,v_j \rangle $, and $ \beta = \langle v_i,v_l,v_j \rangle $ are the two aforementioned angles, then the weight $ \omega_{ij} $ is defined as\+:
+
+$ \omega_{ij} = \cot(\alpha) + \cot(\beta) $ \\
+\hline
+
+\end{DoxyEnumFields}

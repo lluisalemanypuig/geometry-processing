@@ -75,3 +75,5 @@
 \form#74:$ u_1 = v_1 - v_0 $
 \form#75:$ u_2 = v_2 - v_0 $
 \form#76:$v_0,v_1,v_2$
+\form#77:$1\le i < N, \quad 1\le j < M$
+\form#78:$ L(v_i) $

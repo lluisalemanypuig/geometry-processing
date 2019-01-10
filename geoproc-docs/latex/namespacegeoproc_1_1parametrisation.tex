@@ -5,17 +5,10 @@
 Parametrisation algorithms.  
 
 
-\subsection*{Enumerations}
-\begin{DoxyCompactItemize}
-\item 
-enum \hyperlink{namespacegeoproc_1_1parametrisation_a7f001bf497830114e8aea2c884a948b7}{boundary\+\_\+shape} \+: int8\+\_\+t \{ \hyperlink{namespacegeoproc_1_1parametrisation_a7f001bf497830114e8aea2c884a948b7a30954d90085f6eaaf5817917fc5fecb3}{boundary\+\_\+shape\+::\+Circle} = 0, 
-\hyperlink{namespacegeoproc_1_1parametrisation_a7f001bf497830114e8aea2c884a948b7aceb46ca115d05c51aa5a16a8867c3304}{boundary\+\_\+shape\+::\+Square}
- \}\begin{DoxyCompactList}\small\item\em Shapes of the boundary vertices on the texture. \end{DoxyCompactList}
-\end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-bool \hyperlink{namespacegeoproc_1_1parametrisation_aa73e02d994e3ef3eba0fcfc5863c8416}{harmonic\+\_\+maps} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smoothing\+::smooth\+\_\+weight} \&w, const \hyperlink{namespacegeoproc_1_1parametrisation_a7f001bf497830114e8aea2c884a948b7}{boundary\+\_\+shape} \&s, std\+::vector$<$ glm\+::vec2 $>$ \&uvs)
+bool \hyperlink{namespacegeoproc_1_1parametrisation_a88891cbeadf541ab81be9333c0c232b3}{harmonic\+\_\+maps} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&w, const \hyperlink{namespacegeoproc_a494da744a805b80f842402f0a806ccfc}{boundary\+\_\+shape} \&s, std\+::vector$<$ glm\+::vec2 $>$ \&uvs)
 \begin{DoxyCompactList}\small\item\em Calculates the texture coordinates using Harmonic Maps. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -24,48 +17,21 @@ Parametrisation algorithms.
 
 Implemented\+:
 \begin{DoxyItemize}
-\item Harmonic maps (see \hyperlink{namespacegeoproc_1_1parametrisation_aa73e02d994e3ef3eba0fcfc5863c8416}{harmonic\+\_\+maps}). 
+\item Harmonic maps (see \hyperlink{namespacegeoproc_1_1parametrisation_a88891cbeadf541ab81be9333c0c232b3}{harmonic\+\_\+maps}). 
 \end{DoxyItemize}
 
-\subsection{Enumeration Type Documentation}
-\mbox{\Hypertarget{namespacegeoproc_1_1parametrisation_a7f001bf497830114e8aea2c884a948b7}\label{namespacegeoproc_1_1parametrisation_a7f001bf497830114e8aea2c884a948b7}} 
-\index{geoproc\+::parametrisation@{geoproc\+::parametrisation}!boundary\+\_\+shape@{boundary\+\_\+shape}}
-\index{boundary\+\_\+shape@{boundary\+\_\+shape}!geoproc\+::parametrisation@{geoproc\+::parametrisation}}
-\subsubsection{\texorpdfstring{boundary\+\_\+shape}{boundary\_shape}}
-{\footnotesize\ttfamily enum \hyperlink{namespacegeoproc_1_1parametrisation_a7f001bf497830114e8aea2c884a948b7}{geoproc\+::parametrisation\+::boundary\+\_\+shape} \+: int8\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
-
-
-
-Shapes of the boundary vertices on the texture. 
-
-
-\begin{DoxyItemize}
-\item circle\+: see \hyperlink{namespacegeoproc_1_1parametrisation_a7f001bf497830114e8aea2c884a948b7a30954d90085f6eaaf5817917fc5fecb3}{boundary\+\_\+shape\+::\+Circle}.
-\item square\+: see \hyperlink{namespacegeoproc_1_1parametrisation_a7f001bf497830114e8aea2c884a948b7aceb46ca115d05c51aa5a16a8867c3304}{boundary\+\_\+shape\+::\+Square}. 
-\end{DoxyItemize}\begin{DoxyEnumFields}{Enumerator}
-\raisebox{\heightof{T}}[0pt][0pt]{\index{Circle@{Circle}!geoproc\+::parametrisation@{geoproc\+::parametrisation}}\index{geoproc\+::parametrisation@{geoproc\+::parametrisation}!Circle@{Circle}}}\mbox{\Hypertarget{namespacegeoproc_1_1parametrisation_a7f001bf497830114e8aea2c884a948b7a30954d90085f6eaaf5817917fc5fecb3}\label{namespacegeoproc_1_1parametrisation_a7f001bf497830114e8aea2c884a948b7a30954d90085f6eaaf5817917fc5fecb3}} 
-Circle&The boundary vertices are placed on the circumference of a circle of radius 1, centered at (0,0). \\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{Square@{Square}!geoproc\+::parametrisation@{geoproc\+::parametrisation}}\index{geoproc\+::parametrisation@{geoproc\+::parametrisation}!Square@{Square}}}\mbox{\Hypertarget{namespacegeoproc_1_1parametrisation_a7f001bf497830114e8aea2c884a948b7aceb46ca115d05c51aa5a16a8867c3304}\label{namespacegeoproc_1_1parametrisation_a7f001bf497830114e8aea2c884a948b7aceb46ca115d05c51aa5a16a8867c3304}} 
-Square&The boundary vertices are placed on the boundary of a square of side length 2, centered at (0,0). \\
-\hline
-
-\end{DoxyEnumFields}
-
-
 \subsection{Function Documentation}
-\mbox{\Hypertarget{namespacegeoproc_1_1parametrisation_aa73e02d994e3ef3eba0fcfc5863c8416}\label{namespacegeoproc_1_1parametrisation_aa73e02d994e3ef3eba0fcfc5863c8416}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1parametrisation_a88891cbeadf541ab81be9333c0c232b3}\label{namespacegeoproc_1_1parametrisation_a88891cbeadf541ab81be9333c0c232b3}} 
 \index{geoproc\+::parametrisation@{geoproc\+::parametrisation}!harmonic\+\_\+maps@{harmonic\+\_\+maps}}
 \index{harmonic\+\_\+maps@{harmonic\+\_\+maps}!geoproc\+::parametrisation@{geoproc\+::parametrisation}}
 \subsubsection{\texorpdfstring{harmonic\+\_\+maps()}{harmonic\_maps()}}
-{\footnotesize\ttfamily bool geoproc\+::parametrisation\+::harmonic\+\_\+maps (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smoothing\+::smooth\+\_\+weight} \&}]{w,  }\item[{const \hyperlink{namespacegeoproc_1_1parametrisation_a7f001bf497830114e8aea2c884a948b7}{boundary\+\_\+shape} \&}]{s,  }\item[{std\+::vector$<$ glm\+::vec2 $>$ \&}]{uvs }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily bool geoproc\+::parametrisation\+::harmonic\+\_\+maps (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&}]{w,  }\item[{const \hyperlink{namespacegeoproc_a494da744a805b80f842402f0a806ccfc}{boundary\+\_\+shape} \&}]{s,  }\item[{std\+::vector$<$ glm\+::vec2 $>$ \&}]{uvs }\end{DoxyParamCaption})}
 
 
 
 Calculates the texture coordinates using Harmonic Maps. 
 
-These coordinates are obtained by solving the linear equation system\+: $Ax = b$ whose construction is similar to that in global smoothing (see \hyperlink{namespacegeoproc_1_1smoothing_1_1global_a7e294855e2c00be2b1141aa3f4e2650a}{smoothing\+::global\+::smooth}).
+These coordinates are obtained by solving the linear equation system\+: $Ax = b$ whose construction is similar to that in global smoothing (see \hyperlink{namespacegeoproc_1_1smoothing_1_1global_ac6c034cb72d0a744d0dd843d4df012ff}{smoothing\+::global\+::smooth}).
 
 Matrix {\itshape A} is defined as
 \begin{DoxyItemize}

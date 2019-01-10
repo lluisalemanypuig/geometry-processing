@@ -14,96 +14,9 @@ Implementation of different smoothing algorithms.
 \begin{DoxyCompactList}\small\item\em Local smoothing algorithms. \end{DoxyCompactList}\item 
  \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private}{local\+\_\+private}
 \begin{DoxyCompactList}\small\item\em Local smoothing algorithms core functions. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\subsection*{Enumerations}
-\begin{DoxyCompactItemize}
-\item 
-enum \hyperlink{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537}{smooth\+\_\+operator} \+: int8\+\_\+t \{ \hyperlink{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537a799723f39baf497704a3d39e7c03555f}{smooth\+\_\+operator\+::\+Laplacian}, 
-\hyperlink{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537a0890724bffb79f511bc768c0529dce3f}{smooth\+\_\+operator\+::\+Bi\+Laplacian}, 
-\hyperlink{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537ad69ec4945f39affa518f05fa077b00ae}{smooth\+\_\+operator\+::\+Taubin\+LM}
- \}\begin{DoxyCompactList}\small\item\em The different types of operators available. \end{DoxyCompactList}
-\item 
-enum \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \+: int8\+\_\+t \{ \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028aa489ffed938ef1b9e86889bc413501ee}{smooth\+\_\+weight\+::uniform} = 0, 
-\hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028a8e8ea879f40475ae2c70be8b296bf950}{smooth\+\_\+weight\+::cotangent}
- \}\begin{DoxyCompactList}\small\item\em The different types of weights for smoothing. \end{DoxyCompactList}
-\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
 Implementation of different smoothing algorithms. 
 
 Iterative, local algorithms, and global algorithms. 
-
-\subsection{Enumeration Type Documentation}
-\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537}\label{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537}} 
-\index{geoproc\+::smoothing@{geoproc\+::smoothing}!smooth\+\_\+operator@{smooth\+\_\+operator}}
-\index{smooth\+\_\+operator@{smooth\+\_\+operator}!geoproc\+::smoothing@{geoproc\+::smoothing}}
-\subsubsection{\texorpdfstring{smooth\+\_\+operator}{smooth\_operator}}
-{\footnotesize\ttfamily enum \hyperlink{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537}{geoproc\+::smoothing\+::smooth\+\_\+operator} \+: int8\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
-
-
-
-The different types of operators available. 
-
-
-\begin{DoxyItemize}
-\item Laplacian\+: see \hyperlink{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537a799723f39baf497704a3d39e7c03555f}{smooth\+\_\+operator\+::\+Laplacian}.
-\item Bi-\/\+Laplacian\+: see \hyperlink{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537a0890724bffb79f511bc768c0529dce3f}{smooth\+\_\+operator\+::\+Bi\+Laplacian}.
-\item Taubin\+LM\+: see \hyperlink{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537ad69ec4945f39affa518f05fa077b00ae}{smooth\+\_\+operator\+::\+Taubin\+LM}. 
-\end{DoxyItemize}\begin{DoxyEnumFields}{Enumerator}
-\raisebox{\heightof{T}}[0pt][0pt]{\index{Laplacian@{Laplacian}!geoproc\+::smoothing@{geoproc\+::smoothing}}\index{geoproc\+::smoothing@{geoproc\+::smoothing}!Laplacian@{Laplacian}}}\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537a799723f39baf497704a3d39e7c03555f}\label{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537a799723f39baf497704a3d39e7c03555f}} 
-Laplacian&Detailed in the documentation of functions\+:
-\begin{DoxyItemize}
-\item \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a3eaa81a7fe893e316190a0ab9598732c}{local\+::laplacian(const smooth\+\_\+weight\&, float, size\+\_\+t, Triangle\+Mesh\&)}
-\item \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a160f3ee32c5073d99e3f38782bd4a070}{local\+::laplacian(const smooth\+\_\+weight\&, float, size\+\_\+t, size\+\_\+t, Triangle\+Mesh\&)} 
-\end{DoxyItemize}\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{Bi\+Laplacian@{Bi\+Laplacian}!geoproc\+::smoothing@{geoproc\+::smoothing}}\index{geoproc\+::smoothing@{geoproc\+::smoothing}!Bi\+Laplacian@{Bi\+Laplacian}}}\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537a0890724bffb79f511bc768c0529dce3f}\label{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537a0890724bffb79f511bc768c0529dce3f}} 
-Bi\+Laplacian&Detailed in the documentation of functions\+:
-\begin{DoxyItemize}
-\item \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a5958a9bdf688836bd6242de213a68ec4}{local\+::bilaplacian(const smooth\+\_\+weight\&, float, size\+\_\+t, Triangle\+Mesh\&)}
-\item \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a7c96dc664c1900b1cba6d3a3eb2547d7}{local\+::bilaplacian(const smooth\+\_\+weight\&, float, size\+\_\+t, size\+\_\+t, Triangle\+Mesh\&)} 
-\end{DoxyItemize}\\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{Taubin\+LM@{Taubin\+LM}!geoproc\+::smoothing@{geoproc\+::smoothing}}\index{geoproc\+::smoothing@{geoproc\+::smoothing}!Taubin\+LM@{Taubin\+LM}}}\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537ad69ec4945f39affa518f05fa077b00ae}\label{namespacegeoproc_1_1smoothing_a64c2bfd1dda6cfbf39afa2e61fd62537ad69ec4945f39affa518f05fa077b00ae}} 
-Taubin\+LM&Detailed in the documentation of functions\+:
-\begin{DoxyItemize}
-\item \hyperlink{namespacegeoproc_1_1smoothing_1_1local_acb46f51bf5fefe33b36ae6d7e0c4a899}{local\+::\+Taubin\+L\+M(const smooth\+\_\+weight\&, float, size\+\_\+t, Triangle\+Mesh\&)}
-\item \hyperlink{namespacegeoproc_1_1smoothing_1_1local_ae68c255cdba405972ce42238aee04c3b}{local\+::\+Taubin\+L\+M(const smooth\+\_\+weight\&, float, size\+\_\+t, size\+\_\+t, Triangle\+Mesh\&)} 
-\end{DoxyItemize}\\
-\hline
-
-\end{DoxyEnumFields}
-\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}\label{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}} 
-\index{geoproc\+::smoothing@{geoproc\+::smoothing}!smooth\+\_\+weight@{smooth\+\_\+weight}}
-\index{smooth\+\_\+weight@{smooth\+\_\+weight}!geoproc\+::smoothing@{geoproc\+::smoothing}}
-\subsubsection{\texorpdfstring{smooth\+\_\+weight}{smooth\_weight}}
-{\footnotesize\ttfamily enum \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{geoproc\+::smoothing\+::smooth\+\_\+weight} \+: int8\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
-
-
-
-The different types of weights for smoothing. 
-
-
-\begin{DoxyItemize}
-\item uniform\+: see \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028aa489ffed938ef1b9e86889bc413501ee}{smooth\+\_\+weight\+::uniform}.
-\item cotangent\+: see \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028a8e8ea879f40475ae2c70be8b296bf950}{smooth\+\_\+weight\+::cotangent}. 
-\end{DoxyItemize}\begin{DoxyEnumFields}{Enumerator}
-\raisebox{\heightof{T}}[0pt][0pt]{\index{uniform@{uniform}!geoproc\+::smoothing@{geoproc\+::smoothing}}\index{geoproc\+::smoothing@{geoproc\+::smoothing}!uniform@{uniform}}}\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028aa489ffed938ef1b9e86889bc413501ee}\label{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028aa489ffed938ef1b9e86889bc413501ee}} 
-uniform&Uniform weights. For a vertex $v_i$, the contribution of each vertex of its neighbours $v_j$ is weighted uniformly.
-
-That is, if vertex $v_i$ has $N$ neighbours, the weights are defined as\+:
-
-$ \omega_{ij} = \frac{1}{N} $ \\
-\hline
-
-\raisebox{\heightof{T}}[0pt][0pt]{\index{cotangent@{cotangent}!geoproc\+::smoothing@{geoproc\+::smoothing}}\index{geoproc\+::smoothing@{geoproc\+::smoothing}!cotangent@{cotangent}}}\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028a8e8ea879f40475ae2c70be8b296bf950}\label{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028a8e8ea879f40475ae2c70be8b296bf950}} 
-cotangent&Cotangent weights. For a vertex $v_i$, the contribution of each vertex of its neighbours $v_j$ is weighted using the sum of the cotangents of the angles $ v_i,v_k,v_j $ and . $ v_i,v_l,v_j $, where $ v_k,v_l $ are the two common neighbours of $ v_i,v_j $.
-
-That is, if $ \alpha = \langle v_i,v_k,v_j \rangle $, and $ \beta = \langle v_i,v_l,v_j \rangle $ are the two aforementioned angles, then the weight $ \omega_{ij} $ is defined as\+:
-
-$ \omega_{ij} = \cot(\alpha) + \cot(\beta) $ \\
-\hline
-
-\end{DoxyEnumFields}

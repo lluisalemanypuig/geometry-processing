@@ -16,17 +16,17 @@ void \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a5ef9cdfdd013ff5
 \begin{DoxyCompactList}\small\item\em Computes weights corresponding to cotangent weights. \end{DoxyCompactList}\item 
 void \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_ae75c9986480b1c0cd2c5ac84e0fe8d34}{make\+\_\+cotangent\+\_\+weight} (int vi, const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, const glm\+::vec3 $\ast$verts, glm\+::vec3 \&L)
 \begin{DoxyCompactList}\small\item\em Computes the sum corresponding to cotangent weights. \end{DoxyCompactList}\item 
-void \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a39385a162edb351605f8d4e304bea74f}{apply\+\_\+local} (const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&w, float lambda, const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, const glm\+::vec3 $\ast$old\+\_\+verts, glm\+::vec3 $\ast$new\+\_\+verts)
+void \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a233a9fc9782e2064cbd1c7006485a865}{apply\+\_\+local} (const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&w, float lambda, const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, const glm\+::vec3 $\ast$old\+\_\+verts, glm\+::vec3 $\ast$new\+\_\+verts)
 \begin{DoxyCompactList}\small\item\em Applies one iteration of a local smoothing algorithm. \end{DoxyCompactList}\item 
-void \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a98b54c822111def6ba4bf638982a3251}{apply\+\_\+local} (const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&w, float lambda, const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, size\+\_\+t nt, const glm\+::vec3 $\ast$old\+\_\+verts, glm\+::vec3 $\ast$new\+\_\+verts)
+void \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a20ed9aea1e6c471bdec5608e19bb73bd}{apply\+\_\+local} (const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&w, float lambda, const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, size\+\_\+t nt, const glm\+::vec3 $\ast$old\+\_\+verts, glm\+::vec3 $\ast$new\+\_\+verts)
 \begin{DoxyCompactList}\small\item\em Applies one parallelised iteration of a local smoothing algorithm. \end{DoxyCompactList}\item 
-bool \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_ad81d48e40cfb5d71780dbe2edf00293e}{apply\+\_\+once\+\_\+per\+\_\+it} (const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&w, float l, size\+\_\+t nit, const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, glm\+::vec3 $\ast$old\+\_\+verts, glm\+::vec3 $\ast$new\+\_\+verts)
+bool \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a2f0145cf84135b79813338e5cd18ab87}{apply\+\_\+once\+\_\+per\+\_\+it} (const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&w, float l, size\+\_\+t nit, const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, glm\+::vec3 $\ast$old\+\_\+verts, glm\+::vec3 $\ast$new\+\_\+verts)
 \begin{DoxyCompactList}\small\item\em Applies a sequential local procedure once at every {\itshape nit} iterations. \end{DoxyCompactList}\item 
-bool \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a2d7306fe54658da961be68693a7cd97c}{apply\+\_\+once\+\_\+per\+\_\+it} (const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&w, float l, size\+\_\+t nit, size\+\_\+t n\+\_\+threads, const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, glm\+::vec3 $\ast$old\+\_\+verts, glm\+::vec3 $\ast$new\+\_\+verts)
+bool \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a02e50268720d1728f61cf280998d4b0e}{apply\+\_\+once\+\_\+per\+\_\+it} (const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&w, float l, size\+\_\+t nit, size\+\_\+t n\+\_\+threads, const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, glm\+::vec3 $\ast$old\+\_\+verts, glm\+::vec3 $\ast$new\+\_\+verts)
 \begin{DoxyCompactList}\small\item\em Applies a parallel local procedure once at every {\itshape nit} iterations. \end{DoxyCompactList}\item 
-void \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a2b21fd90516602c4986ef3a39a58d079}{apply\+\_\+twice\+\_\+per\+\_\+it} (const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&w, float l1, float l2, size\+\_\+t nit, const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, glm\+::vec3 $\ast$old\+\_\+verts, glm\+::vec3 $\ast$new\+\_\+verts)
+void \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a47b625e62ff0e3311c49bacaecb0a020}{apply\+\_\+twice\+\_\+per\+\_\+it} (const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&w, float l1, float l2, size\+\_\+t nit, const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, glm\+::vec3 $\ast$old\+\_\+verts, glm\+::vec3 $\ast$new\+\_\+verts)
 \begin{DoxyCompactList}\small\item\em Applies two sequential local procedure at every {\itshape nit} iterations. \end{DoxyCompactList}\item 
-void \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a68d179e0f5a942106f85ddffd10d8c53}{apply\+\_\+twice\+\_\+per\+\_\+it} (const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&w, float l1, float l2, size\+\_\+t nit, size\+\_\+t n\+\_\+threads, const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, glm\+::vec3 $\ast$old\+\_\+verts, glm\+::vec3 $\ast$new\+\_\+verts)
+void \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_ab4056c7402c96ea773e3d26d95b57033}{apply\+\_\+twice\+\_\+per\+\_\+it} (const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&w, float l1, float l2, size\+\_\+t nit, size\+\_\+t n\+\_\+threads, const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, glm\+::vec3 $\ast$old\+\_\+verts, glm\+::vec3 $\ast$new\+\_\+verts)
 \begin{DoxyCompactList}\small\item\em Applies twice parallel local procedure at every {\itshape nit} iterations. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -36,11 +36,11 @@ Local smoothing algorithms core functions.
 Here are defined the core functions that the algorithms in namespace \hyperlink{namespacegeoproc_1_1smoothing_1_1local}{local} (and others too) use. 
 
 \subsection{Function Documentation}
-\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local__private_a39385a162edb351605f8d4e304bea74f}\label{namespacegeoproc_1_1smoothing_1_1local__private_a39385a162edb351605f8d4e304bea74f}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local__private_a233a9fc9782e2064cbd1c7006485a865}\label{namespacegeoproc_1_1smoothing_1_1local__private_a233a9fc9782e2064cbd1c7006485a865}} 
 \index{geoproc\+::smoothing\+::local\+\_\+private@{geoproc\+::smoothing\+::local\+\_\+private}!apply\+\_\+local@{apply\+\_\+local}}
 \index{apply\+\_\+local@{apply\+\_\+local}!geoproc\+::smoothing\+::local\+\_\+private@{geoproc\+::smoothing\+::local\+\_\+private}}
 \subsubsection{\texorpdfstring{apply\+\_\+local()}{apply\_local()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+\_\+private\+::apply\+\_\+local (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&}]{w,  }\item[{float}]{lambda,  }\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{const glm\+::vec3 $\ast$}]{old\+\_\+verts,  }\item[{glm\+::vec3 $\ast$}]{new\+\_\+verts }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+\_\+private\+::apply\+\_\+local (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&}]{w,  }\item[{float}]{lambda,  }\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{const glm\+::vec3 $\ast$}]{old\+\_\+verts,  }\item[{glm\+::vec3 $\ast$}]{new\+\_\+verts }\end{DoxyParamCaption})}
 
 
 
@@ -62,15 +62,15 @@ Applies one iteration of a local smoothing algorithm.
 \begin{DoxyPrecond}{Precondition}
 The mesh requires the data necessary data to compute the weights\+:
 \begin{DoxyItemize}
-\item for a \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028aa489ffed938ef1b9e86889bc413501ee}{smoothing\+\_\+weight\+::uniform} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a6f1acdf579d13e299b947a6619571df7}{make\+\_\+uniform\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}
-\item for a \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028a8e8ea879f40475ae2c70be8b296bf950}{smoothing\+\_\+weight\+::cotangent} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_ae75c9986480b1c0cd2c5ac84e0fe8d34}{make\+\_\+cotangent\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}. 
+\item for a \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843aa489ffed938ef1b9e86889bc413501ee}{smoothing\+\_\+weight\+::uniform} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a6f1acdf579d13e299b947a6619571df7}{make\+\_\+uniform\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}
+\item for a \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843a8e8ea879f40475ae2c70be8b296bf950}{smoothing\+\_\+weight\+::cotangent} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_ae75c9986480b1c0cd2c5ac84e0fe8d34}{make\+\_\+cotangent\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}. 
 \end{DoxyItemize}
 \end{DoxyPrecond}
-\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local__private_a98b54c822111def6ba4bf638982a3251}\label{namespacegeoproc_1_1smoothing_1_1local__private_a98b54c822111def6ba4bf638982a3251}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local__private_a20ed9aea1e6c471bdec5608e19bb73bd}\label{namespacegeoproc_1_1smoothing_1_1local__private_a20ed9aea1e6c471bdec5608e19bb73bd}} 
 \index{geoproc\+::smoothing\+::local\+\_\+private@{geoproc\+::smoothing\+::local\+\_\+private}!apply\+\_\+local@{apply\+\_\+local}}
 \index{apply\+\_\+local@{apply\+\_\+local}!geoproc\+::smoothing\+::local\+\_\+private@{geoproc\+::smoothing\+::local\+\_\+private}}
 \subsubsection{\texorpdfstring{apply\+\_\+local()}{apply\_local()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+\_\+private\+::apply\+\_\+local (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&}]{w,  }\item[{float}]{lambda,  }\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{size\+\_\+t}]{nt,  }\item[{const glm\+::vec3 $\ast$}]{old\+\_\+verts,  }\item[{glm\+::vec3 $\ast$}]{new\+\_\+verts }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+\_\+private\+::apply\+\_\+local (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&}]{w,  }\item[{float}]{lambda,  }\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{size\+\_\+t}]{nt,  }\item[{const glm\+::vec3 $\ast$}]{old\+\_\+verts,  }\item[{glm\+::vec3 $\ast$}]{new\+\_\+verts }\end{DoxyParamCaption})}
 
 
 
@@ -94,15 +94,15 @@ Applies one parallelised iteration of a local smoothing algorithm.
 \begin{DoxyPrecond}{Precondition}
 The mesh requires the data necessary data to compute the weights\+:
 \begin{DoxyItemize}
-\item for a \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028aa489ffed938ef1b9e86889bc413501ee}{smoothing\+\_\+weight\+::uniform} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a6f1acdf579d13e299b947a6619571df7}{make\+\_\+uniform\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}
-\item for a \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028a8e8ea879f40475ae2c70be8b296bf950}{smoothing\+\_\+weight\+::cotangent} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_ae75c9986480b1c0cd2c5ac84e0fe8d34}{make\+\_\+cotangent\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}. 
+\item for a \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843aa489ffed938ef1b9e86889bc413501ee}{smoothing\+\_\+weight\+::uniform} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a6f1acdf579d13e299b947a6619571df7}{make\+\_\+uniform\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}
+\item for a \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843a8e8ea879f40475ae2c70be8b296bf950}{smoothing\+\_\+weight\+::cotangent} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_ae75c9986480b1c0cd2c5ac84e0fe8d34}{make\+\_\+cotangent\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}. 
 \end{DoxyItemize}
 \end{DoxyPrecond}
-\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local__private_ad81d48e40cfb5d71780dbe2edf00293e}\label{namespacegeoproc_1_1smoothing_1_1local__private_ad81d48e40cfb5d71780dbe2edf00293e}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local__private_a2f0145cf84135b79813338e5cd18ab87}\label{namespacegeoproc_1_1smoothing_1_1local__private_a2f0145cf84135b79813338e5cd18ab87}} 
 \index{geoproc\+::smoothing\+::local\+\_\+private@{geoproc\+::smoothing\+::local\+\_\+private}!apply\+\_\+once\+\_\+per\+\_\+it@{apply\+\_\+once\+\_\+per\+\_\+it}}
 \index{apply\+\_\+once\+\_\+per\+\_\+it@{apply\+\_\+once\+\_\+per\+\_\+it}!geoproc\+::smoothing\+::local\+\_\+private@{geoproc\+::smoothing\+::local\+\_\+private}}
 \subsubsection{\texorpdfstring{apply\+\_\+once\+\_\+per\+\_\+it()}{apply\_once\_per\_it()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily bool geoproc\+::smoothing\+::local\+\_\+private\+::apply\+\_\+once\+\_\+per\+\_\+it (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&}]{w,  }\item[{float}]{l,  }\item[{size\+\_\+t}]{nit,  }\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{glm\+::vec3 $\ast$}]{old\+\_\+verts,  }\item[{glm\+::vec3 $\ast$}]{new\+\_\+verts }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily bool geoproc\+::smoothing\+::local\+\_\+private\+::apply\+\_\+once\+\_\+per\+\_\+it (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&}]{w,  }\item[{float}]{l,  }\item[{size\+\_\+t}]{nit,  }\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{glm\+::vec3 $\ast$}]{old\+\_\+verts,  }\item[{glm\+::vec3 $\ast$}]{new\+\_\+verts }\end{DoxyParamCaption})}
 
 
 
@@ -126,18 +126,18 @@ Applies a sequential local procedure once at every {\itshape nit} iterations.
 \begin{DoxyPrecond}{Precondition}
 The mesh requires the data necessary data to compute the weights\+:
 \begin{DoxyItemize}
-\item for a \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028aa489ffed938ef1b9e86889bc413501ee}{smoothing\+\_\+weight\+::uniform} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a6f1acdf579d13e299b947a6619571df7}{make\+\_\+uniform\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}
-\item for a \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028a8e8ea879f40475ae2c70be8b296bf950}{smoothing\+\_\+weight\+::cotangent} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_ae75c9986480b1c0cd2c5ac84e0fe8d34}{make\+\_\+cotangent\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}. 
+\item for a \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843aa489ffed938ef1b9e86889bc413501ee}{smoothing\+\_\+weight\+::uniform} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a6f1acdf579d13e299b947a6619571df7}{make\+\_\+uniform\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}
+\item for a \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843a8e8ea879f40475ae2c70be8b296bf950}{smoothing\+\_\+weight\+::cotangent} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_ae75c9986480b1c0cd2c5ac84e0fe8d34}{make\+\_\+cotangent\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}. 
 \end{DoxyItemize}
 \end{DoxyPrecond}
 \begin{DoxyReturn}{Returns}
 Returns true if the final coordinates of the vertices are in new\+\_\+verts. Returns false if otherwise. 
 \end{DoxyReturn}
-\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local__private_a2d7306fe54658da961be68693a7cd97c}\label{namespacegeoproc_1_1smoothing_1_1local__private_a2d7306fe54658da961be68693a7cd97c}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local__private_a02e50268720d1728f61cf280998d4b0e}\label{namespacegeoproc_1_1smoothing_1_1local__private_a02e50268720d1728f61cf280998d4b0e}} 
 \index{geoproc\+::smoothing\+::local\+\_\+private@{geoproc\+::smoothing\+::local\+\_\+private}!apply\+\_\+once\+\_\+per\+\_\+it@{apply\+\_\+once\+\_\+per\+\_\+it}}
 \index{apply\+\_\+once\+\_\+per\+\_\+it@{apply\+\_\+once\+\_\+per\+\_\+it}!geoproc\+::smoothing\+::local\+\_\+private@{geoproc\+::smoothing\+::local\+\_\+private}}
 \subsubsection{\texorpdfstring{apply\+\_\+once\+\_\+per\+\_\+it()}{apply\_once\_per\_it()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily bool geoproc\+::smoothing\+::local\+\_\+private\+::apply\+\_\+once\+\_\+per\+\_\+it (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&}]{w,  }\item[{float}]{l,  }\item[{size\+\_\+t}]{nit,  }\item[{size\+\_\+t}]{n\+\_\+threads,  }\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{glm\+::vec3 $\ast$}]{old\+\_\+verts,  }\item[{glm\+::vec3 $\ast$}]{new\+\_\+verts }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily bool geoproc\+::smoothing\+::local\+\_\+private\+::apply\+\_\+once\+\_\+per\+\_\+it (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&}]{w,  }\item[{float}]{l,  }\item[{size\+\_\+t}]{nit,  }\item[{size\+\_\+t}]{n\+\_\+threads,  }\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{glm\+::vec3 $\ast$}]{old\+\_\+verts,  }\item[{glm\+::vec3 $\ast$}]{new\+\_\+verts }\end{DoxyParamCaption})}
 
 
 
@@ -163,18 +163,18 @@ Applies a parallel local procedure once at every {\itshape nit} iterations.
 \begin{DoxyPrecond}{Precondition}
 The mesh requires the data necessary data to compute the weights\+:
 \begin{DoxyItemize}
-\item for a \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028aa489ffed938ef1b9e86889bc413501ee}{smoothing\+\_\+weight\+::uniform} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a6f1acdf579d13e299b947a6619571df7}{make\+\_\+uniform\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}
-\item for a \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028a8e8ea879f40475ae2c70be8b296bf950}{smoothing\+\_\+weight\+::cotangent} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_ae75c9986480b1c0cd2c5ac84e0fe8d34}{make\+\_\+cotangent\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}. 
+\item for a \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843aa489ffed938ef1b9e86889bc413501ee}{smoothing\+\_\+weight\+::uniform} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a6f1acdf579d13e299b947a6619571df7}{make\+\_\+uniform\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}
+\item for a \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843a8e8ea879f40475ae2c70be8b296bf950}{smoothing\+\_\+weight\+::cotangent} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_ae75c9986480b1c0cd2c5ac84e0fe8d34}{make\+\_\+cotangent\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}. 
 \end{DoxyItemize}
 \end{DoxyPrecond}
 \begin{DoxyReturn}{Returns}
 Returns true if the final coordinates of the vertices are in new\+\_\+verts. Returns false if otherwise. 
 \end{DoxyReturn}
-\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local__private_a2b21fd90516602c4986ef3a39a58d079}\label{namespacegeoproc_1_1smoothing_1_1local__private_a2b21fd90516602c4986ef3a39a58d079}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local__private_a47b625e62ff0e3311c49bacaecb0a020}\label{namespacegeoproc_1_1smoothing_1_1local__private_a47b625e62ff0e3311c49bacaecb0a020}} 
 \index{geoproc\+::smoothing\+::local\+\_\+private@{geoproc\+::smoothing\+::local\+\_\+private}!apply\+\_\+twice\+\_\+per\+\_\+it@{apply\+\_\+twice\+\_\+per\+\_\+it}}
 \index{apply\+\_\+twice\+\_\+per\+\_\+it@{apply\+\_\+twice\+\_\+per\+\_\+it}!geoproc\+::smoothing\+::local\+\_\+private@{geoproc\+::smoothing\+::local\+\_\+private}}
 \subsubsection{\texorpdfstring{apply\+\_\+twice\+\_\+per\+\_\+it()}{apply\_twice\_per\_it()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+\_\+private\+::apply\+\_\+twice\+\_\+per\+\_\+it (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&}]{w,  }\item[{float}]{l1,  }\item[{float}]{l2,  }\item[{size\+\_\+t}]{nit,  }\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{glm\+::vec3 $\ast$}]{old\+\_\+verts,  }\item[{glm\+::vec3 $\ast$}]{new\+\_\+verts }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+\_\+private\+::apply\+\_\+twice\+\_\+per\+\_\+it (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&}]{w,  }\item[{float}]{l1,  }\item[{float}]{l2,  }\item[{size\+\_\+t}]{nit,  }\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{glm\+::vec3 $\ast$}]{old\+\_\+verts,  }\item[{glm\+::vec3 $\ast$}]{new\+\_\+verts }\end{DoxyParamCaption})}
 
 
 
@@ -200,15 +200,15 @@ Applies two sequential local procedure at every {\itshape nit} iterations.
 \begin{DoxyPrecond}{Precondition}
 The mesh requires the data necessary data to compute the weights\+:
 \begin{DoxyItemize}
-\item for a \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028aa489ffed938ef1b9e86889bc413501ee}{smoothing\+\_\+weight\+::uniform} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a6f1acdf579d13e299b947a6619571df7}{make\+\_\+uniform\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}
-\item for a \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028a8e8ea879f40475ae2c70be8b296bf950}{smoothing\+\_\+weight\+::cotangent} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_ae75c9986480b1c0cd2c5ac84e0fe8d34}{make\+\_\+cotangent\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}. 
+\item for a \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843aa489ffed938ef1b9e86889bc413501ee}{smoothing\+\_\+weight\+::uniform} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a6f1acdf579d13e299b947a6619571df7}{make\+\_\+uniform\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}
+\item for a \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843a8e8ea879f40475ae2c70be8b296bf950}{smoothing\+\_\+weight\+::cotangent} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_ae75c9986480b1c0cd2c5ac84e0fe8d34}{make\+\_\+cotangent\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}. 
 \end{DoxyItemize}
 \end{DoxyPrecond}
-\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local__private_a68d179e0f5a942106f85ddffd10d8c53}\label{namespacegeoproc_1_1smoothing_1_1local__private_a68d179e0f5a942106f85ddffd10d8c53}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local__private_ab4056c7402c96ea773e3d26d95b57033}\label{namespacegeoproc_1_1smoothing_1_1local__private_ab4056c7402c96ea773e3d26d95b57033}} 
 \index{geoproc\+::smoothing\+::local\+\_\+private@{geoproc\+::smoothing\+::local\+\_\+private}!apply\+\_\+twice\+\_\+per\+\_\+it@{apply\+\_\+twice\+\_\+per\+\_\+it}}
 \index{apply\+\_\+twice\+\_\+per\+\_\+it@{apply\+\_\+twice\+\_\+per\+\_\+it}!geoproc\+::smoothing\+::local\+\_\+private@{geoproc\+::smoothing\+::local\+\_\+private}}
 \subsubsection{\texorpdfstring{apply\+\_\+twice\+\_\+per\+\_\+it()}{apply\_twice\_per\_it()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+\_\+private\+::apply\+\_\+twice\+\_\+per\+\_\+it (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&}]{w,  }\item[{float}]{l1,  }\item[{float}]{l2,  }\item[{size\+\_\+t}]{nit,  }\item[{size\+\_\+t}]{n\+\_\+threads,  }\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{glm\+::vec3 $\ast$}]{old\+\_\+verts,  }\item[{glm\+::vec3 $\ast$}]{new\+\_\+verts }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+\_\+private\+::apply\+\_\+twice\+\_\+per\+\_\+it (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&}]{w,  }\item[{float}]{l1,  }\item[{float}]{l2,  }\item[{size\+\_\+t}]{nit,  }\item[{size\+\_\+t}]{n\+\_\+threads,  }\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{glm\+::vec3 $\ast$}]{old\+\_\+verts,  }\item[{glm\+::vec3 $\ast$}]{new\+\_\+verts }\end{DoxyParamCaption})}
 
 
 
@@ -236,8 +236,8 @@ Applies twice parallel local procedure at every {\itshape nit} iterations.
 \begin{DoxyPrecond}{Precondition}
 The mesh requires the data necessary data to compute the weights\+:
 \begin{DoxyItemize}
-\item for a \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028aa489ffed938ef1b9e86889bc413501ee}{smoothing\+\_\+weight\+::uniform} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a6f1acdf579d13e299b947a6619571df7}{make\+\_\+uniform\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}
-\item for a \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028a8e8ea879f40475ae2c70be8b296bf950}{smoothing\+\_\+weight\+::cotangent} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_ae75c9986480b1c0cd2c5ac84e0fe8d34}{make\+\_\+cotangent\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}. 
+\item for a \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843aa489ffed938ef1b9e86889bc413501ee}{smoothing\+\_\+weight\+::uniform} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a6f1acdf579d13e299b947a6619571df7}{make\+\_\+uniform\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}
+\item for a \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843a8e8ea879f40475ae2c70be8b296bf950}{smoothing\+\_\+weight\+::cotangent} see precondition of \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_ae75c9986480b1c0cd2c5ac84e0fe8d34}{make\+\_\+cotangent\+\_\+weight(int, const Triangle\+Mesh\&, const glm\+::vec3 $\ast$, glm\+::vec3\&)}. 
 \end{DoxyItemize}
 \end{DoxyPrecond}
 \mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local__private_ae75c9986480b1c0cd2c5ac84e0fe8d34}\label{namespacegeoproc_1_1smoothing_1_1local__private_ae75c9986480b1c0cd2c5ac84e0fe8d34}} 
@@ -254,7 +254,7 @@ Computes the sum
 
 $\sum_{j} w_{ij}\cdot(v_j - v_i)$
 
-where $w_{ij}$ correpond to cotangent weights. See \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028a8e8ea879f40475ae2c70be8b296bf950}{smooth\+\_\+weight\+::cotangent}. Recall that $j$ iterates over the 1-\/ring neighbourhood of {\itshape vi}. 
+where $w_{ij}$ correpond to cotangent weights. See \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843a8e8ea879f40475ae2c70be8b296bf950}{smooth\+\_\+weight\+::cotangent}. Recall that $j$ iterates over the 1-\/ring neighbourhood of {\itshape vi}. 
 \begin{DoxyParams}[1]{Parameters}
  & {\em vi} & Valid vertex index. \\
 \hline
@@ -312,7 +312,7 @@ Computes the sum
 
 $\sum_{j} w_{ij}\cdot(v_j - v_i)$
 
-where $w_{ij}$ correpond to uniform weights. See \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028aa489ffed938ef1b9e86889bc413501ee}{smooth\+\_\+weight\+::uniform}. Recall that $j$ iterates over the 1-\/ring neighbourhood of {\itshape vi}. 
+where $w_{ij}$ correpond to uniform weights. See \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843aa489ffed938ef1b9e86889bc413501ee}{smooth\+\_\+weight\+::uniform}. Recall that $j$ iterates over the 1-\/ring neighbourhood of {\itshape vi}. 
 \begin{DoxyParams}[1]{Parameters}
  & {\em vi} & Valid vertex index. \\
 \hline

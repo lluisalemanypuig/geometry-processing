@@ -103,6 +103,8 @@ bool \hyperlink{classgeoproc_1_1TriangleMesh_a409e399857e1a1abc9f23918ff5f5860}{
 \begin{DoxyCompactList}\small\item\em Are the boundaries valid? \end{DoxyCompactList}\item 
 const std\+::vector$<$ int $>$ \& \hyperlink{classgeoproc_1_1TriangleMesh_ae73a760e61250eb2f474b8ab03a1e2ab}{get\+\_\+vertex\+\_\+edge} () const
 \begin{DoxyCompactList}\small\item\em Returns a relation between vertices and edges. \end{DoxyCompactList}\item 
+const std\+::vector$<$ int $>$ \& \hyperlink{classgeoproc_1_1TriangleMesh_af5093cb9508a1f3193f5b8481bbabef3}{get\+\_\+triangles} () const
+\begin{DoxyCompactList}\small\item\em Returns a constant reference to all the triangles in this mesh. \end{DoxyCompactList}\item 
 const std\+::vector$<$ int\mbox{[}3\mbox{]}$>$ \& \hyperlink{classgeoproc_1_1TriangleMesh_af56b3521a8df241f4f67c7f2bbacfa51}{get\+\_\+edges\+\_\+triangle} () const
 \begin{DoxyCompactList}\small\item\em Returns a relation between tirnalges and edges. \end{DoxyCompactList}\item 
 const std\+::vector$<$ \hyperlink{classgeoproc_1_1mesh__edge}{mesh\+\_\+edge} $>$ \& \hyperlink{classgeoproc_1_1TriangleMesh_a742e5769cb3e26303eb8ec1af57c9ac4}{get\+\_\+edges} () const
@@ -455,6 +457,19 @@ Neighbourhood data must exist in this mesh. See \hyperlink{classgeoproc_1_1Trian
 \end{DoxyPrecond}
 \begin{DoxyReturn}{Returns}
 If the corner index is valid, the face index {\itshape f} returned is also valid\+: 0 $<$= {\itshape 3$\ast$f} $<$ number of triangles. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_af5093cb9508a1f3193f5b8481bbabef3}\label{classgeoproc_1_1TriangleMesh_af5093cb9508a1f3193f5b8481bbabef3}} 
+\index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+triangles@{get\+\_\+triangles}}
+\index{get\+\_\+triangles@{get\+\_\+triangles}!geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}}
+\subsubsection{\texorpdfstring{get\+\_\+triangles()}{get\_triangles()}}
+{\footnotesize\ttfamily const vector$<$ int $>$ \& geoproc\+::\+Triangle\+Mesh\+::get\+\_\+triangles (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Returns a constant reference to all the triangles in this mesh. 
+
+\begin{DoxyReturn}{Returns}
+Returns a constant reference to \hyperlink{classgeoproc_1_1TriangleMesh_ad1cf20622f2bb080100862f413bd89c2}{triangles}. 
 \end{DoxyReturn}
 \mbox{\Hypertarget{classgeoproc_1_1TriangleMesh_a9c231aaac3dfbfe9b6334df6cabb741e}\label{classgeoproc_1_1TriangleMesh_a9c231aaac3dfbfe9b6334df6cabb741e}} 
 \index{geoproc\+::\+Triangle\+Mesh@{geoproc\+::\+Triangle\+Mesh}!get\+\_\+vertex@{get\+\_\+vertex}}

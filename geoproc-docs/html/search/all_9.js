@@ -13,5 +13,6 @@ var searchData=
   ['mesh',['mesh',['../classgeoproc_1_1iterators_1_1mesh__iterator.html#a6102e0c43bcf7008597387a2f085ca0e',1,'geoproc::iterators::mesh_iterator']]],
   ['mesh_5fedge',['mesh_edge',['../classgeoproc_1_1mesh__edge.html',1,'geoproc::mesh_edge'],['../classgeoproc_1_1mesh__edge.html#ab54d5cca1a94addee7c591bd8a7e553b',1,'geoproc::mesh_edge::mesh_edge()'],['../classgeoproc_1_1mesh__edge.html#a67841c3983cd67cf346bf23cb15411bf',1,'geoproc::mesh_edge::mesh_edge(int pv, int nv, int lt, int rt)'],['../classgeoproc_1_1mesh__edge.html#adcd094f91449248c574402dff022b94f',1,'geoproc::mesh_edge::mesh_edge(const mesh_edge &amp;m)']]],
   ['mesh_5fiterator',['mesh_iterator',['../classgeoproc_1_1iterators_1_1mesh__iterator.html',1,'geoproc::iterators::mesh_iterator'],['../classgeoproc_1_1iterators_1_1mesh__iterator.html#a785c3bccc57fd4db49de8aa89bc2d04e',1,'geoproc::iterators::mesh_iterator::mesh_iterator()']]],
-  ['min_5fcoord',['min_coord',['../classgeoproc_1_1TriangleMesh.html#aab5e7d8baf6f6cd7b5655b4c89f79e00',1,'geoproc::TriangleMesh']]]
+  ['min_5fcoord',['min_coord',['../classgeoproc_1_1TriangleMesh.html#aab5e7d8baf6f6cd7b5655b4c89f79e00',1,'geoproc::TriangleMesh']]],
+  ['modifier',['modifier',['../namespacegeoproc.html#a396280579199558902594f4df72c01c7',1,'geoproc']]]
 ];

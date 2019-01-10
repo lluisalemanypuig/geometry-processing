@@ -8,17 +8,17 @@ Local smoothing algorithms.
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a3eaa81a7fe893e316190a0ab9598732c}{laplacian} (const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&w, float lambda, size\+\_\+t n\+\_\+iter, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
+void \hyperlink{namespacegeoproc_1_1smoothing_1_1local_afc087060b0ce1c1ce40b8e5a9969e843}{laplacian} (const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&w, float lambda, size\+\_\+t n\+\_\+iter, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
 \begin{DoxyCompactList}\small\item\em Laplacian operator for mesh smoothing. \end{DoxyCompactList}\item 
-void \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a160f3ee32c5073d99e3f38782bd4a070}{laplacian} (const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&w, float lambda, size\+\_\+t n\+\_\+iter, size\+\_\+t nt, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
+void \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a1b6e158caeaf3ae121b47fab6c6edbf9}{laplacian} (const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&w, float lambda, size\+\_\+t n\+\_\+iter, size\+\_\+t nt, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
 \begin{DoxyCompactList}\small\item\em Parallel Laplacian operator for mesh smoothing. \end{DoxyCompactList}\item 
-void \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a5958a9bdf688836bd6242de213a68ec4}{bilaplacian} (const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&w, float lambda, size\+\_\+t n\+\_\+iter, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
+void \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a5e2f0a2048d6fc14c372ea75bf70982f}{bilaplacian} (const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&w, float lambda, size\+\_\+t n\+\_\+iter, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
 \begin{DoxyCompactList}\small\item\em Bilaplacian operator for mesh smoothing. \end{DoxyCompactList}\item 
-void \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a7c96dc664c1900b1cba6d3a3eb2547d7}{bilaplacian} (const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&w, float lambda, size\+\_\+t n\+\_\+iter, size\+\_\+t nt, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
+void \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a8a59216ea802c3ff64b4be4b904cfa5c}{bilaplacian} (const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&w, float lambda, size\+\_\+t n\+\_\+iter, size\+\_\+t nt, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
 \begin{DoxyCompactList}\small\item\em Parallel Bilaplacian operator for mesh smoothing. \end{DoxyCompactList}\item 
-void \hyperlink{namespacegeoproc_1_1smoothing_1_1local_acb46f51bf5fefe33b36ae6d7e0c4a899}{Taubin\+LM} (const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&w, float lambda, size\+\_\+t n\+\_\+iter, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
+void \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a17dcfcb442ae9cfbad9964b789b8c7a6}{Taubin\+LM} (const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&w, float lambda, size\+\_\+t n\+\_\+iter, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
 \begin{DoxyCompactList}\small\item\em Taubin $\lambda-\mu$ operator for mesh smoothing. \end{DoxyCompactList}\item 
-void \hyperlink{namespacegeoproc_1_1smoothing_1_1local_ae68c255cdba405972ce42238aee04c3b}{Taubin\+LM} (const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&w, float lambda, size\+\_\+t n\+\_\+iter, size\+\_\+t nt, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
+void \hyperlink{namespacegeoproc_1_1smoothing_1_1local_abea3fa692927cd47d165322f9791ddca}{Taubin\+LM} (const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&w, float lambda, size\+\_\+t n\+\_\+iter, size\+\_\+t nt, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
 \begin{DoxyCompactList}\small\item\em Parallel Taubin $\lambda-\mu$ operator for mesh smoothing. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -28,17 +28,19 @@ Local smoothing algorithms.
 These can also be referred to as iterative smoothing algorithms. 
 
 \subsection{Function Documentation}
-\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local_a5958a9bdf688836bd6242de213a68ec4}\label{namespacegeoproc_1_1smoothing_1_1local_a5958a9bdf688836bd6242de213a68ec4}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local_a5e2f0a2048d6fc14c372ea75bf70982f}\label{namespacegeoproc_1_1smoothing_1_1local_a5e2f0a2048d6fc14c372ea75bf70982f}} 
 \index{geoproc\+::smoothing\+::local@{geoproc\+::smoothing\+::local}!bilaplacian@{bilaplacian}}
 \index{bilaplacian@{bilaplacian}!geoproc\+::smoothing\+::local@{geoproc\+::smoothing\+::local}}
 \subsubsection{\texorpdfstring{bilaplacian()}{bilaplacian()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+::bilaplacian (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&}]{w,  }\item[{float}]{lambda,  }\item[{size\+\_\+t}]{n\+\_\+iter,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+::bilaplacian (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&}]{w,  }\item[{float}]{lambda,  }\item[{size\+\_\+t}]{n\+\_\+iter,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
 
 
 
 Bilaplacian operator for mesh smoothing. 
 
-Applies the Laplacian operator once with positive value of $\lambda$ and then with negative value of $\lambda$ for every iteration. 
+Applies the Laplacian smothing operator once with positive value of $\lambda$ and then with negative value of $\lambda$ for every iteration.
+
+For details on the Laplacian operator see \hyperlink{namespacegeoproc_a396280579199558902594f4df72c01c7a799723f39baf497704a3d39e7c03555f}{modifier\+::\+Laplacian}. For details on how it is applied to smoothing see \hyperlink{namespacegeoproc_1_1smoothing_1_1local_afc087060b0ce1c1ce40b8e5a9969e843}{laplacian(const weight\&, float, size\+\_\+t, Triangle\+Mesh\&)}. 
 \begin{DoxyParams}[1]{Parameters}
  & {\em w} & The type of weight used. \\
 \hline
@@ -56,19 +58,19 @@ The mesh requires\+:
 \item Angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}) 
 \end{DoxyItemize}
 
-The mesh can\textquotesingle{}t have boundaries if the \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028a8e8ea879f40475ae2c70be8b296bf950}{smooth\+\_\+weight\+::cotangent} is applied. However, this is not checked since the mesh may not have its boundaries computed. 
+The mesh can\textquotesingle{}t have boundaries if the \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843a8e8ea879f40475ae2c70be8b296bf950}{weight\+::cotangent} is applied. However, this is not checked since the mesh need not have its boundaries computed. 
 \end{DoxyPrecond}
-\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local_a7c96dc664c1900b1cba6d3a3eb2547d7}\label{namespacegeoproc_1_1smoothing_1_1local_a7c96dc664c1900b1cba6d3a3eb2547d7}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local_a8a59216ea802c3ff64b4be4b904cfa5c}\label{namespacegeoproc_1_1smoothing_1_1local_a8a59216ea802c3ff64b4be4b904cfa5c}} 
 \index{geoproc\+::smoothing\+::local@{geoproc\+::smoothing\+::local}!bilaplacian@{bilaplacian}}
 \index{bilaplacian@{bilaplacian}!geoproc\+::smoothing\+::local@{geoproc\+::smoothing\+::local}}
 \subsubsection{\texorpdfstring{bilaplacian()}{bilaplacian()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+::bilaplacian (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&}]{w,  }\item[{float}]{lambda,  }\item[{size\+\_\+t}]{n\+\_\+iter,  }\item[{size\+\_\+t}]{nt,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+::bilaplacian (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&}]{w,  }\item[{float}]{lambda,  }\item[{size\+\_\+t}]{n\+\_\+iter,  }\item[{size\+\_\+t}]{nt,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
 
 
 
 Parallel Bilaplacian operator for mesh smoothing. 
 
-See \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a5958a9bdf688836bd6242de213a68ec4}{bilaplacian(const smooth\+\_\+weight\&, float, size\+\_\+t, Triangle\+Mesh\&)} for details. 
+See \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a5e2f0a2048d6fc14c372ea75bf70982f}{bilaplacian(const weight\&, float, size\+\_\+t, Triangle\+Mesh\&)} for details. 
 \begin{DoxyParams}[1]{Parameters}
  & {\em w} & The type of weight used. \\
 \hline
@@ -88,13 +90,13 @@ The mesh requires\+:
 \item Angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}) 
 \end{DoxyItemize}
 
-The mesh can\textquotesingle{}t have boundaries if the \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028a8e8ea879f40475ae2c70be8b296bf950}{smooth\+\_\+weight\+::cotangent} is applied. However, this is not checked since the mesh may not have its boundaries computed. 
+The mesh can\textquotesingle{}t have boundaries if the \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843a8e8ea879f40475ae2c70be8b296bf950}{weight\+::cotangent} is applied. However, this is not checked since the mesh need not have its boundaries computed. 
 \end{DoxyPrecond}
-\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local_a3eaa81a7fe893e316190a0ab9598732c}\label{namespacegeoproc_1_1smoothing_1_1local_a3eaa81a7fe893e316190a0ab9598732c}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local_afc087060b0ce1c1ce40b8e5a9969e843}\label{namespacegeoproc_1_1smoothing_1_1local_afc087060b0ce1c1ce40b8e5a9969e843}} 
 \index{geoproc\+::smoothing\+::local@{geoproc\+::smoothing\+::local}!laplacian@{laplacian}}
 \index{laplacian@{laplacian}!geoproc\+::smoothing\+::local@{geoproc\+::smoothing\+::local}}
 \subsubsection{\texorpdfstring{laplacian()}{laplacian()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+::laplacian (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&}]{w,  }\item[{float}]{lambda,  }\item[{size\+\_\+t}]{n\+\_\+iter,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+::laplacian (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&}]{w,  }\item[{float}]{lambda,  }\item[{size\+\_\+t}]{n\+\_\+iter,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
 
 
 
@@ -106,9 +108,7 @@ Each vertex of the mesh is translated\+:
 
 $ v_i' = v_i + \lambda \cdot L(v_i) $
 
-where
-
-$ L(v_i) = \sum_{j} w_{ij}(v_j - v_i) $
+where $ L(v_i) $ is the Laplacian operator defined in \hyperlink{namespacegeoproc_a396280579199558902594f4df72c01c7a799723f39baf497704a3d39e7c03555f}{modifier\+::\+Laplacian}.
 
 The sum iterates over the 1-\/ring of vertex $v_i$. The weights $ w_{ij} $ are determined by the parameter {\itshape w} and are normalised so that, for a given vertex $v_i$\+:
 
@@ -140,19 +140,19 @@ The mesh requires\+:
 \item Angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}) 
 \end{DoxyItemize}
 
-The mesh can\textquotesingle{}t have boundaries if the \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028a8e8ea879f40475ae2c70be8b296bf950}{smooth\+\_\+weight\+::cotangent} is applied. However, this is not checked since the mesh may not have its boundaries computed. 
+The mesh can\textquotesingle{}t have boundaries if the \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843a8e8ea879f40475ae2c70be8b296bf950}{weight\+::cotangent} is applied. However, this is not checked since the mesh need not have its boundaries computed. 
 \end{DoxyPrecond}
-\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local_a160f3ee32c5073d99e3f38782bd4a070}\label{namespacegeoproc_1_1smoothing_1_1local_a160f3ee32c5073d99e3f38782bd4a070}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local_a1b6e158caeaf3ae121b47fab6c6edbf9}\label{namespacegeoproc_1_1smoothing_1_1local_a1b6e158caeaf3ae121b47fab6c6edbf9}} 
 \index{geoproc\+::smoothing\+::local@{geoproc\+::smoothing\+::local}!laplacian@{laplacian}}
 \index{laplacian@{laplacian}!geoproc\+::smoothing\+::local@{geoproc\+::smoothing\+::local}}
 \subsubsection{\texorpdfstring{laplacian()}{laplacian()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+::laplacian (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&}]{w,  }\item[{float}]{lambda,  }\item[{size\+\_\+t}]{n\+\_\+iter,  }\item[{size\+\_\+t}]{nt,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+::laplacian (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&}]{w,  }\item[{float}]{lambda,  }\item[{size\+\_\+t}]{n\+\_\+iter,  }\item[{size\+\_\+t}]{nt,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
 
 
 
 Parallel Laplacian operator for mesh smoothing. 
 
-See \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a3eaa81a7fe893e316190a0ab9598732c}{laplacian(const smooth\+\_\+weight\&, float, size\+\_\+t, Triangle\+Mesh\&)} for details. 
+See \hyperlink{namespacegeoproc_1_1smoothing_1_1local_afc087060b0ce1c1ce40b8e5a9969e843}{laplacian(const weight\&, float, size\+\_\+t, Triangle\+Mesh\&)} for details. 
 \begin{DoxyParams}[1]{Parameters}
  & {\em w} & The type of weight used. \\
 \hline
@@ -172,13 +172,13 @@ The mesh requires\+:
 \item Angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}) 
 \end{DoxyItemize}
 
-The mesh can\textquotesingle{}t have boundaries if the \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028a8e8ea879f40475ae2c70be8b296bf950}{smooth\+\_\+weight\+::cotangent} is applied. However, this is not checked since the mesh may not have its boundaries computed. 
+The mesh can\textquotesingle{}t have boundaries if the \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843a8e8ea879f40475ae2c70be8b296bf950}{weight\+::cotangent} is applied. However, this is not checked since the mesh need not have its boundaries computed. 
 \end{DoxyPrecond}
-\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local_acb46f51bf5fefe33b36ae6d7e0c4a899}\label{namespacegeoproc_1_1smoothing_1_1local_acb46f51bf5fefe33b36ae6d7e0c4a899}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local_a17dcfcb442ae9cfbad9964b789b8c7a6}\label{namespacegeoproc_1_1smoothing_1_1local_a17dcfcb442ae9cfbad9964b789b8c7a6}} 
 \index{geoproc\+::smoothing\+::local@{geoproc\+::smoothing\+::local}!Taubin\+LM@{Taubin\+LM}}
 \index{Taubin\+LM@{Taubin\+LM}!geoproc\+::smoothing\+::local@{geoproc\+::smoothing\+::local}}
 \subsubsection{\texorpdfstring{Taubin\+L\+M()}{TaubinLM()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+::\+Taubin\+LM (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&}]{w,  }\item[{float}]{lambda,  }\item[{size\+\_\+t}]{n\+\_\+iter,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+::\+Taubin\+LM (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&}]{w,  }\item[{float}]{lambda,  }\item[{size\+\_\+t}]{n\+\_\+iter,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
 
 
 
@@ -210,19 +210,19 @@ The mesh requires\+:
 \item Angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}) 
 \end{DoxyItemize}
 
-The mesh can\textquotesingle{}t have boundaries if the \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028a8e8ea879f40475ae2c70be8b296bf950}{smooth\+\_\+weight\+::cotangent} is applied. However, this is not checked since the mesh may not have its boundaries computed. 
+The mesh can\textquotesingle{}t have boundaries if the \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843a8e8ea879f40475ae2c70be8b296bf950}{weight\+::cotangent} is applied. However, this is not checked since the mesh need not have its boundaries computed. 
 \end{DoxyPrecond}
-\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local_ae68c255cdba405972ce42238aee04c3b}\label{namespacegeoproc_1_1smoothing_1_1local_ae68c255cdba405972ce42238aee04c3b}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local_abea3fa692927cd47d165322f9791ddca}\label{namespacegeoproc_1_1smoothing_1_1local_abea3fa692927cd47d165322f9791ddca}} 
 \index{geoproc\+::smoothing\+::local@{geoproc\+::smoothing\+::local}!Taubin\+LM@{Taubin\+LM}}
 \index{Taubin\+LM@{Taubin\+LM}!geoproc\+::smoothing\+::local@{geoproc\+::smoothing\+::local}}
 \subsubsection{\texorpdfstring{Taubin\+L\+M()}{TaubinLM()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+::\+Taubin\+LM (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028}{smooth\+\_\+weight} \&}]{w,  }\item[{float}]{lambda,  }\item[{size\+\_\+t}]{n\+\_\+iter,  }\item[{size\+\_\+t}]{nt,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+::\+Taubin\+LM (\begin{DoxyParamCaption}\item[{const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&}]{w,  }\item[{float}]{lambda,  }\item[{size\+\_\+t}]{n\+\_\+iter,  }\item[{size\+\_\+t}]{nt,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
 
 
 
 Parallel Taubin $\lambda-\mu$ operator for mesh smoothing. 
 
-See \hyperlink{namespacegeoproc_1_1smoothing_1_1local_acb46f51bf5fefe33b36ae6d7e0c4a899}{Taubin\+L\+M(const smooth\+\_\+weight\&, float, size\+\_\+t, Triangle\+Mesh\&)} for details. 
+See \hyperlink{namespacegeoproc_1_1smoothing_1_1local_a17dcfcb442ae9cfbad9964b789b8c7a6}{Taubin\+L\+M(const weight\&, float, size\+\_\+t, Triangle\+Mesh\&)} for details. 
 \begin{DoxyParams}[1]{Parameters}
  & {\em w} & The type of weight used. \\
 \hline
@@ -242,5 +242,5 @@ The mesh requires\+:
 \item Angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}) 
 \end{DoxyItemize}
 
-The mesh can\textquotesingle{}t have boundaries if the \hyperlink{namespacegeoproc_1_1smoothing_a76e43f405426c150569712512de58028a8e8ea879f40475ae2c70be8b296bf950}{smooth\+\_\+weight\+::cotangent} is applied. However, this is not checked since the mesh may not have its boundaries computed. 
+The mesh can\textquotesingle{}t have boundaries if the \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843a8e8ea879f40475ae2c70be8b296bf950}{weight\+::cotangent} is applied. However, this is not checked since the mesh need not have its boundaries computed. 
 \end{DoxyPrecond}
