@@ -214,10 +214,10 @@ inline void barycentric_coordinates(
 	float& w0, float& w1, float& w2
 )
 {
-	float aT = mesh.get_triangle_area(T);
 	int v0, v1, v2;
 	mesh.get_vertices_triangle(T, v0,v1,v2);
 
+	float aT = triangle_area(uvs[v0], uvs[v1], uvs[v2]);
 	float a0 = triangle_area(p, uvs[v1], uvs[v2]);
 	float a1 = triangle_area(uvs[v0], p, uvs[v2]);
 	float a2 = triangle_area(uvs[v0], uvs[v1], p);
@@ -225,6 +225,10 @@ inline void barycentric_coordinates(
 	w0 = a0/aT;
 	w1 = a1/aT;
 	w2 = a2/aT;
+
+	// this check makes sure that the point
+	// is actually inside triangle 'T'
+	assert(std::abs(w0 + w1 + w2 - 1.0f) <= 1e-6f);
 }
 
 inline void make_new_vertex
@@ -289,7 +293,7 @@ bool harmonic_maps(
 				 << vec2out(next) << endl;
 			return false;
 		}
-		barycentric_coordinates(mesh, nT, uvs, pre, w0,w1,w2);
+		barycentric_coordinates(mesh, nT, uvs, next, w0,w1,w2);
 		make_new_vertex(mesh, nT, w0,w1,w2, new_vertices[it]);
 		++it;
 		pre = next;
@@ -307,7 +311,7 @@ bool harmonic_maps(
 					 << vec2out(next) << endl;
 				return false;
 			}
-			barycentric_coordinates(mesh, nT, uvs, pre, w0,w1,w2);
+			barycentric_coordinates(mesh, nT, uvs, next, w0,w1,w2);
 			make_new_vertex(mesh, nT, w0,w1,w2, new_vertices[it]);
 			++it;
 			pre = next;
@@ -321,12 +325,12 @@ bool harmonic_maps(
 	for (size_t i = 0; i < N - 2; ++i) {
 		for (size_t j = 0; j < M - 2; ++j) {
 			new_triangles.push_back(j*N1 + i);
-			new_triangles.push_back(j*N1 + i + 1);
 			new_triangles.push_back((j + 1)*N1 + i + 1);
+			new_triangles.push_back(j*N1 + i + 1);
 
 			new_triangles.push_back(j*N1 + i);
-			new_triangles.push_back((j + 1)*N1 + i + 1);
 			new_triangles.push_back((j + 1)*N1 + i);
+			new_triangles.push_back((j + 1)*N1 + i + 1);
 		}
 	}
 
