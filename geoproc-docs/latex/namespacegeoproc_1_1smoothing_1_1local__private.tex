@@ -10,9 +10,13 @@ Local smoothing algorithms core functions.
 \item 
 void \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_afa8f6895e6f658b6ec77da138347971f}{make\+\_\+uniform\+\_\+weights} (int vi, const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, float $\ast$pv\+\_\+ws)
 \begin{DoxyCompactList}\small\item\em Computes weights corresponding to uniform weights. \end{DoxyCompactList}\item 
+void \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a04fc2ea113fcafa38210c562dca3d735}{make\+\_\+uniform\+\_\+weights} (int vi, const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, double $\ast$pv\+\_\+ws)
+\begin{DoxyCompactList}\small\item\em Computes weights corresponding to uniform weights. \end{DoxyCompactList}\item 
 void \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a6f1acdf579d13e299b947a6619571df7}{make\+\_\+uniform\+\_\+weight} (int vi, const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, const glm\+::vec3 $\ast$verts, glm\+::vec3 \&L)
 \begin{DoxyCompactList}\small\item\em Computes the sum corresponding to uniform weights. \end{DoxyCompactList}\item 
 void \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a5ef9cdfdd013ff5b017f98ba9b94d280}{make\+\_\+cotangent\+\_\+weights} (int vi, const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, float $\ast$pv\+\_\+ws)
+\begin{DoxyCompactList}\small\item\em Computes weights corresponding to cotangent weights. \end{DoxyCompactList}\item 
+void \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a258b6f254a89ea6773e6b59cbe16e4f5}{make\+\_\+cotangent\+\_\+weights} (int vi, const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, double $\ast$pv\+\_\+ws)
 \begin{DoxyCompactList}\small\item\em Computes weights corresponding to cotangent weights. \end{DoxyCompactList}\item 
 void \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_ae75c9986480b1c0cd2c5ac84e0fe8d34}{make\+\_\+cotangent\+\_\+weight} (int vi, const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, const glm\+::vec3 $\ast$verts, glm\+::vec3 \&L)
 \begin{DoxyCompactList}\small\item\em Computes the sum corresponding to cotangent weights. \end{DoxyCompactList}\item 
@@ -275,7 +279,7 @@ The mesh requires\+:
 \mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local__private_a5ef9cdfdd013ff5b017f98ba9b94d280}\label{namespacegeoproc_1_1smoothing_1_1local__private_a5ef9cdfdd013ff5b017f98ba9b94d280}} 
 \index{geoproc\+::smoothing\+::local\+\_\+private@{geoproc\+::smoothing\+::local\+\_\+private}!make\+\_\+cotangent\+\_\+weights@{make\+\_\+cotangent\+\_\+weights}}
 \index{make\+\_\+cotangent\+\_\+weights@{make\+\_\+cotangent\+\_\+weights}!geoproc\+::smoothing\+::local\+\_\+private@{geoproc\+::smoothing\+::local\+\_\+private}}
-\subsubsection{\texorpdfstring{make\+\_\+cotangent\+\_\+weights()}{make\_cotangent\_weights()}}
+\subsubsection{\texorpdfstring{make\+\_\+cotangent\+\_\+weights()}{make\_cotangent\_weights()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+\_\+private\+::make\+\_\+cotangent\+\_\+weights (\begin{DoxyParamCaption}\item[{int}]{vi,  }\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{float $\ast$}]{pv\+\_\+ws }\end{DoxyParamCaption})}
 
 
@@ -283,6 +287,32 @@ The mesh requires\+:
 Computes weights corresponding to cotangent weights. 
 
 For vertex {\itshape vi} computes $\frac{1}{d_i}$ where $d_i$ is the valence of vertex {\itshape vi} (the number of neighbours in its one-\/ring). 
+\begin{DoxyParams}[1]{Parameters}
+ & {\em vi} & Valid vertex index. \\
+\hline
+ & {\em m} & Mesh to be iterated. \\
+\hline
+\mbox{\tt out}  & {\em pv\+\_\+ws} & Weights per vertex. Non-\/neighbours of {\itshape vi} are guaranteed to have null weight. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+The mesh requires\+:
+\begin{DoxyItemize}
+\item Neighbourhood data (see \hyperlink{classgeoproc_1_1TriangleMesh_a84003dfdfd5e591c00f01a797578ff1f}{Triangle\+Mesh\+::make\+\_\+neighbourhood\+\_\+data})
+\item Angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}) 
+\end{DoxyItemize}
+\end{DoxyPrecond}
+\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local__private_a258b6f254a89ea6773e6b59cbe16e4f5}\label{namespacegeoproc_1_1smoothing_1_1local__private_a258b6f254a89ea6773e6b59cbe16e4f5}} 
+\index{geoproc\+::smoothing\+::local\+\_\+private@{geoproc\+::smoothing\+::local\+\_\+private}!make\+\_\+cotangent\+\_\+weights@{make\+\_\+cotangent\+\_\+weights}}
+\index{make\+\_\+cotangent\+\_\+weights@{make\+\_\+cotangent\+\_\+weights}!geoproc\+::smoothing\+::local\+\_\+private@{geoproc\+::smoothing\+::local\+\_\+private}}
+\subsubsection{\texorpdfstring{make\+\_\+cotangent\+\_\+weights()}{make\_cotangent\_weights()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+\_\+private\+::make\+\_\+cotangent\+\_\+weights (\begin{DoxyParamCaption}\item[{int}]{vi,  }\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{double $\ast$}]{pv\+\_\+ws }\end{DoxyParamCaption})}
+
+
+
+Computes weights corresponding to cotangent weights. 
+
+Same as \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_a5ef9cdfdd013ff5b017f98ba9b94d280}{make\+\_\+cotangent\+\_\+weights(int, const Triangle\+Mesh\&, float$\ast$)} but with doubles. 
 \begin{DoxyParams}[1]{Parameters}
  & {\em vi} & Valid vertex index. \\
 \hline
@@ -332,14 +362,39 @@ The mesh requires\+:
 \mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local__private_afa8f6895e6f658b6ec77da138347971f}\label{namespacegeoproc_1_1smoothing_1_1local__private_afa8f6895e6f658b6ec77da138347971f}} 
 \index{geoproc\+::smoothing\+::local\+\_\+private@{geoproc\+::smoothing\+::local\+\_\+private}!make\+\_\+uniform\+\_\+weights@{make\+\_\+uniform\+\_\+weights}}
 \index{make\+\_\+uniform\+\_\+weights@{make\+\_\+uniform\+\_\+weights}!geoproc\+::smoothing\+::local\+\_\+private@{geoproc\+::smoothing\+::local\+\_\+private}}
-\subsubsection{\texorpdfstring{make\+\_\+uniform\+\_\+weights()}{make\_uniform\_weights()}}
+\subsubsection{\texorpdfstring{make\+\_\+uniform\+\_\+weights()}{make\_uniform\_weights()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+\_\+private\+::make\+\_\+uniform\+\_\+weights (\begin{DoxyParamCaption}\item[{int}]{vi,  }\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{float $\ast$}]{pv\+\_\+ws }\end{DoxyParamCaption})}
 
 
 
 Computes weights corresponding to uniform weights. 
 
-For vertex {\itshape vi} computes $\frac{1}{d_i}$ where $d_i$ is the valence of vertex {\itshape vi} (the number of neighbours in its one-\/ring). This value is value is assigned to all its neighbours in the mesh in the output parameter {\itshape pv\+\_\+ws}.. 
+For vertex {\itshape vi} computes $\frac{1}{d_i}$ where $d_i$ is the valence of vertex {\itshape vi} (the number of neighbours in its one-\/ring). This value is value is assigned to all its neighbours in the mesh in the output parameter {\itshape pv\+\_\+ws}. 
+\begin{DoxyParams}[1]{Parameters}
+ & {\em vi} & Valid vertex index. \\
+\hline
+ & {\em m} & Mesh to be iterated. \\
+\hline
+\mbox{\tt out}  & {\em pv\+\_\+ws} & Weights per vertex. Non-\/neighbours of {\itshape vi} are guaranteed to have null weight. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+The mesh requires\+:
+\begin{DoxyItemize}
+\item Neighbourhood data (see \hyperlink{classgeoproc_1_1TriangleMesh_a84003dfdfd5e591c00f01a797578ff1f}{Triangle\+Mesh\+::make\+\_\+neighbourhood\+\_\+data}) 
+\end{DoxyItemize}
+\end{DoxyPrecond}
+\mbox{\Hypertarget{namespacegeoproc_1_1smoothing_1_1local__private_a04fc2ea113fcafa38210c562dca3d735}\label{namespacegeoproc_1_1smoothing_1_1local__private_a04fc2ea113fcafa38210c562dca3d735}} 
+\index{geoproc\+::smoothing\+::local\+\_\+private@{geoproc\+::smoothing\+::local\+\_\+private}!make\+\_\+uniform\+\_\+weights@{make\+\_\+uniform\+\_\+weights}}
+\index{make\+\_\+uniform\+\_\+weights@{make\+\_\+uniform\+\_\+weights}!geoproc\+::smoothing\+::local\+\_\+private@{geoproc\+::smoothing\+::local\+\_\+private}}
+\subsubsection{\texorpdfstring{make\+\_\+uniform\+\_\+weights()}{make\_uniform\_weights()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void geoproc\+::smoothing\+::local\+\_\+private\+::make\+\_\+uniform\+\_\+weights (\begin{DoxyParamCaption}\item[{int}]{vi,  }\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{double $\ast$}]{pv\+\_\+ws }\end{DoxyParamCaption})}
+
+
+
+Computes weights corresponding to uniform weights. 
+
+Same as \hyperlink{namespacegeoproc_1_1smoothing_1_1local__private_afa8f6895e6f658b6ec77da138347971f}{make\+\_\+uniform\+\_\+weights(int, const Triangle\+Mesh\&, float$\ast$)} but with doubles. 
 \begin{DoxyParams}[1]{Parameters}
  & {\em vi} & Valid vertex index. \\
 \hline
