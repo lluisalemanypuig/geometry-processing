@@ -295,25 +295,25 @@ void MainWindow::on_RB_Render_HarmonicMaps_toggled(bool checked) {
 void MainWindow::on_RB_Render_HarmonicMaps_Circle_toggled(bool checked) {
 	if (checked) {
 		string w = ui->CB_Render_HarmonicMaps_Weights->currentText().toStdString();
-		weight weight;
+		weight wgt;
 		if (w == "Uniform") {
-			weight = weight::uniform;
+			wgt = weight::uniform;
 		}
 		else if (w == "Cotangent") {
-			weight = weight::cotangent;
+			wgt = weight::cotangent;
 		}
 
 		if (current_tab == 0) {
 			ui->SingleView_Renderer->set_harmonic_map(
-				polymode::harmonic_maps_Circle, weight
+				polymode::harmonic_maps_Circle, wgt
 			);
 		}
 		else if (current_tab == 1) {
 			ui->DualView_LeftRenderer->set_harmonic_map(
-				polymode::harmonic_maps_Circle, weight
+				polymode::harmonic_maps_Circle, wgt
 			);
 			ui->DualView_RightRenderer->set_harmonic_map(
-				polymode::harmonic_maps_Circle, weight
+				polymode::harmonic_maps_Circle, wgt
 			);
 		}
 	}
@@ -322,25 +322,25 @@ void MainWindow::on_RB_Render_HarmonicMaps_Circle_toggled(bool checked) {
 void MainWindow::on_RB_Render_HarmonicMaps_Square_toggled(bool checked) {
 	if (checked) {
 		string w = ui->CB_Render_HarmonicMaps_Weights->currentText().toStdString();
-		weight weight;
+		weight wgt;
 		if (w == "Uniform") {
-			weight = weight::uniform;
+			wgt = weight::uniform;
 		}
 		else if (w == "Cotangent") {
-			weight = weight::cotangent;
+			wgt = weight::cotangent;
 		}
 
 		if (current_tab == 0) {
 			ui->SingleView_Renderer->set_harmonic_map(
-				polymode::harmonic_maps_Square, weight
+				polymode::harmonic_maps_Square, wgt
 			);
 		}
 		else if (current_tab == 1) {
 			ui->DualView_LeftRenderer->set_harmonic_map(
-				polymode::harmonic_maps_Square, weight
+				polymode::harmonic_maps_Square, wgt
 			);
 			ui->DualView_RightRenderer->set_harmonic_map(
-				polymode::harmonic_maps_Square, weight
+				polymode::harmonic_maps_Square, wgt
 			);
 		}
 	}
@@ -362,12 +362,12 @@ void MainWindow::on_CB_Render_HarmonicMaps_Weights_currentTextChanged
 )
 {
 	string w = t.toStdString();
-	weight weight;
+	weight wgt;
 	if (w == "Uniform") {
-		weight = weight::uniform;
+		wgt = weight::uniform;
 	}
 	else if (w == "Cotangent") {
-		weight = weight::cotangent;
+		wgt = weight::cotangent;
 	}
 	else {
 		cerr << ERR("MainWindow::on_CB_Render_HarmonicMaps_Weights_currentTextChanged",
@@ -391,11 +391,11 @@ void MainWindow::on_CB_Render_HarmonicMaps_Weights_currentTextChanged
 	}
 
 	if (current_tab == 0) {
-		ui->SingleView_Renderer->set_harmonic_map(pm, weight);
+		ui->SingleView_Renderer->set_harmonic_map(pm, wgt);
 	}
 	else if (current_tab == 1) {
-		ui->DualView_LeftRenderer->set_harmonic_map(pm, weight);
-		ui->DualView_RightRenderer->set_harmonic_map(pm, weight);
+		ui->DualView_LeftRenderer->set_harmonic_map(pm, wgt);
+		ui->DualView_RightRenderer->set_harmonic_map(pm, wgt);
 	}
 }
 
@@ -585,12 +585,12 @@ void MainWindow::on_PB_Remeshing_Run_clicked() {
 	}
 
 	string w = ui->CB_Remeshing_Weights->currentText().toStdString();
-	weight weight;
+	weight wgt;
 	if (w == "Uniform") {
-		weight = weight::uniform;
+		wgt = weight::uniform;
 	}
 	else if (w == "Cotangent") {
-		weight = weight::cotangent;
+		wgt = weight::cotangent;
 	}
 	else {
 		cerr << ERR("MainWindow::on_PB_Remeshing_Run_clicked", "MainWindow") << endl;
@@ -598,7 +598,7 @@ void MainWindow::on_PB_Remeshing_Run_clicked() {
 		return;
 	}
 
-	ui->DualView_RightRenderer->set_smooth_weight_type(weight);
+	ui->DualView_RightRenderer->set_smooth_weight_type(wgt);
 
 	size_t NN = static_cast<size_t>(N);
 	size_t MM = static_cast<size_t>(M);

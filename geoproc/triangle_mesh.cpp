@@ -399,7 +399,7 @@ const vector<int>& TriangleMesh::get_triangles() const {
 	return triangles;
 }
 
-const vector<int[3]>& TriangleMesh::get_edges_triangle() const {
+const vector<vec3>& TriangleMesh::get_edges_triangle() const {
 	return edges_per_triangle;
 }
 

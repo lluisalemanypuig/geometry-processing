@@ -67,7 +67,7 @@ namespace test_geoproc {
 		bool lambda = false;
 		bool it = false;
 		bool oper = false;
-		bool weight = false;
+		bool weight_parsed = false;
 		bool mu = false;
 
 		string option;
@@ -113,18 +113,18 @@ namespace test_geoproc {
 				}
 			}
 			else if (option == "weight-type") {
-				if (weight) {
+				if (weight_parsed) {
 					cerr << "Warning: weight already entered." << endl;
 				}
 				string w;
 				cin >> w;
 				if (w == "uniform") {
 					S.sw = weight::uniform;
-					weight = true;
+					weight_parsed = true;
 				}
 				else if (w == "cotangent") {
 					S.sw = weight::cotangent;
-					weight = true;
+					weight_parsed = true;
 				}
 				else {
 					cerr << "Error: weight type '" << w << "' is not valid." << endl;
@@ -144,13 +144,13 @@ namespace test_geoproc {
 		if (not oper) {
 			cerr << "Error: smoothing operator not entered." << endl;
 		}
-		if (not weight) {
+		if (not weight_parsed) {
 			cerr << "Error: weight type parameter not entered." << endl;
 		}
-		if (not lambda or not it or not weight or not oper) {
+		if (not lambda or not it or not weight_parsed or not oper) {
 			cerr << "Error: missing parameters. Configuration will be discarded" << endl;
 		}
-		return lambda and it and weight and oper;
+		return lambda and it and weight_parsed and oper;
 	}
 
 	void exe_band_freq(size_t nt, TriangleMesh& m) {

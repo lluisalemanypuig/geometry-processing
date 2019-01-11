@@ -138,7 +138,7 @@ class TriangleMesh {
 		 * where @e e_p, @e e_q, @e e_r are edges such that either their
 		 * @ref mesh_edge::lT or @ref mesh_edge::rT equals @e i.
 		 */
-		std::vector<int[3]> edges_per_triangle;
+		std::vector<glm::vec3> edges_per_triangle;
 
 		/**
 		 * @brief Edge index for each vertex.
@@ -541,7 +541,7 @@ class TriangleMesh {
 		 * @pre Neighbourhood has to be valid (@ref is_neighbourhood_valid()
 		 * evaluates to true).
 		 */
-		const std::vector<int[3]>& get_edges_triangle() const;
+		const std::vector<glm::vec3>& get_edges_triangle() const;
 		/**
 		 * @brief Returns all edges in the mesh.
 		 * @pre Neighbourhood has to be valid (@ref is_neighbourhood_valid()

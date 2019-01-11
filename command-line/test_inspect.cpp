@@ -203,7 +203,7 @@ namespace test_geoproc {
 		const vector<float>& areas = mesh.get_areas();
 		const vector<glm::vec3>& angles = mesh.get_angles();
 		const vector<glm::vec3>& normals = mesh.get_normal_vectors();
-		const vector<int[3]>& ept = mesh.get_edges_triangle();
+		const vector<glm::vec3>& ept = mesh.get_edges_triangle();
 		cout << "Triangles:" << endl;
 		for (int t = 0; t < mesh.n_triangles(); ++t) {
 			int v0,v1,v2;

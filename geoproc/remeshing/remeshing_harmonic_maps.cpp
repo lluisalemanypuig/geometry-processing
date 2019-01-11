@@ -144,7 +144,7 @@ inline int find_next_triangle(
 )
 {
 	const vector<geoproc::mesh_edge>& dcel = mesh.get_edges();
-	const vector<int[3]>& edges_per_triangle = mesh.get_edges_triangle();
+	const vector<vec3>& edges_per_triangle = mesh.get_edges_triangle();
 
 	// assume we have a segment from 'pre' to 'next'
 	int T = prev_tri;
@@ -155,7 +155,7 @@ inline int find_next_triangle(
 	while (not finish) {
 		int vt0, vt1, vt2;
 		mesh.get_vertices_triangle(T, vt0,vt1,vt2);
-		const int *ept = edges_per_triangle[T];
+		const vec3& ept = edges_per_triangle[T];
 
 		if (inside_triangle(uvs, next, vt0,vt1,vt2)) {
 			finish = true;
@@ -231,8 +231,10 @@ inline void barycentric_coordinates(
 	assert(std::abs(w0 + w1 + w2 - 1.0f) <= 1e-6f);
 }
 
-inline void make_new_vertex
-(const geoproc::TriangleMesh& mesh, int T, float w0,float w1,float w2, vec3& vert)
+inline void make_new_vertex(
+	const geoproc::TriangleMesh& mesh, int T,
+	float w0,float w1,float w2, vec3& vert
+)
 {
 	int v0, v1, v2;
 	mesh.get_vertices_triangle(T, v0,v1,v2);

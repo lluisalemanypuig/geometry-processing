@@ -3,13 +3,11 @@
 
 // C++ includes
 #include <iostream>
-#include <set>
+#include <cmath>
 using namespace std;
 
 // glm includes
 #include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
-using namespace glm;
 
 // geoproc includes
 #include <geoproc/parametrisation/parametrisation.hpp>
@@ -42,10 +40,10 @@ namespace test_geoproc {
 		cout << endl;
 	}
 
-#define out_float(x) ((std::abs(x) <= 1e-4 ? 0.0 : x))
+#define out_float(x) ((std::abs(static_cast<float>(x)) <= 1e-4 ? 0.0 : x))
 #define geogebra_out(v) "Point({" << out_float(v.x) << "," << out_float(v.y) << "})"
 
-	void print_segments(const TriangleMesh& mesh, const vector<vec2>& uvs) {
+	void print_segments(const TriangleMesh& mesh, const vector<glm::vec2>& uvs) {
 		cout << "{";
 
 		iterators::vertex::vertex_vertex_iterator it(mesh);
