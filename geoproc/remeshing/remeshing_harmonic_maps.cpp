@@ -1,5 +1,8 @@
 #include <geoproc/remeshing/remeshing.hpp>
 
+// C includes
+#include <omp.h>
+
 // C++ includes
 #include <iostream>
 #include <vector>
@@ -13,11 +16,13 @@ using namespace glm;
 #include <geoproc/parametrisation/parametrisation.hpp>
 #include <geoproc/mesh_edge.hpp>
 
-#define triangle_orientation(p1,p2,p3)								\
+// helper defines
+#define triangle_orientation(p1,p2,p3)	\
 	((p1.x - p3.x)*(p2.y - p3.y) - (p1.y - p3.y)*(p2.x - p3.x))
 
 #define vec2out(p) "(" << p.x << "," << p.y << ")"
 
+/* orientation and intersection tests */
 enum seg_ori {
 	collinear,
 	left, right
@@ -72,7 +77,7 @@ inline seg_ori segment_orientation
 }
 
 // returns true if segment (p,q) intersects segment (r,s)
-inline bool get_next_triangle(
+inline bool segment_intersection(
 	const vector<vec2>& uvs, const vector<geoproc::mesh_edge>& dcel,
 	int edge_idx, const vec2& p, const vec2& q
 )
@@ -120,6 +125,8 @@ inline bool get_next_triangle(
 	return false;
 }
 
+/* point-location functions */
+
 // linear search through all the meshe's triangles
 inline int find_first_triangle
 (const geoproc::TriangleMesh& mesh, const vector<vec2>& uvs, const vec2& p)
@@ -166,7 +173,7 @@ inline int find_next_triangle(
 		bool next_found = false;
 		e_idx = ept[0];
 		if (not next_found and (prev_edge == -1 or prev_edge != e_idx)) {
-			next_found = get_next_triangle(uvs, dcel, e_idx, prev, next);
+			next_found = segment_intersection(uvs, dcel, e_idx, prev, next);
 			if (next_found) {
 				T = (dcel[e_idx].lT == T ? dcel[e_idx].rT : dcel[e_idx].lT);
 				prev_edge = e_idx;
@@ -175,7 +182,7 @@ inline int find_next_triangle(
 
 		e_idx = ept[1];
 		if (not next_found and (prev_edge == -1 or prev_edge != e_idx)) {
-			next_found = get_next_triangle(uvs, dcel, e_idx, prev, next);
+			next_found = segment_intersection(uvs, dcel, e_idx, prev, next);
 			if (next_found) {
 				T = (dcel[e_idx].lT == T ? dcel[e_idx].rT : dcel[e_idx].lT);
 				prev_edge = e_idx;
@@ -184,7 +191,7 @@ inline int find_next_triangle(
 
 		e_idx = ept[2];
 		if (not next_found and (prev_edge == -1 or prev_edge != e_idx)) {
-			next_found = get_next_triangle(uvs, dcel, e_idx, prev, next);
+			next_found = segment_intersection(uvs, dcel, e_idx, prev, next);
 			if (next_found) {
 				T = (dcel[e_idx].lT == T ? dcel[e_idx].rT : dcel[e_idx].lT);
 				prev_edge = e_idx;
@@ -208,10 +215,9 @@ inline int find_next_triangle(
 	return T;
 }
 
-inline void barycentric_coordinates(
-	const geoproc::TriangleMesh& mesh, int T,
-	const vector<vec2>& uvs, const vec2& p,
-	float& w0, float& w1, float& w2
+inline void make_new_vertex(
+	const geoproc::TriangleMesh& mesh, const vector<vec2>& uvs,
+	int T, const vec2& p, vec3& vert
 )
 {
 	int v0, v1, v2;
@@ -222,25 +228,61 @@ inline void barycentric_coordinates(
 	float a1 = triangle_area(uvs[v0], p, uvs[v2]);
 	float a2 = triangle_area(uvs[v0], uvs[v1], p);
 
-	w0 = a0/aT;
-	w1 = a1/aT;
-	w2 = a2/aT;
+	float w0 = a0/aT;
+	float w1 = a1/aT;
+	float w2 = a2/aT;
 
 	// this check makes sure that the point
 	// is actually inside triangle 'T'
 	assert(std::abs(w0 + w1 + w2 - 1.0f) <= 1e-6f);
-}
-
-inline void make_new_vertex(
-	const geoproc::TriangleMesh& mesh, int T,
-	float w0,float w1,float w2, vec3& vert
-)
-{
-	int v0, v1, v2;
-	mesh.get_vertices_triangle(T, v0,v1,v2);
 
 	const vector<vec3>& vertices = mesh.get_vertices();
 	vert = vertices[v0]*w0 + vertices[v1]*w1 + vertices[v2]*w2;
+}
+
+// make vertices from grid point with index 'from' to
+// grid point with index 'to'. Interval [from, to).
+inline bool make_vertices_from_to(
+	const geoproc::TriangleMesh& mesh,
+	const vector<vec2>& uvs,
+	size_t N, size_t M, size_t begin, size_t end,
+	vector<vec3>& new_vertices
+)
+{
+	float i = (begin/M)*1.0f;
+	float j = (begin%M)*1.0f;
+	vec2 pre((i + 1)/(N + 1), (j + 1)/(M + 1));
+
+	// first point - to be handled differently
+	int nT = find_first_triangle(mesh, uvs, pre);
+	if (nT == -1) {
+		cerr << "geoproc::remeshing::harmonic_maps - Error" << endl;
+		cerr << "    In thread: " << omp_get_thread_num() << endl;
+		cerr << "    Could not locate point (" << i << "," << j << ")= "
+			 << vec2out(pre) << endl;
+		return false;
+	}
+	make_new_vertex(mesh, uvs, nT, pre, new_vertices[begin]);
+
+	// rest of the points from 'begin' to 'end'
+	for (size_t idx = begin + 1; idx < end; ++idx) {
+		i = (idx/M)*1.0f;
+		j = (idx%M)*1.0f;
+		vec2 next((i + 1)/(N + 1), (j + 1)/(M + 1));
+
+		nT = find_next_triangle(mesh, nT, uvs, pre, next);
+		if (nT == -1) {
+			cerr << "geoproc::remeshing::harmonic_maps - Error" << endl;
+			cerr << "    In thread: " << omp_get_thread_num() << endl;
+			cerr << "    Could not locate point (" << i << "," << j << ")= "
+				 << vec2out(next) << endl;
+			return false;
+		}
+		make_new_vertex(mesh, uvs, nT, next, new_vertices[idx]);
+		pre = next;
+	}
+
+	return true;
 }
 
 namespace geoproc {
@@ -269,80 +311,30 @@ bool harmonic_maps(
 
 bool harmonic_maps(
 	const TriangleMesh& mesh, size_t N, size_t M,
-	const std::vector<glm::vec2>& uvs, TriangleMesh& remesh
+	const vector<glm::vec2>& uvs, TriangleMesh& remesh
 )
 {
 	assert(mesh.n_vertices() == uvs.size());
-
-	++N; ++M;
-	size_t it = 0;
-	vec2 pre(1.0f/N, 1.0f/M);
-	vector<vec3> new_vertices((N - 1)*(M - 1));
-	float w0,w1,w2;
+	vector<vec3> new_vertices(N*M);
 
 	/* compute the coordinates of the new vertices */
-
-	// first point - to be handled differently
-	int nT = find_first_triangle(mesh, uvs, pre);
-	if (nT == -1) {
-		cerr << "geoproc::remeshing::harmonic_maps - Error" << endl;
-		cerr << "    Could not locate point " << vec2out(pre) << "." << endl;
+	bool r = make_vertices_from_to(mesh, uvs, N, M, 0, N*M, new_vertices);
+	if (not r) {
 		return false;
-	}
-
-	barycentric_coordinates(mesh, nT, uvs, pre, w0,w1,w2);
-	make_new_vertex(mesh, nT, w0,w1,w2, new_vertices[it]);
-	++it;
-
-	// first row of points
-	for (size_t j = 2; j < M; ++j) {
-		vec2 next(1.0f/N, (1.0f*j)/M);
-
-		nT = find_next_triangle(mesh, nT, uvs, pre, next);
-		if (nT == -1) {
-			cerr << "geoproc::remeshing::harmonic_maps - Error" << endl;
-			cerr << "    Could not locate point (0," << j << ")= "
-				 << vec2out(next) << endl;
-			return false;
-		}
-		barycentric_coordinates(mesh, nT, uvs, next, w0,w1,w2);
-		make_new_vertex(mesh, nT, w0,w1,w2, new_vertices[it]);
-		++it;
-		pre = next;
-	}
-
-	// rest of the grid
-	for (size_t i = 2; i < N; ++i) {
-		for (size_t j = 1; j < M; ++j) {
-			vec2 next((1.0f*i)/N, (1.0f*j)/M);
-
-			nT = find_next_triangle(mesh, nT, uvs, pre, next);
-			if (nT == -1) {
-				cerr << "geoproc::remeshing::harmonic_maps - Error" << endl;
-				cerr << "    Could not locate point (" << i << "," << j << ")= ("
-					 << vec2out(next) << endl;
-				return false;
-			}
-			barycentric_coordinates(mesh, nT, uvs, next, w0,w1,w2);
-			make_new_vertex(mesh, nT, w0,w1,w2, new_vertices[it]);
-			++it;
-			pre = next;
-		}
 	}
 
 	/* compute new triangles */
 	// this is easy because we handle only the 'Square' case
 	vector<int> new_triangles;
-	size_t N1 = N - 1;
-	for (size_t i = 0; i < N - 2; ++i) {
-		for (size_t j = 0; j < M - 2; ++j) {
-			new_triangles.push_back(j*N1 + i);
-			new_triangles.push_back((j + 1)*N1 + i + 1);
-			new_triangles.push_back(j*N1 + i + 1);
+	for (size_t i = 0; i < N - 1; ++i) {
+		for (size_t j = 0; j < M - 1; ++j) {
+			new_triangles.push_back(i*M + j);
+			new_triangles.push_back((i + 1)*M + j);
+			new_triangles.push_back((i + 1)*M + j + 1);
 
-			new_triangles.push_back(j*N1 + i);
-			new_triangles.push_back((j + 1)*N1 + i);
-			new_triangles.push_back((j + 1)*N1 + i + 1);
+			new_triangles.push_back(i*M + j);
+			new_triangles.push_back((i + 1)*M + j + 1);
+			new_triangles.push_back(i*M + j + 1);
 		}
 	}
 
