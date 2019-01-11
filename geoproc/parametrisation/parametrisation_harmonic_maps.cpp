@@ -4,16 +4,23 @@
 #include <iostream>
 using namespace std;
 
-// geoproc includes
-#include <geoproc/smoothing/local_private.hpp>
-
 // Eigen includes
 #include <Eigen/Sparse>
 
-typedef Eigen::Triplet<float> T;
+// geoproc includes
+#include <geoproc/smoothing/local_private.hpp>
+#include <geoproc/definitions.hpp>
+
+#define to_double(x) static_cast<double>(x)
+#define to_float(x) static_cast<float>(x)
+
+typedef Eigen::Triplet<float> Tf;
+typedef Eigen::Triplet<double> Td;
 typedef Eigen::MatrixXf Matrixf;
 typedef Eigen::VectorXf Vectorf;
+typedef Eigen::VectorXd Vectord;
 typedef Eigen::SparseMatrix<float> SparseMatrixf;
+typedef Eigen::SparseMatrix<double> SparseMatrixd;
 
 inline void harmonic_maps_laplacian
 (
@@ -30,14 +37,14 @@ inline void harmonic_maps_laplacian
 	 */
 
 	// system's matrix
-	SparseMatrixf A(variable, variable);
+	SparseMatrixd A(variable, variable);
 	// independent term vectors
-	Vectorf bX(variable), bY(variable);
+	Vectord bX(variable), bY(variable);
 
 	// weights for system's matrix (per row)
-	float *ws = static_cast<float *>(malloc(N*sizeof(float)));
+	double *ws = static_cast<double *>(malloc(N*sizeof(double)));
 	// list of triplets for system's matrix
-	vector<T> triplet_list;
+	vector<Td> triplet_list;
 
 	int row_it = 0;
 	for (int i = 0; i < N; ++i) {
@@ -51,24 +58,25 @@ inline void harmonic_maps_laplacian
 			geoproc::smoothing::local_private::make_cotangent_weights(i, m, ws);
 		}
 
-		ws[i] = -1.0f;
+		ws[i] = -1.0;
 
 		// compute the right handside of the equation
 		// (vectors bX,bY,bZ) using this row
 		int col_it = 0;
 
-		glm::vec2 sums(0.0f,0.0f);
+		glm::vec2d sums(0.0f,0.0f);
 		for (int j = 0; j < N; ++j) {
 			if (constant[j]) {
 				// if the vertex at the j-th column is constant
 				// we need to accumulate the sum
-				sums += ws[j]*uvs[j];
+				sums.x += ws[j]*to_double(uvs[j].x);
+				sums.y += ws[j]*to_double(uvs[j].y);
 			}
 			else {
 				// if it is not constant we have a
 				// triplet of the system matrix
-				if (ws[j] != 0.0f) {
-					triplet_list.push_back(T(row_it, col_it, ws[j]));
+				if (ws[j] != 0.0) {
+					triplet_list.push_back(Td(row_it, col_it, ws[j]));
 				}
 				++col_it;
 			}
@@ -88,16 +96,16 @@ inline void harmonic_maps_laplacian
 	// improve memory consumption
 	A.makeCompressed();
 
-	SparseMatrixf At = A.transpose();
-	Eigen::SimplicialCholesky<SparseMatrixf> solver(At*A);
-	Vectorf solX = solver.solve(At*bX);
-	Vectorf solY = solver.solve(At*bY);
+	SparseMatrixd At = A.transpose();
+	Eigen::SimplicialCholesky<SparseMatrixd> solver(At*A);
+	Vectord solX = solver.solve(At*bX);
+	Vectord solY = solver.solve(At*bY);
 
 	int fixed_it = 0;
-	for (int i = 0; i < N; ++i) {
+	for (size_t i = 0; i < static_cast<size_t>(N); ++i) {
 		if (not constant[i]) {
-			uvs[i].x = solX(fixed_it);
-			uvs[i].y = solY(fixed_it);
+			uvs[i].x = to_float(solX(fixed_it));
+			uvs[i].y = to_float(solY(fixed_it));
 			++fixed_it;
 		}
 	}
@@ -125,7 +133,7 @@ bool harmonic_maps
 		return false;
 	}
 
-	const int N = m.n_vertices();
+	const size_t N = static_cast<size_t>(m.n_vertices());
 	uvs = vector<glm::vec2>(N, glm::vec2(-1.0f,-1.0f));
 
 	// constant vertices
@@ -141,7 +149,7 @@ bool harmonic_maps
 		float inc = (2.0f*M_PI)/boundary.size();
 		float alpha = 0.0f;
 		for (size_t i = 0; i < boundary.size(); ++i, alpha += inc) {
-			int v_idx = boundary[i];
+			size_t v_idx = static_cast<size_t>(boundary[i]);
 			constant[v_idx] = true;
 			uvs[v_idx].x = std::cos(alpha);
 			uvs[v_idx].y = std::sin(alpha);
@@ -150,34 +158,34 @@ bool harmonic_maps
 	else if (s == boundary_shape::Square) {
 		// place vertices of the boundary on a square of side
 		// length 1, starting at (1,-1), in counterclockwise order
-		int r = boundary.size()%4;
-		int n_side1 = boundary.size()/4 + int(r > 0); --r;
-		int n_side2 = boundary.size()/4 + int(r > 0); --r;
-		int n_side3 = boundary.size()/4 + int(r > 0); --r;
-		int n_side4 = boundary.size()/4 + int(r > 0);
+		size_t r = boundary.size()%4;
+		size_t n_side1 = boundary.size()/4 + size_t(r > 0); --r;
+		size_t n_side2 = boundary.size()/4 + size_t(r > 0); --r;
+		size_t n_side3 = boundary.size()/4 + size_t(r > 0); --r;
+		size_t n_side4 = boundary.size()/4 + size_t(r > 0);
 
 		// texture coordinates of boundary vertices
 		size_t bound_it = 0;
-		for (int i = 0; i < n_side1; ++i, ++bound_it) {
-			int v_idx = boundary[bound_it];
+		for (size_t i = 0; i < n_side1; ++i, ++bound_it) {
+			size_t v_idx = static_cast<size_t>(boundary[bound_it]);
 			constant[v_idx] = true;
 			uvs[v_idx].x =  1.0f;
 			uvs[v_idx].y = -1.0f + i*(2.0f/n_side1);
 		}
-		for (int i = 0; i < n_side2; ++i, ++bound_it) {
-			int v_idx = boundary[bound_it];
+		for (size_t i = 0; i < n_side2; ++i, ++bound_it) {
+			size_t v_idx = static_cast<size_t>(boundary[bound_it]);
 			constant[v_idx] = true;
 			uvs[v_idx].x = 1.0f - i*(2.0f/n_side2);
 			uvs[v_idx].y = 1.0f;
 		}
-		for (int i = 0; i < n_side3; ++i, ++bound_it) {
-			int v_idx = boundary[bound_it];
+		for (size_t i = 0; i < n_side3; ++i, ++bound_it) {
+			size_t v_idx = static_cast<size_t>(boundary[bound_it]);
 			constant[v_idx] = true;
 			uvs[v_idx].x = -1.0f;
 			uvs[v_idx].y =  1.0f - i*(2.0f/n_side3);
 		}
-		for (int i = 0; i < n_side4; ++i, ++bound_it) {
-			int v_idx = boundary[bound_it];
+		for (size_t i = 0; i < n_side4; ++i, ++bound_it) {
+			size_t v_idx = static_cast<size_t>(boundary[bound_it]);
 			constant[v_idx] = true;
 			uvs[v_idx].x = -1.0f + i*(2.0f/n_side4);
 			uvs[v_idx].y = -1.0f;

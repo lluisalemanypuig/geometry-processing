@@ -62,7 +62,7 @@ struct CornerEdgeFace {
 };
 
 inline void add_edge_to_triangle
-(vector<vec3>& ept, unsigned char *count, int t, int e)
+(vector<vec3i>& ept, unsigned char *count, int t, int e)
 {
 	ept[t][ count[t] ] = e;
 	++count[t];
@@ -111,7 +111,7 @@ inline int find_common_boundary_edge(
 
 inline void find_prev_next_edges(
 	const vector<int>& boundary_edges,
-	const vector<vec3>& ept, unsigned char *count,
+	const vector<vec3i>& ept, unsigned char *count,
 	vector<geoproc::mesh_edge>& edges
 )
 {

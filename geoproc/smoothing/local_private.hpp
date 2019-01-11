@@ -19,7 +19,7 @@ namespace local_private {
  * For vertex @e vi computes \f$\frac{1}{d_i}\f$ where \f$d_i\f$ is
  * the valence of vertex @e vi (the number of neighbours in its one-ring).
  * This value is value is assigned to all its neighbours in the mesh
- * in the output parameter @e pv_ws..
+ * in the output parameter @e pv_ws.
  * @param vi Valid vertex index.
  * @param m Mesh to be iterated.
  * @param[out] pv_ws Weights per vertex. Non-neighbours of @e vi are
@@ -29,6 +29,20 @@ namespace local_private {
  */
 void make_uniform_weights
 (int vi, const TriangleMesh& m, float *pv_ws);
+/**
+ * @brief Computes weights corresponding to uniform weights.
+ *
+ * Same as @ref make_uniform_weights(int, const TriangleMesh&, float*)
+ * but with doubles.
+ * @param vi Valid vertex index.
+ * @param m Mesh to be iterated.
+ * @param[out] pv_ws Weights per vertex. Non-neighbours of @e vi are
+ * guaranteed to have null weight.
+ * @pre The mesh requires:
+ * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+ */
+void make_uniform_weights
+(int vi, const TriangleMesh& m, double *pv_ws);
 
 /**
  * @brief Computes the sum corresponding to uniform weights.
@@ -68,6 +82,21 @@ void make_uniform_weight
  */
 void make_cotangent_weights
 (int vi, const TriangleMesh& m, float *pv_ws);
+/**
+ * @brief Computes weights corresponding to cotangent weights.
+ *
+ * Same as @ref make_cotangent_weights(int, const TriangleMesh&, float*)
+ * but with doubles.
+ * @param vi Valid vertex index.
+ * @param m Mesh to be iterated.
+ * @param[out] pv_ws Weights per vertex. Non-neighbours of @e vi are guaranteed
+ * to have null weight.
+ * @pre The mesh requires:
+ * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
+ * - Angles and areas (see @ref TriangleMesh::make_angles_area)
+ */
+void make_cotangent_weights
+(int vi, const TriangleMesh& m, double *pv_ws);
 
 /**
  * @brief Computes the sum corresponding to cotangent weights.

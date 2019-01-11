@@ -11,11 +11,13 @@ using namespace std;
 // glm includes
 using namespace glm;
 
-// gpr algorithms includes
+// geoproc includes
 #include <geoproc/iterators/mesh_iterator.hpp>
 #include <geoproc/iterators/vertex_iterators.hpp>
 
-inline float cotan(float a) { return cos(a)/sin(a); }
+inline float cotanf(float a) { return std::cos(a)/std::sin(a); }
+inline double cotand(double a) { return std::cos(a)/std::sin(a); }
+#define to_double(x) static_cast<double>(x)
 
 namespace geoproc {
 namespace smoothing {
@@ -47,6 +49,33 @@ void make_uniform_weights
 	}
 	for (int j : neighs) {
 		pv_ws[j] = 1.0f/neighs.size();
+	}
+}
+
+void make_uniform_weights
+(int vi, const TriangleMesh& m, double *pv_ws)
+{
+	assert(pv_ws != nullptr);
+
+	iterators::vertex::vertex_vertex_iterator it(m);
+
+	int first = it.init(vi);
+
+	// neighbours of vi
+	vector<int> neighs;
+	int j = it.current();
+	do {
+		neighs.push_back(j);
+		j = it.next();
+	}
+	while (j != first);
+
+	// set weights to 0
+	for (int j = 0; j < m.n_vertices(); ++j) {
+		pv_ws[j] = 0.0;
+	}
+	for (int j : neighs) {
+		pv_ws[j] = 1.0/neighs.size();
 	}
 }
 
@@ -122,8 +151,8 @@ void make_cotangent_weights
 		// Compute the two angles (alpha and beta).
 		// At the same time, compute the difference vector.
 
-		const vec3 angles1 = mesh_angles[next1];
-		const vec3 angles2 = mesh_angles[next2];
+		const vec3& angles1 = mesh_angles[next1];
+		const vec3& angles2 = mesh_angles[next2];
 
 		if (vi == i1)		{ alpha = angles1.y; }
 		else if (vi == j1)	{ alpha = angles1.z; }
@@ -133,7 +162,7 @@ void make_cotangent_weights
 		else if (vi == k2)	{ beta = angles2.y; }
 
 		// compute and store weight
-		W = cotan(alpha) + cotan(beta);
+		W = cotanf(alpha) + cotanf(beta);
 		weight_per_neigh.push_back( make_pair(k1,W) );
 		sW += W;
 
@@ -144,6 +173,73 @@ void make_cotangent_weights
 	while (next1 != first);
 
 	for (const pair<int,float>& nw : weight_per_neigh) {
+		pv_ws[nw.first] = nw.second/sW;
+	}
+}
+
+void make_cotangent_weights
+(int vi, const TriangleMesh& m, double *pv_ws)
+{
+	assert(pv_ws != nullptr);
+
+	// mesh info
+	const vector<vec3>& mesh_angles = m.get_angles();
+
+	// set weights to 0
+	for (int j = 0; j < m.n_vertices(); ++j) {
+		pv_ws[j] = 0.0;
+	}
+
+	iterators::vertex::vertex_face_iterator it(m);
+	const int first = it.init(vi);
+	int next1 = first;
+	int next2 = it.next();
+
+	// loop over the one-ring neighbourhood of
+	// vertex vi. When a neighbour is found assign
+	// its corresponding weight.
+
+	// loop variables
+	vector<pair<int, double> > weight_per_neigh;
+	double alpha = 0.0;
+	double beta = 0.0;
+	double W = 0.0;
+	double sW = 0.0;
+	do {
+		int i1,j1,k1, i2,j2,k2;
+		m.get_vertices_triangle(next1, vi, i1,j1,k1);
+		m.get_vertices_triangle(next2, vi, i2,j2,k2);
+
+		// make sure that the orientations are correct.
+		// k1 and j2 are the same vertex, and a neighbour of vi.
+		assert(i1 == i2);
+		assert(k1 == j2);
+
+		// Compute the two angles (alpha and beta).
+		// At the same time, compute the difference vector.
+
+		const vec3& angles1 = mesh_angles[next1];
+		const vec3& angles2 = mesh_angles[next2];
+
+		if (vi == i1)		{ alpha = to_double(angles1.y); }
+		else if (vi == j1)	{ alpha = to_double(angles1.z); }
+		else if (vi == k1)	{ alpha = to_double(angles1.x); }
+		if (vi == i2)		{ beta = to_double(angles2.z); }
+		else if (vi == j2)	{ beta = to_double(angles2.x); }
+		else if (vi == k2)	{ beta = to_double(angles2.y); }
+
+		// compute and store weight
+		W = cotand(alpha) + cotand(beta);
+		weight_per_neigh.push_back( make_pair(k1,W) );
+		sW += W;
+
+		// go to next 2 faces
+		next1 = next2;
+		next2 = it.next();
+	}
+	while (next1 != first);
+
+	for (const pair<int,double>& nw : weight_per_neigh) {
 		pv_ws[nw.first] = nw.second/sW;
 	}
 }
@@ -195,7 +291,7 @@ void make_cotangent_weight
 		beta = acos( dot(u,v) );
 
 		// compute weight
-		float W = cotan(alpha) + cotan(beta);
+		float W = cotanf(alpha) + cotanf(beta);
 		S += W;
 
 		weights.push_back(W);

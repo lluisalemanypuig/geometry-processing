@@ -17,7 +17,7 @@ using namespace glm;
 #include <geoproc/iterators/mesh_iterator.hpp>
 #include <geoproc/iterators/vertex_iterators.hpp>
 
-inline float cotan(float a) { return cos(a)/sin(a); }
+inline float cotanf(float a) { return cos(a)/sin(a); }
 
 inline float Kh_at_vertex(const geoproc::TriangleMesh& m, int vi) {
 	// mesh info
@@ -66,7 +66,7 @@ inline float Kh_at_vertex(const geoproc::TriangleMesh& m, int vi) {
 		else if (vi == k2)	{ beta = angles2.y; }
 
 		// compute weight
-		float W = cotan(alpha) + cotan(beta);
+		float W = cotanf(alpha) + cotanf(beta);
 		// accumulate curvature vector
 		curv_vec += W*diff;
 

@@ -5,9 +5,11 @@
 
 // glm includes
 #include <glm/vec3.hpp>
+#include <glm/detail/qualifier.hpp>
 
 // geoproc includes
 #include <geoproc/mesh_edge.hpp>
+#include <geoproc/definitions.hpp>
 
 namespace geoproc {
 
@@ -138,7 +140,7 @@ class TriangleMesh {
 		 * where @e e_p, @e e_q, @e e_r are edges such that either their
 		 * @ref mesh_edge::lT or @ref mesh_edge::rT equals @e i.
 		 */
-		std::vector<glm::vec3> edges_per_triangle;
+		std::vector<glm::vec3i> edges_per_triangle;
 
 		/**
 		 * @brief Edge index for each vertex.
@@ -541,7 +543,7 @@ class TriangleMesh {
 		 * @pre Neighbourhood has to be valid (@ref is_neighbourhood_valid()
 		 * evaluates to true).
 		 */
-		const std::vector<glm::vec3>& get_edges_triangle() const;
+		const std::vector<glm::vec3i>& get_edges_triangle() const;
 		/**
 		 * @brief Returns all edges in the mesh.
 		 * @pre Neighbourhood has to be valid (@ref is_neighbourhood_valid()
