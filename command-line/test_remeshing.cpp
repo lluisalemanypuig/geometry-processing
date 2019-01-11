@@ -36,7 +36,6 @@ namespace test_geoproc {
 		cout << endl;
 		cout << "    --shape c: shape of the boundary vertices on the texture" << endl;
 		cout << "        Allowed values:" << endl;
-		cout << "        * circle" << endl;
 		cout << "        * square" << endl;
 		cout << endl;
 		cout << "    --weight-type" << endl;
