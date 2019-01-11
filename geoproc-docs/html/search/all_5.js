@@ -12,7 +12,7 @@ var searchData=
   ['get_5fcorners_5ftriangle',['get_corners_triangle',['../classgeoproc_1_1TriangleMesh.html#acd89c54ec14ddfb5d38f1baedb717fc2',1,'geoproc::TriangleMesh']]],
   ['get_5fedge_5fvertex',['get_edge_vertex',['../classgeoproc_1_1TriangleMesh.html#acc3b8ff563eef67b3f55606a716d5dd9',1,'geoproc::TriangleMesh']]],
   ['get_5fedges',['get_edges',['../classgeoproc_1_1TriangleMesh.html#a742e5769cb3e26303eb8ec1af57c9ac4',1,'geoproc::TriangleMesh']]],
-  ['get_5fedges_5ftriangle',['get_edges_triangle',['../classgeoproc_1_1TriangleMesh.html#af56b3521a8df241f4f67c7f2bbacfa51',1,'geoproc::TriangleMesh']]],
+  ['get_5fedges_5ftriangle',['get_edges_triangle',['../classgeoproc_1_1TriangleMesh.html#a30ae6e36038a8b38959c233d144b6bff',1,'geoproc::TriangleMesh']]],
   ['get_5fmin_5fmax_5fcoordinates',['get_min_max_coordinates',['../classgeoproc_1_1TriangleMesh.html#a00f918f8d96560f640efd244fd273cec',1,'geoproc::TriangleMesh']]],
   ['get_5fnormal_5fvectors',['get_normal_vectors',['../classgeoproc_1_1TriangleMesh.html#ac21af48c99662a753251a5b7507c175f',1,'geoproc::TriangleMesh']]],
   ['get_5fopposite_5fcorner',['get_opposite_corner',['../classgeoproc_1_1TriangleMesh.html#a0ea38352c56a76d6def1fce67253f433',1,'geoproc::TriangleMesh']]],
