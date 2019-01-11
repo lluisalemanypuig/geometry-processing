@@ -249,33 +249,33 @@ inline bool make_vertices_from_to(
 	vector<vec3>& new_vertices
 )
 {
-	float i = (begin/M)*1.0f;
-	float j = (begin%M)*1.0f;
-	vec2 pre((i + 1)/(N + 1), (j + 1)/(M + 1));
+	float x_idx = (begin/M)*1.0f;
+	float y_idx = (begin%M)*1.0f;
+	vec2 pre((x_idx + 1)/(N + 1), (y_idx + 1)/(M + 1));
 
 	// first point - to be handled differently
 	int nT = find_first_triangle(mesh, uvs, pre);
 	if (nT == -1) {
 		cerr << "geoproc::remeshing::harmonic_maps - Error" << endl;
 		cerr << "    In thread: " << omp_get_thread_num() << endl;
-		cerr << "    Could not locate point (" << i << "," << j << ")= "
-			 << vec2out(pre) << endl;
+		cerr << "    Could not locate point ("
+			 << x_idx << "," << y_idx << ")= " << vec2out(pre) << endl;
 		return false;
 	}
 	make_new_vertex(mesh, uvs, nT, pre, new_vertices[begin]);
 
 	// rest of the points from 'begin' to 'end'
 	for (size_t idx = begin + 1; idx < end; ++idx) {
-		i = (idx/M)*1.0f;
-		j = (idx%M)*1.0f;
-		vec2 next((i + 1)/(N + 1), (j + 1)/(M + 1));
+		x_idx = (idx/M)*1.0f;
+		y_idx = (idx%M)*1.0f;
+		vec2 next((x_idx + 1)/(N + 1), (y_idx + 1)/(M + 1));
 
 		nT = find_next_triangle(mesh, nT, uvs, pre, next);
 		if (nT == -1) {
 			cerr << "geoproc::remeshing::harmonic_maps - Error" << endl;
 			cerr << "    In thread: " << omp_get_thread_num() << endl;
-			cerr << "    Could not locate point (" << i << "," << j << ")= "
-				 << vec2out(next) << endl;
+			cerr << "    Could not locate point ("
+				 << x_idx << "," << y_idx << ")= " << vec2out(next) << endl;
 			return false;
 		}
 		make_new_vertex(mesh, uvs, nT, next, new_vertices[idx]);
