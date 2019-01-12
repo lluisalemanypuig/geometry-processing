@@ -366,10 +366,10 @@ bool parseJsonObject
 	if (alg_str == "Laplacian") {
 		conf.so = modifier::Laplacian;
 	}
-	else if (alg_str == "Laplacian") {
+	else if (alg_str == "BiLaplacian") {
 		conf.so = modifier::BiLaplacian;
 	}
-	else if (alg_str == "Laplacian") {
+	else if (alg_str == "TaubinLM") {
 		conf.so = modifier::TaubinLM;
 	}
 	else {
@@ -381,10 +381,10 @@ bool parseJsonObject
 
 	/* parse WEIGHT TYPE */
 	QString weight_str = weight_value.toString();
-	if (weight_str == "uniform") {
+	if (weight_str == "Uniform") {
 		conf.sw = weight::uniform;
 	}
-	else if (weight_str == "cotangent") {
+	else if (weight_str == "Cotangent") {
 		conf.sw = weight::cotangent;
 	}
 	else {
