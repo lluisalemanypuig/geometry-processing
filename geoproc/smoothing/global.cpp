@@ -19,17 +19,17 @@ using namespace std;
 // Eigen includes
 #include <Eigen/Sparse>
 
-typedef Eigen::Triplet<float> T;
-static inline bool comp_triplet(const T& t1, const T& t2) {
+typedef Eigen::Triplet<double> Td;
+static inline bool comp_triplet(const Td& t1, const Td& t2) {
 	if (t1.row() == t2.row()) {
 		return t1.col() < t2.col();
 	}
 	return t1.row() < t2.row();
 }
 
-typedef Eigen::MatrixXf Matrixf;
-typedef Eigen::VectorXf Vectorf;
-typedef Eigen::SparseMatrix<float> SparseMatrixf;
+typedef Eigen::MatrixXd Matrixd;
+typedef Eigen::VectorXd Vectord;
+typedef Eigen::SparseMatrix<double> SparseMatrixd;
 
 /* ---------------- */
 /* HELPER FUNCTIONS */
@@ -38,8 +38,8 @@ inline void compute_row
 (
 	int i, int N, const geoproc::weight& w,
 	const vector<bool>& constant, const geoproc::TriangleMesh& m,
-	vector<T>& triplet_list, float *ws, int& row_it, int& col_it,
-	glm::vec3& sums
+	vector<Td>& triplet_list, double *ws, int& row_it, int& col_it,
+	glm::vec3d& sums
 )
 {
 	if (not constant[i]) {
@@ -49,7 +49,7 @@ inline void compute_row
 		else if (w == geoproc::weight::cotangent) {
 			geoproc::smoothing::local_private::make_cotangent_weights(i, m, ws);
 		}
-		ws[i] = -1.0f;
+		ws[i] = -1.0;
 	}
 	for (int j = 0; j < N; ++j) {
 		if (constant[j]) {
@@ -60,8 +60,8 @@ inline void compute_row
 		else {
 			/* if it is not constant we have a
 			   triplet of the system matrix */
-			if (ws[j] != 0.0f) {
-				triplet_list.push_back(T(row_it, col_it, ws[j]));
+			if (ws[j] != 0.0) {
+				triplet_list.push_back(Td(row_it, col_it, ws[j]));
 			}
 			++col_it;
 		}
@@ -80,21 +80,21 @@ inline void smooth_laplacian
 	 */
 
 	// system's matrix
-	SparseMatrixf A(variable, variable);
+	SparseMatrixd A(variable, variable);
 	// independent term vectors
-	Vectorf bX(variable), bY(variable), bZ(variable);
+	Vectord bX(variable), bY(variable), bZ(variable);
 
 	// weights for system's matrix (per row)
-	float *ws = static_cast<float *>(malloc(N*sizeof(float)));
+	double *ws = static_cast<double *>(malloc(N*sizeof(double)));
 	// list of triplets for system's matrix
-	vector<T> triplet_list;
+	vector<Td> triplet_list;
 
 	// build triplets for system's matrix
 	int row_it = 0;
 	for (int i = 0; i < N; ++i) {
 		if (constant[i]) { continue; }
 
-		glm::vec3 sums(0.0f,0.0f,0.0f);
+		glm::vec3d sums(0.0,0.0,0.0);
 		int col_it = 0;
 		compute_row
 		(i, N, w, constant, m, triplet_list, ws, row_it, col_it, sums);
@@ -116,14 +116,14 @@ inline void smooth_laplacian
 	// improve memory consumption
 	A.makeCompressed();
 
-	SparseMatrixf At = A.transpose();
+	SparseMatrixd At = A.transpose();
 
-	Eigen::SimplicialCholesky<SparseMatrixf> solver(At*A);
-	Vectorf solX = solver.solve(At*bX);
-	Vectorf solY = solver.solve(At*bY);
-	Vectorf solZ = solver.solve(At*bZ);
+	Eigen::SimplicialCholesky<SparseMatrixd> solver(At*A);
+	Vectord solX = solver.solve(At*bX);
+	Vectord solY = solver.solve(At*bY);
+	Vectord solZ = solver.solve(At*bZ);
 
-	vector<glm::vec3> coords = m.get_vertices();
+	vector<glm::vec3d> coords = m.get_vertices();
 	int fixed_it = 0;
 	for (int i = 0; i < N; ++i) {
 		if (not constant[i]) {

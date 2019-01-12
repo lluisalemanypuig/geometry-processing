@@ -104,11 +104,11 @@ namespace test_geoproc {
 		cout << "    Angles and areas computed in "
 			 << timing::elapsed_seconds(begin, end) << " seconds" << endl;
 
-		vector<float> curv;
+		vector<double> curv;
 
 		cout << "Compute curvature '" << curvature << "'" << endl;
 
-		float min, max;
+		double min, max;
 
 		begin = timing::now();
 		if (curvature == "Gauss") {

@@ -16,12 +16,12 @@ namespace smoothing {
 namespace local {
 
 void laplacian
-(const weight& w, float l, size_t nit, TriangleMesh& m)
+(const weight& w, double l, size_t nit, TriangleMesh& m)
 {
 	const int N = m.n_vertices();
 
 	// Allocate memory equivalent to two arrays of vertices.
-	vec3 *verts = static_cast<vec3 *>(malloc(2*N*sizeof(vec3)));
+	vec3d *verts = static_cast<vec3d *>(malloc(2*N*sizeof(vec3d)));
 	// Fill the first array (there is no need to fill the second).
 	std::copy(m.get_vertices().begin(), m.get_vertices().end(), &verts[0]);
 
@@ -38,7 +38,7 @@ void laplacian
 }
 
 void laplacian
-(const weight& w, float l, size_t nit, size_t nt, TriangleMesh& m)
+(const weight& w, double l, size_t nit, size_t nt, TriangleMesh& m)
 {
 	if (nt == 1) {
 		laplacian(w,l,nit, m);
@@ -48,7 +48,7 @@ void laplacian
 	const int N = m.n_vertices();
 
 	// Allocate memory equivalent to two arrays of vertices.
-	vec3 *verts = static_cast<vec3 *>(malloc(2*N*sizeof(vec3)));
+	vec3d *verts = static_cast<vec3d *>(malloc(2*N*sizeof(vec3d)));
 	// Fill the first array (there is no need to fill the second).
 	std::copy(m.get_vertices().begin(), m.get_vertices().end(), verts);
 
@@ -65,12 +65,12 @@ void laplacian
 }
 
 void bilaplacian
-(const weight& w, float l, size_t nit, TriangleMesh& m)
+(const weight& w, double l, size_t nit, TriangleMesh& m)
 {
 	const int N = m.n_vertices();
 
 	// Allocate memory equivalent to two arrays of vertices.
-	vec3 *verts = static_cast<vec3 *>(malloc(2*N*sizeof(vec3)));
+	vec3d *verts = static_cast<vec3d *>(malloc(2*N*sizeof(vec3d)));
 	// Fill the first array (there is no need to fill the second).
 	std::copy(m.get_vertices().begin(), m.get_vertices().end(), &verts[0]);
 
@@ -85,7 +85,7 @@ void bilaplacian
 }
 
 void bilaplacian
-(const weight& w, float l, size_t nit, size_t nt, TriangleMesh& m)
+(const weight& w, double l, size_t nit, size_t nt, TriangleMesh& m)
 {
 	if (nt == 1) {
 		bilaplacian(w,l,nit, m);
@@ -95,7 +95,7 @@ void bilaplacian
 	const int N = m.n_vertices();
 
 	// Allocate memory equivalent to two arrays of vertices.
-	vec3 *verts = static_cast<vec3 *>(malloc(2*N*sizeof(vec3)));
+	vec3d *verts = static_cast<vec3d *>(malloc(2*N*sizeof(vec3d)));
 	// Fill the first array (there is no need to fill the second).
 	std::copy(m.get_vertices().begin(), m.get_vertices().end(), &verts[0]);
 
@@ -110,14 +110,14 @@ void bilaplacian
 }
 
 void TaubinLM
-(const weight& w, float l, size_t nit, TriangleMesh& m)
+(const weight& w, double l, size_t nit, TriangleMesh& m)
 {
 	const int N = m.n_vertices();
-	const float Kpb = 0.1f;
-	const float mu = 1.0f/(Kpb - 1.0f/l);
+	const double Kpb = 0.1;
+	const double mu = 1.0/(Kpb - 1.0/l);
 
 	// Allocate memory equivalent to two arrays of vertices.
-	vec3 *verts = static_cast<vec3 *>(malloc(2*N*sizeof(vec3)));
+	vec3d *verts = static_cast<vec3d *>(malloc(2*N*sizeof(vec3d)));
 	// Fill the first array (there is no need to fill the second).
 	std::copy(m.get_vertices().begin(), m.get_vertices().end(), &verts[0]);
 
@@ -132,7 +132,7 @@ void TaubinLM
 }
 
 void TaubinLM
-(const weight& w, float l, size_t nit, size_t nt, TriangleMesh& m)
+(const weight& w, double l, size_t nit, size_t nt, TriangleMesh& m)
 {
 	if (nt == 1) {
 		TaubinLM(w,l,nit, m);
@@ -140,11 +140,11 @@ void TaubinLM
 	}
 
 	const int N = m.n_vertices();
-	const float Kpb = 0.1f;
-	const float mu = 1.0f/(Kpb - 1.0f/l);
+	const double Kpb = 0.1;
+	const double mu = 1.0/(Kpb - 1.0/l);
 
 	// Allocate memory equivalent to two arrays of vertices.
-	vec3 *verts = static_cast<vec3 *>(malloc(2*N*sizeof(vec3)));
+	vec3d *verts = static_cast<vec3d *>(malloc(2*N*sizeof(vec3d)));
 	// Fill the first array (there is no need to fill the second).
 	std::copy(m.get_vertices().begin(), m.get_vertices().end(), &verts[0]);
 

@@ -37,8 +37,8 @@ void init_bins(size_t nbins, int *bins) {
 static inline
 void fill_bins
 (
-	const vector<float>& data,
-	float dmin, float step, float val, bool around_val,
+	const vector<double>& data,
+	double dmin, double step, double val, bool around_val,
 	int nbins, int *bins, int& start_at
 )
 {
@@ -80,7 +80,7 @@ static inline
 int find_left_right
 (
 	const int *bins, int nbins,
-	size_t ndata, float prop,
+	size_t ndata, double prop,
 	int start_at, int& left, int& right
 )
 {
@@ -92,7 +92,7 @@ int find_left_right
 	bool move_right = (right < nbins ? true : false);
 
 	while (
-		(100.0f*count)/ndata < prop and
+		(100.0*count)/ndata < prop and
 		(move_left or move_right)
 	)
 	{
@@ -126,9 +126,9 @@ int find_left_right
 }
 
 void generic_binning(
-	const vector<float>& data, float val, bool around_val,
-	float dmin, float dmax, float prop,
-	float& m, float& M
+	const vector<double>& data, double val, bool around_val,
+	double dmin, double dmax, double prop,
+	double& m, double& M
 )
 {
 	size_t ndata = data.size();
@@ -147,16 +147,16 @@ void generic_binning(
 	// and minimum values
 
 	size_t nbins;
-	if (dmax - dmin <= 100.0f)			{ nbins = 100; }
-	else if (dmax - dmin <= 1000.0f)	{ nbins = 100; }
-	else if (dmax - dmin <= 10000.0f)	{ nbins = 1000; }
-	else if (dmax - dmin <= 100000.0f)	{ nbins = 10000; }
-	else if (dmax - dmin <= 1000000.0f)	{ nbins = 100000; }
+	if (dmax - dmin <= 100.0)			{ nbins = 100; }
+	else if (dmax - dmin <= 1000.0)		{ nbins = 100; }
+	else if (dmax - dmin <= 10000.0)	{ nbins = 1000; }
+	else if (dmax - dmin <= 100000.0)	{ nbins = 10000; }
+	else if (dmax - dmin <= 1000000.0)	{ nbins = 100000; }
 	else								{ nbins = 1000000; }
 	++nbins;
 	int inbins = static_cast<int>(nbins);
 
-	float step = (dmax - dmin)/(nbins - 1);
+	double step = (dmax - dmin)/(nbins - 1);
 
 	#if defined (DEBUG)
 	cout << "    use " << nbins << " bins" << endl;
@@ -170,7 +170,7 @@ void generic_binning(
 
 	int count;
 	size_t num_steps = 0;
-	float current_prop, err;
+	double current_prop, err;
 	bool terminate = false;
 	do {
 		init_bins(nbins, bins);
@@ -184,7 +184,7 @@ void generic_binning(
 		count = find_left_right
 			(bins, inbins, ndata, prop, start_at, left, right);
 
-		current_prop = (100.0f*count)/ndata;
+		current_prop = (100.0*count)/ndata;
 		err = std::abs(prop - current_prop);
 
 		// Find values of data in the left and right bins.
@@ -198,7 +198,7 @@ void generic_binning(
 		if (num_steps >= 100) {
 			terminate = true;
 		}
-		if (err < 0.001f and current_prop > prop) {
+		if (err < 0.001 and current_prop > prop) {
 			terminate = true;
 		}
 	}
@@ -226,45 +226,45 @@ void generic_binning(
 }
 
 void binning(
-	const vector<float>& data,
-	float dmin, float dmax, float prop,
-	float& min, float& max
+	const vector<double>& data,
+	double dmin, double dmax, double prop,
+	double& min, double& max
 )
 {
 	generic_binning(data, 0.0, false, dmin, dmax, prop, min, max);
 }
 
 void binning_around(
-	const vector<float>& data, float center,
-	float dmin, float dmax, float prop,
-	float& min, float& max
+	const vector<double>& data, double center,
+	double dmin, double dmax, double prop,
+	double& min, double& max
 )
 {
 	generic_binning(data, center, true, dmin, dmax, prop, min, max);
 }
 
 void below_dev(
-	const vector<float>& data,
-	float prop, float& min, float& max
+	const vector<double>& data,
+	double prop, double& min, double& max
 )
 {
-	float mean = 0.0f;
-	for (float v : data) {
+	double mean = 0.0;
+	for (double v : data) {
 		mean += v;
 	}
 	mean /= data.size();
-	float var = 0.0f;
-	for (float v : data) {
+	double var = 0.0;
+	for (double v : data) {
 		var += (v - mean)*(v - mean);
 	}
 	var /= (data.size() - 1);
 
-	float vm = numeric_limits<float>::max();
-	float vM = -numeric_limits<float>::max();
-	float dev = sqrt(var);
-	dev *= (1.0f + prop/100.0f);
+	double vm = numeric_limits<double>::max();
+	double vM = -numeric_limits<double>::max();
+	double dev = sqrt(var);
+	dev *= (1.0 + prop/100.0);
 
-	for (float v : data) {
+	for (double v : data) {
 		if (v < dev) {
 			if (v > vM) {
 				vM = v;
@@ -284,67 +284,67 @@ namespace coloring {
 
 void colors_rainbow
 (
-	const vector<float>& values, float m, float M,
-	vector<glm::vec3>& cols
+	const vector<double>& values, double m, double M,
+	vector<glm::vec3d>& cols
 )
 {
 	// ----------------------- //
 	// Colour rainbow gradient //
-	float r, g, b;
-	r = g = b = 0.0f;
-	cols = vector<glm::vec3>(values.size());
+	double r, g, b;
+	r = g = b = 0.0;
+	cols = vector<glm::vec3d>(values.size());
 	for (size_t i = 0; i < values.size(); ++i) {
-		float v = values[i];
-		float s = (v - m)/(M - m);
+		double v = values[i];
+		double s = (v - m)/(M - m);
 
-		if (s <= 0.0f) {
+		if (s <= 0.0) {
 			// RED
 			// below 0.0
-			r = 1.0f;
-			g = 0.0f;
-			b = 0.0f;
+			r = 1.0;
+			g = 0.0;
+			b = 0.0;
 		}
-		else if (s <= 0.2f) {
+		else if (s <= 0.2) {
 			// RED to YELLOW
 			// from 0.0 to 0.2
-			r = 1.0f;
-			g = 5.0f*(s - 0.0f);
-			b = 0.0f;
+			r = 1.0;
+			g = 5.0*(s - 0.0);
+			b = 0.0;
 		}
-		else if (s <= 0.4f) {
+		else if (s <= 0.4) {
 			// YELLOW to GREEN
 			// from 0.2 to 0.4
-			r = -5.0f*s + 2.0f;
-			g = 1.0f;
-			b = 0.0f;
+			r = -5.0*s + 2.0;
+			g = 1.0;
+			b = 0.0;
 		}
 		else if (s <= 0.6f) {
 			// GREEN to CYAN
 			// from 0.4 to 0.6
-			r = 0.0f;
-			g = 1.0f;
-			b = 5.0f*(s - 0.4f);
+			r = 0.0;
+			g = 1.0;
+			b = 5.0*(s - 0.4);
 		}
 		else if (s <= 0.8f) {
 			// CYAN to BLUE
 			// from 0.6 to 0.8
-			r = 0.0f;
-			g = -5.0f*s + 4.0f;
-			b = 1.0f;
+			r = 0.0;
+			g = -5.0*s + 4.0;
+			b = 1.0;
 		}
-		else if (s <= 1.0f) {
+		else if (s <= 1.0) {
 			// BLUE to PURPLE
 			// from 0.8 to 1.0
-			r = 5.0f*(s - 0.8f);
-			g = 0.0f;
-			b = 1.0f;
+			r = 5.0*(s - 0.8);
+			g = 0.0;
+			b = 1.0;
 		}
-		else if (1.0f <= s) {
+		else if (1.0 <= s) {
 			// PURPLE
 			// above 1.0
-			r = 1.0f;
-			g = 0.0f;
-			b = 1.0f;
+			r = 1.0;
+			g = 0.0;
+			b = 1.0;
 		}
 
 		cols[i].x = r;

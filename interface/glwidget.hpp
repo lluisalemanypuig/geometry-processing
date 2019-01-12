@@ -70,12 +70,12 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		RenderTriangleMesh mesh;
 
 		/// Minimum and maximum curvature values
-		float cm, cM;
+		double cm, cM;
 		/// Values of the curvature per vertex
-		std::vector<float> curvature_values;
+		std::vector<double> curvature_values;
 		/// Proportion of curvature values to be used.
-		float prop;
-		float to_prop;
+		double prop;
+		double to_prop;
 
 		/// Number of threads to use.
 		size_t nt;
@@ -149,9 +149,9 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 
 		/// Sets the proportion (in %) of curvature values to be used for display.
 		/// Displays the curvature values afterwards.
-		void change_display_curvature_proportion(float p);
+		void change_display_curvature_proportion(double p);
 		/// Sets the proportion (in %) of curvature values to be used for display.
-		void change_curvature_proportion(float p);
+		void change_curvature_proportion(double p);
 
 		/// Sets the number of threads.
 		void set_num_threads(size_t nt);

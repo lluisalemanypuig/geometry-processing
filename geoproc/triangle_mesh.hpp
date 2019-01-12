@@ -30,7 +30,7 @@ namespace geoproc {
 class TriangleMesh {
 	protected:
 		/// The set of vertices of the mesh.
-		std::vector<glm::vec3> vertices;
+		std::vector<glm::vec3d> vertices;
 		/**
 		 * @brief The set of triangles of the mesh.
 		 *
@@ -55,7 +55,7 @@ class TriangleMesh {
 		 * can be filled after having set the vertices and the
 		 * triangles.
 		 */
-		std::vector<glm::vec3> normal_vectors;
+		std::vector<glm::vec3d> normal_vectors;
 
 		/**
 		 * @brief Angles of each triangle.
@@ -72,7 +72,7 @@ class TriangleMesh {
 		 * Notice that its size is @ref n_triangles() or
 		 * @ref n_corners()/3.
 		 */
-		std::vector<glm::vec3> angles;
+		std::vector<glm::vec3d> angles;
 
 		/**
 		 * @brief Area of each triangle.
@@ -80,7 +80,7 @@ class TriangleMesh {
 		 * Notice that its size is @ref n_triangles() or
 		 * @ref n_corners()/3.
 		 */
-		std::vector<float> areas;
+		std::vector<double> areas;
 
 		/**
 		 * @brief The set of opposite corners.
@@ -183,9 +183,9 @@ class TriangleMesh {
 		std::vector<std::vector<int> > boundaries;
 
 		/// Minimum value of x-,y-, and z-coordinates.
-		glm::vec3 min_coord;
+		glm::vec3d min_coord;
 		/// Maximum value of x-,y-, and z-coordinates.
-		glm::vec3 max_coord;
+		glm::vec3d max_coord;
 
 		/// Are the computed triangle angles and areas valid?
 		bool angles_area_valid;
@@ -234,7 +234,7 @@ class TriangleMesh {
 		 * @param j A valid vertex index.
 		 * @param k A valid vertex index.
 		 */
-		float get_triangle_area(int i, int j, int k) const;
+		double get_triangle_area(int i, int j, int k) const;
 
 	public:
 		/// Default constructor.
@@ -260,7 +260,7 @@ class TriangleMesh {
 		 *
 		 * @post The angles and areas of the triangles are invalidated.
 		 */
-		void set_vertices(const std::vector<float>& coords);
+		void set_vertices(const std::vector<double>& coords);
 		/**
 		 * @brief Sets the vertices to the mesh.
 		 *
@@ -272,7 +272,7 @@ class TriangleMesh {
 		 *
 		 * @post The angles and areas of the triangles are invalidated.
 		 */
-		void set_vertices(const glm::vec3 *vs, int N);
+		void set_vertices(const glm::vec3d *vs, int N);
 		/**
 		 * @brief Sets the vertices to the mesh.
 		 *
@@ -281,7 +281,7 @@ class TriangleMesh {
 		 *
 		 * @post The angles and areas of the triangles are invalidated.
 		 */
-		void set_vertices(const std::vector<glm::vec3>& vs);
+		void set_vertices(const std::vector<glm::vec3d>& vs);
 		/**
 		 * @brief Adds the connectivity information to the mesh.
 		 *
@@ -488,18 +488,18 @@ class TriangleMesh {
 		 * @brief Returns the coordinates of a vertex.
 		 * @param v A valid vertex index: 0 <= @e v < number of vertices.
 		 */
-		const glm::vec3& get_vertex(int v) const;
+		const glm::vec3d& get_vertex(int v) const;
 
 		/// Returns a constant reference to all vertices of the mesh.
-		const std::vector<glm::vec3>& get_vertices() const;
+		const std::vector<glm::vec3d>& get_vertices() const;
 		/// Returns a constant reference to all vertices of the mesh.
-		const glm::vec3 *get_pvertices() const;
+		const glm::vec3d *get_pvertices() const;
 
 		/**
 		 * @brief Returns a constant reference to all normal vectors.
 		 * @return Returns a constant reference to @ref normal_vectors.
 		 */
-		const std::vector<glm::vec3>& get_normal_vectors() const;
+		const std::vector<glm::vec3d>& get_normal_vectors() const;
 
 		/**
 		 * @brief Returns the area of face @e f.
@@ -509,16 +509,16 @@ class TriangleMesh {
 		 * @ref get_triangle_area(int,int,int)const.
 		 * @param t A valid triangle index: 0 <= @e t < number of triangles.
 		 */
-		float get_triangle_area(int t) const;
+		double get_triangle_area(int t) const;
 
 		/// Returns the area of each triangle.
-		const std::vector<float>& get_areas() const;
+		const std::vector<double>& get_areas() const;
 
 		/**
 		 * @brief Returns the angles on each triangle.
 		 * @pre Angles and area data must be valid
 		 */
-		const std::vector<glm::vec3>& get_angles() const;
+		const std::vector<glm::vec3d>& get_angles() const;
 
 		/// Is neighbourhood data valid?
 		bool are_angles_area_valid() const;
@@ -568,7 +568,7 @@ class TriangleMesh {
 		 * @param[out] m Minimum x-,y-,z- coordinates.
 		 * @param[out] M Maximum x-,y-,z- coordinates.
 		 */
-		void get_min_max_coordinates(glm::vec3& m, glm::vec3& M) const;
+		void get_min_max_coordinates(glm::vec3d& m, glm::vec3d& M) const;
 
 };
 

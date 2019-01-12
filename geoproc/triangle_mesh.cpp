@@ -64,7 +64,7 @@ void TriangleMesh::copy_mesh(const TriangleMesh& m) {
 	angles_area_valid = m.angles_area_valid;
 }
 
-float TriangleMesh::get_triangle_area(int i, int j, int k) const {
+double TriangleMesh::get_triangle_area(int i, int j, int k) const {
 	assert(0 <= i and i < n_vertices());
 	assert(0 <= j and j < n_vertices());
 	assert(0 <= k and k < n_vertices());
@@ -89,7 +89,7 @@ TriangleMesh::~TriangleMesh() {
 	destroy();
 }
 
-void TriangleMesh::set_vertices(const std::vector<float>& coords) {
+void TriangleMesh::set_vertices(const std::vector<double>& coords) {
 	assert(coords.size()%3 == 0);
 	assert(coords.size() >= 2); // at least one vertex
 
@@ -115,7 +115,7 @@ void TriangleMesh::set_vertices(const std::vector<float>& coords) {
 	invalidate_areas_angles();
 }
 
-void TriangleMesh::set_vertices(const glm::vec3 *vs, int N) {
+void TriangleMesh::set_vertices(const glm::vec3d *vs, int N) {
 	assert(vs != nullptr);
 	assert(N >= 1); // at least one vertex
 
@@ -126,9 +126,9 @@ void TriangleMesh::set_vertices(const glm::vec3 *vs, int N) {
 	vertices.resize(N);
 	copy_if(
 		vs, vs + N, vertices.begin(),
-		[&](const vec3& v) -> bool {
-			min_coord = min(min_coord, v);
-			max_coord = max(max_coord, v);
+		[&](const vec3d& v) -> bool {
+			min_coord = glm::min(min_coord, v);
+			max_coord = glm::max(max_coord, v);
 			return true;
 		}
 	);
@@ -137,7 +137,7 @@ void TriangleMesh::set_vertices(const glm::vec3 *vs, int N) {
 	invalidate_areas_angles();
 }
 
-void TriangleMesh::set_vertices(const std::vector<glm::vec3>& vs) {
+void TriangleMesh::set_vertices(const std::vector<glm::vec3d>& vs) {
 	assert(vs.size() >= 1); // at least one vertex
 
 	min_coord = vs[0];
@@ -146,9 +146,9 @@ void TriangleMesh::set_vertices(const std::vector<glm::vec3>& vs) {
 	vertices.resize(vs.size());
 	copy_if(
 		vs.begin(), vs.end(), vertices.begin(),
-		[&](const vec3& v) -> bool {
-			min_coord = min(min_coord, v);
-			max_coord = max(max_coord, v);
+		[&](const vec3d& v) -> bool {
+			min_coord = glm::min(min_coord, v);
+			max_coord = glm::max(max_coord, v);
 			return true;
 		}
 	);
@@ -180,18 +180,18 @@ void TriangleMesh::make_normal_vectors() {
 }
 
 void TriangleMesh::scale_to_unit() {
-	vec3 center(0.0f, 0.0f, 0.0f);
-	vec3 m(1e10, 1e10, 1e10);
-	vec3 M(-1e10, -1e10, -1e10);
+	vec3d center(0.0f, 0.0f, 0.0f);
+	vec3d m(1e10, 1e10, 1e10);
+	vec3d M(-1e10, -1e10, -1e10);
 
 	for (size_t i = 0; i < vertices.size(); ++i) {
 		center += vertices[i];
-		m = min(m, vertices[i]);
-		M = max(M, vertices[i]);
+		m = glm::min(m, vertices[i]);
+		M = glm::max(M, vertices[i]);
 	}
 	center /= vertices.size();
 
-	float largestSize = std::max(M.x - m.x, std::max(M.y - m.y, M.z - m.z));
+	double largestSize = std::max(M.x - m.x, std::max(M.y - m.y, M.z - m.z));
 
 	for (unsigned int i = 0; i < vertices.size(); ++i) {
 		vertices[i] = (vertices[i] - center)/largestSize;
@@ -346,34 +346,34 @@ int TriangleMesh::get_opposite_corner(int c) const {
 	return opposite_corners[c];
 }
 
-const vec3& TriangleMesh::get_vertex(int v) const {
+const vec3d& TriangleMesh::get_vertex(int v) const {
 	assert(0 <= v and v < n_vertices());
 	return vertices[v];
 }
 
-const vector<vec3>& TriangleMesh::get_vertices() const {
+const vector<vec3d>& TriangleMesh::get_vertices() const {
 	return vertices;
 }
 
-const vec3 *TriangleMesh::get_pvertices() const {
+const vec3d *TriangleMesh::get_pvertices() const {
 	return &vertices[0];
 }
 
-const vector<vec3>& TriangleMesh::get_normal_vectors() const {
+const vector<vec3d>& TriangleMesh::get_normal_vectors() const {
 	return normal_vectors;
 }
 
-float TriangleMesh::get_triangle_area(int t) const {
+double TriangleMesh::get_triangle_area(int t) const {
 	assert(0 <= t and t < n_triangles());
 	return areas[t];
 }
 
-const vector<float>& TriangleMesh::get_areas() const {
+const vector<double>& TriangleMesh::get_areas() const {
 	assert(angles_area_valid);
 	return areas;
 }
 
-const vector<vec3>& TriangleMesh::get_angles() const {
+const vector<vec3d>& TriangleMesh::get_angles() const {
 	assert(angles_area_valid);
 	return angles;
 }
@@ -419,7 +419,7 @@ const vector<vector<int> >& TriangleMesh::get_boundaries() const {
 	return boundaries;
 }
 
-void TriangleMesh::get_min_max_coordinates(vec3& m, vec3& M) const {
+void TriangleMesh::get_min_max_coordinates(vec3d& m, vec3d& M) const {
 	m = min_coord;
 	M = max_coord;
 }

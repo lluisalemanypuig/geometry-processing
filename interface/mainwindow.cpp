@@ -49,7 +49,7 @@ void MainWindow::change_curvature() {
 	//change_poly_mode();
 }
 
-void MainWindow::change_curvature_prop_display(float p) {
+void MainWindow::change_curvature_prop_display(double p) {
 	if (current_tab == 0) {
 		ui->SingleView_Renderer->change_display_curvature_proportion(p);
 		ui->DualView_LeftRenderer->change_curvature_proportion(p);
@@ -177,8 +177,8 @@ void MainWindow::set_global_smooth_params() {
 			 << weight_type.toStdString() << "' not recognised." << endl;
 	}
 
-	float v = ui->HS_Smooth_Global_Percentage->value();
-	float p = 100.0f*v/ui->HS_Smooth_Global_Percentage->maximum();
+	double v = ui->HS_Smooth_Global_Percentage->value();
+	double p = 100.0*v/ui->HS_Smooth_Global_Percentage->maximum();
 	ui->DualView_RightRenderer->set_perc_fixed_vertices(p);
 }
 
@@ -401,9 +401,9 @@ void MainWindow::on_CB_Render_HarmonicMaps_Weights_currentTextChanged
 
 /* Curvature radio buttons */
 
-bool MainWindow::get_prop_curvature_values(float& p) {
+bool MainWindow::get_prop_curvature_values(double& p) {
 	bool ok = true;
-	p = ui->LE_Curvature_Proportion->text().toFloat(&ok);
+	p = ui->LE_Curvature_Proportion->text().toDouble(&ok);
 	if (not ok) {
 		cerr << ERR("MainWindow::on_LE_Curvature_Proportion_returnPressed",
 					"MainWindow") << endl;
@@ -413,7 +413,7 @@ bool MainWindow::get_prop_curvature_values(float& p) {
 }
 
 void MainWindow::set_prop_values_to_all() {
-	float p;
+	double p;
 	if (get_prop_curvature_values(p)) {
 		ui->SingleView_Renderer->change_curvature_proportion(p);
 		ui->DualView_LeftRenderer->change_curvature_proportion(p);
@@ -422,23 +422,23 @@ void MainWindow::set_prop_values_to_all() {
 }
 
 void MainWindow::on_LE_Curvature_Proportion_returnPressed() {
-	float p;
+	double p;
 	if (get_prop_curvature_values(p)) {
 		change_curvature_prop_display(p);
-		if (p < 85.0f) {
+		if (p < 85.0) {
 			ui->VS_Curvature_Proportion->setValue(1);
 		}
-		else if (p > 99.0f) {
+		else if (p > 99.0) {
 			ui->VS_Curvature_Proportion->setValue(10000);
 		}
 		else {
-			ui->VS_Curvature_Proportion->setValue(int((p - 85.0f)*10000.0f/14.0f));
+			ui->VS_Curvature_Proportion->setValue(int((p - 85.0)*10000.0/14.0));
 		}
 	}
 }
 
 void MainWindow::on_VS_Curvature_Proportion_sliderMoved(int value) {
-	float p = value*14.0f/10000.0f + 85.0f;
+	double p = value*14.0/10000.0 + 85.0;
 	change_curvature_prop_display(p);
 	int v = int(p*100);
 	string s = std::to_string(v);
@@ -495,8 +495,8 @@ void MainWindow::on_RB_Curvature_No_toggled(bool checked) {
 /* Smoothing */
 
 void MainWindow::on_HS_Smooth_Global_Percentage_valueChanged(int value) {
-	float p = 100.0f*float(value)/ui->HS_Smooth_Global_Percentage->maximum();
-	p = (int(p*100))/100.0f;
+	double p = 100.0*double(value)/ui->HS_Smooth_Global_Percentage->maximum();
+	p = (int(p*100))/100.0;
 	string ps = std::to_string(p);
 	if (ps.find('.') == 1) {
 		ps = "0" + ps;

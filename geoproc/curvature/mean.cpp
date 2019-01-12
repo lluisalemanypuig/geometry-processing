@@ -17,12 +17,12 @@ using namespace glm;
 #include <geoproc/iterators/mesh_iterator.hpp>
 #include <geoproc/iterators/vertex_iterators.hpp>
 
-inline float cotanf(float a) { return cos(a)/sin(a); }
+inline double cotand(double a) { return std::cos(a)/std::sin(a); }
 
-inline float Kh_at_vertex(const geoproc::TriangleMesh& m, int vi) {
+inline double Kh_at_vertex(const geoproc::TriangleMesh& m, int vi) {
 	// mesh info
-	const vector<float>& mesh_areas = m.get_areas();
-	const vector<vec3>& mesh_angles = m.get_angles();
+	const vector<double>& mesh_areas = m.get_areas();
+	const vector<vec3d>& mesh_angles = m.get_angles();
 
 	geoproc::iterators::vertex::vertex_face_iterator it(m);
 	const int first = it.init(vi);
@@ -30,14 +30,14 @@ inline float Kh_at_vertex(const geoproc::TriangleMesh& m, int vi) {
 	int next2 = it.next();
 
 	// Voronoi area around 'i'
-	float vor_area = 0.0f;
+	double vor_area = 0.0;
 	// curvature vector
-	vec3 curv_vec(0.0f,0.0f,0.0f);
+	vec3d curv_vec(0.0,0.0,0.0);
 
 	// loop variables
-	vec3 diff;
-	float alpha = 0.0f;
-	float beta = 0.0f;
+	vec3d diff;
+	double alpha = 0.0;
+	double beta = 0.0;
 	do {
 		int i1,j1,k1, i2,j2,k2;
 		m.get_vertices_triangle(next1, i1,j1,k1);
@@ -46,8 +46,8 @@ inline float Kh_at_vertex(const geoproc::TriangleMesh& m, int vi) {
 		// Compute the two angles (alpha and beta).
 		// At the same time, compute the difference vector.
 
-		const vec3 angles1 = mesh_angles[next1];
-		const vec3 angles2 = mesh_angles[next2];
+		const vec3d& angles1 = mesh_angles[next1];
+		const vec3d& angles2 = mesh_angles[next2];
 
 		if (vi == i1)		{
 			alpha = angles1.y;
@@ -66,7 +66,7 @@ inline float Kh_at_vertex(const geoproc::TriangleMesh& m, int vi) {
 		else if (vi == k2)	{ beta = angles2.y; }
 
 		// compute weight
-		float W = cotanf(alpha) + cotanf(beta);
+		double W = cotand(alpha) + cotand(beta);
 		// accumulate curvature vector
 		curv_vec += W*diff;
 
@@ -74,7 +74,7 @@ inline float Kh_at_vertex(const geoproc::TriangleMesh& m, int vi) {
 		// when the triangle has an angle that is larger
 		// than 90 degrees (pi/2) then the area contributes
 		// only by half.
-		float area = mesh_areas[next1];
+		double area = mesh_areas[next1];
 		vor_area += area;
 
 		// go to next 2 faces
@@ -84,26 +84,26 @@ inline float Kh_at_vertex(const geoproc::TriangleMesh& m, int vi) {
 	while (next1 != first);
 
 	// finish computation of voronoi area
-	vor_area /= 3.0f;
+	vor_area /= 3.0;
 	// finish computation of curvature vector
-	curv_vec *= (1.0f/(2.0f*vor_area));
+	curv_vec *= 0.5*vor_area;
 
-	return (1.0f/2.0f)*length(curv_vec);
+	return 0.5*length(curv_vec);
 }
 
 namespace geoproc {
 namespace curvature {
 
 void mean
-(const TriangleMesh& mesh, std::vector<float>& Kh, float *m, float *M) {
+(const TriangleMesh& mesh, std::vector<double>& Kh, double *m, double *M) {
 	const int N = mesh.n_vertices();
 	Kh.resize(N);
 
 	if (m != nullptr) {
-		*m = numeric_limits<float>::max();
+		*m = numeric_limits<double>::max();
 	}
 	if (M != nullptr) {
-		*M = -numeric_limits<float>::max();
+		*M = -numeric_limits<double>::max();
 	}
 
 	for (int i = 0; i < N; ++i) {
@@ -117,7 +117,7 @@ void mean
 	}
 }
 
-void mean(const TriangleMesh& mesh, std::vector<float>& Kh, size_t nt) {
+void mean(const TriangleMesh& mesh, std::vector<double>& Kh, size_t nt) {
 	if (nt == 1) {
 		mean(mesh, Kh);
 		return;
@@ -133,7 +133,7 @@ void mean(const TriangleMesh& mesh, std::vector<float>& Kh, size_t nt) {
 }
 
 void mean
-(const TriangleMesh& mesh, std::vector<float>& Kh, size_t nt, float *m, float *M)
+(const TriangleMesh& mesh, std::vector<double>& Kh, size_t nt, double *m, double *M)
 {
 	if (nt == 1) {
 		mean(mesh, Kh, m, M);
@@ -143,8 +143,8 @@ void mean
 	const int N = mesh.n_vertices();
 	Kh.resize(N);
 
-	float mm = std::numeric_limits<float>::max();
-	float MM = -mm;
+	double mm = std::numeric_limits<double>::max();
+	double MM = -mm;
 
 	#pragma omp parallel for num_threads(nt) reduction(min:mm) reduction(max:MM)
 	for (int i = 0; i < N; ++i) {

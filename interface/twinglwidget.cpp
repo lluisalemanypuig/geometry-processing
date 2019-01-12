@@ -75,10 +75,10 @@ TwinGLWidget::TwinGLWidget(QWidget *parent) : GLWidget(parent) {
 	twin = nullptr;
 
 	nit = 0;
-	lambda = 0.0f;
-	mu = 0.0f;
+	lambda = 0.0;
+	mu = 0.0;
 
-	perc_fix_vertices = 0.0f;
+	perc_fix_vertices = 0.0;
 }
 
 TwinGLWidget::~TwinGLWidget() {
@@ -106,12 +106,12 @@ void TwinGLWidget::set_n_iterations(size_t n) {
 	nit = n;
 }
 
-void TwinGLWidget::set_lambda(float l) {
+void TwinGLWidget::set_lambda(double l) {
 	lambda = l;
-	mu = 1.0f/(0.1f - 1.0f/lambda);
+	mu = 1.0/(0.1 - 1.0/lambda);
 }
 
-void TwinGLWidget::set_perc_fixed_vertices(float p) {
+void TwinGLWidget::set_perc_fixed_vertices(double p) {
 	perc_fix_vertices = p;
 }
 
@@ -257,7 +257,7 @@ void TwinGLWidget::run_global_smoothing_algorithm() {
 	cout << "    Fixing vertices..." << endl;
 
 	vector<bool> constant(N, false);
-	while ((100.0f*(N - max_idx - 1))/N < perc_fix_vertices) {
+	while ((100.0*(N - max_idx - 1))/N < perc_fix_vertices) {
 		int i = rand()%(max_idx + 1);
 		constant[indices[i]] = true;
 
@@ -302,7 +302,7 @@ bool parseJsonObject
 (
 	const QJsonObject& obj,
 	vector<filter_frequencies::smoothing_configuration>& confs,
-	float& mu, const string& name
+	double& mu, const string& name
 )
 {
 	// error control
@@ -400,7 +400,7 @@ bool parseJsonObject
 	/* parse MU */
 	if (obj.find(QString("mu")) != obj.end()) {
 		QJsonValue mu_value = obj.value("mu");
-		mu = mu_value.toDouble();
+		mu = static_cast<double>(mu_value.toDouble());
 	}
 
 	/* parse # ITERATIONS */
@@ -412,11 +412,11 @@ bool parseJsonObject
 
 void TwinGLWidget::run_band_frequencies(const QJsonDocument& doc) {
 	vector<filter_frequencies::smoothing_configuration> confs;
-	vector<float> mus;
+	vector<double> mus;
 
 	if (doc.isObject()) {
 		QJsonObject obj = doc.object();
-		float mu;
+		double mu;
 		bool res = parseJsonObject(obj, confs, mu, name);
 		if (not res) {
 			return;
@@ -426,7 +426,7 @@ void TwinGLWidget::run_band_frequencies(const QJsonDocument& doc) {
 	else if (doc.isArray()) {
 		QJsonArray arr = doc.array();
 		for (int i = 0; i < arr.count(); ++i) {
-			float mu;
+			double mu;
 			QJsonObject obj = arr.at(i).toObject();
 			bool res = parseJsonObject(obj, confs, mu, name);
 			if (not res) {

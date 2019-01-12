@@ -108,8 +108,8 @@ void GLWidget::show_curvature(bool make_all_buffers) {
 	cout << PROG("GLWidget::show_curvature", name, "make colours with curvature")
 		 << endl;
 
-	vector<vec3> cols;
-	float min, max;
+	vector<vec3d> cols;
+	double min, max;
 
 	if (current_curv_display == curv_type::Gauss) {
 		min_max::binning_around(curvature_values, 0.0, cm, cM, prop, min, max);
@@ -181,7 +181,7 @@ void GLWidget::compute_harmonic_maps() {
 	}
 	cout << endl;
 
-	vector<vec2> uvs;
+	vector<vec2d> uvs;
 
 	timing::time_point begin = timing::now();
 	parametrisation::harmonic_maps(mesh, harmonic_maps_weight, s, uvs);
@@ -341,7 +341,7 @@ GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
 	angleY = 0.0f;
 	distance = 2.0f;
 
-	prop = 95.0f;
+	prop = 95.0;
 	nt = 1;
 }
 
@@ -619,7 +619,7 @@ void GLWidget::change_curvature_display() {
 	show_curvature(make_all_buffers);
 }
 
-void GLWidget::change_display_curvature_proportion(float p) {
+void GLWidget::change_display_curvature_proportion(double p) {
 	prop = p;
 	to_prop = p;
 
@@ -629,7 +629,7 @@ void GLWidget::change_display_curvature_proportion(float p) {
 	show_curvature(false);
 }
 
-void GLWidget::change_curvature_proportion(float p) {
+void GLWidget::change_curvature_proportion(double p) {
 	to_prop = p;
 }
 

@@ -50,11 +50,11 @@ namespace local {
  * not checked since the mesh need not have its boundaries computed.
  */
 void laplacian
-(const weight& w, float lambda, size_t n_iter, TriangleMesh& m);
+(const weight& w, double lambda, size_t n_iter, TriangleMesh& m);
 /**
  * @brief Parallel Laplacian operator for mesh smoothing.
  *
- * See @ref laplacian(const weight&, float, size_t, TriangleMesh&)
+ * See @ref laplacian(const weight&, double, size_t, TriangleMesh&)
  * for details.
  * @param w The type of weight used.
  * @param lambda Smoothing parameter.
@@ -69,7 +69,7 @@ void laplacian
  * not checked since the mesh need not have its boundaries computed.
  */
 void laplacian
-(const weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);
+(const weight& w, double lambda, size_t n_iter, size_t nt, TriangleMesh& m);
 
 /**
  * @brief Bilaplacian operator for mesh smoothing.
@@ -80,7 +80,7 @@ void laplacian
  *
  * For details on the Laplacian operator see @ref modifier::Laplacian.
  * For details on how it is applied to smoothing see
- * @ref laplacian(const weight&, float, size_t, TriangleMesh&).
+ * @ref laplacian(const weight&, double, size_t, TriangleMesh&).
  * @param w The type of weight used.
  * @param lambda Smoothing parameter.
  * @param n_iter Number of iterations of the algorithm.
@@ -93,11 +93,11 @@ void laplacian
  * not checked since the mesh need not have its boundaries computed.
  */
 void bilaplacian
-(const weight& w, float lambda, size_t n_iter, TriangleMesh& m);
+(const weight& w, double lambda, size_t n_iter, TriangleMesh& m);
 /**
  * @brief Parallel Bilaplacian operator for mesh smoothing.
  *
- * See @ref bilaplacian(const weight&, float, size_t, TriangleMesh&)
+ * See @ref bilaplacian(const weight&, double, size_t, TriangleMesh&)
  * for details.
  * @param w The type of weight used.
  * @param lambda Smoothing parameter.
@@ -112,7 +112,7 @@ void bilaplacian
  * not checked since the mesh need not have its boundaries computed.
  */
 void bilaplacian
-(const weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);
+(const weight& w, double lambda, size_t n_iter, size_t nt, TriangleMesh& m);
 
 /**
  * @brief Taubin \f$\lambda-\mu\f$ operator for mesh smoothing.
@@ -140,11 +140,11 @@ void bilaplacian
  * not checked since the mesh need not have its boundaries computed.
  */
 void TaubinLM
-(const weight& w, float lambda, size_t n_iter, TriangleMesh& m);
+(const weight& w, double lambda, size_t n_iter, TriangleMesh& m);
 /**
  * @brief Parallel Taubin \f$\lambda-\mu\f$ operator for mesh smoothing.
  *
- * See @ref TaubinLM(const weight&, float, size_t, TriangleMesh&)
+ * See @ref TaubinLM(const weight&, double, size_t, TriangleMesh&)
  * for details.
  * @param w The type of weight used.
  * @param lambda Smoothing parameter.
@@ -159,7 +159,7 @@ void TaubinLM
  * not checked since the mesh need not have its boundaries computed.
  */
 void TaubinLM
-(const weight& w, float lambda, size_t n_iter, size_t nt, TriangleMesh& m);
+(const weight& w, double lambda, size_t n_iter, size_t nt, TriangleMesh& m);
 
 } // -- namespace local
 } // -- namespace smoothing

@@ -58,8 +58,8 @@ class RenderTriangleMesh : public TriangleMesh {
 		 * @param[out] perFaceTriangles I DO NOT KNOW!!! (YET)
 		 */
 		void make_VBO_data(
-			vector<vec3>& copied_vertices,
-			vector<vec3>& normals,
+			vector<vec3d>& copied_vertices,
+			vector<vec3d>& normals,
 			vector<unsigned int>& perFaceTriangles
 		);
 		/**
@@ -81,10 +81,10 @@ class RenderTriangleMesh : public TriangleMesh {
 		 * @param[out] perFaceTriangles I DO NOT KNOW!!! (YET)
 		 */
 		void make_VBO_data(
-			const vector<vec3>& colors,
-			vector<vec3>& copied_vertices,
-			vector<vec3>& cols,
-			vector<vec3>& normals,
+			const vector<vec3d>& colors,
+			vector<vec3d>& copied_vertices,
+			vector<vec3d>& cols,
+			vector<vec3d>& normals,
 			vector<unsigned int>& perFaceTriangles
 		);
 		/**
@@ -106,10 +106,10 @@ class RenderTriangleMesh : public TriangleMesh {
 		 * @param[out] perFaceTriangles I DO NOT KNOW!!! (YET)
 		 */
 		void make_VBO_data(
-			const vector<vec2>& tex_coord,
-			vector<vec3>& copied_vertices,
-			vector<vec2>& texs,
-			vector<vec3>& normals,
+			const vector<vec2d>& tex_coord,
+			vector<vec3d>& copied_vertices,
+			vector<vec2d>& texs,
+			vector<vec3d>& normals,
 			vector<unsigned int>& perFaceTriangles
 		);
 
@@ -154,7 +154,7 @@ class RenderTriangleMesh : public TriangleMesh {
 		 * @param colors Specify color per vertex.
 		 * @return Returns false on error.
 		 */
-		bool init(QOpenGLShaderProgram *program, const vector<vec3>& colors);
+		bool init(QOpenGLShaderProgram *program, const vector<vec3d>& colors);
 		/**
 		 * @brief Initialises the mesh with the shader @e program associated.
 		 *
@@ -164,7 +164,7 @@ class RenderTriangleMesh : public TriangleMesh {
 		 * @param tex_coord Specify texture coordinates per vertex.
 		 * @return Returns false on error.
 		 */
-		bool init(QOpenGLShaderProgram *program, const vector<vec2>& tex_coord);
+		bool init(QOpenGLShaderProgram *program, const vector<vec2d>& tex_coord);
 
 		/**
 		 * @brief Remakes the vertex buffer object.
@@ -186,7 +186,7 @@ class RenderTriangleMesh : public TriangleMesh {
 		 * @pre The colour buffer object must have been previously created.
 		 * @return Returns false on error.
 		 */
-		bool make_colours_buffer(QOpenGLShaderProgram *program, const vector<vec3>& colors);
+		bool make_colours_buffer(QOpenGLShaderProgram *program, const vector<vec3d>& colors);
 
 		/**
 		 * @brief Remakes the texture coordinate buffer object.
@@ -194,7 +194,7 @@ class RenderTriangleMesh : public TriangleMesh {
 		 * If the buffer was not made then everything is remade.
 		 * @return Returns false on error.
 		 */
-		bool make_tex_coord_buffer(QOpenGLShaderProgram *program, const vector<vec2>& texs);
+		bool make_tex_coord_buffer(QOpenGLShaderProgram *program, const vector<vec2d>& texs);
 
 		/**
 		 * @brief Frees all the memoery occupied by the mesh.

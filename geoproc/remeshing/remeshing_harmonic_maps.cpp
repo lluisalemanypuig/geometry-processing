@@ -19,7 +19,6 @@ using namespace glm;
 
 // helper defines
 #define triangle_orientation(p1,p2,p3) ((p1.x - p3.x)*(p2.y - p3.y) - (p1.y - p3.y)*(p2.x - p3.x))
-#define to_double(x) static_cast<double>(x)
 #define vec2out(p) "Point({" << p.x << "," << p.y << "})"
 #define segment2out(p,q) "Segment(" << vec2out(p) << "," << vec2out(q) << ")"
 
@@ -46,17 +45,17 @@ inline bool inside_triangle
 	return o0 <= 0.0 and o1 <= 0.0 and o2 <= 0.0;
 }
 
-inline float triangle_area
+inline double triangle_area
 (const vec2d& p, const vec2d& q, const vec2d& r)
 {
-	vec3d p3(p, 0.0f);
-	vec3d q3(q, 0.0f);
-	vec3d r3(r, 0.0f);
+	vec3d p3(p, 0.0);
+	vec3d q3(q, 0.0);
+	vec3d r3(r, 0.0);
 
 	vec3d ij = q3 - p3;
 	vec3d ik = r3 - p3;
 	vec3d C = cross(ij, ik);
-	return length(C)/2.0f;
+	return length(C)/2.0;
 }
 
 inline seg_ori segment_orientation
@@ -239,26 +238,26 @@ inline int find_next_triangle(
 
 inline void make_new_vertex(
 	const geoproc::TriangleMesh& mesh, const vector<vec2d>& uvs,
-	int T, const vec2d& p, vec3& vert
+	int T, const vec2d& p, vec3d& vert
 )
 {
 	int v0, v1, v2;
 	mesh.get_vertices_triangle(T, v0,v1,v2);
 
-	float aT = triangle_area(uvs[v0], uvs[v1], uvs[v2]);
-	float a0 = triangle_area(p, uvs[v1], uvs[v2]);
-	float a1 = triangle_area(uvs[v0], p, uvs[v2]);
-	float a2 = triangle_area(uvs[v0], uvs[v1], p);
+	double aT = triangle_area(uvs[v0], uvs[v1], uvs[v2]);
+	double a0 = triangle_area(p, uvs[v1], uvs[v2]);
+	double a1 = triangle_area(uvs[v0], p, uvs[v2]);
+	double a2 = triangle_area(uvs[v0], uvs[v1], p);
 
-	float w0 = a0/aT;
-	float w1 = a1/aT;
-	float w2 = a2/aT;
+	double w0 = a0/aT;
+	double w1 = a1/aT;
+	double w2 = a2/aT;
 
 	// this check makes sure that the point
 	// is actually inside triangle 'T'
-	assert(std::abs(w0 + w1 + w2 - 1.0f) <= 1e-6f);
+	assert(std::abs(w0 + w1 + w2 - 1.0) <= 1e-6);
 
-	const vector<vec3>& vertices = mesh.get_vertices();
+	const vector<vec3d>& vertices = mesh.get_vertices();
 	vert = vertices[v0]*w0 + vertices[v1]*w1 + vertices[v2]*w2;
 }
 
@@ -268,12 +267,12 @@ inline bool make_vertices_from_to(
 	const geoproc::TriangleMesh& mesh,
 	const vector<vec2d>& uvs,
 	size_t N, size_t M, size_t begin, size_t end,
-	vector<vec3>& new_vertices
+	vector<vec3d>& new_vertices
 )
 {
-	float x_idx = (begin/M)*1.0f;
-	float y_idx = (begin%M)*1.0f;
-	vec2 pre((x_idx + 1)/(N + 1), (y_idx + 1)/(M + 1));
+	double x_idx = (begin/M)*1.0;
+	double y_idx = (begin%M)*1.0;
+	vec2d pre((x_idx + 1)/(N + 1), (y_idx + 1)/(M + 1));
 
 	// first point - to be handled differently
 	int nT = find_first_triangle(mesh, uvs, pre);
@@ -291,9 +290,9 @@ inline bool make_vertices_from_to(
 
 	// rest of the points from 'begin' to 'end'
 	for (size_t idx = begin + 1; idx < end; ++idx) {
-		x_idx = (idx/M)*1.0f;
-		y_idx = (idx%M)*1.0f;
-		vec2 next((x_idx + 1)/(N + 1), (y_idx + 1)/(M + 1));
+		x_idx = (idx/M)*1.0;
+		y_idx = (idx%M)*1.0;
+		vec2d next((x_idx + 1)/(N + 1), (y_idx + 1)/(M + 1));
 
 		nT = find_next_triangle(mesh, nT, uvs, pre, next);
 		if (nT == -1) {
@@ -328,7 +327,7 @@ bool harmonic_maps(
 		return false;
 	}
 
-	vector<vec2> uvs;
+	vector<vec2d> uvs;
 	bool r = parametrisation::harmonic_maps(mesh, w, s, uvs);
 	if (not r) {
 		return false;
@@ -339,21 +338,14 @@ bool harmonic_maps(
 
 bool harmonic_maps(
 	const TriangleMesh& mesh, size_t N, size_t M,
-	const std::vector<glm::vec2>& uvs, TriangleMesh& remesh
+	const std::vector<glm::vec2d>& uvs, TriangleMesh& remesh
 )
 {
 	assert(mesh.n_vertices() == uvs.size());
-	vector<vec3> new_vertices(N*M);
-
-	// convert uv coordinates to doubles...
-	vector<glm::vec2d> double_uvs(uvs.size());
-	for (size_t i = 0; i < uvs.size(); ++i) {
-		double_uvs[i].x = to_double(uvs[i].x);
-		double_uvs[i].y = to_double(uvs[i].y);
-	}
+	vector<vec3d> new_vertices(N*M);
 
 	/* compute the coordinates of the new vertices */
-	bool r = make_vertices_from_to(mesh, double_uvs, N, M, 0, N*M, new_vertices);
+	bool r = make_vertices_from_to(mesh, uvs, N, M, 0, N*M, new_vertices);
 	if (not r) {
 		return false;
 	}

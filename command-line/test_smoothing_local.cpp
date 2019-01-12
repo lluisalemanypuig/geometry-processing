@@ -69,7 +69,7 @@ namespace test_geoproc {
 		string mesh_file = "none";
 		string opt = "none";
 		string weight_type = "none";
-		float lambda;
+		double lambda;
 		size_t nt = 1;
 		size_t it;
 
@@ -196,7 +196,7 @@ namespace test_geoproc {
 		if (_print) {
 			cout << "Loaded mesh:" << endl;
 			for (int i = 0; i < mesh.n_vertices(); ++i) {
-				const vec3& v = mesh.get_vertex(i);
+				const vec3d& v = mesh.get_vertex(i);
 				cout << "    " << i << ": "
 					 << v.x << "," << v.y << "," << v.z << endl;
 			}

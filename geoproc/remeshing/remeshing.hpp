@@ -15,7 +15,7 @@ namespace remeshing {
  * the square [0,1]x[0,1] (regardless of the shape).
  *
  * Using the 2d coordinates calculated calls
- * @ref harmonic_maps(const TriangleMesh&, size_t, size_t, const std::vector<glm::vec2>&, TriangleMesh&);
+ * @ref harmonic_maps(const TriangleMesh&,size_t,size_t,const std::vector<glm::vec2d>&,TriangleMesh&);
  * @param[in] m Triangle mesh to be remeshed.
  * @param[in] N Size of the grid in the x-axis.
  * @param[in] M Size of the grid in the y-axis.
@@ -79,11 +79,13 @@ bool harmonic_maps
  * @pre The input mesh needs all of its edges computed, namely,
  * neighbourhood data has to be valid.
  * @pre There must be as many 2d points as vertices in the mesh.
+ * @pre This function assumes that the parametric space of @e uvs is
+ * squared-shaped.
  * @returns Returns false on failure. Returns true on success.
  */
 bool harmonic_maps
 (const TriangleMesh& m, size_t N, size_t M,
- const std::vector<glm::vec2>& uvs, TriangleMesh& rm);
+ const std::vector<glm::vec2d>& uvs, TriangleMesh& rm);
 
 } // -- namespace remeshing
 } // -- namespace geoproc

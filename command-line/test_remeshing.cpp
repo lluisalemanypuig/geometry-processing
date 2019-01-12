@@ -174,7 +174,7 @@ namespace test_geoproc {
 		new_mesh.make_boundaries();
 		new_mesh.make_angles_area();
 
-		const vector<glm::vec3>& new_verts = new_mesh.get_vertices();
+		const vector<glm::vec3d>& new_verts = new_mesh.get_vertices();
 		cout << "Vertices of the new mesh:" << endl;
 		for (const glm::vec3& v : new_verts) {
 			cout << "    " << v.x << "," << v.y << "," << v.z << endl;

@@ -10,12 +10,12 @@
 // custom extension of namespace glm
 namespace glm {
 
-typedef glm::vec<2, float, glm::qualifier::highp> vec2f;
-typedef glm::vec<2, double, glm::qualifier::highp> vec2d;
+typedef vec<2, float, glm::qualifier::highp> vec2f;
+typedef vec<2, double, glm::qualifier::highp> vec2d;
 
-typedef glm::vec<3, float, glm::qualifier::highp> vec3f;
-typedef glm::vec<3, double, glm::qualifier::highp> vec3d;
-typedef glm::vec<3, int, glm::qualifier::highp> vec3i;
+typedef vec<3, float, glm::qualifier::highp> vec3f;
+typedef vec<3, double, glm::qualifier::highp> vec3d;
+typedef vec<3, int, glm::qualifier::highp> vec3i;
 
 } // -- namespace glm
 
@@ -39,24 +39,24 @@ enum class modifier : int8_t {
 	 * where \f$w_{ij}\f$ is the type of weight. See @ref weight for details.
 	 *
 	 * Its usage is detailed in functions:
-	 * - @ref smoothing::local::laplacian(const weight&, float, size_t, TriangleMesh&).
-	 * - @ref smoothing::local::laplacian(const weight&, float, size_t, size_t, TriangleMesh&).
+	 * - @ref smoothing::local::laplacian(const weight&, double, size_t, TriangleMesh&).
+	 * - @ref smoothing::local::laplacian(const weight&, double, size_t, size_t, TriangleMesh&).
 	 */
 	Laplacian,
 	/**
 	 * The Bilaplacian operator applies twice the @ref modifier::Laplacian operator.
 	 *
 	 * Its usage is detailed in functions:
-	 * - @ref smoothing::local::bilaplacian(const weight&, float, size_t, TriangleMesh&)
-	 * - @ref smoothing::local::bilaplacian(const weight&, float, size_t, size_t, TriangleMesh&)
+	 * - @ref smoothing::local::bilaplacian(const weight&, double, size_t, TriangleMesh&)
+	 * - @ref smoothing::local::bilaplacian(const weight&, double, size_t, size_t, TriangleMesh&)
 	 */
 	BiLaplacian,
 	/**
 	 * The TaubinLM operator applies twice the @ref modifier::Laplacian operator.
 	 *
 	 * Detailed in the documentation of functions:
-	 * - @ref smoothing::local::TaubinLM(const weight&, float, size_t, TriangleMesh&)
-	 * - @ref smoothing::local::TaubinLM(const weight&, float, size_t, size_t, TriangleMesh&)
+	 * - @ref smoothing::local::TaubinLM(const weight&, double, size_t, TriangleMesh&)
+	 * - @ref smoothing::local::TaubinLM(const weight&, double, size_t, size_t, TriangleMesh&)
 	 */
 	TaubinLM
 };

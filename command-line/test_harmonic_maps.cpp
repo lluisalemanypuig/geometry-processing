@@ -40,10 +40,10 @@ namespace test_geoproc {
 		cout << endl;
 	}
 
-#define out_float(x) ((std::abs(static_cast<float>(x)) <= 1e-4 ? 0.0 : x))
-#define geogebra_out(v) "Point({" << out_float(v.x) << "," << out_float(v.y) << "})"
+#define out_double(x) ((std::abs(static_cast<double>(x)) <= 1e-4 ? 0.0 : x))
+#define geogebra_out(v) "Point({" << out_double(v.x) << "," << out_double(v.y) << "})"
 
-	void print_segments(const TriangleMesh& mesh, const vector<glm::vec2>& uvs) {
+	void print_segments(const TriangleMesh& mesh, const vector<glm::vec2d>& uvs) {
 		cout << "{";
 
 		iterators::vertex::vertex_vertex_iterator it(mesh);
@@ -153,7 +153,7 @@ namespace test_geoproc {
 		mesh.make_boundaries();
 		mesh.make_angles_area();
 
-		vector<glm::vec2> uvs;
+		vector<glm::vec2d> uvs;
 
 		timing::time_point begin = timing::now();
 		bool r = harmonic_maps(mesh, w, shape, uvs);

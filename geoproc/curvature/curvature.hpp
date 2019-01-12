@@ -27,8 +27,8 @@ namespace curvature {
  */
 void Gauss
 (
-	const TriangleMesh& mesh, std::vector<float>& Kg,
-	float *min = nullptr, float *max = nullptr
+	const TriangleMesh& mesh, std::vector<double>& Kg,
+	double *min = nullptr, double *max = nullptr
 );
 
 /**
@@ -38,7 +38,7 @@ void Gauss
  * using the cotangents as weights.
  *
  * If the number of threads given is 1 then
- * @ref Gauss(const TriangleMesh&, std::vector<float>&,float*,float*)
+ * @ref Gauss(const TriangleMesh&, std::vector<double>&,double*,double*)
  * is called.
  *
  * This function needs neighbourhood data and the meshe's angles
@@ -50,7 +50,7 @@ void Gauss
  * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
  * - Angles and areas (see @ref TriangleMesh::make_angles_area)
  */
-void Gauss(const TriangleMesh& mesh, std::vector<float>& Kg, size_t n_threads);
+void Gauss(const TriangleMesh& mesh, std::vector<double>& Kg, size_t n_threads);
 /**
  * @brief Computes the Gauss curvature for each vertex.
  *
@@ -58,7 +58,7 @@ void Gauss(const TriangleMesh& mesh, std::vector<float>& Kg, size_t n_threads);
  * using the cotangents as weights.
  *
  * If the number of threads given is 1 then
- * @ref Gauss(const TriangleMesh&, std::vector<float>&,float*,float*) is called.
+ * @ref Gauss(const TriangleMesh&, std::vector<double>&,double*,double*) is called.
  *
  * This function needs neighbourhood data and the meshe's angles
  * and areas (see @ref TriangleMesh::make_angles_area).
@@ -73,8 +73,8 @@ void Gauss(const TriangleMesh& mesh, std::vector<float>& Kg, size_t n_threads);
  */
 void Gauss
 (
-	const TriangleMesh& mesh, std::vector<float>& Kg,
-	size_t n_threads, float *min, float *max
+	const TriangleMesh& mesh, std::vector<double>& Kg,
+	size_t n_threads, double *min, double *max
 );
 
 /**
@@ -95,8 +95,8 @@ void Gauss
  */
 void mean
 (
-	const TriangleMesh& mesh, std::vector<float>& Kh,
-	float *min = nullptr, float *max = nullptr
+	const TriangleMesh& mesh, std::vector<double>& Kh,
+	double *min = nullptr, double *max = nullptr
 );
 /**
  * @brief Computes the mean curvature for each vertex.
@@ -105,7 +105,7 @@ void mean
  * using the cotangents as weights.
  *
  * If the number of threads given is 1 then
- * @ref mean(const TriangleMesh&, std::vector<float>&,float*,float*)
+ * @ref mean(const TriangleMesh&, std::vector<double>&,double*,double*)
  * is called.
  *
  * This function needs neighbourhood data and the meshe's angles
@@ -117,7 +117,7 @@ void mean
  * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
  * - Angles and areas (see @ref TriangleMesh::make_angles_area)
  */
-void mean(const TriangleMesh& mesh, std::vector<float>& Kh, size_t n_threads);
+void mean(const TriangleMesh& mesh, std::vector<double>& Kh, size_t n_threads);
 /**
  * @brief Computes the mean curvature for each vertex.
  *
@@ -125,7 +125,7 @@ void mean(const TriangleMesh& mesh, std::vector<float>& Kh, size_t n_threads);
  * using the cotangents as weights.
  *
  * If the number of threads given is 1 then
- * @ref mean(const TriangleMesh&, std::vector<float>&,float*,float*)
+ * @ref mean(const TriangleMesh&, std::vector<double>&,double*,double*)
  * is called.
  *
  * This function needs neighbourhood data and the meshe's angles
@@ -141,8 +141,8 @@ void mean(const TriangleMesh& mesh, std::vector<float>& Kh, size_t n_threads);
  */
 void mean
 (
-	const TriangleMesh& mesh, std::vector<float>& Kh,
-	size_t n_threads, float *min, float *max
+	const TriangleMesh& mesh, std::vector<double>& Kh,
+	size_t n_threads, double *min, double *max
 );
 
 } // -- namespace curavture

@@ -14,7 +14,8 @@ HEADERS +=						\
 	twinglwidget.hpp			\
 	render_triangle_mesh.hpp	\
 	utils.hpp \
-    err_war_helper.hpp
+    err_war_helper.hpp \
+    definitions.hpp
 
 SOURCES +=						\
 	main.cpp					\

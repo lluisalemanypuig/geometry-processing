@@ -28,20 +28,6 @@ namespace local_private {
  * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
  */
 void make_uniform_weights
-(int vi, const TriangleMesh& m, float *pv_ws);
-/**
- * @brief Computes weights corresponding to uniform weights.
- *
- * Same as @ref make_uniform_weights(int, const TriangleMesh&, float*)
- * but with doubles.
- * @param vi Valid vertex index.
- * @param m Mesh to be iterated.
- * @param[out] pv_ws Weights per vertex. Non-neighbours of @e vi are
- * guaranteed to have null weight.
- * @pre The mesh requires:
- * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
- */
-void make_uniform_weights
 (int vi, const TriangleMesh& m, double *pv_ws);
 
 /**
@@ -63,7 +49,7 @@ void make_uniform_weights
  * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
  */
 void make_uniform_weight
-(int vi, const TriangleMesh& m, const glm::vec3 *verts, glm::vec3& L);
+(int vi, const TriangleMesh& m, const glm::vec3d *verts, glm::vec3d& L);
 
 /* COTANGENT */
 
@@ -72,21 +58,6 @@ void make_uniform_weight
  *
  * For vertex @e vi computes \f$\frac{1}{d_i}\f$ where \f$d_i\f$ is
  * the valence of vertex @e vi (the number of neighbours in its one-ring).
- * @param vi Valid vertex index.
- * @param m Mesh to be iterated.
- * @param[out] pv_ws Weights per vertex. Non-neighbours of @e vi are guaranteed
- * to have null weight.
- * @pre The mesh requires:
- * - Neighbourhood data (see @ref TriangleMesh::make_neighbourhood_data)
- * - Angles and areas (see @ref TriangleMesh::make_angles_area)
- */
-void make_cotangent_weights
-(int vi, const TriangleMesh& m, float *pv_ws);
-/**
- * @brief Computes weights corresponding to cotangent weights.
- *
- * Same as @ref make_cotangent_weights(int, const TriangleMesh&, float*)
- * but with doubles.
  * @param vi Valid vertex index.
  * @param m Mesh to be iterated.
  * @param[out] pv_ws Weights per vertex. Non-neighbours of @e vi are guaranteed
@@ -118,7 +89,7 @@ void make_cotangent_weights
  * - Angles and areas (see @ref TriangleMesh::make_angles_area)
  */
 void make_cotangent_weight
-(int vi, const TriangleMesh& m, const glm::vec3 *verts, glm::vec3& L);
+(int vi, const TriangleMesh& m, const glm::vec3d *verts, glm::vec3d& L);
 
 /* APPLY LOCAL ALGORITHMS */
 
@@ -134,16 +105,15 @@ void make_cotangent_weight
  * @param[out] new_verts The coordinates of the smoothed vertices.
  * @pre The mesh requires the data necessary data to compute the weights:
  * - for a @ref smoothing_weight::uniform see precondition of
- * @ref make_uniform_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&)
+ * @ref make_uniform_weight(int, const TriangleMesh&, const glm::vec3d*, glm::vec3d&)
  * - for a @ref smoothing_weight::cotangent see precondition of
- * @ref make_cotangent_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&).
+ * @ref make_cotangent_weight(int, const TriangleMesh&, const glm::vec3d*, glm::vec3d&).
  */
 void apply_local
 (
-	const weight& w, float lambda,
-	const TriangleMesh& m,
-	const glm::vec3 *old_verts,
-	glm::vec3 *new_verts
+	const weight& w, double lambda,
+	const TriangleMesh& m, const glm::vec3d *old_verts,
+	glm::vec3d *new_verts
 );
 /**
  * @brief Applies one parallelised iteration of a local smoothing algorithm.
@@ -158,17 +128,17 @@ void apply_local
  * @param[out] new_verts The coordinates of the smoothed vertices.
  * @pre The mesh requires the data necessary data to compute the weights:
  * - for a @ref smoothing_weight::uniform see precondition of
- * @ref make_uniform_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&)
+ * @ref make_uniform_weight(int, const TriangleMesh&, const glm::vec3d*, glm::vec3d&)
  * - for a @ref smoothing_weight::cotangent see precondition of
- * @ref make_cotangent_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&).
+ * @ref make_cotangent_weight(int, const TriangleMesh&, const glm::vec3d*, glm::vec3d&).
  */
 void apply_local
 (
-	const weight& w, float lambda,
+	const weight& w, double lambda,
 	const TriangleMesh& m,
 	size_t nt,
-	const glm::vec3 *old_verts,
-	glm::vec3 *new_verts
+	const glm::vec3d *old_verts,
+	glm::vec3d *new_verts
 );
 
 /**
@@ -186,19 +156,19 @@ void apply_local
  * coordinates of the vertices of the mesh depending on the returned value.
  * @pre The mesh requires the data necessary data to compute the weights:
  * - for a @ref smoothing_weight::uniform see precondition of
- * @ref make_uniform_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&)
+ * @ref make_uniform_weight(int, const TriangleMesh&, const glm::vec3d*, glm::vec3d&)
  * - for a @ref smoothing_weight::cotangent see precondition of
- * @ref make_cotangent_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&).
+ * @ref make_cotangent_weight(int, const TriangleMesh&, const glm::vec3d*, glm::vec3d&).
  * @return Returns true if the final coordinates of the vertices are in
  * new_verts. Returns false if otherwise.
  */
 bool apply_once_per_it
 (
-	const weight& w, float l,
+	const weight& w, double l,
 	size_t nit,
 	const TriangleMesh& m,
-	glm::vec3 *old_verts,
-	glm::vec3 *new_verts
+	glm::vec3d *old_verts,
+	glm::vec3d *new_verts
 );
 /**
  * @brief Applies a parallel local procedure once at every @e nit iterations.
@@ -216,19 +186,19 @@ bool apply_once_per_it
  * coordinates of the vertices of the mesh depending on the returned value.
  * @pre The mesh requires the data necessary data to compute the weights:
  * - for a @ref smoothing_weight::uniform see precondition of
- * @ref make_uniform_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&)
+ * @ref make_uniform_weight(int, const TriangleMesh&, const glm::vec3d*, glm::vec3d&)
  * - for a @ref smoothing_weight::cotangent see precondition of
- * @ref make_cotangent_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&).
+ * @ref make_cotangent_weight(int, const TriangleMesh&, const glm::vec3d*, glm::vec3d&).
  * @return Returns true if the final coordinates of the vertices are in
  * new_verts. Returns false if otherwise.
  */
 bool apply_once_per_it
 (
-	const weight& w, float l,
+	const weight& w, double l,
 	size_t nit, size_t n_threads,
 	const TriangleMesh& m,
-	glm::vec3 *old_verts,
-	glm::vec3 *new_verts
+	glm::vec3d *old_verts,
+	glm::vec3d *new_verts
 );
 
 /**
@@ -247,18 +217,18 @@ bool apply_once_per_it
  * coordinates of the vertices of the mesh.
  * @pre The mesh requires the data necessary data to compute the weights:
  * - for a @ref smoothing_weight::uniform see precondition of
- * @ref make_uniform_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&)
+ * @ref make_uniform_weight(int, const TriangleMesh&, const glm::vec3d*, glm::vec3d&)
  * - for a @ref smoothing_weight::cotangent see precondition of
- * @ref make_cotangent_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&).
+ * @ref make_cotangent_weight(int, const TriangleMesh&, const glm::vec3d*, glm::vec3d&).
  */
 void apply_twice_per_it
 (
 	const weight& w,
-	float l1, float l2,
+	double l1, double l2,
 	size_t nit,
 	const TriangleMesh& m,
-	glm::vec3 *old_verts,
-	glm::vec3 *new_verts
+	glm::vec3d *old_verts,
+	glm::vec3d *new_verts
 );
 /**
  * @brief Applies twice parallel local procedure at every @e nit iterations.
@@ -277,18 +247,18 @@ void apply_twice_per_it
  * coordinates of the vertices of the mesh.
  * @pre The mesh requires the data necessary data to compute the weights:
  * - for a @ref smoothing_weight::uniform see precondition of
- * @ref make_uniform_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&)
+ * @ref make_uniform_weight(int, const TriangleMesh&, const glm::vec3d*, glm::vec3d&)
  * - for a @ref smoothing_weight::cotangent see precondition of
- * @ref make_cotangent_weight(int, const TriangleMesh&, const glm::vec3 *, glm::vec3&).
+ * @ref make_cotangent_weight(int, const TriangleMesh&, const glm::vec3d*, glm::vec3d&).
  */
 void apply_twice_per_it
 (
 	const weight& w,
-	float l1, float l2,
+	double l1, double l2,
 	size_t nit, size_t n_threads,
 	const TriangleMesh& m,
-	glm::vec3 *old_verts,
-	glm::vec3 *new_verts
+	glm::vec3d *old_verts,
+	glm::vec3d *new_verts
 );
 
 } // -- namespace local_private

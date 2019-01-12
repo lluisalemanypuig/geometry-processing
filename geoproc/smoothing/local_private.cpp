@@ -15,42 +15,13 @@ using namespace glm;
 #include <geoproc/iterators/mesh_iterator.hpp>
 #include <geoproc/iterators/vertex_iterators.hpp>
 
-inline float cotanf(float a) { return std::cos(a)/std::sin(a); }
 inline double cotand(double a) { return std::cos(a)/std::sin(a); }
-#define to_double(x) static_cast<double>(x)
 
 namespace geoproc {
 namespace smoothing {
 namespace local_private {
 
 /* UNIFORM */
-
-void make_uniform_weights
-(int vi, const TriangleMesh& m, float *pv_ws)
-{
-	assert(pv_ws != nullptr);
-
-	iterators::vertex::vertex_vertex_iterator it(m);
-
-	int first = it.init(vi);
-
-	// neighbours of vi
-	vector<int> neighs;
-	int j = it.current();
-	do {
-		neighs.push_back(j);
-		j = it.next();
-	}
-	while (j != first);
-
-	// set weights to 0
-	for (int j = 0; j < m.n_vertices(); ++j) {
-		pv_ws[j] = 0.0f;
-	}
-	for (int j : neighs) {
-		pv_ws[j] = 1.0f/neighs.size();
-	}
-}
 
 void make_uniform_weights
 (int vi, const TriangleMesh& m, double *pv_ws)
@@ -80,7 +51,7 @@ void make_uniform_weights
 }
 
 void make_uniform_weight
-(int vi, const TriangleMesh& m, const glm::vec3 *verts, glm::vec3& L)
+(int vi, const TriangleMesh& m, const glm::vec3d *verts, glm::vec3d& L)
 {
 	assert(verts != nullptr);
 
@@ -89,7 +60,7 @@ void make_uniform_weight
 	int first = it.init(vi);
 
 	// differences vector
-	vector<vec3> diffs;
+	vector<vec3d> diffs;
 	int j = it.current();
 	do {
 		diffs.push_back( verts[j] - verts[vi] );
@@ -99,7 +70,7 @@ void make_uniform_weight
 
 	// now we can compute the weights, which in
 	// this case are uniform so only one value
-	float w = 1.0f/diffs.size();
+	double w = 1.0/diffs.size();
 
 	// multiply the weight to each difference
 	// and accumulate to L
@@ -111,79 +82,12 @@ void make_uniform_weight
 /* COTANGENT */
 
 void make_cotangent_weights
-(int vi, const TriangleMesh& m, float *pv_ws)
-{
-	assert(pv_ws != nullptr);
-
-	// mesh info
-	const vector<vec3>& mesh_angles = m.get_angles();
-
-	// set weights to 0
-	for (int j = 0; j < m.n_vertices(); ++j) {
-		pv_ws[j] = 0.0f;
-	}
-
-	iterators::vertex::vertex_face_iterator it(m);
-	const int first = it.init(vi);
-	int next1 = first;
-	int next2 = it.next();
-
-	// loop over the one-ring neighbourhood of
-	// vertex vi. When a neighbour is found assign
-	// its corresponding weight.
-
-	// loop variables
-	vector<pair<int, float> > weight_per_neigh;
-	float alpha = 0.0f;
-	float beta = 0.0f;
-	float W = 0.0f;
-	float sW = 0.0f;
-	do {
-		int i1,j1,k1, i2,j2,k2;
-		m.get_vertices_triangle(next1, vi, i1,j1,k1);
-		m.get_vertices_triangle(next2, vi, i2,j2,k2);
-
-		// make sure that the orientations are correct.
-		// k1 and j2 are the same vertex, and a neighbour of vi.
-		assert(i1 == i2);
-		assert(k1 == j2);
-
-		// Compute the two angles (alpha and beta).
-		// At the same time, compute the difference vector.
-
-		const vec3& angles1 = mesh_angles[next1];
-		const vec3& angles2 = mesh_angles[next2];
-
-		if (vi == i1)		{ alpha = angles1.y; }
-		else if (vi == j1)	{ alpha = angles1.z; }
-		else if (vi == k1)	{ alpha = angles1.x; }
-		if (vi == i2)		{ beta = angles2.z; }
-		else if (vi == j2)	{ beta = angles2.x; }
-		else if (vi == k2)	{ beta = angles2.y; }
-
-		// compute and store weight
-		W = cotanf(alpha) + cotanf(beta);
-		weight_per_neigh.push_back( make_pair(k1,W) );
-		sW += W;
-
-		// go to next 2 faces
-		next1 = next2;
-		next2 = it.next();
-	}
-	while (next1 != first);
-
-	for (const pair<int,float>& nw : weight_per_neigh) {
-		pv_ws[nw.first] = nw.second/sW;
-	}
-}
-
-void make_cotangent_weights
 (int vi, const TriangleMesh& m, double *pv_ws)
 {
 	assert(pv_ws != nullptr);
 
 	// mesh info
-	const vector<vec3>& mesh_angles = m.get_angles();
+	const vector<vec3d>& mesh_angles = m.get_angles();
 
 	// set weights to 0
 	for (int j = 0; j < m.n_vertices(); ++j) {
@@ -218,15 +122,15 @@ void make_cotangent_weights
 		// Compute the two angles (alpha and beta).
 		// At the same time, compute the difference vector.
 
-		const vec3& angles1 = mesh_angles[next1];
-		const vec3& angles2 = mesh_angles[next2];
+		const vec3d& angles1 = mesh_angles[next1];
+		const vec3d& angles2 = mesh_angles[next2];
 
-		if (vi == i1)		{ alpha = to_double(angles1.y); }
-		else if (vi == j1)	{ alpha = to_double(angles1.z); }
-		else if (vi == k1)	{ alpha = to_double(angles1.x); }
-		if (vi == i2)		{ beta = to_double(angles2.z); }
-		else if (vi == j2)	{ beta = to_double(angles2.x); }
-		else if (vi == k2)	{ beta = to_double(angles2.y); }
+		if (vi == i1)		{ alpha = angles1.y; }
+		else if (vi == j1)	{ alpha = angles1.z; }
+		else if (vi == k1)	{ alpha = angles1.x; }
+		if (vi == i2)		{ beta = angles2.z; }
+		else if (vi == j2)	{ beta = angles2.x; }
+		else if (vi == k2)	{ beta = angles2.y; }
 
 		// compute and store weight
 		W = cotand(alpha) + cotand(beta);
@@ -245,7 +149,7 @@ void make_cotangent_weights
 }
 
 void make_cotangent_weight
-(int vi, const TriangleMesh& m, const glm::vec3 *verts, glm::vec3& L)
+(int vi, const TriangleMesh& m, const glm::vec3d *verts, glm::vec3d& L)
 {
 	assert(verts != nullptr);
 
@@ -255,15 +159,15 @@ void make_cotangent_weight
 	int next2 = it.next();
 
 	// differences vector
-	vector<vec3> diffs;
+	vector<vec3d> diffs;
 	// sum of cotangents vector
-	vector<float> weights;
+	vector<double> weights;
 	// sum of all weights
-	float S = 0.0f;
+	double S = 0.0;
 
 	// loop variables
-	vec3 u, v;
-	float alpha, beta;
+	vec3d u, v;
+	double alpha, beta;
 	do {
 		// it is guaranteed that
 		//     i1 = i
@@ -284,14 +188,14 @@ void make_cotangent_weight
 		// Compute the two angles (alpha and beta).
 		u = normalize( verts[i1] - verts[j1] );
 		v = normalize( verts[k1] - verts[j1] );
-		alpha = acos( dot(u,v) );
+		alpha = std::acos( dot(u,v) );
 
 		u = normalize( verts[i2] - verts[k2] );
 		v = normalize( verts[j2] - verts[k2] );
-		beta = acos( dot(u,v) );
+		beta = std::acos( dot(u,v) );
 
 		// compute weight
-		float W = cotanf(alpha) + cotanf(beta);
+		double W = cotand(alpha) + cotand(beta);
 		S += W;
 
 		weights.push_back(W);
@@ -314,9 +218,9 @@ void make_cotangent_weight
 
 void apply_local
 (
-	const weight& w, float l,
+	const weight& w, double l,
 	const TriangleMesh& m,
-	const glm::vec3 *from, glm::vec3 *to
+	const glm::vec3d *from, glm::vec3d *to
 )
 {
 	assert(from != nullptr);
@@ -324,11 +228,11 @@ void apply_local
 
 	// compute the new coordinates of the vertices
 
-	vec3 L;
+	vec3d L;
 	switch (w) {
 		case weight::uniform:
 			for (int i = 0; i < m.n_vertices(); ++i) {
-				L = vec3(0.0f,0.0f,0.0f);
+				L = vec3d(0.0,0.0,0.0);
 				make_uniform_weight(i, m, from, L);
 				// apply formula
 				to[i] = from[i] + l*L;
@@ -337,7 +241,7 @@ void apply_local
 
 		case weight::cotangent:
 			for (int i = 0; i < m.n_vertices(); ++i) {
-				L = vec3(0.0f,0.0f,0.0f);
+				L = vec3d(0.0,0.0,0.0);
 				make_cotangent_weight(i, m, from, L);
 				// apply formula
 				to[i] = from[i] + l*L;
@@ -349,10 +253,10 @@ void apply_local
 
 void apply_local
 (
-	const weight& w, float l,
+	const weight& w, double l,
 	const TriangleMesh& m,
 	size_t nt,
-	const glm::vec3 *from, glm::vec3 *to
+	const glm::vec3d *from, glm::vec3d *to
 )
 {
 	assert(from != nullptr);
@@ -360,13 +264,13 @@ void apply_local
 
 	// compute the new coordinates of the vertices
 
-	vec3 L;
+	vec3d L;
 	switch (w) {
 		case weight::uniform:
 
 			#pragma omp parallel for num_threads(nt) private(L)
 			for (int i = 0; i < m.n_vertices(); ++i) {
-				L = vec3(0.0f,0.0f,0.0f);
+				L = vec3d(0.0,0.0,0.0);
 				make_uniform_weight(i, m, from, L);
 				// apply formula
 				to[i] = from[i] + l*L;
@@ -377,7 +281,7 @@ void apply_local
 
 			#pragma omp parallel for num_threads(nt) private(L)
 			for (int i = 0; i < m.n_vertices(); ++i) {
-				L = vec3(0.0f,0.0f,0.0f);
+				L = vec3d(0.0,0.0,0.0);
 				make_cotangent_weight(i, m, from, L);
 				// apply formula
 				to[i] = from[i] + l*L;
@@ -389,11 +293,11 @@ void apply_local
 
 bool apply_once_per_it
 (
-	const weight& w, float l,
+	const weight& w, double l,
 	size_t nit,
 	const TriangleMesh& m,
-	glm::vec3 *old_verts,
-	glm::vec3 *new_verts
+	glm::vec3d *old_verts,
+	glm::vec3d *new_verts
 )
 {
 	assert(old_verts != nullptr);
@@ -420,11 +324,11 @@ bool apply_once_per_it
 
 bool apply_once_per_it
 (
-	const weight& w, float l,
+	const weight& w, double l,
 	size_t nit, size_t n_threads,
 	const TriangleMesh& m,
-	glm::vec3 *old_verts,
-	glm::vec3 *new_verts
+	glm::vec3d *old_verts,
+	glm::vec3d *new_verts
 )
 {
 	assert(old_verts != nullptr);
@@ -452,11 +356,11 @@ bool apply_once_per_it
 void apply_twice_per_it
 (
 	const weight& w,
-	float l1, float l2,
+	double l1, double l2,
 	size_t nit,
 	const TriangleMesh& m,
-	glm::vec3 *old_verts,
-	glm::vec3 *new_verts
+	glm::vec3d *old_verts,
+	glm::vec3d *new_verts
 )
 {
 	// for each iteration of the algorithm
@@ -469,11 +373,11 @@ void apply_twice_per_it
 void apply_twice_per_it
 (
 	const weight& w,
-	float l1, float l2,
+	double l1, double l2,
 	size_t nit, size_t n_threads,
 	const TriangleMesh& m,
-	glm::vec3 *old_verts,
-	glm::vec3 *new_verts
+	glm::vec3d *old_verts,
+	glm::vec3d *new_verts
 )
 {
 	// for each iteration of the algorithm

@@ -18,15 +18,15 @@ using namespace glm;
 #include <geoproc/iterators/mesh_iterator.hpp>
 #include <geoproc/iterators/vertex_iterators.hpp>
 
-inline float Kg_at_vertex_par(const geoproc::TriangleMesh& m, int v) {
+inline double Kg_at_vertex_par(const geoproc::TriangleMesh& m, int v) {
 	// mesh info
-	const vector<float>& mesh_areas = m.get_areas();
-	const vector<vec3>& mesh_angles = m.get_angles();
+	const vector<double>& mesh_areas = m.get_areas();
+	const vector<vec3d>& mesh_angles = m.get_angles();
 
 	// sum of angles incident to 'v'
-	float angle_sum = 0.0f;
+	double angle_sum = 0.0;
 	// Voronoi area around 'v'
-	float vor_area = 0.0f;
+	double vor_area = 0.0;
 
 	geoproc::iterators::vertex::vertex_face_iterator it(m);
 
@@ -40,7 +40,7 @@ inline float Kg_at_vertex_par(const geoproc::TriangleMesh& m, int v) {
 		// when the triangle has an angle that is larger
 		// than 90 degrees (pi/4) then the area contributes
 		// only by half.
-		float area = mesh_areas[f];
+		double area = mesh_areas[f];
 		vor_area += area;
 
 		// index vertices of current face
@@ -57,9 +57,9 @@ inline float Kg_at_vertex_par(const geoproc::TriangleMesh& m, int v) {
 	while (f != first);
 
 	// finish computation of voronoi area
-	vor_area /= 3.0f;
+	vor_area /= 3.0;
 
-	return (1.0f/vor_area)*(2.0f*M_PI - angle_sum);
+	return (1.0/vor_area)*(2.0*M_PI - angle_sum);
 }
 
 namespace geoproc {
@@ -71,23 +71,23 @@ namespace curvature {
 // Use a different algorithm from the one used for
 // the parallel computation of the curvature
 void Gauss
-(const TriangleMesh& mesh, std::vector<float>& Kg, float *m, float *M)
+(const TriangleMesh& mesh, std::vector<double>& Kg, double *m, double *M)
 {
 	// mesh info
 	const int nT = mesh.n_triangles();
 	const int nV = mesh.n_vertices();
-	const vector<float>& mesh_areas = mesh.get_areas();
-	const vector<vec3>& mesh_angles = mesh.get_angles();
+	const vector<double>& mesh_areas = mesh.get_areas();
+	const vector<vec3d>& mesh_angles = mesh.get_angles();
 
 	// Gauss curvature per vertex
-	Kg = vector<float>(nV, 0.0f);
+	Kg = vector<double>(nV, 0.0);
 
 	// Angle around each vertex.
 	// Define this array to contain:
 	// angles[i] = 2*pi - sum_{face j adjacent to i} angle_j
 	// where angle_j is the j-th angle incident to vertex i
 	// for j = 1 to number of adjacent faces to vertex i.
-	vector<float> angles(nV, 2.0f*M_PI);
+	vector<double> angles(nV, 2.0*M_PI);
 
 	int i0,i1,i2;
 	float area;
@@ -124,15 +124,15 @@ void Gauss
 	// actual value of the curvature:
 
 	if (m != nullptr) {
-		*m = numeric_limits<float>::max();
+		*m = numeric_limits<double>::max();
 	}
 	if (M != nullptr) {
-		*M = -numeric_limits<float>::max();
+		*M = -numeric_limits<double>::max();
 	}
 
 	// compute curvature per vertex
 	for (int i = 0; i < nV; ++i) {
-		Kg[i] = 3.0f*(angles[i]/Kg[i]);
+		Kg[i] = 3.0*(angles[i]/Kg[i]);
 
 		if (m != nullptr) {
 			*m = std::min(*m, Kg[i]);
@@ -146,14 +146,14 @@ void Gauss
 /* ---------------------------- */
 /* --------- PARALLEL --------- */
 
-void Gauss(const TriangleMesh& m, std::vector<float>& Kg, size_t nt) {
+void Gauss(const TriangleMesh& m, std::vector<double>& Kg, size_t nt) {
 	if (nt == 1) {
 		Gauss(m, Kg);
 		return;
 	}
 
 	const int N = m.n_vertices();
-	Kg = vector<float>(N, 0.0f);
+	Kg = vector<double>(N, 0.0);
 
 	#pragma omp parallel for num_threads(nt)
 	for (int i = 0; i < N; ++i) {
@@ -162,7 +162,7 @@ void Gauss(const TriangleMesh& m, std::vector<float>& Kg, size_t nt) {
 }
 
 void Gauss
-(const TriangleMesh& mesh, std::vector<float>& Kg, size_t nt, float *m, float *M)
+(const TriangleMesh& mesh, std::vector<double>& Kg, size_t nt, double *m, double *M)
 {
 	if (nt == 1) {
 		Gauss(mesh, Kg, m, M);
@@ -170,10 +170,10 @@ void Gauss
 	}
 
 	const int N = mesh.n_vertices();
-	Kg = vector<float>(N, 0.0f);
+	Kg = vector<double>(N, 0.0);
 
-	float mm = std::numeric_limits<float>::max();
-	float MM = -mm;
+	double mm = std::numeric_limits<double>::max();
+	double MM = -mm;
 
 	#pragma omp parallel for num_threads(nt) reduction(min:mm) reduction(max:MM)
 	for (int i = 0; i < N; ++i) {

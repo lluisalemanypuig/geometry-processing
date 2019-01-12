@@ -53,7 +53,7 @@ bool __load_header(ifstream& fin, int& n_verts, int& n_faces, string& format) {
 
 // ---------------- BINARY ----------------
 // ---- LITTLE ENDIAN 1.0
-void __load_vertices_binary_le_1_0(ifstream& fin, int n_verts, vector<float>& verts) {
+void __load_vertices_binary_le_1_0(ifstream& fin, int n_verts, vector<double>& verts) {
 	float v1, v2, v3;
 
 	for (int i = 0; i < n_verts; ++i) {
@@ -99,7 +99,7 @@ void __load_faces_binary_le_1_0(ifstream& fin, int n_faces, vector<int>& tris) {
 // ---------------- ASCII ----------------
 // ---- ASCII 1.0
 
-void __load_vertices_ascii_1_0(ifstream& fin, int n_verts, vector<float>& verts) {
+void __load_vertices_ascii_1_0(ifstream& fin, int n_verts, vector<double>& verts) {
 	float v1,v2,v3;
 
 	for (int i = 0; i < n_verts; ++i) {
@@ -141,7 +141,7 @@ void __load_faces_ascii_1_0(ifstream& fin, int n_faces, vector<int>& tris) {
 }
 
 void __add_model_to_mesh
-(const vector<float>& verts, const vector<int>& tris, geoproc::TriangleMesh& mesh)
+(const vector<double>& verts, const vector<int>& tris, geoproc::TriangleMesh& mesh)
 {
 	// (for verts)
 	// Every position that is a multiple of 3 starts
@@ -179,7 +179,7 @@ bool read_mesh(const std::string& filename, TriangleMesh& mesh) {
 		return false;
 	}
 
-	vector<float> plyVertices;
+	vector<double> plyVertices;
 	vector<int> plyTriangles;
 
 	// Load the vertices and the faces from the ply file.

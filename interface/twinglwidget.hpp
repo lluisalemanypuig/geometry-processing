@@ -18,10 +18,10 @@ class TwinGLWidget : public GLWidget {
 		modifier op;
 		weight wt;
 		size_t nit;
-		float lambda;
-		float mu;
+		double lambda;
+		double mu;
 
-		float perc_fix_vertices;
+		double perc_fix_vertices;
 
 		void mousePressEvent(QMouseEvent *event);
 		void mouseMoveEvent(QMouseEvent *event);
@@ -38,8 +38,8 @@ class TwinGLWidget : public GLWidget {
 		void set_display(float aX, float aY, float d);
 
 		void set_n_iterations(size_t n);
-		void set_lambda(float l);
-		void set_perc_fixed_vertices(float p);
+		void set_lambda(double l);
+		void set_perc_fixed_vertices(double p);
 		void set_smooth_operator(const modifier& o);
 		void set_smooth_weight_type(const weight& w);
 

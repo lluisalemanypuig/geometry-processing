@@ -60,7 +60,7 @@ namespace test_geoproc {
 		cout << "        -1" << endl;
 	}
 
-	bool read_smooth_conf(smoothing_configuration& S, float& MU) {
+	bool read_smooth_conf(smoothing_configuration& S, double& MU) {
 		char lcurlbracket;
 		cin >> lcurlbracket;
 
@@ -177,11 +177,11 @@ namespace test_geoproc {
 		timing::time_point begin, end;
 
 		vector<smoothing_configuration> Cs;
-		vector<float> mus;
+		vector<double> mus;
 
 		bool keep_reading = true;
 		while (keep_reading) {
-			float mu;
+			double mu;
 			smoothing_configuration C;
 			if (read_smooth_conf(C, mu)) {
 				Cs.push_back(C);

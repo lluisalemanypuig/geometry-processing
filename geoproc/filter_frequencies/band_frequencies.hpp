@@ -30,7 +30,7 @@ struct smoothing_configuration {
 	/// Type of weight applied within the operator.
 	weight sw;
 	/// Value of parameter \f$\lambda\f$.
-	float lambda;
+	double lambda;
 	/// Amount of iterations of the algorithm.
 	size_t n_it;
 };
@@ -66,7 +66,7 @@ struct smoothing_configuration {
  */
 void band_frequencies
 (const std::vector<smoothing_configuration>& confs,
- const std::vector<float>& mus, TriangleMesh& m);
+ const std::vector<double>& mus, TriangleMesh& m);
 /**
  * @brief Band frequencies operator.
  *
@@ -99,7 +99,7 @@ void band_frequencies
  */
 void band_frequencies
 (const std::vector<smoothing_configuration>& confs,
- const std::vector<float>& mus, size_t nt, TriangleMesh& m);
+ const std::vector<double>& mus, size_t nt, TriangleMesh& m);
 
 } // -- namespace filter_frequencies
 } // -- namespace geoproc

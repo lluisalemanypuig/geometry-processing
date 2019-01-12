@@ -72,7 +72,7 @@ namespace parametrisation {
  */
 bool harmonic_maps
 (const TriangleMesh& m, const weight& w,
- const boundary_shape& s, std::vector<glm::vec2>& uvs);
+ const boundary_shape& s, std::vector<glm::vec2d>& uvs);
 
 } // -- namespace parametrisation
 } // -- namespace geoproc

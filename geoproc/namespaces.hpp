@@ -26,12 +26,12 @@ namespace geoproc {
 	 * @brief Implementation of different curvature algorithms.
 	 * 
 	 * The following curvatures are available:
-	 * - @ref curvature::Gauss(const TriangleMesh&, std::vector<float>&, float*, float*).
-	 * - @ref curvature::Gauss(const TriangleMesh&, std::vector<float>&, size_t).
-	 * - @ref curvature::Gauss(const TriangleMesh&, std::vector<float>&, size_t, float*, float*).
-	 * - @ref curvature::mean(const TriangleMesh&, std::vector<float>&, float*, float*).
-	 * - @ref curvature::mean(const TriangleMesh&, std::vector<float>&, size_t).
-	 * - @ref curvature::mean(const TriangleMesh&, std::vector<float>&, size_t, float*, float*).
+	 * - @ref curvature::Gauss(const TriangleMesh&, std::vector<double>&, double*, double*).
+	 * - @ref curvature::Gauss(const TriangleMesh&, std::vector<double>&, size_t).
+	 * - @ref curvature::Gauss(const TriangleMesh&, std::vector<double>&, size_t, double*, double*).
+	 * - @ref curvature::mean(const TriangleMesh&, std::vector<double>&, double*, double*).
+	 * - @ref curvature::mean(const TriangleMesh&, std::vector<double>&, size_t).
+	 * - @ref curvature::mean(const TriangleMesh&, std::vector<double>&, size_t, double*, double*).
 	 */
 	namespace curvature { }
 
