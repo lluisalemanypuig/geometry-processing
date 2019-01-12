@@ -77,8 +77,9 @@ interface can be found in the directory \dir{interface}.
 The operations accessible in this view are divided into two tabs.
 The most simple one is the \tabbox{Settings} tab. This contains the
 option to increase the number of threads that the algorithms can use
-to speed-up the software. There is also the option to clean up the
-loaded meshes.
+to speed-up the software (see section \ref{sec:parallel-algorithms}
+to see what features benefit from increasing the number of threads).
+There is also the option to clean up the loaded meshes.
 
 \hfill
 
@@ -255,6 +256,7 @@ guided by the amount of points the regular grid will have in the $x$- and
 $y$- axis (\elem{1} and \elem{2} respectively), and the weight type (\elem{3}).
 
 \section{Parallelised algorithms}
+\label{sec:parallel-algorithms}
 
 Here are listed the options that can take advantage of the use of
 several threads:
@@ -265,6 +267,32 @@ several threads:
 	available).
 	\item Since band frequencies use local smoothing algorithms, this
 	option can benefit from using multithreading too.
+	\item Part of the remeshing algorithm has been parallelised. Since
+	the parametrisation using Harmonic Maps is not parallel, only the
+	construction of the new mesh is actually parallel.
+\end{itemize}
+
+\section{Status of functionalities}
+
+All features provided in the interface are fully functional, except for
+two of them:
+\begin{itemize}
+	\item Reflection lines rendering mode. Reflection lines are perfectly
+	rendered for those models in which the normals needed for this purpose
+	(see next paragraph) can be computed as the normal of every triangle
+	(if a triangle has vertices $v_i$, $v_j$ and $v_k$ then its normal is
+	the normalisation of $(v_j - v_i) \times (v_k - v_i)$). A model of a
+	completely flat surface, for example, is perfectly suitable for this
+	rendering mode.
+	
+	\hfill
+	
+	Ideally, the normals a model should have in order to render these lines
+	properly should be computed differently (not done). The normals of all
+	triangles should be computed as the average of \textbf{some} of their
+	neighbouring faces $\{t\}$.
+	
+	\item Remeshing. Remeshing is not implemented for the shape ``circle''.
 \end{itemize}
 
 \end{document}
