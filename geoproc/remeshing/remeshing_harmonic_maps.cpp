@@ -374,15 +374,10 @@ bool harmonic_maps(
 	/* compute new triangles */
 	// this is easy because we handle only the 'Square' case
 	vector<int> new_triangles((N - 1)*(M - 1)*3*2);
-	for (size_t idx = 0; idx < N*M; ++idx) {
+	for (size_t idx = 0; idx < (N - 1)*M; ++idx) {
 		size_t i = idx/M;
 		size_t j = idx%M;
 
-		if (i == N - 1) {
-			// this will not change in the next M iterations,
-			// so stop right here
-			break;
-		}
 		if (j == M - 1) {
 			continue;
 		}
@@ -443,10 +438,10 @@ bool harmonic_maps(
 	// than the others, but we should also expect it to
 	// produce very little imbalance.
 	#pragma omp parallel for num_threads(nt)
-	for (size_t idx = 0; idx < N*M; ++idx) {
+	for (size_t idx = 0; idx < (N - 1)*M; ++idx) {
 		size_t i = idx/M;
 		size_t j = idx%M;
-		if (i == N - 1 or j == M - 1) {
+		if (j == M - 1) {
 			// Whenever i=N-1 the thread should stop straightaway.
 			// However OpenMP does not allow for the uggly 'break'
 			// statement, and I can't bring myself to modify the
