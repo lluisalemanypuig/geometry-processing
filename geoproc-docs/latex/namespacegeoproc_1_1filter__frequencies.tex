@@ -13,9 +13,9 @@ struct \hyperlink{structgeoproc_1_1filter__frequencies_1_1smoothing__configurati
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \hyperlink{namespacegeoproc_1_1filter__frequencies_aa795010d1cd2daaafb0b1f60ee3ab1cd}{band\+\_\+frequencies} (const std\+::vector$<$ \hyperlink{structgeoproc_1_1filter__frequencies_1_1smoothing__configuration}{smoothing\+\_\+configuration} $>$ \&confs, const std\+::vector$<$ float $>$ \&mus, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
+void \hyperlink{namespacegeoproc_1_1filter__frequencies_a9a3d38dda8f7703607998e250e264a7c}{band\+\_\+frequencies} (const std\+::vector$<$ \hyperlink{structgeoproc_1_1filter__frequencies_1_1smoothing__configuration}{smoothing\+\_\+configuration} $>$ \&confs, const std\+::vector$<$ double $>$ \&mus, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
 \begin{DoxyCompactList}\small\item\em Band frequencies operator. \end{DoxyCompactList}\item 
-void \hyperlink{namespacegeoproc_1_1filter__frequencies_a2af31b5e6e8c4d0f5de51c488c1d69b2}{band\+\_\+frequencies} (const std\+::vector$<$ \hyperlink{structgeoproc_1_1filter__frequencies_1_1smoothing__configuration}{smoothing\+\_\+configuration} $>$ \&confs, const std\+::vector$<$ float $>$ \&mus, size\+\_\+t nt, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
+void \hyperlink{namespacegeoproc_1_1filter__frequencies_a186988c0c5cb1fa64125db078846814e}{band\+\_\+frequencies} (const std\+::vector$<$ \hyperlink{structgeoproc_1_1filter__frequencies_1_1smoothing__configuration}{smoothing\+\_\+configuration} $>$ \&confs, const std\+::vector$<$ double $>$ \&mus, size\+\_\+t nt, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m)
 \begin{DoxyCompactList}\small\item\em Band frequencies operator. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -25,11 +25,11 @@ Frequencies filtering.
 Implementation of algorithms to highlight certain frequencies of a mesh. 
 
 \subsection{Function Documentation}
-\mbox{\Hypertarget{namespacegeoproc_1_1filter__frequencies_aa795010d1cd2daaafb0b1f60ee3ab1cd}\label{namespacegeoproc_1_1filter__frequencies_aa795010d1cd2daaafb0b1f60ee3ab1cd}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1filter__frequencies_a9a3d38dda8f7703607998e250e264a7c}\label{namespacegeoproc_1_1filter__frequencies_a9a3d38dda8f7703607998e250e264a7c}} 
 \index{geoproc\+::filter\+\_\+frequencies@{geoproc\+::filter\+\_\+frequencies}!band\+\_\+frequencies@{band\+\_\+frequencies}}
 \index{band\+\_\+frequencies@{band\+\_\+frequencies}!geoproc\+::filter\+\_\+frequencies@{geoproc\+::filter\+\_\+frequencies}}
 \subsubsection{\texorpdfstring{band\+\_\+frequencies()}{band\_frequencies()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily void geoproc\+::filter\+\_\+frequencies\+::band\+\_\+frequencies (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ \hyperlink{structgeoproc_1_1filter__frequencies_1_1smoothing__configuration}{smoothing\+\_\+configuration} $>$ \&}]{confs,  }\item[{const std\+::vector$<$ float $>$ \&}]{mus,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void geoproc\+::filter\+\_\+frequencies\+::band\+\_\+frequencies (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ \hyperlink{structgeoproc_1_1filter__frequencies_1_1smoothing__configuration}{smoothing\+\_\+configuration} $>$ \&}]{confs,  }\item[{const std\+::vector$<$ double $>$ \&}]{mus,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
 
 
 
@@ -65,11 +65,11 @@ The mesh requires\+:
 \item Angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}) 
 \end{DoxyItemize}
 \end{DoxyPrecond}
-\mbox{\Hypertarget{namespacegeoproc_1_1filter__frequencies_a2af31b5e6e8c4d0f5de51c488c1d69b2}\label{namespacegeoproc_1_1filter__frequencies_a2af31b5e6e8c4d0f5de51c488c1d69b2}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1filter__frequencies_a186988c0c5cb1fa64125db078846814e}\label{namespacegeoproc_1_1filter__frequencies_a186988c0c5cb1fa64125db078846814e}} 
 \index{geoproc\+::filter\+\_\+frequencies@{geoproc\+::filter\+\_\+frequencies}!band\+\_\+frequencies@{band\+\_\+frequencies}}
 \index{band\+\_\+frequencies@{band\+\_\+frequencies}!geoproc\+::filter\+\_\+frequencies@{geoproc\+::filter\+\_\+frequencies}}
 \subsubsection{\texorpdfstring{band\+\_\+frequencies()}{band\_frequencies()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily void geoproc\+::filter\+\_\+frequencies\+::band\+\_\+frequencies (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ \hyperlink{structgeoproc_1_1filter__frequencies_1_1smoothing__configuration}{smoothing\+\_\+configuration} $>$ \&}]{confs,  }\item[{const std\+::vector$<$ float $>$ \&}]{mus,  }\item[{size\+\_\+t}]{nt,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void geoproc\+::filter\+\_\+frequencies\+::band\+\_\+frequencies (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ \hyperlink{structgeoproc_1_1filter__frequencies_1_1smoothing__configuration}{smoothing\+\_\+configuration} $>$ \&}]{confs,  }\item[{const std\+::vector$<$ double $>$ \&}]{mus,  }\item[{size\+\_\+t}]{nt,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m }\end{DoxyParamCaption})}
 
 
 

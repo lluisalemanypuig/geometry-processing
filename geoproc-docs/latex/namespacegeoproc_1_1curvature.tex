@@ -8,17 +8,17 @@ Implementation of different curvature algorithms.
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-void \hyperlink{namespacegeoproc_1_1curvature_a1d38de2a33224952f31f3447aafb9484}{Gauss} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&mesh, std\+::vector$<$ float $>$ \&Kg, float $\ast$min=nullptr, float $\ast$max=nullptr)
+void \hyperlink{namespacegeoproc_1_1curvature_ac05fe4b3f804678c768241f17f52bb9a}{Gauss} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&mesh, std\+::vector$<$ double $>$ \&Kg, double $\ast$min=nullptr, double $\ast$max=nullptr)
 \begin{DoxyCompactList}\small\item\em Computes the Gauss curvature for each vertex. \end{DoxyCompactList}\item 
-void \hyperlink{namespacegeoproc_1_1curvature_a2b648a2fed90b2541e2c4c48b0bdc514}{Gauss} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&mesh, std\+::vector$<$ float $>$ \&Kg, size\+\_\+t n\+\_\+threads)
+void \hyperlink{namespacegeoproc_1_1curvature_a769aa493a6028dbd553b6e40711662f8}{Gauss} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&mesh, std\+::vector$<$ double $>$ \&Kg, size\+\_\+t n\+\_\+threads)
 \begin{DoxyCompactList}\small\item\em Computes the Gauss curvature for each vertex. \end{DoxyCompactList}\item 
-void \hyperlink{namespacegeoproc_1_1curvature_a8a166392e1df0d1f24f98a214e85aea4}{Gauss} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&mesh, std\+::vector$<$ float $>$ \&Kg, size\+\_\+t n\+\_\+threads, float $\ast$min, float $\ast$max)
+void \hyperlink{namespacegeoproc_1_1curvature_a76b1a28725ce587aec2b5a5d452fb019}{Gauss} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&mesh, std\+::vector$<$ double $>$ \&Kg, size\+\_\+t n\+\_\+threads, double $\ast$min, double $\ast$max)
 \begin{DoxyCompactList}\small\item\em Computes the Gauss curvature for each vertex. \end{DoxyCompactList}\item 
-void \hyperlink{namespacegeoproc_1_1curvature_ac095baa6ee2f7db33430b8545eae8207}{mean} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&mesh, std\+::vector$<$ float $>$ \&Kh, float $\ast$min=nullptr, float $\ast$max=nullptr)
+void \hyperlink{namespacegeoproc_1_1curvature_a9ccfeae3d3672f6627f4de90bd8ffb0c}{mean} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&mesh, std\+::vector$<$ double $>$ \&Kh, double $\ast$min=nullptr, double $\ast$max=nullptr)
 \begin{DoxyCompactList}\small\item\em Computes the mean curvature for each vertex. \end{DoxyCompactList}\item 
-void \hyperlink{namespacegeoproc_1_1curvature_a8048e3a6ac3d896f2a795b75996c6997}{mean} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&mesh, std\+::vector$<$ float $>$ \&Kh, size\+\_\+t n\+\_\+threads)
+void \hyperlink{namespacegeoproc_1_1curvature_a4d1846571b144ee15bd828156bd5f256}{mean} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&mesh, std\+::vector$<$ double $>$ \&Kh, size\+\_\+t n\+\_\+threads)
 \begin{DoxyCompactList}\small\item\em Computes the mean curvature for each vertex. \end{DoxyCompactList}\item 
-void \hyperlink{namespacegeoproc_1_1curvature_abb57cc83faf5e8f776cf3624a0b1b152}{mean} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&mesh, std\+::vector$<$ float $>$ \&Kh, size\+\_\+t n\+\_\+threads, float $\ast$min, float $\ast$max)
+void \hyperlink{namespacegeoproc_1_1curvature_ae649b189f6b14d3dd42fcace8a0e804a}{mean} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&mesh, std\+::vector$<$ double $>$ \&Kh, size\+\_\+t n\+\_\+threads, double $\ast$min, double $\ast$max)
 \begin{DoxyCompactList}\small\item\em Computes the mean curvature for each vertex. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -27,20 +27,20 @@ Implementation of different curvature algorithms.
 
 The following curvatures are available\+:
 \begin{DoxyItemize}
-\item \hyperlink{namespacegeoproc_1_1curvature_a1d38de2a33224952f31f3447aafb9484}{curvature\+::\+Gauss(const Triangle\+Mesh\&, std\+::vector$<$float$>$\&, float$\ast$, float$\ast$)}.
-\item \hyperlink{namespacegeoproc_1_1curvature_a2b648a2fed90b2541e2c4c48b0bdc514}{curvature\+::\+Gauss(const Triangle\+Mesh\&, std\+::vector$<$float$>$\&, size\+\_\+t)}.
-\item \hyperlink{namespacegeoproc_1_1curvature_a8a166392e1df0d1f24f98a214e85aea4}{curvature\+::\+Gauss(const Triangle\+Mesh\&, std\+::vector$<$float$>$\&, size\+\_\+t, float$\ast$, float$\ast$)}.
-\item \hyperlink{namespacegeoproc_1_1curvature_ac095baa6ee2f7db33430b8545eae8207}{curvature\+::mean(const Triangle\+Mesh\&, std\+::vector$<$float$>$\&, float$\ast$, float$\ast$)}.
-\item \hyperlink{namespacegeoproc_1_1curvature_a8048e3a6ac3d896f2a795b75996c6997}{curvature\+::mean(const Triangle\+Mesh\&, std\+::vector$<$float$>$\&, size\+\_\+t)}.
-\item \hyperlink{namespacegeoproc_1_1curvature_abb57cc83faf5e8f776cf3624a0b1b152}{curvature\+::mean(const Triangle\+Mesh\&, std\+::vector$<$float$>$\&, size\+\_\+t, float$\ast$, float$\ast$)}. 
+\item \hyperlink{namespacegeoproc_1_1curvature_ac05fe4b3f804678c768241f17f52bb9a}{curvature\+::\+Gauss(const Triangle\+Mesh\&, std\+::vector$<$double$>$\&, double$\ast$, double$\ast$)}.
+\item \hyperlink{namespacegeoproc_1_1curvature_a769aa493a6028dbd553b6e40711662f8}{curvature\+::\+Gauss(const Triangle\+Mesh\&, std\+::vector$<$double$>$\&, size\+\_\+t)}.
+\item \hyperlink{namespacegeoproc_1_1curvature_a76b1a28725ce587aec2b5a5d452fb019}{curvature\+::\+Gauss(const Triangle\+Mesh\&, std\+::vector$<$double$>$\&, size\+\_\+t, double$\ast$, double$\ast$)}.
+\item \hyperlink{namespacegeoproc_1_1curvature_a9ccfeae3d3672f6627f4de90bd8ffb0c}{curvature\+::mean(const Triangle\+Mesh\&, std\+::vector$<$double$>$\&, double$\ast$, double$\ast$)}.
+\item \hyperlink{namespacegeoproc_1_1curvature_a4d1846571b144ee15bd828156bd5f256}{curvature\+::mean(const Triangle\+Mesh\&, std\+::vector$<$double$>$\&, size\+\_\+t)}.
+\item \hyperlink{namespacegeoproc_1_1curvature_ae649b189f6b14d3dd42fcace8a0e804a}{curvature\+::mean(const Triangle\+Mesh\&, std\+::vector$<$double$>$\&, size\+\_\+t, double$\ast$, double$\ast$)}. 
 \end{DoxyItemize}
 
 \subsection{Function Documentation}
-\mbox{\Hypertarget{namespacegeoproc_1_1curvature_a1d38de2a33224952f31f3447aafb9484}\label{namespacegeoproc_1_1curvature_a1d38de2a33224952f31f3447aafb9484}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1curvature_ac05fe4b3f804678c768241f17f52bb9a}\label{namespacegeoproc_1_1curvature_ac05fe4b3f804678c768241f17f52bb9a}} 
 \index{geoproc\+::curvature@{geoproc\+::curvature}!Gauss@{Gauss}}
 \index{Gauss@{Gauss}!geoproc\+::curvature@{geoproc\+::curvature}}
 \subsubsection{\texorpdfstring{Gauss()}{Gauss()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
-{\footnotesize\ttfamily void geoproc\+::curvature\+::\+Gauss (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{mesh,  }\item[{std\+::vector$<$ float $>$ \&}]{Kg,  }\item[{float $\ast$}]{min = {\ttfamily nullptr},  }\item[{float $\ast$}]{max = {\ttfamily nullptr} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void geoproc\+::curvature\+::\+Gauss (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{mesh,  }\item[{std\+::vector$<$ double $>$ \&}]{Kg,  }\item[{double $\ast$}]{min = {\ttfamily nullptr},  }\item[{double $\ast$}]{max = {\ttfamily nullptr} }\end{DoxyParamCaption})}
 
 
 
@@ -66,11 +66,11 @@ The mesh requires\+:
 \item Angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}) 
 \end{DoxyItemize}
 \end{DoxyPrecond}
-\mbox{\Hypertarget{namespacegeoproc_1_1curvature_a2b648a2fed90b2541e2c4c48b0bdc514}\label{namespacegeoproc_1_1curvature_a2b648a2fed90b2541e2c4c48b0bdc514}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1curvature_a769aa493a6028dbd553b6e40711662f8}\label{namespacegeoproc_1_1curvature_a769aa493a6028dbd553b6e40711662f8}} 
 \index{geoproc\+::curvature@{geoproc\+::curvature}!Gauss@{Gauss}}
 \index{Gauss@{Gauss}!geoproc\+::curvature@{geoproc\+::curvature}}
 \subsubsection{\texorpdfstring{Gauss()}{Gauss()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
-{\footnotesize\ttfamily void geoproc\+::curvature\+::\+Gauss (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{mesh,  }\item[{std\+::vector$<$ float $>$ \&}]{Kg,  }\item[{size\+\_\+t}]{n\+\_\+threads }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void geoproc\+::curvature\+::\+Gauss (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{mesh,  }\item[{std\+::vector$<$ double $>$ \&}]{Kg,  }\item[{size\+\_\+t}]{n\+\_\+threads }\end{DoxyParamCaption})}
 
 
 
@@ -78,7 +78,7 @@ Computes the Gauss curvature for each vertex.
 
 Use the discretisation of the Laplace-\/\+Beltrami operator, using the cotangents as weights.
 
-If the number of threads given is 1 then \hyperlink{namespacegeoproc_1_1curvature_a1d38de2a33224952f31f3447aafb9484}{Gauss(const Triangle\+Mesh\&, std\+::vector$<$float$>$\&,float$\ast$,float$\ast$)} is called.
+If the number of threads given is 1 then \hyperlink{namespacegeoproc_1_1curvature_ac05fe4b3f804678c768241f17f52bb9a}{Gauss(const Triangle\+Mesh\&, std\+::vector$<$double$>$\&,double$\ast$,double$\ast$)} is called.
 
 This function needs neighbourhood data and the meshe\textquotesingle{}s angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}). 
 \begin{DoxyParams}[1]{Parameters}
@@ -96,11 +96,11 @@ The mesh requires\+:
 \item Angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}) 
 \end{DoxyItemize}
 \end{DoxyPrecond}
-\mbox{\Hypertarget{namespacegeoproc_1_1curvature_a8a166392e1df0d1f24f98a214e85aea4}\label{namespacegeoproc_1_1curvature_a8a166392e1df0d1f24f98a214e85aea4}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1curvature_a76b1a28725ce587aec2b5a5d452fb019}\label{namespacegeoproc_1_1curvature_a76b1a28725ce587aec2b5a5d452fb019}} 
 \index{geoproc\+::curvature@{geoproc\+::curvature}!Gauss@{Gauss}}
 \index{Gauss@{Gauss}!geoproc\+::curvature@{geoproc\+::curvature}}
 \subsubsection{\texorpdfstring{Gauss()}{Gauss()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
-{\footnotesize\ttfamily void geoproc\+::curvature\+::\+Gauss (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{mesh,  }\item[{std\+::vector$<$ float $>$ \&}]{Kg,  }\item[{size\+\_\+t}]{n\+\_\+threads,  }\item[{float $\ast$}]{min,  }\item[{float $\ast$}]{max }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void geoproc\+::curvature\+::\+Gauss (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{mesh,  }\item[{std\+::vector$<$ double $>$ \&}]{Kg,  }\item[{size\+\_\+t}]{n\+\_\+threads,  }\item[{double $\ast$}]{min,  }\item[{double $\ast$}]{max }\end{DoxyParamCaption})}
 
 
 
@@ -108,7 +108,7 @@ Computes the Gauss curvature for each vertex.
 
 Use the discretisation of the Laplace-\/\+Beltrami operator, using the cotangents as weights.
 
-If the number of threads given is 1 then \hyperlink{namespacegeoproc_1_1curvature_a1d38de2a33224952f31f3447aafb9484}{Gauss(const Triangle\+Mesh\&, std\+::vector$<$float$>$\&,float$\ast$,float$\ast$)} is called.
+If the number of threads given is 1 then \hyperlink{namespacegeoproc_1_1curvature_ac05fe4b3f804678c768241f17f52bb9a}{Gauss(const Triangle\+Mesh\&, std\+::vector$<$double$>$\&,double$\ast$,double$\ast$)} is called.
 
 This function needs neighbourhood data and the meshe\textquotesingle{}s angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}). 
 \begin{DoxyParams}[1]{Parameters}
@@ -130,11 +130,11 @@ The mesh requires\+:
 \item Angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}) 
 \end{DoxyItemize}
 \end{DoxyPrecond}
-\mbox{\Hypertarget{namespacegeoproc_1_1curvature_ac095baa6ee2f7db33430b8545eae8207}\label{namespacegeoproc_1_1curvature_ac095baa6ee2f7db33430b8545eae8207}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1curvature_a9ccfeae3d3672f6627f4de90bd8ffb0c}\label{namespacegeoproc_1_1curvature_a9ccfeae3d3672f6627f4de90bd8ffb0c}} 
 \index{geoproc\+::curvature@{geoproc\+::curvature}!mean@{mean}}
 \index{mean@{mean}!geoproc\+::curvature@{geoproc\+::curvature}}
 \subsubsection{\texorpdfstring{mean()}{mean()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
-{\footnotesize\ttfamily void geoproc\+::curvature\+::mean (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{mesh,  }\item[{std\+::vector$<$ float $>$ \&}]{Kh,  }\item[{float $\ast$}]{min = {\ttfamily nullptr},  }\item[{float $\ast$}]{max = {\ttfamily nullptr} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void geoproc\+::curvature\+::mean (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{mesh,  }\item[{std\+::vector$<$ double $>$ \&}]{Kh,  }\item[{double $\ast$}]{min = {\ttfamily nullptr},  }\item[{double $\ast$}]{max = {\ttfamily nullptr} }\end{DoxyParamCaption})}
 
 
 
@@ -160,11 +160,11 @@ The mesh requires\+:
 \item Angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}) 
 \end{DoxyItemize}
 \end{DoxyPrecond}
-\mbox{\Hypertarget{namespacegeoproc_1_1curvature_a8048e3a6ac3d896f2a795b75996c6997}\label{namespacegeoproc_1_1curvature_a8048e3a6ac3d896f2a795b75996c6997}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1curvature_a4d1846571b144ee15bd828156bd5f256}\label{namespacegeoproc_1_1curvature_a4d1846571b144ee15bd828156bd5f256}} 
 \index{geoproc\+::curvature@{geoproc\+::curvature}!mean@{mean}}
 \index{mean@{mean}!geoproc\+::curvature@{geoproc\+::curvature}}
 \subsubsection{\texorpdfstring{mean()}{mean()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
-{\footnotesize\ttfamily void geoproc\+::curvature\+::mean (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{mesh,  }\item[{std\+::vector$<$ float $>$ \&}]{Kh,  }\item[{size\+\_\+t}]{n\+\_\+threads }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void geoproc\+::curvature\+::mean (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{mesh,  }\item[{std\+::vector$<$ double $>$ \&}]{Kh,  }\item[{size\+\_\+t}]{n\+\_\+threads }\end{DoxyParamCaption})}
 
 
 
@@ -172,7 +172,7 @@ Computes the mean curvature for each vertex.
 
 Use the discretisation of the Laplace-\/\+Beltrami operator, using the cotangents as weights.
 
-If the number of threads given is 1 then \hyperlink{namespacegeoproc_1_1curvature_ac095baa6ee2f7db33430b8545eae8207}{mean(const Triangle\+Mesh\&, std\+::vector$<$float$>$\&,float$\ast$,float$\ast$)} is called.
+If the number of threads given is 1 then \hyperlink{namespacegeoproc_1_1curvature_a9ccfeae3d3672f6627f4de90bd8ffb0c}{mean(const Triangle\+Mesh\&, std\+::vector$<$double$>$\&,double$\ast$,double$\ast$)} is called.
 
 This function needs neighbourhood data and the meshe\textquotesingle{}s angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}). 
 \begin{DoxyParams}[1]{Parameters}
@@ -190,11 +190,11 @@ The mesh requires\+:
 \item Angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}) 
 \end{DoxyItemize}
 \end{DoxyPrecond}
-\mbox{\Hypertarget{namespacegeoproc_1_1curvature_abb57cc83faf5e8f776cf3624a0b1b152}\label{namespacegeoproc_1_1curvature_abb57cc83faf5e8f776cf3624a0b1b152}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1curvature_ae649b189f6b14d3dd42fcace8a0e804a}\label{namespacegeoproc_1_1curvature_ae649b189f6b14d3dd42fcace8a0e804a}} 
 \index{geoproc\+::curvature@{geoproc\+::curvature}!mean@{mean}}
 \index{mean@{mean}!geoproc\+::curvature@{geoproc\+::curvature}}
 \subsubsection{\texorpdfstring{mean()}{mean()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
-{\footnotesize\ttfamily void geoproc\+::curvature\+::mean (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{mesh,  }\item[{std\+::vector$<$ float $>$ \&}]{Kh,  }\item[{size\+\_\+t}]{n\+\_\+threads,  }\item[{float $\ast$}]{min,  }\item[{float $\ast$}]{max }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void geoproc\+::curvature\+::mean (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{mesh,  }\item[{std\+::vector$<$ double $>$ \&}]{Kh,  }\item[{size\+\_\+t}]{n\+\_\+threads,  }\item[{double $\ast$}]{min,  }\item[{double $\ast$}]{max }\end{DoxyParamCaption})}
 
 
 
@@ -202,7 +202,7 @@ Computes the mean curvature for each vertex.
 
 Use the discretisation of the Laplace-\/\+Beltrami operator, using the cotangents as weights.
 
-If the number of threads given is 1 then \hyperlink{namespacegeoproc_1_1curvature_ac095baa6ee2f7db33430b8545eae8207}{mean(const Triangle\+Mesh\&, std\+::vector$<$float$>$\&,float$\ast$,float$\ast$)} is called.
+If the number of threads given is 1 then \hyperlink{namespacegeoproc_1_1curvature_a9ccfeae3d3672f6627f4de90bd8ffb0c}{mean(const Triangle\+Mesh\&, std\+::vector$<$double$>$\&,double$\ast$,double$\ast$)} is called.
 
 This function needs neighbourhood data and the meshe\textquotesingle{}s angles and areas (see \hyperlink{classgeoproc_1_1TriangleMesh_a4657d7986fd9905c3a7b759e3d1b5442}{Triangle\+Mesh\+::make\+\_\+angles\+\_\+area}). 
 \begin{DoxyParams}[1]{Parameters}

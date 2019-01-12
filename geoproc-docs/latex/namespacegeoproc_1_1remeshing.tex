@@ -10,8 +10,11 @@ Remeshing algorithms.
 \item 
 bool \hyperlink{namespacegeoproc_1_1remeshing_a5ed68eab2cd304f825321c46cdcdc17e}{harmonic\+\_\+maps} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, size\+\_\+t N, size\+\_\+t M, const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&w, const \hyperlink{namespacegeoproc_a494da744a805b80f842402f0a806ccfc}{boundary\+\_\+shape} \&s, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&rm)
 \begin{DoxyCompactList}\small\item\em Remeshes a triangle mesh using harmonic map coordinates. \end{DoxyCompactList}\item 
-bool \hyperlink{namespacegeoproc_1_1remeshing_a44a30c31cdb35181ac57b48911aa47a1}{harmonic\+\_\+maps} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, size\+\_\+t N, size\+\_\+t M, const std\+::vector$<$ glm\+::vec2 $>$ \&uvs, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&rm)
-\begin{DoxyCompactList}\small\item\em Remeshes a triangle mesh using harmonic map coordinates. \end{DoxyCompactList}\end{DoxyCompactItemize}
+bool \hyperlink{namespacegeoproc_1_1remeshing_af6de9f8e386ce37b161aa7f1f54cc47e}{harmonic\+\_\+maps} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, size\+\_\+t N, size\+\_\+t M, const std\+::vector$<$ glm\+::vec2d $>$ \&uvs, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&rm)
+\begin{DoxyCompactList}\small\item\em Remeshes a triangle mesh using harmonic map coordinates. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespacegeoproc_1_1remeshing_aef7b7a38ada1b7581989f19fff09b226}\label{namespacegeoproc_1_1remeshing_aef7b7a38ada1b7581989f19fff09b226}} 
+bool {\bfseries harmonic\+\_\+maps} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&mesh, size\+\_\+t N, size\+\_\+t M, const std\+::vector$<$ glm\+::vec2d $>$ \&uvs, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&remesh)
+\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -35,7 +38,7 @@ Remeshes a triangle mesh using harmonic map coordinates.
 
 First, computes the harmonic maps parametrisation of the mesh, which yields a set of 2d coordinates in the xy plane, more concretely in the square \mbox{[}0,1\mbox{]}x\mbox{[}0,1\mbox{]} (regardless of the shape).
 
-Using the 2d coordinates calculated calls \hyperlink{namespacegeoproc_1_1remeshing_a44a30c31cdb35181ac57b48911aa47a1}{harmonic\+\_\+maps(const Triangle\+Mesh\&, size\+\_\+t, size\+\_\+t, const std\+::vector$<$glm\+::vec2$>$\&, Triangle\+Mesh\&)}; 
+Using the 2d coordinates calculated calls \hyperlink{namespacegeoproc_1_1remeshing_af6de9f8e386ce37b161aa7f1f54cc47e}{harmonic\+\_\+maps(const Triangle\+Mesh\&,size\+\_\+t,size\+\_\+t,const std\+::vector$<$glm\+::vec2d$>$\&,\+Triangle\+Mesh\&)}; 
 \begin{DoxyParams}[1]{Parameters}
 \mbox{\tt in}  & {\em m} & Triangle mesh to be remeshed. \\
 \hline
@@ -53,18 +56,18 @@ Using the 2d coordinates calculated calls \hyperlink{namespacegeoproc_1_1remeshi
 \begin{DoxyPrecond}{Precondition}
 The input mesh needs all of its edges computed, namely, neighbourhood data has to be valid. 
 
-The preconditions of the method \hyperlink{namespacegeoproc_1_1parametrisation_a88891cbeadf541ab81be9333c0c232b3}{parametrisation\+::harmonic\+\_\+maps} have to be true before calling this method. 
+The preconditions of the method \hyperlink{namespacegeoproc_1_1parametrisation_a7fff945ae22310764e66c98ffd42bdb9}{parametrisation\+::harmonic\+\_\+maps} have to be true before calling this method. 
 
 Only \hyperlink{namespacegeoproc_a494da744a805b80f842402f0a806ccfcaceb46ca115d05c51aa5a16a8867c3304}{boundary\+\_\+shape\+::\+Square} is allowed. 
 \end{DoxyPrecond}
 \begin{DoxyReturn}{Returns}
 Returns false on failure. Returns true on success. 
 \end{DoxyReturn}
-\mbox{\Hypertarget{namespacegeoproc_1_1remeshing_a44a30c31cdb35181ac57b48911aa47a1}\label{namespacegeoproc_1_1remeshing_a44a30c31cdb35181ac57b48911aa47a1}} 
+\mbox{\Hypertarget{namespacegeoproc_1_1remeshing_af6de9f8e386ce37b161aa7f1f54cc47e}\label{namespacegeoproc_1_1remeshing_af6de9f8e386ce37b161aa7f1f54cc47e}} 
 \index{geoproc\+::remeshing@{geoproc\+::remeshing}!harmonic\+\_\+maps@{harmonic\+\_\+maps}}
 \index{harmonic\+\_\+maps@{harmonic\+\_\+maps}!geoproc\+::remeshing@{geoproc\+::remeshing}}
 \subsubsection{\texorpdfstring{harmonic\+\_\+maps()}{harmonic\_maps()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily bool geoproc\+::remeshing\+::harmonic\+\_\+maps (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{size\+\_\+t}]{N,  }\item[{size\+\_\+t}]{M,  }\item[{const std\+::vector$<$ glm\+::vec2 $>$ \&}]{uvs,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{rm }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily bool geoproc\+::remeshing\+::harmonic\+\_\+maps (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{size\+\_\+t}]{N,  }\item[{size\+\_\+t}]{M,  }\item[{const std\+::vector$<$ glm\+::vec2d $>$ \&}]{uvs,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{rm }\end{DoxyParamCaption})}
 
 
 
@@ -103,6 +106,8 @@ where $T_k$ denotes the triangle of the original mesh {\itshape m} that is mappe
 The input mesh needs all of its edges computed, namely, neighbourhood data has to be valid. 
 
 There must be as many 2d points as vertices in the mesh. 
+
+This function assumes that the parametric space of {\itshape uvs} is squared-\/shaped. 
 \end{DoxyPrecond}
 \begin{DoxyReturn}{Returns}
 Returns false on failure. Returns true on success. 
