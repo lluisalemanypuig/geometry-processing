@@ -36,6 +36,30 @@ bool harmonic_maps
 /**
  * @brief Remeshes a triangle mesh using harmonic map coordinates.
  *
+ * Parallel computation of a remeshing.
+ * See @ref harmonic_maps(const TriangleMesh&, size_t, size_t, const weight&,const boundary_shape&, TriangleMesh&);
+ * for details.
+ * @param[in] m Triangle mesh to be remeshed.
+ * @param[in] N Size of the grid in the x-axis.
+ * @param[in] M Size of the grid in the y-axis.
+ * @param[in] w Type of weight to use to obtain the parametrisation.
+ * @param[in] s Boundary shape of the parametrisation.
+ * @param[in] nt Number of threads.
+ * @param[out] rm Remeshed mesh.
+ * @pre The input mesh needs all of its edges computed, namely, neighbourhood
+ * data has to be valid.
+ * @pre The preconditions of the method @ref parametrisation::harmonic_maps
+ * have to be true before calling this method.
+ * @pre Only @ref boundary_shape::Square is allowed.
+ * @returns Returns false on failure. Returns true on success.
+ */
+bool harmonic_maps
+(const TriangleMesh& m, size_t N, size_t M, const weight& w,
+ const boundary_shape& s, size_t nt, TriangleMesh& rm);
+
+/**
+ * @brief Remeshes a triangle mesh using harmonic map coordinates.
+ *
  * First, computes the harmonic maps parametrisation of the mesh, which
  * yields a set of 2d coordinates in the xy plane, more concretely in
  * the square [0,1]x[0,1] (regardless of the shape).
@@ -80,12 +104,38 @@ bool harmonic_maps
  * neighbourhood data has to be valid.
  * @pre There must be as many 2d points as vertices in the mesh.
  * @pre This function assumes that the parametric space of @e uvs is
- * squared-shaped.
+ * squared-shaped (they have been computed using @ref boundary_shape::Square).
  * @returns Returns false on failure. Returns true on success.
  */
 bool harmonic_maps
 (const TriangleMesh& m, size_t N, size_t M,
  const std::vector<glm::vec2d>& uvs, TriangleMesh& rm);
+
+/**
+ * @brief Remeshes a triangle mesh using harmonic map coordinates.
+ *
+ * Parallel computation of the remeshing of a mesh given coordinates in
+ * a parametric space.
+ *
+ * See
+ * @ref harmonic_maps(const TriangleMesh&, size_t, size_t, const std::vector<glm::vec2d>&, TriangleMesh&)
+ * for details.
+ * @param[in] m Triangle mesh to be remeshed.
+ * @param[in] N Size of the grid in the x-axis.
+ * @param[in] M Size of the grid in the y-axis.
+ * @param[in] uvs Parametrisation of the input mesh.
+ * @param[in] nt Number of threads.
+ * @param[out] rm Remeshed mesh.
+ * @pre The input mesh needs all of its edges computed, namely,
+ * neighbourhood data has to be valid.
+ * @pre There must be as many 2d points as vertices in the mesh.
+ * @pre This function assumes that the parametric space of @e uvs is
+ * squared-shaped (they have been computed using @ref boundary_shape::Square).
+ * @returns Returns false on failure. Returns true on success.
+ */
+bool harmonic_maps
+(const TriangleMesh& m, size_t N, size_t M,
+ const std::vector<glm::vec2d>& uvs, size_t nt, TriangleMesh& rm);
 
 } // -- namespace remeshing
 } // -- namespace geoproc

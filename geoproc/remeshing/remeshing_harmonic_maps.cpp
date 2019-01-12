@@ -21,6 +21,7 @@ using namespace glm;
 #define triangle_orientation(p1,p2,p3) ((p1.x - p3.x)*(p2.y - p3.y) - (p1.y - p3.y)*(p2.x - p3.x))
 #define vec2out(p) "Point({" << p.x << "," << p.y << "})"
 #define segment2out(p,q) "Segment(" << vec2out(p) << "," << vec2out(q) << ")"
+#define index(i,j,M) ((i)*M + (j))
 
 /* orientation and intersection tests */
 enum seg_ori {
@@ -337,6 +338,26 @@ bool harmonic_maps(
 }
 
 bool harmonic_maps(
+	const TriangleMesh& mesh, size_t N, size_t M, const weight& w,
+	const boundary_shape& s, size_t nt, TriangleMesh& remesh
+)
+{
+	if (s == boundary_shape::Circle) {
+		cerr << "geoproc::remeshing::harmonic_maps - Error" << endl;
+		cerr << "    Not implemented for shape 'Circle'." << endl;
+		return false;
+	}
+
+	vector<vec2d> uvs;
+	bool r = parametrisation::harmonic_maps(mesh, w, s, uvs);
+	if (not r) {
+		return false;
+	}
+
+	return harmonic_maps(mesh, N, M, uvs, nt, remesh);
+}
+
+bool harmonic_maps(
 	const TriangleMesh& mesh, size_t N, size_t M,
 	const std::vector<glm::vec2d>& uvs, TriangleMesh& remesh
 )
@@ -352,17 +373,98 @@ bool harmonic_maps(
 
 	/* compute new triangles */
 	// this is easy because we handle only the 'Square' case
-	vector<int> new_triangles;
-	for (size_t i = 0; i < N - 1; ++i) {
-		for (size_t j = 0; j < M - 1; ++j) {
-			new_triangles.push_back(i*M + j);
-			new_triangles.push_back((i + 1)*M + j);
-			new_triangles.push_back((i + 1)*M + j + 1);
+	vector<int> new_triangles((N - 1)*(M - 1)*3*2);
+	for (size_t idx = 0; idx < N*M; ++idx) {
+		size_t i = idx/M;
+		size_t j = idx%M;
 
-			new_triangles.push_back(i*M + j);
-			new_triangles.push_back((i + 1)*M + j + 1);
-			new_triangles.push_back(i*M + j + 1);
+		if (i == N - 1) {
+			// this will not change in the next M iterations,
+			// so stop right here
+			break;
 		}
+		if (j == M - 1) {
+			continue;
+		}
+
+		size_t _idx = i*(M - 1) + j;
+		new_triangles[6*_idx + 0] = index(i,   j,   M);
+		new_triangles[6*_idx + 1] = index(i+1, j,   M);
+		new_triangles[6*_idx + 2] = index(i+1, j+1, M);
+
+		new_triangles[6*_idx + 3] = index(i,   j,   M);
+		new_triangles[6*_idx + 4] = index(i+1, j+1, M);
+		new_triangles[6*_idx + 5] = index(i,   j+1, M);
+	}
+
+	remesh.set_vertices(new_vertices);
+	remesh.set_triangles(new_triangles);
+	return true;
+}
+
+bool harmonic_maps(
+	const TriangleMesh& mesh, size_t N, size_t M,
+	const std::vector<glm::vec2d>& uvs, size_t nt,
+	TriangleMesh& remesh
+)
+{
+	if (nt == 1) {
+		return harmonic_maps(mesh, N, M, uvs, remesh);
+	}
+
+	assert(mesh.n_vertices() == uvs.size());
+	vector<vec3d> new_vertices(N*M);
+
+	/* compute the coordinates of the new vertices */
+	int r;
+
+#pragma omp parallel num_threads(nt) reduction(max:r)
+{
+	size_t total = N*M;
+	size_t tid = static_cast<size_t>(omp_get_thread_num());
+	size_t begin = (total/nt)*tid;
+	size_t end = (total/nt)*(tid + 1);
+	if (tid == nt - 1) {
+		end = N*M;
+	}
+	bool s = make_vertices_from_to(mesh, uvs, N, M, begin, end, new_vertices);
+	r = (s ? 1 : 0);
+}
+
+	if (r == 0) {
+		return false;
+	}
+
+	/* compute new triangles */
+	// this is easy because we handle only the 'Square' case
+	vector<int> new_triangles((N - 1)*(M - 1)*3*2);
+
+	// we should expect the last thread to do less work
+	// than the others, but we should also expect it to
+	// produce very little imbalance.
+	#pragma omp parallel for num_threads(nt)
+	for (size_t idx = 0; idx < N*M; ++idx) {
+		size_t i = idx/M;
+		size_t j = idx%M;
+		if (i == N - 1 or j == M - 1) {
+			// Whenever i=N-1 the thread should stop straightaway.
+			// However OpenMP does not allow for the uggly 'break'
+			// statement, and I can't bring myself to modify the
+			// 'for' condition from
+			//    idx < N*M
+			// to
+			//    idx < N*M and not finish
+			continue;
+		}
+
+		size_t _idx = i*(M - 1) + j;
+		new_triangles[6*_idx + 0] = index(i,   j,   M);
+		new_triangles[6*_idx + 1] = index(i+1, j,   M);
+		new_triangles[6*_idx + 2] = index(i+1, j+1, M);
+
+		new_triangles[6*_idx + 3] = index(i,   j,   M);
+		new_triangles[6*_idx + 4] = index(i+1, j+1, M);
+		new_triangles[6*_idx + 5] = index(i,   j+1, M);
 	}
 
 	remesh.set_vertices(new_vertices);

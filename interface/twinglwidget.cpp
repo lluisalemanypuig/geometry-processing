@@ -131,9 +131,36 @@ void TwinGLWidget::make_remeshing(size_t N, size_t M) {
 	mesh.make_boundaries();
 	mesh.make_angles_area();
 
+	timing::time_point begin, end;
+
 	TriangleMesh res;
-	bool r = remeshing::harmonic_maps
-	(mesh, N, M, wt, boundary_shape::Square, res);
+	vector<vec2d> uvs;
+
+	bool r;
+	begin = timing::now();
+	r = parametrisation::harmonic_maps(mesh, wt, boundary_shape::Square, uvs);
+	end = timing::now();
+	cout << "Computed parametrisation in " << timing::elapsed_seconds(begin, end)
+		 << " seconds" << endl;
+	if (not r) {
+		cerr << "Error: some error occured. Aborting."
+			 << endl;
+		return;
+	}
+
+	begin = timing::now();
+	r = remeshing::harmonic_maps(mesh, N, M, uvs, nt, res);
+	end = timing::now();
+	cout << "Computed remeshing in " << timing::elapsed_seconds(begin, end)
+		 << " seconds." << endl;
+	cout << "Using " << nt << " threads" << endl;
+	if (not r) {
+		cerr << "Error: some error occured. Aborting."
+			 << endl;
+		return;
+	}
+
+
 
 	if (not r) {
 		cerr << ERR("TwinGLWidget::make_remeshing", name) << endl;

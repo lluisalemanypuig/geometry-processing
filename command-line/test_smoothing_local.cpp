@@ -69,9 +69,9 @@ namespace test_geoproc {
 		string mesh_file = "none";
 		string opt = "none";
 		string weight_type = "none";
-		double lambda;
+		double lambda = 0.5;
 		size_t nt = 1;
-		size_t it;
+		size_t it = 1;
 
 		bool _print = false;
 		bool _lambda = false;

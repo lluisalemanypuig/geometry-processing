@@ -30,6 +30,9 @@ namespace test_geoproc {
 		cout << endl;
 		cout << "    --load f: load a mesh stored in the .ply file f" << endl;
 		cout << endl;
+		cout << "    --threads n: number of threads." << endl;
+		cout << "        Default: 1" << endl;
+		cout << endl;
 		cout << "    --N n: number of points in the x-axis" << endl;
 		cout << endl;
 		cout << "    --M m: number of points in the y-axis" << endl;
@@ -49,6 +52,7 @@ namespace test_geoproc {
 		string mesh_file = "none";
 		string shape_name = "none";
 		string weight_type = "none";
+		size_t nt = 1;
 		size_t N = 0;
 		size_t M = 0;
 
@@ -64,6 +68,10 @@ namespace test_geoproc {
 			}
 			else if (strcmp(argv[i], "--load") == 0) {
 				mesh_file = string(argv[i + 1]);
+				++i;
+			}
+			else if (strcmp(argv[i], "--threads") == 0) {
+				nt = atoi(argv[i + 1]);
 				++i;
 			}
 			else if (strcmp(argv[i], "--N") == 0) {
@@ -136,10 +144,7 @@ namespace test_geoproc {
 		}
 
 		boundary_shape shape;
-		if (shape_name == "circle") {
-			shape = boundary_shape::Circle;
-		}
-		else if (shape_name == "square") {
+		if (shape_name == "square") {
 			shape = boundary_shape::Square;
 		}
 		else {
@@ -156,13 +161,26 @@ namespace test_geoproc {
 		mesh.make_boundaries();
 		mesh.make_angles_area();
 
+		vector<vec2d> uvs;
+
 		bool r;
 		timing::time_point begin = timing::now();
-		r = remeshing::harmonic_maps(mesh, N,M, w, shape, new_mesh);
+		r = parametrisation::harmonic_maps(mesh, w, shape, uvs);
 		timing::time_point end = timing::now();
-		cout << "Remeshed in " << timing::elapsed_seconds(begin, end)
+		cout << "Computed parametrisation in " << timing::elapsed_seconds(begin, end)
 			 << " seconds" << endl;
+		if (not r) {
+			cerr << "Error: some error occured. Aborting."
+				 << endl;
+			return 1;
+		}
 
+		begin = timing::now();
+		r = remeshing::harmonic_maps(mesh, N, M, uvs, nt, new_mesh);
+		end = timing::now();
+		cout << "Computed remeshing in " << timing::elapsed_seconds(begin, end)
+			 << " seconds." << endl;
+		cout << "Using " << nt << " threads" << endl;
 		if (not r) {
 			cerr << "Error: some error occured. Aborting."
 				 << endl;
@@ -176,7 +194,7 @@ namespace test_geoproc {
 
 		const vector<glm::vec3d>& new_verts = new_mesh.get_vertices();
 		cout << "Vertices of the new mesh:" << endl;
-		for (const glm::vec3& v : new_verts) {
+		for (const glm::vec3d& v : new_verts) {
 			cout << "    " << v.x << "," << v.y << "," << v.z << endl;
 		}
 
