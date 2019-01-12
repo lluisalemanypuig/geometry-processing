@@ -10,10 +10,17 @@ Remeshing algorithms.
 \item 
 bool \hyperlink{namespacegeoproc_1_1remeshing_a5ed68eab2cd304f825321c46cdcdc17e}{harmonic\+\_\+maps} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, size\+\_\+t N, size\+\_\+t M, const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&w, const \hyperlink{namespacegeoproc_a494da744a805b80f842402f0a806ccfc}{boundary\+\_\+shape} \&s, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&rm)
 \begin{DoxyCompactList}\small\item\em Remeshes a triangle mesh using harmonic map coordinates. \end{DoxyCompactList}\item 
+bool \hyperlink{namespacegeoproc_1_1remeshing_a93ecfce9f176fa6e7890df1c0acf656f}{harmonic\+\_\+maps} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, size\+\_\+t N, size\+\_\+t M, const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&w, const \hyperlink{namespacegeoproc_a494da744a805b80f842402f0a806ccfc}{boundary\+\_\+shape} \&s, size\+\_\+t nt, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&rm)
+\begin{DoxyCompactList}\small\item\em Remeshes a triangle mesh using harmonic map coordinates. \end{DoxyCompactList}\item 
 bool \hyperlink{namespacegeoproc_1_1remeshing_af6de9f8e386ce37b161aa7f1f54cc47e}{harmonic\+\_\+maps} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, size\+\_\+t N, size\+\_\+t M, const std\+::vector$<$ glm\+::vec2d $>$ \&uvs, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&rm)
+\begin{DoxyCompactList}\small\item\em Remeshes a triangle mesh using harmonic map coordinates. \end{DoxyCompactList}\item 
+bool \hyperlink{namespacegeoproc_1_1remeshing_abc1c5d2c5a934ba9d051129a971a5515}{harmonic\+\_\+maps} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&m, size\+\_\+t N, size\+\_\+t M, const std\+::vector$<$ glm\+::vec2d $>$ \&uvs, size\+\_\+t nt, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&rm)
 \begin{DoxyCompactList}\small\item\em Remeshes a triangle mesh using harmonic map coordinates. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{namespacegeoproc_1_1remeshing_aef7b7a38ada1b7581989f19fff09b226}\label{namespacegeoproc_1_1remeshing_aef7b7a38ada1b7581989f19fff09b226}} 
 bool {\bfseries harmonic\+\_\+maps} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&mesh, size\+\_\+t N, size\+\_\+t M, const std\+::vector$<$ glm\+::vec2d $>$ \&uvs, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&remesh)
+\item 
+\mbox{\Hypertarget{namespacegeoproc_1_1remeshing_a08197201f5951867f5c29c4f37fd77fb}\label{namespacegeoproc_1_1remeshing_a08197201f5951867f5c29c4f37fd77fb}} 
+bool {\bfseries harmonic\+\_\+maps} (const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&mesh, size\+\_\+t N, size\+\_\+t M, const std\+::vector$<$ glm\+::vec2d $>$ \&uvs, size\+\_\+t nt, \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&remesh)
 \end{DoxyCompactItemize}
 
 
@@ -29,7 +36,7 @@ Implemented\+:
 \mbox{\Hypertarget{namespacegeoproc_1_1remeshing_a5ed68eab2cd304f825321c46cdcdc17e}\label{namespacegeoproc_1_1remeshing_a5ed68eab2cd304f825321c46cdcdc17e}} 
 \index{geoproc\+::remeshing@{geoproc\+::remeshing}!harmonic\+\_\+maps@{harmonic\+\_\+maps}}
 \index{harmonic\+\_\+maps@{harmonic\+\_\+maps}!geoproc\+::remeshing@{geoproc\+::remeshing}}
-\subsubsection{\texorpdfstring{harmonic\+\_\+maps()}{harmonic\_maps()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+\subsubsection{\texorpdfstring{harmonic\+\_\+maps()}{harmonic\_maps()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
 {\footnotesize\ttfamily bool geoproc\+::remeshing\+::harmonic\+\_\+maps (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{size\+\_\+t}]{N,  }\item[{size\+\_\+t}]{M,  }\item[{const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&}]{w,  }\item[{const \hyperlink{namespacegeoproc_a494da744a805b80f842402f0a806ccfc}{boundary\+\_\+shape} \&}]{s,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{rm }\end{DoxyParamCaption})}
 
 
@@ -63,10 +70,47 @@ Only \hyperlink{namespacegeoproc_a494da744a805b80f842402f0a806ccfcaceb46ca115d05
 \begin{DoxyReturn}{Returns}
 Returns false on failure. Returns true on success. 
 \end{DoxyReturn}
+\mbox{\Hypertarget{namespacegeoproc_1_1remeshing_a93ecfce9f176fa6e7890df1c0acf656f}\label{namespacegeoproc_1_1remeshing_a93ecfce9f176fa6e7890df1c0acf656f}} 
+\index{geoproc\+::remeshing@{geoproc\+::remeshing}!harmonic\+\_\+maps@{harmonic\+\_\+maps}}
+\index{harmonic\+\_\+maps@{harmonic\+\_\+maps}!geoproc\+::remeshing@{geoproc\+::remeshing}}
+\subsubsection{\texorpdfstring{harmonic\+\_\+maps()}{harmonic\_maps()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily bool geoproc\+::remeshing\+::harmonic\+\_\+maps (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{size\+\_\+t}]{N,  }\item[{size\+\_\+t}]{M,  }\item[{const \hyperlink{namespacegeoproc_a12e5a10581b53b9dd9a509127527f843}{weight} \&}]{w,  }\item[{const \hyperlink{namespacegeoproc_a494da744a805b80f842402f0a806ccfc}{boundary\+\_\+shape} \&}]{s,  }\item[{size\+\_\+t}]{nt,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{rm }\end{DoxyParamCaption})}
+
+
+
+Remeshes a triangle mesh using harmonic map coordinates. 
+
+Parallel computation of a remeshing. See \hyperlink{namespacegeoproc_1_1remeshing_a5ed68eab2cd304f825321c46cdcdc17e}{harmonic\+\_\+maps(const Triangle\+Mesh\&, size\+\_\+t, size\+\_\+t, const weight\&,const boundary\+\_\+shape\&, Triangle\+Mesh\&)}; for details. 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em m} & Triangle mesh to be remeshed. \\
+\hline
+\mbox{\tt in}  & {\em N} & Size of the grid in the x-\/axis. \\
+\hline
+\mbox{\tt in}  & {\em M} & Size of the grid in the y-\/axis. \\
+\hline
+\mbox{\tt in}  & {\em w} & Type of weight to use to obtain the parametrisation. \\
+\hline
+\mbox{\tt in}  & {\em s} & Boundary shape of the parametrisation. \\
+\hline
+\mbox{\tt in}  & {\em nt} & Number of threads. \\
+\hline
+\mbox{\tt out}  & {\em rm} & Remeshed mesh. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+The input mesh needs all of its edges computed, namely, neighbourhood data has to be valid. 
+
+The preconditions of the method \hyperlink{namespacegeoproc_1_1parametrisation_a7fff945ae22310764e66c98ffd42bdb9}{parametrisation\+::harmonic\+\_\+maps} have to be true before calling this method. 
+
+Only \hyperlink{namespacegeoproc_a494da744a805b80f842402f0a806ccfcaceb46ca115d05c51aa5a16a8867c3304}{boundary\+\_\+shape\+::\+Square} is allowed. 
+\end{DoxyPrecond}
+\begin{DoxyReturn}{Returns}
+Returns false on failure. Returns true on success. 
+\end{DoxyReturn}
 \mbox{\Hypertarget{namespacegeoproc_1_1remeshing_af6de9f8e386ce37b161aa7f1f54cc47e}\label{namespacegeoproc_1_1remeshing_af6de9f8e386ce37b161aa7f1f54cc47e}} 
 \index{geoproc\+::remeshing@{geoproc\+::remeshing}!harmonic\+\_\+maps@{harmonic\+\_\+maps}}
 \index{harmonic\+\_\+maps@{harmonic\+\_\+maps}!geoproc\+::remeshing@{geoproc\+::remeshing}}
-\subsubsection{\texorpdfstring{harmonic\+\_\+maps()}{harmonic\_maps()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+\subsubsection{\texorpdfstring{harmonic\+\_\+maps()}{harmonic\_maps()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
 {\footnotesize\ttfamily bool geoproc\+::remeshing\+::harmonic\+\_\+maps (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{size\+\_\+t}]{N,  }\item[{size\+\_\+t}]{M,  }\item[{const std\+::vector$<$ glm\+::vec2d $>$ \&}]{uvs,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{rm }\end{DoxyParamCaption})}
 
 
@@ -107,7 +151,44 @@ The input mesh needs all of its edges computed, namely, neighbourhood data has t
 
 There must be as many 2d points as vertices in the mesh. 
 
-This function assumes that the parametric space of {\itshape uvs} is squared-\/shaped. 
+This function assumes that the parametric space of {\itshape uvs} is squared-\/shaped (they have been computed using \hyperlink{namespacegeoproc_a494da744a805b80f842402f0a806ccfcaceb46ca115d05c51aa5a16a8867c3304}{boundary\+\_\+shape\+::\+Square}). 
+\end{DoxyPrecond}
+\begin{DoxyReturn}{Returns}
+Returns false on failure. Returns true on success. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespacegeoproc_1_1remeshing_abc1c5d2c5a934ba9d051129a971a5515}\label{namespacegeoproc_1_1remeshing_abc1c5d2c5a934ba9d051129a971a5515}} 
+\index{geoproc\+::remeshing@{geoproc\+::remeshing}!harmonic\+\_\+maps@{harmonic\+\_\+maps}}
+\index{harmonic\+\_\+maps@{harmonic\+\_\+maps}!geoproc\+::remeshing@{geoproc\+::remeshing}}
+\subsubsection{\texorpdfstring{harmonic\+\_\+maps()}{harmonic\_maps()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily bool geoproc\+::remeshing\+::harmonic\+\_\+maps (\begin{DoxyParamCaption}\item[{const \hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{m,  }\item[{size\+\_\+t}]{N,  }\item[{size\+\_\+t}]{M,  }\item[{const std\+::vector$<$ glm\+::vec2d $>$ \&}]{uvs,  }\item[{size\+\_\+t}]{nt,  }\item[{\hyperlink{classgeoproc_1_1TriangleMesh}{Triangle\+Mesh} \&}]{rm }\end{DoxyParamCaption})}
+
+
+
+Remeshes a triangle mesh using harmonic map coordinates. 
+
+Parallel computation of the remeshing of a mesh given coordinates in a parametric space.
+
+See \hyperlink{namespacegeoproc_1_1remeshing_af6de9f8e386ce37b161aa7f1f54cc47e}{harmonic\+\_\+maps(const Triangle\+Mesh\&, size\+\_\+t, size\+\_\+t, const std\+::vector$<$glm\+::vec2d$>$\&, Triangle\+Mesh\&)} for details. 
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em m} & Triangle mesh to be remeshed. \\
+\hline
+\mbox{\tt in}  & {\em N} & Size of the grid in the x-\/axis. \\
+\hline
+\mbox{\tt in}  & {\em M} & Size of the grid in the y-\/axis. \\
+\hline
+\mbox{\tt in}  & {\em uvs} & Parametrisation of the input mesh. \\
+\hline
+\mbox{\tt in}  & {\em nt} & Number of threads. \\
+\hline
+\mbox{\tt out}  & {\em rm} & Remeshed mesh. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+The input mesh needs all of its edges computed, namely, neighbourhood data has to be valid. 
+
+There must be as many 2d points as vertices in the mesh. 
+
+This function assumes that the parametric space of {\itshape uvs} is squared-\/shaped (they have been computed using \hyperlink{namespacegeoproc_a494da744a805b80f842402f0a806ccfcaceb46ca115d05c51aa5a16a8867c3304}{boundary\+\_\+shape\+::\+Square}). 
 \end{DoxyPrecond}
 \begin{DoxyReturn}{Returns}
 Returns false on failure. Returns true on success. 
