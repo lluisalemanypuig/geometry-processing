@@ -411,7 +411,7 @@ bool harmonic_maps(
 	vector<vec3d> new_vertices(N*M);
 
 	/* compute the coordinates of the new vertices */
-	int r;
+	int r = 0;
 
 #pragma omp parallel num_threads(nt) reduction(max:r)
 {
