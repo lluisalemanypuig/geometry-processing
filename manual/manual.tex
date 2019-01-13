@@ -71,6 +71,13 @@ and a command-line application to apply the algorithms implemented can
 be found in the directory \dir{command-line}. The code of the
 interface can be found in the directory \dir{interface}.
 
+\hfill
+
+See section \ref{sec:functionalities} to see the state of functionality
+of every algorithm (what works at a 100\%, what is not implemented, ...).
+See the project's \textbf{README.md} file for instructions on how to
+compile the project.
+
 \section{Single View}
 \label{sec:single-view}
 
@@ -84,14 +91,15 @@ There is also the option to clean up the loaded meshes.
 \hfill
 
 \begin{wrapfigure}{r}{0.3\textwidth}
+	\vspace{-30pt}
 	\begin{subfigure}{0.4\textwidth}
 		\centering
-		\includegraphics[scale=0.225]{SV-render}
+		\includegraphics[scale=0.175]{SV-render}
 		\caption{Render tab.}
 	\end{subfigure}
 	\begin{subfigure}{0.4\textwidth}
 		\centering
-		\includegraphics[scale=1]{SV-settings}
+		\includegraphics[scale=0.8]{SV-settings}
 		\caption{Settings tab.}
 	\end{subfigure}
 	\caption{Tabs of single view.}
@@ -181,12 +189,12 @@ that the local algorithm should perform, and the type of weight: Uniform or Cota
 (\elem{4}).
 
 \subsubsection{Global}
-Similarly, the user can choose between three operators: Laplacian,
-BiLaplacian, Taubin-$\lambda\mu$ (\elem{5}), and the type of weight: Uniform or
-Cotangent (\elem{6}). Additionally, the user can select the amount of
-fixed vertices that the algorithm needs to perform the smoothing. This
-amount is given using the slider that specifies the percentage of vertices
-to be fixed (\elem{7}).
+The global smoothing algorithm is only implemented for the Laplacian
+opearator (\elem{5}). The user, however, is able to choose the type of
+weight: Uniform or Cotangent (\elem{6}). Additionally, the user can
+select the amount of fixed vertices that the algorithm needs to perform
+the smoothing. This amount is given using the slider that specifies the
+percentage of vertices to be fixed (\elem{7}).
 
 \subsection{Band frequencies}
 \label{sec:dual-view:band-frequencies}
@@ -273,9 +281,10 @@ several threads:
 \end{itemize}
 
 \section{Status of functionalities}
+\label{sec:functionalities}
 
 All features provided in the interface are fully functional, except for
-two of them:
+the following:
 \begin{itemize}
 	\item Reflection lines rendering mode. Reflection lines are perfectly
 	rendered for those models in which the normals needed for this purpose
@@ -284,13 +293,16 @@ two of them:
 	the normalisation of $(v_j - v_i) \times (v_k - v_i)$). A model of a
 	completely flat surface, for example, is perfectly suitable for this
 	rendering mode.
-	
 	\hfill
 	
-	Ideally, the normals a model should have in order to render these lines
+	Ideally, the normals to be used in order to render these lines
 	properly should be computed differently (not done). The normals of all
 	triangles should be computed as the average of \textbf{some} of their
-	neighbouring faces $\{t\}$.
+	neighbouring faces. In this project, the normals are taken as the cross
+	product, as explained before.
+	
+	\item Global smoothing. Only the Laplacian operator is implemented
+	for this algorithm.
 	
 	\item Remeshing. Remeshing is not implemented for the shape ``circle''.
 \end{itemize}
