@@ -80,8 +80,7 @@ Qt Creator. The _.pro_ files need to contain:
 - The path to include the __geoproc__ library, and to link against it.
 - The paths to include both the _glm_, and _Eigen_ (this last
 one only when needed). The _.pro_ already include the include paths to these
-libraries assuming a Linux environment in which these are installed in the
-system.
+libraries assuming they are installed in the system.
 
 In order to successfully compile each subproject, one can follow these intructions:
 
