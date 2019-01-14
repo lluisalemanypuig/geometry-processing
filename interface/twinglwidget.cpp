@@ -160,8 +160,6 @@ void TwinGLWidget::make_remeshing(size_t N, size_t M) {
 		return;
 	}
 
-
-
 	if (not r) {
 		cerr << ERR("TwinGLWidget::make_remeshing", name) << endl;
 		cerr << "    Something went wrong with remeshing." << endl;

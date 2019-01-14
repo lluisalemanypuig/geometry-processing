@@ -349,14 +349,16 @@ GLWidget::~GLWidget() {
 	delete_program();
 }
 
-void GLWidget::set_mesh(const RenderTriangleMesh& rm) {
+void GLWidget::set_mesh(const RenderTriangleMesh& rm, bool init) {
 	// free current mesh
 	mesh.free_buffers();
 	mesh.destroy();
 
 	mesh = rm;
 
-	init_mesh(true);
+	if (init) {
+		init_mesh(true);
+	}
 }
 
 void GLWidget::load_mesh(const QString& filename) {

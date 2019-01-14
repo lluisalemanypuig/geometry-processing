@@ -603,7 +603,7 @@ void MainWindow::on_PB_Remeshing_Run_clicked() {
 	size_t NN = static_cast<size_t>(N);
 	size_t MM = static_cast<size_t>(M);
 
-	ui->DualView_RightRenderer->set_mesh(ui->DualView_LeftRenderer->get_mesh());
+	ui->DualView_RightRenderer->set_mesh(ui->DualView_LeftRenderer->get_mesh(), false);
 	ui->DualView_RightRenderer->make_remeshing(NN, MM);
 }
 

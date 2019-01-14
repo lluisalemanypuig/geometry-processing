@@ -116,7 +116,7 @@ class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 		 * The mesh passed as parameter is not scaled to unit.
 		 * @param rm
 		 */
-		void set_mesh(const RenderTriangleMesh& rm);
+		void set_mesh(const RenderTriangleMesh& rm, bool init = true);
 		/// Loads a mesh from a file.
 		void load_mesh(const QString& filename);
 		/// Clears the mesh.
