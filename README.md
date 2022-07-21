@@ -35,7 +35,7 @@ This project has several dependencies.
 
 ### Libraries
 
-This project relies on the [glm](https://glm.g-truc.net/0.9.9/index.html) (v. 0.9.5 or older) and the [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) libraries (v. 3.3.5 or older) for the geometry-processing algorithms. Also, [OpenMP](http://www.openmp.org/) is needed for the parallelised version of some of the algorithms.
+This project relies on the [glm](https://glm.g-truc.net/0.9.9/index.html) (v. 0.9.5 or newer) and the [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) libraries (v. 3.3.5 or newer) for the geometry-processing algorithms. Also, [OpenMP](http://www.openmp.org/) is needed for the parallelised version of some of the algorithms.
 
 The Qt library (tested only with version 5.9.6) to compile and execute the interface to visualise the results of the algorithms.
 
