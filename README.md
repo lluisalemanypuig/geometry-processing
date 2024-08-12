@@ -27,7 +27,7 @@ The algorithms' implementations are inside the __geoproc/__ directory. That dire
 
 ### Documentation
 
-Documentation of the library was generated using [Doxygen](http://www.doxygen.nl/). It can be found in the [geoproc-docs/](https://github.com/lluisalemanypuig/geometry-processing/tree/master/geoproc-docs) directory.
+Documentation of the library was generated using [Doxygen](http://www.doxygen.nl/). It can be found in the [geoproc-docs.zip](https://github.com/lluisalemanypuig/geometry-processing/blob/master/geoproc-docs.zip) file.
 
 ## Dependencies
 
