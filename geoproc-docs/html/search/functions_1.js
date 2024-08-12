@@ -1,5 +1,0 @@
-var searchData=
-[
-  ['band_5ffrequencies',['band_frequencies',['../namespacegeoproc_1_1filter__frequencies.html#a9a3d38dda8f7703607998e250e264a7c',1,'geoproc::filter_frequencies::band_frequencies(const std::vector&lt; smoothing_configuration &gt; &amp;confs, const std::vector&lt; double &gt; &amp;mus, TriangleMesh &amp;m)'],['../namespacegeoproc_1_1filter__frequencies.html#a186988c0c5cb1fa64125db078846814e',1,'geoproc::filter_frequencies::band_frequencies(const std::vector&lt; smoothing_configuration &gt; &amp;confs, const std::vector&lt; double &gt; &amp;mus, size_t nt, TriangleMesh &amp;m)']]],
-  ['bilaplacian',['bilaplacian',['../namespacegeoproc_1_1smoothing_1_1local.html#ae414b9bd00610e2f63096ab8c087b5ea',1,'geoproc::smoothing::local::bilaplacian(const weight &amp;w, double lambda, size_t n_iter, TriangleMesh &amp;m)'],['../namespacegeoproc_1_1smoothing_1_1local.html#a57fc04667cb54871012f162f6af1deed',1,'geoproc::smoothing::local::bilaplacian(const weight &amp;w, double lambda, size_t n_iter, size_t nt, TriangleMesh &amp;m)']]]
-];

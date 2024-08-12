@@ -1,8 +1,0 @@
-<map id="geoproc/smoothing/local_private.cpp" name="geoproc/smoothing/local_private.cpp">
-<area shape="rect" id="node2" href="$local__private_8hpp.html" title="geoproc/smoothing/local\l_private.hpp" alt="" coords="182,95,344,136"/>
-<area shape="rect" id="node12" href="$mesh__iterator_8hpp.html" title="geoproc/iterators/mesh\l_iterator.hpp" alt="" coords="418,184,572,225"/>
-<area shape="rect" id="node13" href="$vertex__iterators_8hpp.html" title="geoproc/iterators/vertex\l_iterators.hpp" alt="" coords="420,95,578,136"/>
-<area shape="rect" id="node4" href="$triangle__mesh_8hpp.html" title="geoproc/triangle_mesh.hpp" alt="" coords="242,273,420,300"/>
-<area shape="rect" id="node8" href="$smoothing__defs_8hpp.html" title="geoproc/smoothing/smoothing\l_defs.hpp" alt="" coords="29,184,225,225"/>
-<area shape="rect" id="node7" href="$mesh__edge_8hpp.html" title="geoproc/mesh_edge.hpp" alt="" coords="153,348,317,375"/>
-</map>
